@@ -16,8 +16,8 @@ export default function Lab4() {
      const vizPanel = (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', flex: 1, minHeight: 0 }}>
       <div className="dashboard-grid">
-            <AttitudeViewer3D height="100%" />
-            <GPSMap height="100%" />
+            <AttitudeViewer3D height={350} />
+            <GPSMap height={350} />
             <CameraViewer />
       </div>
             <SerialMonitor height={350} />

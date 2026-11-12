@@ -4,7 +4,7 @@ export default function TabPanel({ tabs, defaultTab = 0, extraToolbar }) {
   const [active, setActive] = useState(defaultTab);
 
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <div className="tabs" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ display: 'flex', gap: '8px' }}>
           {tabs.map((tab, i) => (
@@ -24,8 +24,19 @@ export default function TabPanel({ tabs, defaultTab = 0, extraToolbar }) {
           </div>
         )}
       </div>
-      <div style={{ padding: 'var(--space-lg)' }}>
-        {tabs[active] && tabs[active].content}
+      <div style={{ flex: 1, minHeight: 0, position: 'relative' }}>
+        {tabs.map((tab, i) => (
+          <div
+            key={i}
+            style={{
+              padding: 'var(--space-lg)',
+              height: '100%',
+              display: active === i ? 'block' : 'none'
+            }}
+          >
+            {tab.content}
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -40,14 +40,14 @@ export const CUBESAT_COMPONENTS = [
     role: 'Thu thập dữ liệu môi trường & chuyển động',
     image: '/images/components/sensor.png',
     specs: [
-      { label: 'Cảm biến quán tính', value: 'MPU6050 (Gia tốc 3 trục ±16g + Con quay 3 trục ±2000 °/s)' },
+      { label: 'Cảm biến quán tính', value: 'MPU6500 (Gia tốc 3 trục ±16g + Con quay 3 trục ±2000 °/s)' },
       { label: 'La bàn từ trường', value: 'QMC5883L (Đo từ trường 3 trục, độ phân giải 2 mG)' },
       { label: 'Cảm biến khí quyển', value: 'BMP280 (Áp suất 300-1100 hPa, Nhiệt độ -40°C đến +85°C)' },
       { label: 'Giao thức kết nối', value: 'I2C Bus (SDA, SCL) dùng chung' },
       { label: 'Thuật toán tích hợp', value: 'Bộ lọc Madgwick / Kalman Filter để tính toán góc Euler' },
       { label: 'Dữ liệu đầu ra', value: 'Góc nghiêng (Pitch, Roll, Yaw), Nhiệt độ, Độ cao tương đối' },
     ],
-    description: 'Hệ thống cảm biến 9 trục (IMU) kết hợp sức mạnh của 3 loại cảm biến: MPU6050, QMC5883L và BMP280. Thông qua các thuật toán lọc nhiễu phức tạp, hệ thống này giúp vệ tinh nhận thức được tư thế của mình trong không gian không trọng lực (Attitude Determination).',
+    description: 'Hệ thống cảm biến 9 trục (IMU) kết hợp sức mạnh của 3 loại cảm biến: MPU6500, QMC5883L và BMP280. Thông qua các thuật toán lọc nhiễu phức tạp, hệ thống này giúp vệ tinh nhận thức được tư thế của mình trong không gian không trọng lực (Attitude Determination).',
   },
   {
     id: 'gps',
@@ -90,7 +90,7 @@ export const CUBESAT_COMPONENTS = [
     specs: [
       { label: 'Phần cứng', value: 'MicroSD Card Adapter Module' },
       { label: 'Định dạng tập tin', value: 'FAT16 / FAT32 (Hỗ trợ thẻ nhớ lên đến 32GB)' },
-      { label: 'Giao thức kết nối', value: 'SPI (SCK=18, MISO=19, MOSI=23, CS=15)' },
+      { label: 'Giao thức kết nối', value: 'SPI (SCK=18, MISO=19, MOSI=23, CS=13)' },
       { label: 'Điện áp hoạt động', value: '5V hoặc 3.3V (Tích hợp IC chuyển mức logic Level Shifter)' },
       { label: 'Nhiệm vụ chính', value: 'Ghi log Telemetry liên tục (Data Logging), lưu file cấu hình' },
     ],

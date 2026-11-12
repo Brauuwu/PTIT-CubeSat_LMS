@@ -1,5 +1,7 @@
 import { useState, useCallback } from 'react';
-import { ResponsiveGridLayout } from 'react-grid-layout';
+import { Responsive as ResponsiveGridLayout, useContainerWidth } from 'react-grid-layout';
+import 'react-grid-layout/css/styles.css';
+import 'react-resizable/css/styles.css';
 import VoltageChart from '../visualization/VoltageChart';
 import GPSMap from '../visualization/GPSMap';
 import AttitudeViewer3D from '../visualization/AttitudeViewer3D';
@@ -26,17 +28,17 @@ function GaugeWidget({ config }) {
   return (
     <div style={{ textAlign: 'center', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{
-        width: '110px', height: '110px', borderRadius: '50%', margin: '0 auto var(--space-md)',
+        width: 'min(80%, 250px)', aspectRatio: '1/1', borderRadius: '50%', margin: '0 auto var(--space-md)',
         background: `conic-gradient(${color} ${pct * 3.6}deg, var(--bg-tertiary) 0deg)`,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         boxShadow: `0 0 20px ${color}20, inset 0 4px 10px rgba(0,0,0,0.5)`,
       }}>
         <div style={{
-          width: '90px', height: '90px', borderRadius: '50%', background: 'var(--bg-surface)',
+          width: '82%', height: '82%', borderRadius: '50%', background: 'var(--bg-surface)',
           display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column',
           boxShadow: '0 4px 10px rgba(0,0,0,0.3)'
         }}>
-          <span style={{ fontSize: '1.75rem', fontWeight: 800, fontFamily: 'var(--font-mono)', color, textShadow: `0 0 10px ${color}40` }}>
+          <span style={{ fontSize: 'clamp(1.5rem, 5vw, 3rem)', fontWeight: 800, fontFamily: 'var(--font-mono)', color, textShadow: `0 0 10px ${color}40` }}>
             {value.toFixed(1)}
           </span>
         </div>
@@ -90,6 +92,7 @@ function ButtonWidget({ config, onSend }) {
 }
 
 export default function DashboardBuilder() {
+  const { width, containerRef } = useContainerWidth();
   const [widgets, setWidgets] = useState([
     { i: '1', type: 'chart', title: 'Điện áp Pin', x: 0, y: 0, w: 6, h: 4, config: {} },
     { i: '2', type: 'gauge', title: 'Battery Level', x: 6, y: 0, w: 3, h: 3, config: { value: 3.72, max: 4.2, label: 'Pin (V)' } },
@@ -98,34 +101,46 @@ export default function DashboardBuilder() {
   const [nextId, setNextId] = useState(4);
   const [isDraggingOver, setIsDraggingOver] = useState(false);
   const [droppingItem, setDroppingItem] = useState(null);
+  const [dropError, setDropError] = useState("");
 
   // Handle Drag Start from Palette
   const onDragStart = (e, wt) => {
     e.dataTransfer.setData('text/plain', wt.type);
     e.dataTransfer.effectAllowed = 'copy';
-    setDroppingItem({ i: 'drop', w: wt.w, h: wt.h });
+    setDroppingItem({ i: 'drop', w: wt.w, h: wt.h, type: wt.type });
   };
 
   // RGL triggers this when an external item is dropped
   const onDrop = (layout, layoutItem, _event) => {
-    const type = _event.dataTransfer.getData('text/plain');
+    setDropError("onDrop called!");
+    // Safely get the type
+    const type = droppingItem?.type || (_event && _event.dataTransfer && _event.dataTransfer.getData('text/plain'));
+    
+    setIsDraggingOver(false);
+    
     if (!type) {
+      setDropError("Error: No type found in droppingItem or dataTransfer.");
       setDroppingItem(null);
       return;
     }
 
     const info = WIDGET_TYPES.find(w => w.type === type);
     if (!info) {
+      setDropError(`Error: Widget type '${type}' not found.`);
       setDroppingItem(null);
       return;
     }
+
+    // Safely get coordinates (fallback to end of layout)
+    const dropX = layoutItem?.x ?? 0;
+    const dropY = layoutItem?.y ?? Infinity;
 
     const newWidget = {
       i: nextId.toString(),
       type,
       title: info.label,
-      x: layoutItem.x,
-      y: layoutItem.y,
+      x: dropX,
+      y: dropY,
       w: info.w,
       h: info.h,
       config: {}
@@ -133,8 +148,8 @@ export default function DashboardBuilder() {
 
     setWidgets(prev => [...prev, newWidget]);
     setNextId(prev => prev + 1);
-    setIsDraggingOver(false);
     setDroppingItem(null);
+    setDropError(`Success: Added ${type} at ${dropX},${dropY}`);
   };
 
   const removeWidget = (id) => {
@@ -152,9 +167,9 @@ export default function DashboardBuilder() {
 
   const renderWidget = (widget) => {
     switch (widget.type) {
-      case 'chart': return <div style={{ height: '100%', minHeight: '200px' }}><VoltageChart /></div>;
-      case 'map': return <div style={{ height: '100%', minHeight: '200px' }}><GPSMap height="100%" /></div>;
-      case '3d': return <div style={{ height: '100%', minHeight: '200px' }}><AttitudeViewer3D height="100%" /></div>;
+      case 'chart': return <div style={{ height: '100%', overflow: 'hidden' }}><VoltageChart height="100%" standalone={false} /></div>;
+      case 'map': return <div style={{ height: '100%', overflow: 'hidden' }}><GPSMap height="100%" standalone={false} /></div>;
+      case '3d': return <div style={{ height: '100%', overflow: 'hidden' }}><AttitudeViewer3D height="100%" standalone={false} /></div>;
       case 'gauge': return <GaugeWidget config={widget.config} />;
       case 'alert': return <AlertWidget config={widget.config} />;
       case 'button': return <ButtonWidget config={widget.config} />;
@@ -179,6 +194,11 @@ export default function DashboardBuilder() {
             Kéo và thả (Drag & Drop) tiện ích xuống Canvas bên dưới
           </span>
         </div>
+        {dropError && (
+          <div style={{ padding: '8px 16px', background: 'var(--bg-tertiary)', color: 'var(--accent-orange)', borderBottom: '1px solid var(--border-subtle)' }}>
+            Log: {dropError}
+          </div>
+        )}
         <div className="widget-palette">
           {WIDGET_TYPES.map(wt => (
             <div
@@ -195,6 +215,7 @@ export default function DashboardBuilder() {
 
       {/* Dashboard Canvas */}
       <div 
+        ref={containerRef}
         className={`dashboard-canvas ${isDraggingOver ? 'is-dragging-over' : ''}`}
         onDragOver={(e) => { e.preventDefault(); setIsDraggingOver(true); }}
         onDragLeave={() => setIsDraggingOver(false)}
@@ -218,6 +239,7 @@ export default function DashboardBuilder() {
         )}
 
         <ResponsiveGridLayout
+          width={width}
           className="layout"
           layouts={{ lg: widgets }}
           breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}

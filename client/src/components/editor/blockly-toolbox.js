@@ -5,6 +5,27 @@ import * as Blockly from 'blockly';
  * Maps 1:1 with the PTITCube firmware library API.
  */
 export function registerCustomBlocks() {
+  // === Workspace Structure ===
+  Blockly.Blocks['arduino_setup'] = {
+    init() {
+      this.appendDummyInput().appendField('⚙️ Khởi động (Setup)');
+      this.appendStatementInput('DO').setCheck(null);
+      this.setColour(20);
+      this.setTooltip('Các lệnh bên trong chỉ chạy 1 lần khi khởi động');
+      this.setDeletable(false); // Không cho phép xóa
+    }
+  };
+
+  Blockly.Blocks['arduino_loop'] = {
+    init() {
+      this.appendDummyInput().appendField('🔄 Lặp liên tục (Loop)');
+      this.appendStatementInput('DO').setCheck(null);
+      this.setColour(120);
+      this.setTooltip('Các lệnh bên trong chạy lặp lại mãi mãi');
+      this.setDeletable(false);
+    }
+  };
+
   // === Arduino Core ===
   Blockly.Blocks['serial_print'] = {
     init() {
@@ -87,7 +108,7 @@ export function registerCustomBlocks() {
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);
       this.setColour(210);
-      this.setTooltip('Khởi tạo hệ thống cảm biến (BMP280 + MPU6050 + QMC5883L)');
+      this.setTooltip('Khởi tạo hệ thống cảm biến (BMP280 + MPU6500 + QMC5883L)');
     }
   };
 
@@ -111,31 +132,42 @@ export function registerCustomBlocks() {
 
   Blockly.Blocks['imu_read_acc'] = {
     init() {
-      this.appendDummyInput().appendField('📐 Đọc Gia tốc (Acc X/Y/Z)');
-      this.setPreviousStatement(true, null);
-      this.setNextStatement(true, null);
+      this.appendDummyInput()
+        .appendField('📐 Gia tốc')
+        .appendField(new Blockly.FieldDropdown([['X', 'X'], ['Y', 'Y'], ['Z', 'Z']]), 'AXIS');
+      this.setOutput(true, 'Number');
       this.setColour(210);
-      this.setTooltip('Đọc và in gia tốc 3 trục từ MPU6050');
+      this.setTooltip('Lấy giá trị gia tốc theo trục');
     }
   };
 
   Blockly.Blocks['imu_read_gyro'] = {
     init() {
-      this.appendDummyInput().appendField('🔄 Đọc Gyro (X/Y/Z)');
-      this.setPreviousStatement(true, null);
-      this.setNextStatement(true, null);
+      this.appendDummyInput()
+        .appendField('🔄 Gyro')
+        .appendField(new Blockly.FieldDropdown([['X', 'X'], ['Y', 'Y'], ['Z', 'Z']]), 'AXIS');
+      this.setOutput(true, 'Number');
       this.setColour(210);
-      this.setTooltip('Đọc và in gyroscope 3 trục từ MPU6050');
     }
   };
 
   Blockly.Blocks['imu_read_mag'] = {
     init() {
-      this.appendDummyInput().appendField('🧭 Đọc Từ trường (Mag X/Y/Z)');
+      this.appendDummyInput()
+        .appendField('🧭 Từ trường')
+        .appendField(new Blockly.FieldDropdown([['X', 'X'], ['Y', 'Y'], ['Z', 'Z']]), 'AXIS');
+      this.setOutput(true, 'Number');
+      this.setColour(210);
+    }
+  };
+
+  Blockly.Blocks['sensor_update'] = {
+    init() {
+      this.appendDummyInput().appendField('🔄 Cập nhật dữ liệu IMU');
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);
       this.setColour(210);
-      this.setTooltip('Đọc la bàn từ trường 3 trục từ QMC5883L');
+      this.setTooltip('Gọi hàm này trước khi lấy dữ liệu Gia tốc/Gyro/La bàn');
     }
   };
 
@@ -172,11 +204,21 @@ export function registerCustomBlocks() {
 
   Blockly.Blocks['gps_read'] = {
     init() {
-      this.appendDummyInput().appendField('🌍 Đọc GPS (Lat/Lng)');
+      this.appendDummyInput().appendField('🌍 Cập nhật dữ liệu GPS');
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);
       this.setColour(30);
-      this.setTooltip('Cập nhật và in tọa độ GPS');
+      this.setTooltip('Gọi hàm này trước khi lấy tọa độ GPS');
+    }
+  };
+
+  Blockly.Blocks['gps_get_coord'] = {
+    init() {
+      this.appendDummyInput()
+        .appendField('📍 Lấy tọa độ GPS')
+        .appendField(new Blockly.FieldDropdown([['Vĩ độ (Lat)', 'LAT'], ['Kinh độ (Lng)', 'LNG']]), 'COORD');
+      this.setOutput(true, 'Number');
+      this.setColour(30);
     }
   };
 
@@ -219,12 +261,29 @@ export function registerCustomBlocks() {
     init() {
       this.appendDummyInput()
         .appendField('📡 lora.sendMessage(')
-        .appendField(new Blockly.FieldTextInput('Hello'), 'MSG')
-        .appendField(')');
+        .appendValueInput('MSG')
+        .setCheck('String');
+      this.appendDummyInput().appendField(')');
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);
       this.setColour(60);
-      this.setTooltip('Gửi một tin nhắn qua LoRa');
+      this.setTooltip('Gửi một tin nhắn (chữ) qua LoRa');
+    }
+  };
+
+  Blockly.Blocks['com_receive'] = {
+    init() {
+      this.appendDummyInput().appendField('📡 Lấy tin nhắn nhận được (LoRa)');
+      this.setOutput(true, 'String');
+      this.setColour(60);
+    }
+  };
+
+  Blockly.Blocks['com_available'] = {
+    init() {
+      this.appendDummyInput().appendField('📡 Có tin nhắn LoRa mới?');
+      this.setOutput(true, 'Boolean');
+      this.setColour(60);
     }
   };
 
@@ -313,6 +372,7 @@ export function getToolboxForLab(labId) {
           { kind: 'block', type: 'sensor_init' },
           { kind: 'block', type: 'sensor_read_temp' },
           { kind: 'block', type: 'sensor_read_pressure' },
+          { kind: 'block', type: 'sensor_update' },
           { kind: 'block', type: 'imu_read_acc' },
           { kind: 'block', type: 'imu_read_gyro' },
           { kind: 'block', type: 'imu_read_mag' },
@@ -325,6 +385,7 @@ export function getToolboxForLab(labId) {
         contents: [
           { kind: 'block', type: 'gps_init' },
           { kind: 'block', type: 'gps_read' },
+          { kind: 'block', type: 'gps_get_coord' },
         ],
       },
       {
@@ -347,6 +408,8 @@ export function getToolboxForLab(labId) {
       contents: [
         { kind: 'block', type: 'com_init' },
         { kind: 'block', type: 'com_send' },
+        { kind: 'block', type: 'com_receive' },
+        { kind: 'block', type: 'com_available' },
       ],
     });
   }

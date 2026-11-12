@@ -100,7 +100,7 @@ function AxisHelper() {
   );
 }
 
-export default function AttitudeViewer3D({ height = 350 }) {
+export default function AttitudeViewer3D({ height = 350, standalone = true }) {
   const { subscribe } = useSerial();
   const [rotation, setRotation] = useState({ pitch: 0, roll: 0, yaw: 0 });
 
@@ -147,9 +147,9 @@ export default function AttitudeViewer3D({ height = 350 }) {
     return () => cancelAnimationFrame(frame);
   }, []);
 
-  return (
-    <div className="card">
-      <div className="card-header">
+  const content = (
+    <>
+      <div className="card-header" style={{ display: standalone ? 'flex' : 'none' }}>
         <h3>🛰️ 3D Attitude Viewer</h3>
         <div style={{ display: 'flex', gap: '12px', fontSize: 'var(--font-size-xs)', fontFamily: 'var(--font-mono)' }}>
           <span style={{ color: 'var(--accent-red)' }}>P: {rotation.pitch.toFixed(1)}°</span>
@@ -157,7 +157,7 @@ export default function AttitudeViewer3D({ height = 350 }) {
           <span style={{ color: 'var(--accent-blue)' }}>Y: {rotation.yaw.toFixed(1)}°</span>
         </div>
       </div>
-      <div style={{ height: `${height}px`, background: '#070b14' }}>
+      <div style={{ height: typeof height === 'number' ? `${height}px` : height, background: '#070b14', flex: 1, position: 'relative' }}>
         <Canvas camera={{ position: [3, 2, 3], fov: 50 }}>
           <ambientLight intensity={0.4} />
           <directionalLight position={[5, 5, 5]} intensity={0.8} />
@@ -186,6 +186,8 @@ export default function AttitudeViewer3D({ height = 350 }) {
           />
         </Canvas>
       </div>
-    </div>
+    </>
   );
+
+  return standalone ? <div className="card">{content}</div> : <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>{content}</div>;
 }

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import ReactECharts from 'echarts-for-react';
 import { useSerial } from '../../contexts/SerialContext';
 
-export default function VoltageChart({ maxPoints = 60 }) {
+export default function VoltageChart({ maxPoints = 60, height = '300px', standalone = true }) {
   const { subscribe } = useSerial();
   const [data, setData] = useState([]);
   const timeRef = useRef(0);
@@ -99,9 +99,8 @@ export default function VoltageChart({ maxPoints = 60 }) {
     animationDuration: 300,
   };
 
-  return (
-    <div className="card">
-      <ReactECharts option={option} style={{ height: '300px' }} notMerge={true} />
-    </div>
-  );
+  const finalHeight = typeof height === 'number' ? `${height}px` : height;
+  const content = <ReactECharts option={option} style={{ height: finalHeight, width: '100%' }} notMerge={true} />;
+
+  return standalone ? <div className="card">{content}</div> : content;
 }

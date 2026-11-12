@@ -16,11 +16,9 @@ export default function Lab7() {
      const vizPanel = (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', flex: 1, minHeight: 0 }}>
       <div className="dashboard-grid">
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)', height: '100%' }}>
-            <AttitudeViewer3D height="100%" />
-            <GPSMap height="100%" />
-            <VoltageChart maxPoints={100} />
-          </div>
+        <AttitudeViewer3D height={350} />
+        <GPSMap height={350} />
+        <VoltageChart maxPoints={100} />
       </div>
     </div>
   );

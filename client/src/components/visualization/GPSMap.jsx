@@ -26,7 +26,7 @@ function MapUpdater({ center }) {
   return null;
 }
 
-export default function GPSMap({ height = 350 }) {
+export default function GPSMap({ height = 350, standalone = true }) {
   const { subscribe } = useSerial();
   const [position, setPosition] = useState([21.0285, 105.8542]); // Hanoi default
   const [trail, setTrail] = useState([]);
@@ -68,9 +68,9 @@ export default function GPSMap({ height = 350 }) {
     return () => clearInterval(interval);
   }, []);
 
-  return (
-    <div className="card">
-      <div className="card-header">
+  const content = (
+    <>
+      <div className="card-header" style={{ display: standalone ? 'flex' : 'none' }}>
         <h3>🌍 GPS Map</h3>
         <div style={{ display: 'flex', gap: '12px', fontSize: 'var(--font-size-xs)', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }}>
           <span>Lat: {gpsInfo.lat.toFixed(6)}</span>
@@ -78,11 +78,11 @@ export default function GPSMap({ height = 350 }) {
           <span>Alt: {gpsInfo.alt.toFixed(1)}m</span>
         </div>
       </div>
-      <div style={{ height: `${height}px` }}>
+      <div style={{ height: typeof height === 'number' ? `${height}px` : height, flex: 1, position: 'relative' }}>
         <MapContainer
           center={position}
           zoom={16}
-          style={{ height: '100%', width: '100%', borderRadius: '0 0 12px 12px' }}
+          style={{ height: '100%', width: '100%', borderRadius: standalone ? '0 0 12px 12px' : '0' }}
           zoomControl={true}
         >
           <TileLayer
@@ -108,6 +108,8 @@ export default function GPSMap({ height = 350 }) {
           )}
         </MapContainer>
       </div>
-    </div>
+    </>
   );
+
+  return standalone ? <div className="card">{content}</div> : <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>{content}</div>;
 }
