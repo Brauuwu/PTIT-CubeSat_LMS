@@ -1833,14 +1833,14 @@
     "question": "Thông số 'CPHA = 0' trong cấu hình SPI có ý nghĩa kỹ thuật gì?",
     "Question": "Thông số 'CPHA = 0' trong cấu hình SPI có ý nghĩa kỹ thuật gì?",
     "options": [
-      "Không lấy mẫu dữ liệu",
+      "Dữ liệu được giữ cố định và không lấy mẫu trong toàn bộ chu kỳ xung",
       "Dữ liệu được lấy mẫu tại sườn chuyển tiếp thứ nhất của chu kỳ xung nhịp",
-      "Lấy mẫu liên tục không ngừng",
+      "Dữ liệu được chuyển dịch liên tục mà không đồng bộ theo sườn xung nhịp",
       "Dữ liệu được lấy mẫu tại sườn chuyển tiếp thứ hai của chu kỳ xung nhịp"
     ],
-    "Option_A": "Không lấy mẫu dữ liệu",
+    "Option_A": "Dữ liệu được giữ cố định và không lấy mẫu trong toàn bộ chu kỳ xung",
     "Option_B": "Dữ liệu được lấy mẫu tại sườn chuyển tiếp thứ nhất của chu kỳ xung nhịp",
-    "Option_C": "Lấy mẫu liên tục không ngừng",
+    "Option_C": "Dữ liệu được chuyển dịch liên tục mà không đồng bộ theo sườn xung nhịp",
     "Option_D": "Dữ liệu được lấy mẫu tại sườn chuyển tiếp thứ hai của chu kỳ xung nhịp",
     "answer": "B",
     "Answer": "B",

@@ -2769,12 +2769,12 @@
     "question": "Chấn tử phản xạ (Reflector) trong anten Yagi được bố trí ở vị trí nào và có chiều dài như thế nào so với chấn tử tích cực?",
     "Question": "Chấn tử phản xạ (Reflector) trong anten Yagi được bố trí ở vị trí nào và có chiều dài như thế nào so với chấn tử tích cực?",
     "options": [
-      "Nằm sau chấn tử tích cực và có chiều dài dài hơn khoảng 5%",
+      "Nằm sau chấn tử tích cực và có kích thước dài hơn 5%",
       "Có kích thước chiều dài hình học thu gọn hoàn toàn bằng không",
       "Bố trí ở phía trước chấn tử tích cực và có chiều dài ngắn hơn",
       "Lắp đặt vuông góc một góc 90 độ so với mặt phẳng các chấn tử"
     ],
-    "Option_A": "Nằm sau chấn tử tích cực và có chiều dài dài hơn khoảng 5%",
+    "Option_A": "Nằm sau chấn tử tích cực và có kích thước dài hơn 5%",
     "Option_B": "Có kích thước chiều dài hình học thu gọn hoàn toàn bằng không",
     "Option_C": "Bố trí ở phía trước chấn tử tích cực và có chiều dài ngắn hơn",
     "Option_D": "Lắp đặt vuông góc một góc 90 độ so với mặt phẳng các chấn tử",
@@ -3273,15 +3273,15 @@
     "question": "Để phân mảnh một tệp dữ liệu kích thước lớn (ví dụ `fileSize = 4096` byte) thành các mảnh nhỏ kích thước `CHUNK_SIZE = 128` byte, công thức tính tổng số gói là:",
     "Question": "Để phân mảnh một tệp dữ liệu kích thước lớn (ví dụ `fileSize = 4096` byte) thành các mảnh nhỏ kích thước `CHUNK_SIZE = 128` byte, công thức tính tổng số gói là:",
     "options": [
-      "Nhân kích thước tệp với kích thước mảnh rồi chia cho 100",
-      "Sử dụng công thức làm tròn lên: (fileSize + CHUNK_SIZE - 1) / CHUNK_SIZE",
-      "Chia nguyên kích thước tệp cho kích thước mảnh rồi cộng thêm 1",
-      "Cộng 1 vào kích thước tệp rồi chia trực tiếp cho kích thước mảnh"
+      "Công thức chia trực tiếp: fileSize / CHUNK_SIZE",
+      "Công thức làm tròn lên: (fileSize + CHUNK_SIZE - 1) / CHUNK_SIZE",
+      "Công thức chia lấy dư: (fileSize / CHUNK_SIZE) + 1",
+      "Công thức cộng bù: (fileSize + 1) / CHUNK_SIZE"
     ],
-    "Option_A": "Nhân kích thước tệp với kích thước mảnh rồi chia cho 100",
-    "Option_B": "Sử dụng công thức làm tròn lên: (fileSize + CHUNK_SIZE - 1) / CHUNK_SIZE",
-    "Option_C": "Chia nguyên kích thước tệp cho kích thước mảnh rồi cộng thêm 1",
-    "Option_D": "Cộng 1 vào kích thước tệp rồi chia trực tiếp cho kích thước mảnh",
+    "Option_A": "Công thức chia trực tiếp: fileSize / CHUNK_SIZE",
+    "Option_B": "Công thức làm tròn lên: (fileSize + CHUNK_SIZE - 1) / CHUNK_SIZE",
+    "Option_C": "Công thức chia lấy dư: (fileSize / CHUNK_SIZE) + 1",
+    "Option_D": "Công thức cộng bù: (fileSize + 1) / CHUNK_SIZE",
     "answer": "B",
     "Answer": "B",
     "explanation": "Công thức làm tròn lên chuẩn trong C: `(fileSize + CHUNK_SIZE - 1) / CHUNK_SIZE` bảo đảm khối dữ liệu lẻ cuối cùng vẫn được đóng gói trọn vẹn.",
@@ -3948,12 +3948,12 @@
       "Gọi hàm delay(100) giữa các lần đọc cổng nối tiếp",
       "Giới hạn số lượng gói tin phát tối đa là 5 gói mỗi ngày",
       "Chỉ cho phép phát sóng khi nhiệt độ ngoài trời đạt mức quy định",
-      "Kiểm tra khoảng thời gian trôi qua giữa hai lần phát lớn hơn ngưỡng quy định của Duty Cycle"
+      "Kiểm tra thời gian trôi qua giữa hai lần phát lớn hơn ngưỡng quy định của Duty Cycle"
     ],
     "Option_A": "Gọi hàm delay(100) giữa các lần đọc cổng nối tiếp",
     "Option_B": "Giới hạn số lượng gói tin phát tối đa là 5 gói mỗi ngày",
     "Option_C": "Chỉ cho phép phát sóng khi nhiệt độ ngoài trời đạt mức quy định",
-    "Option_D": "Kiểm tra khoảng thời gian trôi qua giữa hai lần phát lớn hơn ngưỡng quy định của Duty Cycle",
+    "Option_D": "Kiểm tra thời gian trôi qua giữa hai lần phát lớn hơn ngưỡng quy định của Duty Cycle",
     "answer": "D",
     "Answer": "D",
     "explanation": "Áp đặt thời gian chờ tối thiểu giữa các đợt phát sóng dài bảo vệ phần cứng khỏi hiện tượng tích tụ nhiệt nguy hiểm trong chân không.",

@@ -81,15 +81,15 @@
     "question": "Công thức khí áp chuẩn (Barometric Formula) dùng để tính toán cao độ tương đối $h$ từ áp suất đo được $P$ và áp suất mực nước biển $P_0$ là:",
     "Question": "Công thức khí áp chuẩn (Barometric Formula) dùng để tính toán cao độ tương đối $h$ từ áp suất đo được $P$ và áp suất mực nước biển $P_0$ là:",
     "options": [
-      "h = 44330 \\times (1 - P / P_0)",
-      "h = 44330 \\times [1 - (P / P_0)^2]",
-      "h = 44330 \\times (P_0 / P - 1)",
-      "h = 44330 \\times [1 - (P / P_0)^{0.1903}]"
+      "$h = 44330 \\times (1 - P / P_0)$",
+      "$h = 44330 \\times [1 - (P / P_0)^2]$",
+      "$h = 44330 \\times (P_0 / P - 1)$",
+      "$h = 44330 \\times [1 - (P / P_0)^{0.1903}]$"
     ],
-    "Option_A": "h = 44330 \\times (1 - P / P_0)",
-    "Option_B": "h = 44330 \\times [1 - (P / P_0)^2]",
-    "Option_C": "h = 44330 \\times (P_0 / P - 1)",
-    "Option_D": "h = 44330 \\times [1 - (P / P_0)^{0.1903}]",
+    "Option_A": "$h = 44330 \\times (1 - P / P_0)$",
+    "Option_B": "$h = 44330 \\times [1 - (P / P_0)^2]$",
+    "Option_C": "$h = 44330 \\times (P_0 / P - 1)$",
+    "Option_D": "$h = 44330 \\times [1 - (P / P_0)^{0.1903}]$",
     "answer": "D",
     "Answer": "D",
     "explanation": "Phương trình khí áp chuẩn quốc tế (ICAO): $h = 44330 \\times [1 - (P / P_0)^{0.1903}]$ suy ra độ cao từ quy luật suy giảm áp suất theo hàm mũ của tầng đối lưu.",
@@ -444,16 +444,16 @@
       "Chuẩn định dạng tài liệu có cấu trúc JSON",
       "Chuẩn khung dữ liệu nhị phân tốc độ cao CAN",
       "Chuẩn siêu văn bản hiển thị trên trình duyệt",
-      "Chuẩn NMEA 0183 với các câu ASCII bắt đầu bằng `$`"
+      "Chuẩn NMEA 0183 với các câu tin ASCII bắt đầu bằng ký tự tiền tố '\\$'"
     ],
     "Option_A": "Chuẩn định dạng tài liệu có cấu trúc JSON",
     "Option_B": "Chuẩn khung dữ liệu nhị phân tốc độ cao CAN",
     "Option_C": "Chuẩn siêu văn bản hiển thị trên trình duyệt",
-    "Option_D": "Chuẩn NMEA 0183 với các câu ASCII bắt đầu bằng `$`",
+    "Option_D": "Chuẩn NMEA 0183 với các câu tin ASCII bắt đầu bằng ký tự tiền tố '\\$'",
     "answer": "D",
     "Answer": "D",
-    "explanation": "NMEA 0183 là chuẩn quốc tế kinh điển của ngành hàng hải và định vị, phát các câu tin tuần tự dạng văn bản có cấu trúc.",
-    "Explanation": "NMEA 0183 là chuẩn quốc tế kinh điển của ngành hàng hải và định vị, phát các câu tin tuần tự dạng văn bản có cấu trúc."
+    "explanation": "NMEA 0183 là chuẩn quốc tế kinh điển của ngành hàng hải và định vị, phát các câu tin tuần tự dạng văn bản có cấu trúc bắt đầu bằng ký tự '\\$'.",
+    "Explanation": "NMEA 0183 là chuẩn quốc tế kinh điển của ngành hàng hải và định vị, phát các câu tin tuần tự dạng văn bản có cấu trúc bắt đầu bằng ký tự '\\$'."
   },
   {
     "id": 20,
@@ -462,8 +462,8 @@
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
     "Section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
-    "question": "Bản tin NMEA `$GPRMC` (Recommended Minimum Specific GNSS Data) cung cấp tập hợp các thông số cốt lõi nào?",
-    "Question": "Bản tin NMEA `$GPRMC` (Recommended Minimum Specific GNSS Data) cung cấp tập hợp các thông số cốt lõi nào?",
+    "question": "Bản tin NMEA GPRMC (Recommended Minimum Specific GNSS Data) cung cấp tập hợp các thông số cốt lõi nào?",
+    "Question": "Bản tin NMEA GPRMC (Recommended Minimum Specific GNSS Data) cung cấp tập hợp các thông số cốt lõi nào?",
     "options": [
       "Áp suất khí quyển và nhiệt độ môi trường xung quanh",
       "Khung dữ liệu hình ảnh nhị phân truyền từ máy ảnh",
@@ -476,8 +476,8 @@
     "Option_D": "Nhiệt độ tiếp giáp bán dẫn trên bo mạch máy tính",
     "answer": "C",
     "Answer": "C",
-    "explanation": "Câu `$GPRMC` là bản tin tối thiểu quan trọng nhất cung cấp đầy đủ thông tin thời gian, tọa độ phẳng và vận tốc chuyển động.",
-    "Explanation": "Câu `$GPRMC` là bản tin tối thiểu quan trọng nhất cung cấp đầy đủ thông tin thời gian, tọa độ phẳng và vận tốc chuyển động."
+    "explanation": "Câu GPRMC là bản tin tối thiểu quan trọng nhất cung cấp đầy đủ thông tin thời gian, tọa độ phẳng và vận tốc chuyển động.",
+    "Explanation": "Câu GPRMC là bản tin tối thiểu quan trọng nhất cung cấp đầy đủ thông tin thời gian, tọa độ phẳng và vận tốc chuyển động."
   },
   {
     "id": 21,
@@ -486,8 +486,8 @@
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
     "Section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
-    "question": "Bản tin NMEA `$GPGGA` (Global Positioning System Fix Data) cung cấp thông tin đặc thù quan trọng nào mà câu `$GPRMC` không có?",
-    "Question": "Bản tin NMEA `$GPGGA` (Global Positioning System Fix Data) cung cấp thông tin đặc thù quan trọng nào mà câu `$GPRMC` không có?",
+    "question": "Bản tin NMEA GPGGA (Global Positioning System Fix Data) cung cấp thông tin đặc thù quan trọng nào mà câu GPRMC không có?",
+    "Question": "Bản tin NMEA GPGGA (Global Positioning System Fix Data) cung cấp thông tin đặc thù quan trọng nào mà câu GPRMC không có?",
     "options": [
       "Mã định danh định vị của kỹ sư trực trạm mặt đất",
       "Điện áp và dòng điện tiêu thụ của phân hệ nguồn",
@@ -500,8 +500,8 @@
     "Option_D": "Đặc tính phản xạ quang phổ của bề mặt địa hình",
     "answer": "C",
     "Answer": "C",
-    "explanation": "Câu `$GPGGA` cung cấp độ cao geoid, số lượng vệ tinh nhìn thấy (Satellites in view) và hệ số chính xác HDOP.",
-    "Explanation": "Câu `$GPGGA` cung cấp độ cao geoid, số lượng vệ tinh nhìn thấy (Satellites in view) và hệ số chính xác HDOP."
+    "explanation": "Câu GPGGA cung cấp độ cao geoid, số lượng vệ tinh nhìn thấy (Satellites in view) và hệ số chính xác HDOP.",
+    "Explanation": "Câu GPGGA cung cấp độ cao geoid, số lượng vệ tinh nhìn thấy (Satellites in view) và hệ số chính xác HDOP."
   },
   {
     "id": 22,
@@ -801,12 +801,12 @@
     "question": "Khái niệm 'GSD' (Ground Sampling Distance - Khoảng cách lấy mẫu mặt đất) của ảnh viễn thám chụp từ vệ tinh được định nghĩa là gì?",
     "Question": "Khái niệm 'GSD' (Ground Sampling Distance - Khoảng cách lấy mẫu mặt đất) của ảnh viễn thám chụp từ vệ tinh được định nghĩa là gì?",
     "options": [
-      "Kích thước mặt đất tương ứng khoảng cách hai pixel ảnh",
+      "Kích thước phân giải mặt đất tương ứng giữa hai điểm ảnh",
       "Vận tốc bay tương đối của vệ tinh so với bề mặt địa hình",
       "Chiều cao danh định của tầng đối lưu trong khí quyển",
       "Cự ly truyền sóng thẳng giữa hai trạm quan sát mặt đất"
     ],
-    "Option_A": "Kích thước mặt đất tương ứng khoảng cách hai pixel ảnh",
+    "Option_A": "Kích thước phân giải mặt đất tương ứng giữa hai điểm ảnh",
     "Option_B": "Vận tốc bay tương đối của vệ tinh so với bề mặt địa hình",
     "Option_C": "Chiều cao danh định của tầng đối lưu trong khí quyển",
     "Option_D": "Cự ly truyền sóng thẳng giữa hai trạm quan sát mặt đất",
@@ -1062,8 +1062,8 @@
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
     "Section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
-    "question": "Định dạng dữ liệu tọa độ địa lý trong câu NMEA `$GPRMC` (ví dụ: `2102.3456,N`) được biểu diễn theo hệ tọa độ nào?",
-    "Question": "Định dạng dữ liệu tọa độ địa lý trong câu NMEA `$GPRMC` (ví dụ: `2102.3456,N`) được biểu diễn theo hệ tọa độ nào?",
+    "question": "Định dạng dữ liệu tọa độ địa lý trong câu NMEA GPRMC (ví dụ: `2102.3456,N`) được biểu diễn theo hệ tọa độ nào?",
+    "Question": "Định dạng dữ liệu tọa độ địa lý trong câu NMEA GPRMC (ví dụ: `2102.3456,N`) được biểu diễn theo hệ tọa độ nào?",
     "options": [
       "Hệ tọa độ vuông góc không gian tâm Trái Đất ECEF",
       "Hệ lưới chiếu phẳng toàn cầu chuẩn quốc tế UTM",
@@ -1110,8 +1110,8 @@
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
     "Section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
-    "question": "Thời gian UTC trích xuất từ câu tin NMEA `$GPRMC` (ví dụ chuỗi `\"123519.00\"`) có ý nghĩa biểu thị thời gian nào?",
-    "Question": "Thời gian UTC trích xuất từ câu tin NMEA `$GPRMC` (ví dụ chuỗi `\"123519.00\"`) có ý nghĩa biểu thị thời gian nào?",
+    "question": "Thời gian UTC trích xuất từ câu tin NMEA GPRMC (ví dụ chuỗi `\"123519.00\"`) có ý nghĩa biểu thị thời gian nào?",
+    "Question": "Thời gian UTC trích xuất từ câu tin NMEA GPRMC (ví dụ chuỗi `\"123519.00\"`) có ý nghĩa biểu thị thời gian nào?",
     "options": [
       "Mốc thời gian 12 giờ ngày 35 tháng 19 trong năm",
       "Mã định danh của vệ tinh GPS đang phát tín hiệu",
@@ -1124,8 +1124,8 @@
     "Option_D": "Vận tốc bay tương đối tính theo hải lý trên giờ",
     "answer": "C",
     "Answer": "C",
-    "explanation": "Định dạng chuỗi `hhmmss.ss`: 2 số đầu là giờ, 2 số tiếp theo là phút và 2 số sau là giây theo múi giờ chuẩn quốc tế UTC.",
-    "Explanation": "Định dạng chuỗi `hhmmss.ss`: 2 số đầu là giờ, 2 số tiếp theo là phút và 2 số sau là giây theo múi giờ chuẩn quốc tế UTC."
+    "explanation": "Chuỗi 123519.00 tương ứng 12 giờ 35 phút 19.00 giây theo giờ chuẩn quốc tế UTC (Greenwich).",
+    "Explanation": "Chuỗi 123519.00 tương ứng 12 giờ 35 phút 19.00 giây theo giờ chuẩn quốc tế UTC (Greenwich)."
   },
   {
     "id": 48,
@@ -1134,8 +1134,8 @@
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
     "Section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
-    "question": "Ký tự cờ trạng thái 'Status' trong câu `$GPRMC` có giá trị là `'A'` biểu thị điều gì?",
-    "Question": "Ký tự cờ trạng thái 'Status' trong câu `$GPRMC` có giá trị là `'A'` biểu thị điều gì?",
+    "question": "Ký tự cờ trạng thái 'Status' trong câu GPRMC có giá trị là `'A'` biểu thị điều gì?",
+    "Question": "Ký tự cờ trạng thái 'Status' trong câu GPRMC có giá trị là `'A'` biểu thị điều gì?",
     "options": [
       "Module đang tắt nguồn",
       "Dữ liệu định vị hợp lệ và đáng tin cậy",
@@ -1148,8 +1148,8 @@
     "Option_D": "Không có tín hiệu vệ tinh",
     "answer": "B",
     "Answer": "B",
-    "explanation": "Ký tự 'A' (Data Valid) xác nhận máy thu đã khóa tọa độ thành công; nếu là 'V' (Navigation receiver warning) thì tọa độ chưa sử dụng được.",
-    "Explanation": "Ký tự 'A' (Data Valid) xác nhận máy thu đã khóa tọa độ thành công; nếu là 'V' (Navigation receiver warning) thì tọa độ chưa sử dụng được."
+    "explanation": "'A' là Active (dữ liệu hợp lệ, đã khóa định vị); 'V' là Void (cảnh báo dữ liệu không tin cậy hoặc chưa bắt đủ số vệ tinh).",
+    "Explanation": "'A' là Active (dữ liệu hợp lệ, đã khóa định vị); 'V' là Void (cảnh báo dữ liệu không tin cậy hoặc chưa bắt đủ số vệ tinh)."
   },
   {
     "id": 49,
@@ -2241,19 +2241,19 @@
     "question": "Giá trị điện trở kéo lên tối thiểu an toàn ($R_{p(min)}$) trên đường nguồn $V_{DD} = 3.3\\text{V}$ với dòng chìm tối đa $I_{OL} = 3\\text{mA}$ là:",
     "Question": "Giá trị điện trở kéo lên tối thiểu an toàn ($R_{p(min)}$) trên đường nguồn $V_{DD} = 3.3\\text{V}$ với dòng chìm tối đa $I_{OL} = 3\\text{mA}$ là:",
     "options": [
-      "Điện trở kéo tối thiểu là khoảng 1 kOhm",
+      "Điện trở kéo tối thiểu khuyến nghị là 1 kOhm",
       "Điện trở kéo tiêu chuẩn là 10 kOhm",
       "Điện trở kéo danh định là 4.7 kOhm",
       "Điện trở kéo khuyến nghị là 100 Ohm"
     ],
-    "Option_A": "Điện trở kéo tối thiểu là khoảng 1 kOhm",
+    "Option_A": "Điện trở kéo tối thiểu khuyến nghị là 1 kOhm",
     "Option_B": "Điện trở kéo tiêu chuẩn là 10 kOhm",
     "Option_C": "Điện trở kéo danh định là 4.7 kOhm",
     "Option_D": "Điện trở kéo khuyến nghị là 100 Ohm",
     "answer": "A",
     "Answer": "A",
-    "explanation": "$R_{p(min)} = (V_{DD} - V_{OL}) / I_{OL} = (3.3 - 0.4) / 0.003 \\approx 966.7\\ \\Omega$.",
-    "Explanation": "$R_{p(min)} = (V_{DD} - V_{OL}) / I_{OL} = (3.3 - 0.4) / 0.003 \\approx 966.7\\ \\Omega$."
+    "explanation": "Giá trị 1 kOhm đến 4.7 kOhm bảo đảm sườn lên của xung tín hiệu I2C đủ nhanh ở tần số 400 kHz mà không làm dòng chìm của ngõ ra cực thu hở vượt ngưỡng cho phép.",
+    "Explanation": "Giá trị 1 kOhm đến 4.7 kOhm bảo đảm sườn lên của xung tín hiệu I2C đủ nhanh ở tần số 400 kHz mà không làm dòng chìm của ngõ ra cực thu hở vượt ngưỡng cho phép."
   },
   {
     "id": 95,
@@ -2460,16 +2460,16 @@
       "Đạt mức độ suy hao danh định là +20 dB",
       "Độ cách ly ở mức tiêu chuẩn là 0 dB",
       "Mức độ suy giảm tín hiệu đạt -3 dB",
-      "Đạt độ cách ly khoảng -50 dB hoặc tốt hơn"
+      "Độ cách ly giữa các kênh đạt từ -50 dB trở lên"
     ],
     "Option_A": "Đạt mức độ suy hao danh định là +20 dB",
     "Option_B": "Độ cách ly ở mức tiêu chuẩn là 0 dB",
     "Option_C": "Mức độ suy giảm tín hiệu đạt -3 dB",
-    "Option_D": "Đạt độ cách ly khoảng -50 dB hoặc tốt hơn",
+    "Option_D": "Độ cách ly giữa các kênh đạt từ -50 dB trở lên",
     "answer": "D",
     "Answer": "D",
-    "explanation": "Độ suy giảm -50dB ngăn chặn hiệu quả hơn 99% biên độ tín hiệu cao tần rò rỉ qua công tắc khi ở trạng thái ngắt.",
-    "Explanation": "Độ suy giảm -50dB ngăn chặn hiệu quả hơn 99% biên độ tín hiệu cao tần rò rỉ qua công tắc khi ở trạng thái ngắt."
+    "explanation": "Độ cách ly cao ngăn chặn hiện tượng rò rỉ tín hiệu (crosstalk) giữa các kênh đo nhạy cảm khi chuyển mạch.",
+    "Explanation": "Độ cách ly cao ngăn chặn hiện tượng rò rỉ tín hiệu (crosstalk) giữa các kênh đo nhạy cảm khi chuyển mạch."
   },
   {
     "id": 104,
@@ -3534,22 +3534,22 @@
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
     "Section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
-    "question": "Để kiểm tra xem dòng chuỗi NMEA nhận được có phải là bản tin `$GPRMC` hay không, cú pháp kiểm tra chuỗi C++ là:",
-    "Question": "Để kiểm tra xem dòng chuỗi NMEA nhận được có phải là bản tin `$GPRMC` hay không, cú pháp kiểm tra chuỗi C++ là:",
+    "question": "Để kiểm tra xem dòng chuỗi NMEA nhận được có phải là bản tin GPRMC hay không, cú pháp kiểm tra chuỗi C++ là:",
+    "Question": "Để kiểm tra xem dòng chuỗi NMEA nhận được có phải là bản tin GPRMC hay không, cú pháp kiểm tra chuỗi C++ là:",
     "options": [
-      "So sánh độ dài chuỗi ký tự nhận được với hằng số 6 ký tự",
-      "Kiểm tra ký tự đầu tiên của chuỗi có phải là dấu thăng '#'",
-      "Dùng hàm strcmp() so sánh chuỗi với định danh `$GPGGA`",
-      "Dùng hàm strncmp() kiểm tra tiền tố bắt đầu bằng chuỗi `$GPRMC`"
+      "Dùng hàm strcmp() so sánh chuỗi với định danh GPGGA",
+      "Dùng hàm strlen() kiểm tra chuỗi có độ dài đúng 6 ký tự",
+      "Dùng toán tử so sánh bằng line == GPRMC trực tiếp",
+      "Dùng hàm strncmp() kiểm tra 6 ký tự đầu là tiền tố GPRMC"
     ],
-    "Option_A": "So sánh độ dài chuỗi ký tự nhận được với hằng số 6 ký tự",
-    "Option_B": "Kiểm tra ký tự đầu tiên của chuỗi có phải là dấu thăng '#'",
-    "Option_C": "Dùng hàm strcmp() so sánh chuỗi với định danh `$GPGGA`",
-    "Option_D": "Dùng hàm strncmp() kiểm tra tiền tố bắt đầu bằng chuỗi `$GPRMC`",
+    "Option_A": "Dùng hàm strcmp() so sánh chuỗi với định danh GPGGA",
+    "Option_B": "Dùng hàm strlen() kiểm tra chuỗi có độ dài đúng 6 ký tự",
+    "Option_C": "Dùng toán tử so sánh bằng line == GPRMC trực tiếp",
+    "Option_D": "Dùng hàm strncmp() kiểm tra 6 ký tự đầu là tiền tố GPRMC",
     "answer": "D",
     "Answer": "D",
-    "explanation": "Hàm strncmp so sánh 6 ký tự đầu của chuỗi với tiền tố `$GPRMC` (hoặc `$GNRMC` của hệ đa vệ tinh GNSS).",
-    "Explanation": "Hàm strncmp so sánh 6 ký tự đầu của chuỗi với tiền tố `$GPRMC` (hoặc `$GNRMC` của hệ đa vệ tinh GNSS)."
+    "explanation": "Vì câu NMEA chứa nhiều trường dữ liệu phía sau, dùng strncmp(line, \"\\$GPRMC\", 6) == 0 là cách chuẩn xác để nhận dạng loại bản tin.",
+    "Explanation": "Vì câu NMEA chứa nhiều trường dữ liệu phía sau, dùng strncmp(line, \"\\$GPRMC\", 6) == 0 là cách chuẩn xác để nhận dạng loại bản tin."
   },
   {
     "id": 150,
@@ -4235,17 +4235,17 @@
     "options": [
       "Thuật toán tính toán mã băm an toàn chuẩn SHA-256",
       "Tính tổng số học modulo của tất cả các byte bản tin",
-      "Phép toán XOR bit liên tiếp giữa dấu `$` và dấu `*`",
+      "Phép toán XOR bit liên tiếp giữa ký tự '\\$' và ký tự '*'",
       "Phép nhân modulo 256 của toàn bộ các ký tự chuỗi"
     ],
     "Option_A": "Thuật toán tính toán mã băm an toàn chuẩn SHA-256",
     "Option_B": "Tính tổng số học modulo của tất cả các byte bản tin",
-    "Option_C": "Phép toán XOR bit liên tiếp giữa dấu `$` và dấu `*`",
+    "Option_C": "Phép toán XOR bit liên tiếp giữa ký tự '\\$' và ký tự '*'",
     "Option_D": "Phép nhân modulo 256 của toàn bộ các ký tự chuỗi",
     "answer": "C",
     "Answer": "C",
-    "explanation": "Chuẩn NMEA quy định mã checksum 8-bit bằng phép XOR tuần tự từng mã ASCII giữa `$` và `*`, hiển thị dưới dạng 2 ký tự hexa.",
-    "Explanation": "Chuẩn NMEA quy định mã checksum 8-bit bằng phép XOR tuần tự từng mã ASCII giữa `$` và `*`, hiển thị dưới dạng 2 ký tự hexa."
+    "explanation": "Chuẩn NMEA quy định mã checksum 8-bit bằng phép XOR tuần tự từng mã ASCII giữa '\\$' và '*', hiển thị dưới dạng 2 ký tự hexa.",
+    "Explanation": "Chuẩn NMEA quy định mã checksum 8-bit bằng phép XOR tuần tự từng mã ASCII giữa '\\$' và '*', hiển thị dưới dạng 2 ký tự hexa."
   },
   {
     "id": 180,
@@ -4257,19 +4257,19 @@
     "question": "Hàm C++ nào sau đây tính toán và xác thực mã checksum NMEA của chuỗi ký tự nhận được?",
     "Question": "Hàm C++ nào sau đây tính toán và xác thực mã checksum NMEA của chuỗi ký tự nhận được?",
     "options": [
-      "Tính phép XOR liên tiếp tất cả các ký tự nằm giữa `$` và `*` rồi so sánh với mã nhận",
-      "Tính tổng bù hai của tất cả các ký tự trong chuỗi bản tin NMEA",
-      "Tính mã dư thừa vòng CRC-16 trên toàn bộ độ dài của chuỗi ký tự",
-      "Cộng đại số giá trị mã ASCII của toàn bộ chuỗi rồi lấy số dư cho 256"
+      "Tính phép XOR liên tiếp tất cả các ký tự nằm giữa dấu bắt đầu và dấu sao rồi so sánh với mã nhận",
+      "Cộng dồn tất cả các mã ASCII từ đầu câu cho đến dấu xuống dòng",
+      "Đếm tổng số dấu phẩy xuất hiện trong toàn bộ chuỗi ký tự nhận được",
+      "Chỉ kiểm tra xem ký tự đầu tiên có đúng là dấu mở đầu câu tin hay không"
     ],
-    "Option_A": "Tính phép XOR liên tiếp tất cả các ký tự nằm giữa `$` và `*` rồi so sánh với mã nhận",
-    "Option_B": "Tính tổng bù hai của tất cả các ký tự trong chuỗi bản tin NMEA",
-    "Option_C": "Tính mã dư thừa vòng CRC-16 trên toàn bộ độ dài của chuỗi ký tự",
-    "Option_D": "Cộng đại số giá trị mã ASCII của toàn bộ chuỗi rồi lấy số dư cho 256",
+    "Option_A": "Tính phép XOR liên tiếp tất cả các ký tự nằm giữa dấu bắt đầu và dấu sao rồi so sánh với mã nhận",
+    "Option_B": "Cộng dồn tất cả các mã ASCII từ đầu câu cho đến dấu xuống dòng",
+    "Option_C": "Đếm tổng số dấu phẩy xuất hiện trong toàn bộ chuỗi ký tự nhận được",
+    "Option_D": "Chỉ kiểm tra xem ký tự đầu tiên có đúng là dấu mở đầu câu tin hay không",
     "answer": "A",
     "Answer": "A",
-    "explanation": "Hàm quét các ký tự giữa `$` và `*`, tích lũy mã XOR và đối chiếu với 2 chữ số hexa ở cuối câu.",
-    "Explanation": "Hàm quét các ký tự giữa `$` và `*`, tích lũy mã XOR và đối chiếu với 2 chữ số hexa ở cuối câu."
+    "explanation": "Hàm quét các ký tự giữa dấu bắt đầu '\\ và '*', tích lũy mã XOR và đối chiếu với 2 chữ số hexa ở cuối câu. và '*', tích lũy mã XOR và đối chiếu với 2 chữ số hexa ở cuối câu.",
+    "Explanation": "Hàm quét các ký tự giữa dấu bắt đầu '\\ và '*', tích lũy mã XOR và đối chiếu với 2 chữ số hexa ở cuối câu. và '*', tích lũy mã XOR và đối chiếu với 2 chữ số hexa ở cuối câu."
   },
   {
     "id": 181,
@@ -4278,8 +4278,8 @@
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
     "Section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
-    "question": "Trường dữ liệu số 9 trong câu `$GPRMC` (ví dụ `\"230326\"`) cung cấp thông tin ngày tháng năm theo định dạng nào?",
-    "Question": "Trường dữ liệu số 9 trong câu `$GPRMC` (ví dụ `\"230326\"`) cung cấp thông tin ngày tháng năm theo định dạng nào?",
+    "question": "Trường dữ liệu số 9 trong câu GPRMC (ví dụ `\"230326\"`) cung cấp thông tin ngày tháng năm theo định dạng nào?",
+    "Question": "Trường dữ liệu số 9 trong câu GPRMC (ví dụ `\"230326\"`) cung cấp thông tin ngày tháng năm theo định dạng nào?",
     "options": [
       "Giờ - Phút - Giây",
       "Ngày - Tháng - Năm",
@@ -4292,8 +4292,8 @@
     "Option_D": "Năm - Tháng - Ngày",
     "answer": "B",
     "Answer": "B",
-    "explanation": "Định dạng 6 chữ số: 2 số đầu là ngày, 2 số giữa là tháng và 2 số cuối là hai chữ số cuối của năm.",
-    "Explanation": "Định dạng 6 chữ số: 2 số đầu là ngày, 2 số giữa là tháng và 2 số cuối là hai chữ số cuối của năm."
+    "explanation": "Định dạng ddmmyy trong NMEA biểu thị: 23 là ngày, 03 là tháng 3, 26 là năm 2026.",
+    "Explanation": "Định dạng ddmmyy trong NMEA biểu thị: 23 là ngày, 03 là tháng 3, 26 là năm 2026."
   },
   {
     "id": 182,
@@ -4302,8 +4302,8 @@
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
     "Section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
-    "question": "Tốc độ di chuyển mặt đất trong câu `$GPRMC` được biểu thị bằng đơn vị Hải lý/giờ (Knots); để đổi sang km/h trong C++, hệ số nhân là:",
-    "Question": "Tốc độ di chuyển mặt đất trong câu `$GPRMC` được biểu thị bằng đơn vị Hải lý/giờ (Knots); để đổi sang km/h trong C++, hệ số nhân là:",
+    "question": "Tốc độ di chuyển mặt đất trong câu GPRMC được biểu thị bằng đơn vị Hải lý/giờ (Knots); để đổi sang km/h trong C++, hệ số nhân là:",
+    "Question": "Tốc độ di chuyển mặt đất trong câu GPRMC được biểu thị bằng đơn vị Hải lý/giờ (Knots); để đổi sang km/h trong C++, hệ số nhân là:",
     "options": [
       "Nhân giá trị tốc độ đo bằng knots với hệ số 3.6",
       "Nhân giá trị tốc độ đo bằng knots với hệ số phân nửa 0.5",
@@ -4316,8 +4316,8 @@
     "Option_D": "Nhân giá trị tốc độ đo bằng knots với hệ số hải lý 1.852",
     "answer": "D",
     "Answer": "D",
-    "explanation": "Một hải lý (Nautical Mile) bằng chính xác 1852 mét; do đó nhân với 1.852 chuyển đổi trực tiếp sang km/h.",
-    "Explanation": "Một hải lý (Nautical Mile) bằng chính xác 1852 mét; do đó nhân với 1.852 chuyển đổi trực tiếp sang km/h."
+    "explanation": "1 Knot (Hải lý trên giờ) bằng chính xác 1.852 km/h; nhân giá trị knot trích xuất được với 1.852 sẽ quy đổi về km/h.",
+    "Explanation": "1 Knot (Hải lý trên giờ) bằng chính xác 1.852 km/h; nhân giá trị knot trích xuất được với 1.852 sẽ quy đổi về km/h."
   },
   {
     "id": 183,
@@ -4326,8 +4326,8 @@
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
     "Section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
-    "question": "Trường số 6 trong câu `$GPGGA` biểu thị chất lượng định vị GPS (Fix Quality); giá trị nào xác nhận đã có tín hiệu định vị vệ tinh tiêu chuẩn?",
-    "Question": "Trường số 6 trong câu `$GPGGA` biểu thị chất lượng định vị GPS (Fix Quality); giá trị nào xác nhận đã có tín hiệu định vị vệ tinh tiêu chuẩn?",
+    "question": "Trường số 6 trong câu GPGGA biểu thị chất lượng định vị GPS (Fix Quality); giá trị nào xác nhận đã có tín hiệu định vị vệ tinh tiêu chuẩn?",
+    "Question": "Trường số 6 trong câu GPGGA biểu thị chất lượng định vị GPS (Fix Quality); giá trị nào xác nhận đã có tín hiệu định vị vệ tinh tiêu chuẩn?",
     "options": [
       "Giá trị -1",
       "Giá trị 0",
@@ -4340,8 +4340,8 @@
     "Option_D": "Giá trị 9",
     "answer": "C",
     "Answer": "C",
-    "explanation": "Giá trị 1 xác nhận máy thu đã định vị thành công bằng tín hiệu định vị dân sự chuẩn SPS.",
-    "Explanation": "Giá trị 1 xác nhận máy thu đã định vị thành công bằng tín hiệu định vị dân sự chuẩn SPS."
+    "explanation": "0 = Không có Fix; 1 = GPS Fix tiêu chuẩn (SPS); 2 = DGPS Fix (chính xác cao hơn).",
+    "Explanation": "0 = Không có Fix; 1 = GPS Fix tiêu chuẩn (SPS); 2 = DGPS Fix (chính xác cao hơn)."
   },
   {
     "id": 184,
@@ -4473,19 +4473,19 @@
     "question": "Đoạn mã C++ nào sau đây cài đặt cơ chế chụp ảnh an toàn có giới hạn thời gian chờ tối đa (Capture Timeout)?",
     "Question": "Đoạn mã C++ nào sau đây cài đặt cơ chế chụp ảnh an toàn có giới hạn thời gian chờ tối đa (Capture Timeout)?",
     "options": [
-      "Lặp gọi hàm chụp ảnh trong khoảng thời gian timeout xác định cho đến khi nhận được đệm",
-      "Tạm dừng chương trình bằng hàm delay() liên tục trong 3000 mili-giây",
-      "Dùng vòng lặp vô hạn chờ bộ đệm ảnh mà không kiểm tra thời gian trôi qua",
-      "Trì hoãn cố định 3 giây rồi mới gọi hàm lấy bộ đệm ảnh duy nhất một lần"
+      "Lặp gọi hàm chụp ảnh theo thời gian timeout định sẵn",
+      "Tăng tần số xung nhịp bus I2C lên ngưỡng 10 MHz",
+      "Chuyển chế độ hoạt động của camera sang quay phim",
+      "Ngắt ngay nguồn điện cấp cho cảm biến camera"
     ],
-    "Option_A": "Lặp gọi hàm chụp ảnh trong khoảng thời gian timeout xác định cho đến khi nhận được đệm",
-    "Option_B": "Tạm dừng chương trình bằng hàm delay() liên tục trong 3000 mili-giây",
-    "Option_C": "Dùng vòng lặp vô hạn chờ bộ đệm ảnh mà không kiểm tra thời gian trôi qua",
-    "Option_D": "Trì hoãn cố định 3 giây rồi mới gọi hàm lấy bộ đệm ảnh duy nhất một lần",
+    "Option_A": "Lặp gọi hàm chụp ảnh theo thời gian timeout định sẵn",
+    "Option_B": "Tăng tần số xung nhịp bus I2C lên ngưỡng 10 MHz",
+    "Option_C": "Chuyển chế độ hoạt động của camera sang quay phim",
+    "Option_D": "Ngắt ngay nguồn điện cấp cho cảm biến camera",
     "answer": "A",
     "Answer": "A",
-    "explanation": "Giới hạn thời gian chờ 3 giây ngăn chặn việc CPU bị phong bế nếu phần cứng camera bị treo không xuất tín hiệu VSYNC.",
-    "Explanation": "Giới hạn thời gian chờ 3 giây ngăn chặn việc CPU bị phong bế nếu phần cứng camera bị treo không xuất tín hiệu VSYNC."
+    "explanation": "Cơ chế thử lại có timeout tránh làm treo hệ thống nếu khung đệm camera chưa sẵn sàng do nghẽn DMA.",
+    "Explanation": "Cơ chế thử lại có timeout tránh làm treo hệ thống nếu khung đệm camera chưa sẵn sàng do nghẽn DMA."
   },
   {
     "id": 190,

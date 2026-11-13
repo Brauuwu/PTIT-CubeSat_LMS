@@ -2482,18 +2482,18 @@
     "Question": "Chế độ 'Sleep Mode' của MAX17048 cho phép đưa dòng tiêu thụ tĩnh của vi mạch xuống mức kỷ lục nào?",
     "options": [
       "Dòng tiêu thụ tĩnh xấp xỉ mức năm mươi mili-Ampe",
-      "Dòng tĩnh chỉ khoảng ba micro-Ampe hoặc nhỏ hơn",
+      "Dòng tĩnh đạt mức ba micro-Ampe hoặc nhỏ hơn",
       "Dòng tiêu thụ giữ nguyên và không thể cắt giảm",
       "Dòng tĩnh duy trì cố định ở mức một mili-Ampe"
     ],
     "Option_A": "Dòng tiêu thụ tĩnh xấp xỉ mức năm mươi mili-Ampe",
-    "Option_B": "Dòng tĩnh chỉ khoảng ba micro-Ampe hoặc nhỏ hơn",
+    "Option_B": "Dòng tĩnh đạt mức ba micro-Ampe hoặc nhỏ hơn",
     "Option_C": "Dòng tiêu thụ giữ nguyên và không thể cắt giảm",
     "Option_D": "Dòng tĩnh duy trì cố định ở mức một mili-Ampe",
     "answer": "B",
     "Answer": "B",
-    "explanation": "Ở chế độ ngủ sâu, IC MAX17048 chỉ tiêu hao khoảng vài micro-ampe, bảo toàn năng lượng tối đa khi hệ thống nghỉ.",
-    "Explanation": "Ở chế độ ngủ sâu, IC MAX17048 chỉ tiêu hao khoảng vài micro-ampe, bảo toàn năng lượng tối đa khi hệ thống nghỉ."
+    "explanation": "Chế độ Deep Sleep tắt hầu hết các khối ngoại vi và lõi CPU chính, chỉ duy trì khối RTC và bộ nhớ ULP nên tiêu thụ dòng cực thấp cỡ vài uA.",
+    "Explanation": "Chế độ Deep Sleep tắt hầu hết các khối ngoại vi và lõi CPU chính, chỉ duy trì khối RTC và bộ nhớ ULP nên tiêu thụ dòng cực thấp cỡ vài uA."
   },
   {
     "id": 105,
@@ -3754,18 +3754,18 @@
     "Question": "Để in thông số điện áp và dung lượng pin với định dạng 2 chữ số thập phân ra cổng Serial, lệnh C++ nào là phù hợp nhất?",
     "options": [
       "Sử dụng hàm esp_deep_sleep_start() đưa hệ thống vào trạng thái ngủ sâu",
-      "Sử dụng hàm delay() để tạm dừng chương trình trong khoảng thời gian mong muốn",
+      "Sử dụng hàm delay() để tạm dừng chương trình trong thời gian mong muốn",
       "Sử dụng vòng lặp while(1) vô hạn để giữ nguyên trạng thái hiện tại",
       "Gọi hàm system_off() ngắt toàn bộ nguồn cấp của vi điều khiển"
     ],
     "Option_A": "Sử dụng hàm esp_deep_sleep_start() đưa hệ thống vào trạng thái ngủ sâu",
-    "Option_B": "Sử dụng hàm delay() để tạm dừng chương trình trong khoảng thời gian mong muốn",
+    "Option_B": "Sử dụng hàm delay() để tạm dừng chương trình trong thời gian mong muốn",
     "Option_C": "Sử dụng vòng lặp while(1) vô hạn để giữ nguyên trạng thái hiện tại",
     "Option_D": "Gọi hàm system_off() ngắt toàn bộ nguồn cấp của vi điều khiển",
     "answer": "B",
     "Answer": "B",
-    "explanation": "Hàm printf với định dạng `%.2f` hiển thị rõ ràng giá trị điện áp và dung lượng thực tế lên cửa sổ giám sát.",
-    "Explanation": "Hàm printf với định dạng `%.2f` hiển thị rõ ràng giá trị điện áp và dung lượng thực tế lên cửa sổ giám sát."
+    "explanation": "delay() khóa cứng luồng thực thi trong số mili-giây chỉ định; trong các hệ thống đòi hỏi đa nhiệm mượt mà, kỹ thuật non-blocking bằng millis() được ưu tiên hơn.",
+    "Explanation": "delay() khóa cứng luồng thực thi trong số mili-giây chỉ định; trong các hệ thống đòi hỏi đa nhiệm mượt mà, kỹ thuật non-blocking bằng millis() được ưu tiên hơn."
   },
   {
     "id": 159,

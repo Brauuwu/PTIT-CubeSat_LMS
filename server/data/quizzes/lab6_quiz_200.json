@@ -1257,15 +1257,15 @@
     "question": "Công thức tính Biên độ an toàn (Margin of Safety - MoS) của kết cấu cơ khí theo ứng suất cho phép và ứng suất thực tế là:",
     "Question": "Công thức tính Biên độ an toàn (Margin of Safety - MoS) của kết cấu cơ khí theo ứng suất cho phép và ứng suất thực tế là:",
     "options": [
-      "MoS = FoS / 2",
-      "MoS = Ứng suất tính toán - Ứng suất cho phép",
+      "MoS = [Ứng suất tính toán / (Ứng suất cho phép × FoS)] + 1",
+      "MoS = [Ứng suất tính toán / (Ứng suất cho phép × FoS)] - 1",
       "MoS = [Ứng suất cho phép / (Ứng suất tính toán × FoS)] - 1",
-      "MoS = Ứng suất cho phép × FoS"
+      "MoS = [Ứng suất cho phép × FoS / Ứng suất tính toán] + 1"
     ],
-    "Option_A": "MoS = FoS / 2",
-    "Option_B": "MoS = Ứng suất tính toán - Ứng suất cho phép",
+    "Option_A": "MoS = [Ứng suất tính toán / (Ứng suất cho phép × FoS)] + 1",
+    "Option_B": "MoS = [Ứng suất tính toán / (Ứng suất cho phép × FoS)] - 1",
     "Option_C": "MoS = [Ứng suất cho phép / (Ứng suất tính toán × FoS)] - 1",
-    "Option_D": "MoS = Ứng suất cho phép × FoS",
+    "Option_D": "MoS = [Ứng suất cho phép × FoS / Ứng suất tính toán] + 1",
     "answer": "C",
     "Answer": "C",
     "explanation": "Điều kiện bền bắt buộc trong hàng không vũ trụ là $\\text{MoS} \\ge 0$; nếu $\\text{MoS} < 0$, kết cấu không đạt chuẩn an toàn phóng.",
@@ -3946,12 +3946,12 @@
     "Question": "Hàm C++ nào sau đây xuất xung kích hoạt cơ cấu nhiệt đốt dây cước bung anten (Burn-wire Antenna Deployment):",
     "options": [
       "Cấu hình chân đốt nhiệt làm OUTPUT nhưng không xuất mức điện áp điều khiển",
-      "Xuất mức logic HIGH lên chân đốt nhiệt trong khoảng thời gian xác định rồi kéo về LOW",
+      "Xuất mức logic HIGH lên chân đốt nhiệt trong thời gian xung định trước rồi kéo về LOW",
       "Phát mức logic HIGH liên tục không ngắt khiến cầu chì nhiệt bị cháy đứt",
       "Phát xung nhịp điều chế độ rộng PWM ở chu kỳ làm việc cực thấp 1%"
     ],
     "Option_A": "Cấu hình chân đốt nhiệt làm OUTPUT nhưng không xuất mức điện áp điều khiển",
-    "Option_B": "Xuất mức logic HIGH lên chân đốt nhiệt trong khoảng thời gian xác định rồi kéo về LOW",
+    "Option_B": "Xuất mức logic HIGH lên chân đốt nhiệt trong thời gian xung định trước rồi kéo về LOW",
     "Option_C": "Phát mức logic HIGH liên tục không ngắt khiến cầu chì nhiệt bị cháy đứt",
     "Option_D": "Phát xung nhịp điều chế độ rộng PWM ở chu kỳ làm việc cực thấp 1%",
     "answer": "B",

@@ -1065,19 +1065,19 @@
     "question": "Ở chế độ hoạt động 'Station Mode' (STA), module WiFi của ESP32 đóng vai trò là thiết bị gì?",
     "Question": "Ở chế độ hoạt động 'Station Mode' (STA), module WiFi của ESP32 đóng vai trò là thiết bị gì?",
     "options": [
-      "Một trạm chuyển tiếp vệ tinh",
-      "Một điểm phát sóng không dây độc lập",
-      "Một thiết bị máy khách kết nối vào mạng WiFi sẵn có",
-      "Một card mạng có dây"
+      "Hoạt động như máy khách kết nối vào mạng Wi-Fi sẵn có",
+      "Hoạt động như điểm truy cập phát sóng Wi-Fi cho thiết bị",
+      "Hoạt động như bộ định tuyến chuyển mạch gói dữ liệu mạng",
+      "Hoạt động như bộ lặp sóng không dây mở rộng vùng phủ sóng"
     ],
-    "Option_A": "Một trạm chuyển tiếp vệ tinh",
-    "Option_B": "Một điểm phát sóng không dây độc lập",
-    "Option_C": "Một thiết bị máy khách kết nối vào mạng WiFi sẵn có",
-    "Option_D": "Một card mạng có dây",
+    "Option_A": "Hoạt động như máy khách kết nối vào mạng Wi-Fi sẵn có",
+    "Option_B": "Hoạt động như điểm truy cập phát sóng Wi-Fi cho thiết bị",
+    "Option_C": "Hoạt động như bộ định tuyến chuyển mạch gói dữ liệu mạng",
+    "Option_D": "Hoạt động như bộ lặp sóng không dây mở rộng vùng phủ sóng",
     "answer": "C",
     "Answer": "C",
-    "explanation": "Chế độ STA biến ESP32 thành một nút mạng thu nhận và kết nối vào Router / Hotspot xung quanh.",
-    "Explanation": "Chế độ STA biến ESP32 thành một nút mạng thu nhận và kết nối vào Router / Hotspot xung quanh."
+    "explanation": "Ở chế độ STA (Station), ESP32 đóng vai trò là một thiết bị client kết nối vào một Access Point (AP) Wi-Fi đã tồn tại.",
+    "Explanation": "Ở chế độ STA (Station), ESP32 đóng vai trò là một thiết bị client kết nối vào một Access Point (AP) Wi-Fi đã tồn tại."
   },
   {
     "id": 46,
@@ -4690,18 +4690,18 @@
     "Question": "Lệnh `Serial.begin(115200, SERIAL_8N1);` khai báo cấu hình khung truyền UART gồm những thông số nào?",
     "options": [
       "115200 baud, 8 bit dữ liệu, Không kiểm tra chẵn lẻ, 1 bit Stop",
-      "115200 baud, 8 bit dữ liệu, Có kiểm tra chẵn lẻ, 2 bit Stop",
-      "115200 baud, 16 bit dữ liệu, Không bit stop",
-      "Tốc độ 8 Mbps"
+      "115200 baud, 7 bit dữ liệu, Kiểm tra chẵn lẻ Chẵn, 1 bit Stop",
+      "9600 baud, 8 bit dữ liệu, Kiểm tra chẵn lẻ Lẻ, 2 bit Stop",
+      "115200 baud, 8 bit dữ liệu, Kiểm tra chẵn lẻ Chẵn, 2 bit Stop"
     ],
     "Option_A": "115200 baud, 8 bit dữ liệu, Không kiểm tra chẵn lẻ, 1 bit Stop",
-    "Option_B": "115200 baud, 8 bit dữ liệu, Có kiểm tra chẵn lẻ, 2 bit Stop",
-    "Option_C": "115200 baud, 16 bit dữ liệu, Không bit stop",
-    "Option_D": "Tốc độ 8 Mbps",
+    "Option_B": "115200 baud, 7 bit dữ liệu, Kiểm tra chẵn lẻ Chẵn, 1 bit Stop",
+    "Option_C": "9600 baud, 8 bit dữ liệu, Kiểm tra chẵn lẻ Lẻ, 2 bit Stop",
+    "Option_D": "115200 baud, 8 bit dữ liệu, Kiểm tra chẵn lẻ Chẵn, 2 bit Stop",
     "answer": "A",
     "Answer": "A",
-    "explanation": "Ký hiệu SERIAL_8N1 chỉ định định dạng chuẩn: 8 data bits, No parity, 1 stop bit.",
-    "Explanation": "Ký hiệu SERIAL_8N1 chỉ định định dạng chuẩn: 8 data bits, No parity, 1 stop bit."
+    "explanation": "SERIAL_8N1 biểu thị: 8 bit data, No parity (không kiểm tra chẵn lẻ), 1 Stop bit; đây là cấu hình UART chuẩn công nghiệp phổ biến nhất.",
+    "Explanation": "SERIAL_8N1 biểu thị: 8 bit data, No parity (không kiểm tra chẵn lẻ), 1 Stop bit; đây là cấu hình UART chuẩn công nghiệp phổ biến nhất."
   },
   {
     "id": 197,
