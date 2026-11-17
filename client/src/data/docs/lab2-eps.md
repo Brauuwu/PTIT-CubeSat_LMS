@@ -81,16 +81,12 @@ Trên bo EPS, chip **MAX17048** của hãng Maxim Integrated đo đạc liên t�
    - B. Nạp xả luân phiên để chống chai điện cực
    - C. Nạp hai giai đoạn: Dòng không đổi (CC) rồi Áp không đổi (CV)
    - D. Tăng áp tuyến tính không giới hạn dòng nạp
-   - *Đáp án:* **C**
-   - *Giải thích:* TP4056 nạp dòng không đổi (Constant Current) đến khi điện áp đạt 4.2V, sau đó chuyển sang áp không đổi (Constant Voltage) cho tới khi dòng nạp giảm về ngưỡng ngắt an toàn.
 
 2. **IC giám sát pin MAX17048 giao tiếp với vi điều khiển OBC qua giao thức nào và tại địa chỉ I2C mặc định nào?**
    - A. Giao thức I2C tại địa chỉ 0x36
    - B. Giao tiếp SPI tại địa chỉ 0x68
    - C. Cổng UART2 ở tốc độ 9600 baud
    - D. Giao tiếp 1-Wire tại địa chỉ 0x1A
-   - *Đáp án:* **A**
-   - *Giải thích:* MAX17048 sử dụng giao thức I2C với địa chỉ 7-bit cố định là 0x36 để cung cấp số đo điện áp cell pin và tỷ lệ phần trăm dung lượng (SOC).
 
 ---
 
@@ -136,16 +132,12 @@ Trong một vệ tinh CubeSat, việc duy trì cấp nguồn liên tục cho to�
    - B. Kích hoạt chế độ truyền dữ liệu công suất cực đại
    - C. Chuyển đổi qua lại giữa pin chính và pin dự phòng
    - D. Ngắt hoàn toàn nguồn điện khi vệ tinh nằm trong ống phóng
-   - *Đáp án:* **D**
-   - *Giải thích:* Quy chuẩn an toàn phóng đòi hỏi toàn bộ hệ thống điện vệ tinh phải bị cô lập hoàn toàn khi còn nằm trong ống phóng Pod, chỉ kích hoạt khi công tắc cơ học bung ra sau khi tách tầng.
 
 2. **Trên bo mạch EPS, vai trò cốt lõi của mạch hạ áp DC-DC Buck Converter là gì?**
    - A. Chuyển điện áp một chiều DC thành xoay chiều AC
    - B. Ổn định điện áp 3.3V cấp cho vi xử lý với hiệu suất cao
    - C. Tăng điện áp pin từ 3.7V lên 12V để nạp nhanh
    - D. Đo đạc dòng điện rò rỉ của khung sườn cơ học
-   - *Đáp án:* **B**
-   - *Giải thích:* Mạch Buck Converter biến đổi điện áp biến thiên của pin (3.0V - 4.2V) xuống mức ổn định 3.3V cấp cho OBC và cảm biến với hiệu suất chuyển đổi vượt trội (>90%) so với IC tuyến tính.
 
 ---
 
@@ -200,17 +192,13 @@ float readBatterySOC() {
 
 ### ❓ Câu Hỏi Đánh Giá Kỹ Năng Thực Hành (Lab 2)
 1. **Công thức chuyển đổi giá trị thô 16-bit đọc từ thanh ghi VCELL (0x02) của MAX17048 sang điện áp thực tế (Volt) là:**
-   - A. $V = 	ext{raw} 	imes 78.125 mu	ext{V} / 1000000$
-   - B. $V = 	ext{raw} 	imes 1.25	ext{ mV}$
-   - C. $V = 	ext{raw} / 1024.0$
-   - D. $V = 	ext{raw} 	imes 3.3 / 4096.0$
-   - *Đáp án:* **A**
-   - *Giải thích:* Theo datasheet của MAX17048, mỗi LSB của thanh ghi VCELL tương ứng với $78.125 mu	ext{V}$ (hoặc nhân với 1.25mV cho 16 LSB sau khi dịch 4 bit).
+   - A. $V = \text{raw} \times 78.125\ \mu\text{V} / 1000000$
+   - B. $V = \text{raw} \times 1.25\text{ mV}$
+   - C. $V = \text{raw} / 1024.0$
+   - D. $V = \text{raw} \times 3.3 / 4096.0$
 
 2. **Khi điện áp pin sụt giảm dưới ngưỡng an toàn (ví dụ 3.4V), phần mềm bay trên OBC cần thực hiện hành động khẩn cấp nào?**
    - A. Tăng công suất phát sóng vô tuyến để gửi cầu cứu
    - B. Ghi đè toàn bộ dữ liệu thẻ nhớ để giải phóng bộ nhớ
    - C. Ngắt tải ngoại vi và chuyển hệ thống sang chế độ Sleep tiết kiệm điện
    - D. Khởi động lại liên tục để phục hồi dung lượng pin
-   - *Đáp án:* **C**
-   - *Giải thích:* Để tránh làm chai pin hoặc kích hoạt mạch bảo vệ Undervoltage Lockout, OBC phải ngắt các cảm biến tiêu thụ điện lớn và chuyển vi xử lý về chế độ tiết kiệm năng lượng.

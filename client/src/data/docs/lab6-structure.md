@@ -44,16 +44,12 @@ flowchart TD
    - B. Tự động thu thập năng lượng mặt trời không cần quang điện
    - C. Cung cấp đường dẫn tản nhiệt ra không gian và mặt phẳng tiếp địa chung chống nhiễu
    - D. Tăng độ nhạy thu của anten vô tuyến lên gấp đôi
-   - *Đáp án:* **C**
-   - *Giải thích:* Khung nhôm hoạt động như bộ tản nhiệt thụ động dẫn nhiệt lượng từ vi xử lý ra các bề mặt bức xạ, đồng thời tạo mặt phẳng đất chung (Chassis Ground) ngăn ngừa tích tụ tĩnh điện và can nhiễu EMI.
 
 2. **Phân bố khối lượng và vị trí trọng tâm (Center of Gravity - CoG) của CubeSat 1U cần đáp ứng yêu cầu kỹ thuật nào?**
    - A. Trọng tâm phải nằm trong bán kính 2 cm tính từ tâm hình học khối 1U
    - B. Trọng tâm phải nằm lệch hẳn về một góc đáy
    - C. Toàn bộ trọng lượng phải dồn hết về thanh ray trượt
    - D. Khối lượng vệ tinh không được vượt quá 100 gram
-   - *Đáp án:* **A**
-   - *Giải thích:* Tiêu chuẩn CubeSat CDS quy định tâm khối lượng phải nằm rất gần tâm hình học để tránh mô-men quay quán tính bất đối xứng làm vệ tinh bị xoay lộn mất kiểm soát khi phóng khỏi ống Pod.
 
 ---
 
@@ -111,16 +107,12 @@ Trong môi trường chân không sâu ($< 10^{-5}\text{ Torr}$) và nhiệt đ�
    - B. Để giảm trọng lượng của vật liệu nhôm xuống
    - C. Để tăng tính dẫn điện giữa vệ tinh và tên lửa
    - D. Ngăn chặn hiện tượng hàn nguội (Cold Welding) và ma sát kẹt trong ống phóng
-   - *Đáp án:* **D**
-   - *Giải thích:* Trong chân không cao, hai bề mặt kim loại nhôm trần tiếp xúc có thể tự kết dính dính chặt (hàn nguội); lớp phủ oxit nhôm dày và cứng của Anodize Type III ngăn cách tiếp xúc kim loại và triệt tiêu nguy cơ kẹt ray phóng.
 
 2. **Vật liệu hợp kim nhôm nào sau đây thường được ưu tiên lựa chọn để gia công khung cấu trúc vệ tinh nhỏ?**
    - A. Nhôm tạp chất tái chế thông thường
    - B. Hợp kim nhôm hàng không Al 6061-T6 hoặc Al 7075
    - C. Gang đúc xám công nghiệp
    - D. Thép carbon cường độ thấp
-   - *Đáp án:* **B**
-   - *Giải thích:* Hợp kim Al 6061-T6 và 7075 có tỷ số độ bền trên khối lượng rất cao, chống ăn mòn tốt, dễ gia công CNC chính xác và có hệ số giãn nở nhiệt phù hợp với bo mạch điện tử.
 
 ---
 
@@ -180,13 +172,9 @@ flowchart LR
    - B. Siết chặt tối đa từng góc một trước khi sang góc khác
    - C. Dùng keo dán sắt cố định thay cho việc vặn ốc
    - D. Không cần sử dụng vòng đệm chống rung lắc
-   - *Đáp án:* **A**
-   - *Giải thích:* Siết chéo theo đường chéo chữ X với lực siết đều giúp ứng suất phân bố đồng đều trên các cọc đồng, tránh làm vênh bo mạch nhiều lớp và ngăn ngừa nứt gãy mối hàn linh kiện dán.
 
 2. **Mục đích của việc kiểm tra thông mạch và đo điện trở cách điện giữa khung nhôm và các đường nguồn (3.3V, 5V, VBAT) trước khi cấp nguồn là gì?**
    - A. Kiểm tra độ bóng bề mặt của khung kim loại
    - B. Đo nhiệt độ hoạt động của các cọc đỡ cơ học
    - C. Phát hiện sớm sự cố chạm chập ngắn mạch gây cháy linh kiện khi bật nguồn
    - D. Xác định trọng lượng tổng thể của khung máy
-   - *Đáp án:* **C**
-   - *Giải thích:* Bước kiểm tra cách điện vỏ khung đảm bảo không có bất kỳ chân linh kiện hay mối hàn nào vô tình chạm vào khung nhôm, ngăn chặn nguy cơ cháy nổ mạch nguồn khi kết nối pin.

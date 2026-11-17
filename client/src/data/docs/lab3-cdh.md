@@ -62,16 +62,12 @@ Chuẩn giao tiếp **SPI** là một bus truyền thông nối tiếp đồng b
    - B. TX (GPIO 16), RX (GPIO 17), CTS, RTS
    - C. CS (GPIO 13), SCK (GPIO 18), MISO (GPIO 19), MOSI (GPIO 23)
    - D. D0, D1, D2, CLK
-   - *Đáp án:* **C**
-   - *Giải thích:* Bus SPI phần cứng kết nối thẻ nhớ MicroSD sử dụng CS=13, SCK=18, MISO=19, MOSI=23 với định dạng hệ thống tệp FAT32.
 
 2. **Khi ghi dữ liệu viễn trắc vào thẻ MicroSD, tại sao sau khi gọi `dataFile.println()` bắt buộc phải gọi `dataFile.flush()`?**
    - A. Để đẩy dữ liệu từ đệm RAM xuống thẻ nhớ vật lý ngay lập tức
    - B. Để xóa sạch toàn bộ nội dung vừa ghi
    - C. Để đóng tệp tin và giải phóng con trỏ bộ nhớ
    - D. Để chuyển đổi định dạng tệp tin từ nhị phân sang văn bản
-   - *Đáp án:* **A**
-   - *Giải thích:* Thư viện SD sử dụng bộ đệm 512 byte trong RAM; hàm flush() bảo đảm dữ liệu được đẩy xuống thẻ flash, tránh mất mát khi mất nguồn đột ngột.
 
 ---
 
@@ -108,16 +104,12 @@ Trong các dự án nhúng đơn giản, kỹ sư thường sử dụng kiến t
    - B. Tăng tốc độ ghi dữ liệu nhị phân lên thẻ MicroSD
    - C. Tự động điều chỉnh góc quay hướng tấm pin mặt trời
    - D. Cung cấp giao diện tương tác thực thi lệnh chẩn đoán và quản lý tệp tin
-   - *Đáp án:* **D**
-   - *Giải thích:* CLI cho phép kỹ sư mặt đất hoặc môi trường thử nghiệm nhập các lệnh tiêu chuẩn (ls, cat, rm, status) để kiểm tra tình trạng vệ tinh một cách trực quan.
 
 2. **Kiến trúc phần mềm bay Command-Centric Architecture (C2A) vận hành theo nguyên lý nào?**
    - A. Mọi cảm biến đều tự ghi thẳng vào thẻ nhớ không qua CPU
    - B. Toàn bộ tiến trình và hành vi của vệ tinh đều quy về xử lý lệnh
    - C. Chỉ duy nhất một tác vụ chạy liên tục từ lúc phóng
    - D. Cấm sửa đổi cấu hình logic sau khi phóng lên quỹ đạo
-   - *Đáp án:* **B**
-   - *Giải thích:* C2A coi mọi hành động của vệ tinh là phản hồi đối với các lệnh (Commands) nội bộ hoặc từ trạm đất, giúp mã nguồn module hóa cao và dễ dàng tái cấu hình trên quỹ đạo.
 
 ---
 
@@ -171,16 +163,12 @@ Xảy ra khi hai tác vụ cùng chờ tài nguyên mà tác vụ kia đang nắ
    - B. Tăng xung nhịp xử lý của lõi vi điều khiển
    - C. Tự động xóa các tác vụ bị lỗi khỏi danh sách chờ
    - D. Hạ điện áp cấp cho các cảm biến ngoại vi
-   - *Đáp án:* **A**
-   - *Giải thích:* Mutex đảm bảo tại một thời điểm chỉ có một tác vụ duy nhất được phép truy cập tài nguyên phần cứng chia sẻ (như bus SPI hay cổng console `cdh`), tránh làm sai lệch dữ liệu.
 
 2. **Hiện tượng nghịch đảo độ ưu tiên (Priority Inversion) trong hệ thống thời gian thực được khắc phục bằng kỹ thuật nào?**
    - A. Chuyển sang mô hình vòng lặp đơn tuần tự
    - B. Xóa bỏ hoàn toàn các tác vụ có mức ưu tiên thấp
    - C. Kế thừa độ ưu tiên (Priority Inheritance)
    - D. Giảm tần số xung nhịp của CPU
-   - *Đáp án:* **C**
-   - *Giải thích:* Khi tác vụ ưu tiên thấp giữ Mutex mà tác vụ ưu tiên cao đang cần, hệ thống tạm thời nâng mức ưu tiên của tác vụ giữ khóa lên bằng tác vụ chờ để nó giải phóng tài nguyên nhanh nhất.
 
 ---
 
@@ -213,16 +201,12 @@ stateDiagram-v2
    - B. Kích hoạt Reset phần cứng toàn bộ vi điều khiển
    - C. Xóa sạch dữ liệu trên thẻ nhớ ngoài
    - D. Chuyển vi điều khiển về chế độ nạp Bootloader
-   - *Đáp án:* **B**
-   - *Giải thích:* Nếu tác vụ không kịp "nuôi chó" (feed/reset TWDT) trước khi bộ đếm thời gian hết hạn (timeout), TWDT sẽ kích hoạt tín hiệu Reset vi xử lý để phục hồi hệ thống khỏi trạng thái treo.
 
 2. **Quy trình FDIR (Fault Detection, Isolation, and Recovery) trong thiết kế phần mềm vệ tinh là:**
    - A. Quy trình kiểm tra lỗi cơ học trước khi phóng
    - B. Thuật toán định vị quỹ đạo vệ tinh dựa trên GNSS
    - C. Giao thức nén ảnh viễn thám không gian
    - D. Cơ chế tự động phát hiện, cô lập lỗi và tái khởi động phục hồi hệ thống
-   - *Đáp án:* **D**
-   - *Giải thích:* FDIR là triết lý an toàn không gian cho phép vệ tinh tự chẩn đoán lỗi phần cứng/phần mềm, cô lập phân hệ hỏng và chuyển sang trạng thái an toàn (Safe Mode) để tự phục hồi.
 
 ---
 
@@ -264,13 +248,9 @@ void logTelemetryData(float vbat, float temp, float pressure) {
    - B. Đối tượng `Wire` qua bus giao tiếp I2C
    - C. Đối tượng `cdh` (`PTIT_CDH cdh;`) kế thừa từ lớp Stream/Print
    - D. Đối tượng `File` ghi trực tiếp vào thẻ nhớ
-   - *Đáp án:* **C**
-   - *Giải thích:* Theo chuẩn hóa của khóa học, từ Lab 3 trở đi toàn bộ luồng console debug sử dụng đối tượng `cdh` để đóng gói nhất quán phân hệ C&DH.
 
 2. **Chế độ mở tệp nào sau đây trong C++ được sử dụng để ghi nối tiếp dữ liệu viễn trắc mà không làm mất nội dung cũ?**
    - A. `FILE_APPEND`
    - B. `FILE_WRITE`
    - C. `FILE_READ`
    - D. `FILE_TRUNC`
-   - *Đáp án:* **A**
-   - *Giải thích:* `FILE_APPEND` mở tệp và đặt con trỏ ghi ở cuối tệp tin, giúp ghi tiếp các dòng dữ liệu mới mà không ghi đè xóa mất các bản ghi đã lưu trước đó.

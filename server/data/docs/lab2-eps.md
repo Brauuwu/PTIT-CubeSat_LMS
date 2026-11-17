@@ -192,10 +192,10 @@ float readBatterySOC() {
 
 ### ❓ Câu Hỏi Đánh Giá Kỹ Năng Thực Hành (Lab 2)
 1. **Công thức chuyển đổi giá trị thô 16-bit đọc từ thanh ghi VCELL (0x02) của MAX17048 sang điện áp thực tế (Volt) là:**
-   - A. $V = 	ext{raw} 	imes 78.125 mu	ext{V} / 1000000$
-   - B. $V = 	ext{raw} 	imes 1.25	ext{ mV}$
-   - C. $V = 	ext{raw} / 1024.0$
-   - D. $V = 	ext{raw} 	imes 3.3 / 4096.0$
+   - A. $V = \text{raw} \times 78.125\ \mu\text{V} / 1000000$
+   - B. $V = \text{raw} \times 1.25\text{ mV}$
+   - C. $V = \text{raw} / 1024.0$
+   - D. $V = \text{raw} \times 3.3 / 4096.0$
 
 2. **Khi điện áp pin sụt giảm dưới ngưỡng an toàn (ví dụ 3.4V), phần mềm bay trên OBC cần thực hiện hành động khẩn cấp nào?**
    - A. Tăng công suất phát sóng vô tuyến để gửi cầu cứu

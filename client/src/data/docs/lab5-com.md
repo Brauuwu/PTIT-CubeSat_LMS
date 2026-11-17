@@ -75,16 +75,12 @@ Trong đó: $v_\text{los}$ là vận tốc dọc theo đường ngắm (Line-of-
    - B. Không thay đổi nếu anten chuẩn
    - C. Tăng thêm khoảng 6 dB
    - D. Giảm đi chính xác 3 dB
-   - *Đáp án:* **C**
-   - *Giải thích:* Công thức $FSPL \propto d^2$, do đó khi khoảng cách $d$ tăng gấp đôi ($2d$), độ suy hao công suất tăng lên $20 \log_{10}(2) \approx 6\text{ dB}$.
 
 2. **Hiện tượng dịch tần Doppler xảy ra đối với tín hiệu vô tuyến của CubeSat quỹ đạo LEO có đặc điểm gì khi vệ tinh bay qua trạm mặt đất?**
    - A. Tần số thu cao hơn khi vệ tinh tiến lại gần, và thấp hơn khi bay ra xa
    - B. Tần số thu được luôn bằng chính xác tần số phát
    - C. Tần số thu luôn giảm dần về 0 khi vệ tinh đạt góc ngẩng cực đại
    - D. Tần số phát của vệ tinh tự động thay đổi theo nhiệt độ vỏ
-   - *Đáp án:* **A**
-   - *Giải thích:* Do vận tốc bay quỹ đạo LEO rất lớn (~7.7 km/s), hiệu ứng Doppler làm tần số sóng thu được tại trạm mặt đất bị dịch chuyển cao hơn khi tiếp cận và dịch thấp hơn khi rời xa.
 
 ---
 
@@ -130,16 +126,12 @@ Trong không gian, nhiễu nền vũ trụ có thể làm biến dạng ngẫu n
    - B. Định vị tọa độ của vệ tinh trong không gian
    - C. Tự động nén kích thước gói dữ liệu xuống một nửa
    - D. Phát hiện các bit dữ liệu bị sai lệch do nhiễu đường truyền không dây
-   - *Đáp án:* **D**
-   - *Giải thích:* CRC-16 tính toán mã kiểm tra từ toàn bộ nội dung gói tin; nếu có bất kỳ bit nào bị lật do nhiễu vô tuyến, giá trị CRC tính lại tại bên nhận sẽ không khớp giúp loại bỏ gói tin hỏng.
 
 2. **Cấu trúc một khung tin viễn thông không gian tiêu chuẩn (CCSDS Frame) bao gồm 3 phần chính nào?**
    - A. Bootloader, Firmware, Memory Dump
    - B. Header (Tiêu đề), Payload (Dữ liệu tải), Trailer (Mã kiểm tra)
    - C. IP Address, Port Number, Gateway
    - D. Preamble, Sync Word, Frequency
-   - *Đáp án:* **B**
-   - *Giải thích:* Khung tin chuẩn luôn có Header chứa định danh vệ tinh và số thứ tự gói, Payload chứa số đo cảm biến, và Trailer chứa mã kiểm tra lỗi CRC.
 
 ---
 
@@ -154,7 +146,22 @@ Module **Ebyte E32-433T20D** sử dụng chip thu phát bán dẫn SX1278 của 
   - **Băng thông (Bandwidth - BW):** Thường chọn $125\text{ kHz}$ cho kênh UHF.
 
 ### 2. Sơ đồ Chân & Các Chế độ Hoạt động của Module Ebyte E32
-Module E32 giao tiếp với vi điều khiển OBC thông qua cổng UART chuẩn và hai chân điều khiển chế độ `M0`, `M1`:
+Module E32 giao tiếp với vi điều khiển OBC thông qua cổng UART1 chuẩn và hai chân điều khiển chế độ `M0`, `M1`:
+
+- **Sơ đồ đấu nối phần cứng chuẩn hóa theo `PTITCube.h` (Lớp `PTIT_COM`):**
+
+| Tín hiệu E32 LoRa | Chân ESP32 (OBC) | Hướng | Vai trò Kỹ thuật |
+| :--- | :--- | :--- | :--- |
+| **TXD** | **GPIO 26 (RX1)** | Input (ESP32) | Đường nhận dữ liệu từ LoRa vào UART1 của OBC |
+| **RXD** | **GPIO 25 (TX1)** | Output (ESP32) | Đường xuất dữ liệu từ UART1 của OBC sang LoRa |
+| **AUX** | **GPIO 27** | Input (ESP32) | Báo trạng thái bận/rảnh (`HIGH` = Rảnh, `LOW` = Bận) |
+| **M0** | **GPIO 32** | Output (ESP32) | Chân chọn Mode 0 (Mức `LOW` ở chế độ hoạt động bình thường) |
+| **M1** | **GPIO 33** | Output (ESP32) | Chân chọn Mode 1 (Mức `LOW` ở chế độ hoạt động bình thường) |
+| **VCC / GND** | **3.3V / GND** | Nguồn | Cấp nguồn vận hành danh định 3.3V từ bus vệ tinh |
+
+> [!IMPORTANT]
+> **Lưu ý Chuẩn Hóa Chân LoRa & An Toàn ESP32:**
+> Toàn bộ các chân GPIO kết nối module LoRa E32 bắt buộc phải tuân thủ nghiêm ngặt theo thư viện `PTITCube.h`. Tuyệt đối không sử dụng GPIO 35 (hoặc các chân Input-Only 34, 36, 39) làm chân điều khiển `M0`/`M1` vì các chân này không hỗ trợ ngõ ra `OUTPUT`.
 
 | Chế độ Hoạt động | Chân M0 | Chân M1 | Chức năng Kỹ thuật |
 | :--- | :--- | :--- | :--- |
@@ -184,16 +191,12 @@ Một trạm mặt đất thu nhận tín hiệu CubeSat tiêu chuẩn bao gồm
    - B. Cấp nguồn phụ trợ khi pin yếu
    - C. Chuyển đổi giữa chế độ phát và chế độ ngủ
    - D. Báo động nhiệt độ module vượt ngưỡng
-   - *Đáp án:* **A**
-   - *Giải thích:* Chân AUX ở mức LOW báo hiệu module đang truyền sóng hoặc bộ đệm đang bận; chương trình cần đợi AUX lên mức HIGH trước khi ghi tiếp byte dữ liệu mới vào UART.
 
 2. **Để module LoRa E32 hoạt động ở chế độ truyền nhận vô tuyến bình thường (Normal Mode), hai chân M0 và M1 cần được cấu hình mức logic nào?**
    - A. M0 = 1, M1 = 1
    - B. M0 = 1, M1 = 0
    - C. M0 = 0, M1 = 0
    - D. M0 = 0, M1 = 1
-   - *Đáp án:* **C**
-   - *Giải thích:* Khi M0=0 và M1=0, module E32 hoạt động ở Normal Mode cho phép truyền nhận dữ liệu thông suốt qua cổng nối tiếp UART.
 
 ---
 
@@ -256,13 +259,9 @@ void sendBeacon() {
    - B. Xử lý giải điều chế đa băng tần và hiển thị phổ tín hiệu (Waterfall) trực quan
    - C. Không cần kết nối anten thu vẫn bắt được sóng
    - D. Phát sóng công suất hàng nghìn Watt lên quỹ đạo
-   - *Đáp án:* **B**
-   - *Giải thích:* SDR số hóa trực tiếp tín hiệu RF và sử dụng phần mềm để giải điều chế, cho phép quan sát phổ tần, bù dịch tần Doppler và giải mã nhiều giao thức linh hoạt.
 
 2. **Cơ chế Stop-and-Wait ARQ trong truyền nhận viễn lệnh mặt đất hoạt động theo chu trình nào?**
    - A. Gửi liên tục không cần quan tâm bên nhận có nhận được hay không
    - B. Tự động mã hóa lệnh thành dạng sóng analog
    - C. Chỉ nhận lệnh từ vệ tinh chứ trạm đất không được gửi lệnh
    - D. Gửi một gói lệnh, chờ gói tin phản hồi (ACK) trước khi gửi tiếp lệnh mới
-   - *Đáp án:* **D**
-   - *Giải thích:* ARQ (Automatic Repeat reQuest) đảm bảo gói tin lệnh được thực thi thành công: bên phát gửi 1 gói và chỉ phát tiếp khi nhận được xác nhận ACK, nếu timeout sẽ tự động phát lại.

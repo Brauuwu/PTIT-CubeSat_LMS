@@ -55,16 +55,12 @@ Tránh bế tắc tài nguyên (Deadlock) giữa các luồng"]
    - B. Không thể gắn được nút nhấn khởi động
    - C. Can nhiễu điện từ (EMI) giữa module phát sóng LoRa và các cảm biến nhạy
    - D. Bộ nhớ vi điều khiển quá nhỏ không chứa đủ tên sinh viên
-   - *Đáp án:* **C**
-   - *Giải thích:* Khi module LoRa phát xung công suất cao (+20 dBm), bức xạ điện từ và xung sụt áp đột ngột trên đường nguồn có thể gây nhiễu loạn đường truyền I2C của IMU và cảm biến khí quyển đặt sát cạnh.
 
 2. **Bài toán cân đối ngân sách năng lượng (Power Budget) trong pha tích hợp hệ thống đòi hỏi:**
    - A. Tổng năng lượng tấm pin tạo ra trong chu kỳ bay phải lớn hơn tổng tiêu thụ của các tải
    - B. Pin phải luôn được nạp đầy 100% trong suốt thời gian bay
    - C. Vệ tinh phải tắt hoàn toàn bộ vi xử lý khi đi vào vùng tối
    - D. Chỉ cấp điện cho phân hệ truyền thông còn tắt toàn bộ cảm biến
-   - *Đáp án:* **A**
-   - *Giải thích:* Ngân sách năng lượng dương bảo đảm năng lượng thu được trong ~60 phút nhận ánh sáng mặt trời đủ để bù đắp năng lượng tiêu hao trong cả chu kỳ, bao gồm ~35 phút vùng tối Trái Đất (Eclipse).
 
 ---
 
@@ -122,16 +118,12 @@ stateDiagram-v2
    - B. Phát sóng liên tục ngay khi công tắc RBF nhả
    - C. Chờ 24 giờ liên tục không thực hiện lệnh nào
    - D. Trễ im lặng tối thiểu 30 đến 45 phút trước khi kích hoạt thu phát RF
-   - *Đáp án:* **D**
-   - *Giải thích:* Tiêu chuẩn an toàn phóng (Range Safety) bắt buộc vệ tinh phải giữ im lặng vô tuyến 30-45 phút sau khi tách khỏi tên lửa đẩy để tránh làm nhiễu sóng hệ thống dẫn đường của tầng đẩy và các vệ tinh khác cùng cụm phóng.
 
 2. **Máy trạng thái hữu hạn (Mission FSM) của phần mềm bay chuyển từ trạng thái `DETUMBLE` sang `MISSION` khi nào?**
    - A. Khi dung lượng pin sụt giảm dưới 20%
    - B. Khi vận tốc góc quay của vệ tinh trên các trục giảm xuống dưới ngưỡng an toàn
    - C. Khi có tín hiệu ngắt nguồn khẩn cấp từ trạm mặt đất
    - D. Khi thẻ nhớ MicroSD đã ghi đầy một nửa dung lượng
-   - *Đáp án:* **B**
-   - *Giải thích:* Quá trình Detumble sử dụng từ trường hoặc con quay để triệt tiêu chuyển động xoay lộn ban đầu; khi vận tốc góc ổn định (dưới ngưỡng ví dụ 5 deg/s), vệ tinh mới chuyển sang thực hiện sứ mệnh chính.
 
 ---
 
@@ -159,16 +151,12 @@ Bộ kit PTITCube hỗ trợ chế độ mô phỏng quỹ đạo thực tế đ
    - B. Thời điểm bật và tắt nguồn khối pin mặt trời
    - C. Tín hiệu báo động lỗi bộ nhớ RAM và ROM
    - D. Lệnh chuyển đổi chế độ ngủ và chế độ thức
-   - *Đáp án:* **A**
-   - *Giải thích:* AOS là thời điểm trạm đất bắt đầu thu được tín hiệu khi vệ tinh nhô lên khỏi đường chân trời; LOS là thời điểm mất tín hiệu khi vệ tinh lặn xuống dưới đường chân trời (thường kéo dài khoảng 8-12 phút).
 
 2. **Một chu kỳ bay quỹ đạo thấp LEO ở độ cao ~400 km mất khoảng bao lâu và vệ tinh trải qua bao nhiêu vòng bay mỗi ngày?**
    - A. Khoảng 24 giờ mỗi chu kỳ, 1 vòng mỗi ngày
    - B. Khoảng 12 giờ mỗi chu kỳ, 2 vòng mỗi ngày
    - C. Khoảng 90 - 95 phút mỗi chu kỳ, xấp xỉ 15 - 16 vòng mỗi ngày
    - D. Khoảng 45 phút mỗi chu kỳ, 32 vòng mỗi ngày
-   - *Đáp án:* **C**
-   - *Giải thích:* Với vận tốc quỹ đạo xấp xỉ 7.7 km/s, CubeSat hoàn thành một vòng quanh Trái Đất trong ~92-95 phút, tương đương 15 đến 16 vòng bay mỗi ngày đêm.
 
 ---
 
@@ -238,13 +226,9 @@ void handleFSM() {
    - B. Đảm bảo các tác vụ khẩn cấp (như nghe lệnh LoRa) được đáp ứng kịp thời không bị nghẽn
    - C. Không cần khai báo cấu hình phần cứng chân GPIO
    - D. Tự động sửa chữa phần cứng linh kiện bị hư hỏng
-   - *Đáp án:* **B**
-   - *Giải thích:* Bộ lập lịch ưu tiên của FreeRTOS cho phép tác vụ có độ ưu tiên cao chiếm quyền CPU ngay khi có sự kiện (như có gói tin đến qua ngắt UART), loại bỏ hoàn toàn độ trễ của vòng lặp tuần tự.
 
 2. **Chuẩn hóa mã nguồn tích hợp trong Lab 7 yêu cầu đối tượng nào quản lý luồng in thông tin viễn trắc ra terminal?**
    - A. `Serial.println()` trực tiếp
    - B. `Wire.write()` qua bus truyền cảm biến
    - C. `printf()` qua cổng song song máy in
    - D. Đối tượng `cdh.println()` thuộc lớp PTIT_CDH của thư viện PTITCube
-   - *Đáp án:* **D**
-   - *Giải thích:* C&DH đóng vai trò phân hệ quản lý dữ liệu trung tâm; mọi thông điệp chẩn đoán và viễn trắc phải đi qua đối tượng `cdh` để đảm bảo tính nhất quán kiến trúc phần mềm bay.

@@ -65,9 +65,7 @@ sequenceDiagram
   - Màng cảm biến áp suất gốm áp điện (Piezoresistive) có đặc tính phi tuyến tính cao theo nhiệt độ. Trong quá trình sản xuất tại nhà máy, mỗi chip BMP280 được đo kiểm riêng lẻ và nạp sẵn 24 byte hằng số hiệu chuẩn vào bộ nhớ ROM không khả biến (từ thanh ghi `0x88` đến `0xA1`: `dig_T1` đến `dig_T3` cho nhiệt độ, `dig_P1` đến `dig_P9` cho áp suất).
   - Thuật toán giải mã bắt buộc phải đọc toàn bộ mảng 24 byte hằng số này và áp dụng công thức bù trừ nhiệt độ bậc cao theo tài liệu chuẩn của Bosch để quy đổi giá trị ADC thô thành giá trị áp suất thực tế.
 - **Công thức Tính Độ cao Khí quyển (Barometric Hypsometric Formula):**
-  $$h = 44330 \times \left[ 1 - \left(\frac{P}{P_0}
-ight)^{\frac{1}{5.255}} 
-ight]$$
+  $$h = 44330 \times \left[ 1 - \left(\frac{P}{P_0}\right)^{\frac{1}{5.255}} \right]$$
   Trong đó: $h$ là độ cao tính bằng mét, $P$ là áp suất khí quyển đo được, $P_0$ là áp suất chuẩn tại mực nước biển ($1013.25\text{ hPa}$).
 
 ### ❓ Câu Hỏi Củng Cố Kiến Thức (Doc 4.1)
@@ -76,16 +74,12 @@ ight]$$
    - B. Nối đất trực tiếp cả hai chân tín hiệu
    - C. Cấu hình cực máng hở (Open-Drain) kết hợp điện trở kéo lên Pull-up
    - D. Nối tiếp tụ điện cách ly một chiều
-   - *Đáp án:* **C**
-   - *Giải thích:* Open-Drain kết hợp điện trở kéo lên (Pull-up resistors) cho phép nhiều thiết bị cùng chia sẻ một đường bus mà không gây ngắn mạch khi truyền dữ liệu.
 
 2. **Cảm biến khí quyển BMP280 đo đạc và cung cấp các thông số vật lý nào thông qua giao thức I2C?**
    - A. Áp suất khí quyển, Nhiệt độ môi trường và Độ cao khí áp
    - B. Vận tốc góc và từ trường Trái Đất
    - C. Nồng độ khí oxy và độ ẩm tương đối
    - D. Tọa độ kinh độ và vĩ độ vị trí
-   - *Đáp án:* **A**
-   - *Giải thích:* BMP280 là cảm biến áp suất khí quyển và nhiệt độ độ chính xác cao, từ đó vi điều khiển tính toán ra độ cao khí áp theo công thức thủy tĩnh.
 
 ---
 
@@ -132,24 +126,18 @@ Nhân hệ số (1 - alpha) = 0.02"]
    - B. LSM9DS1 địa chỉ 0x1E
    - C. BNO055 địa chỉ 0x28
    - D. MPU6500 địa chỉ 0x68
-   - *Đáp án:* **D**
-   - *Giải thích:* Phân hệ Sensor của kit CubeSat sử dụng vi mạch MPU6500 (6-DoF gồm 3 trục gia tốc kế và 3 trục con quay hồi chuyển) ở địa chỉ I2C 0x68.
 
 2. **Bộ lọc bù (Complementary Filter) giải quyết bài toán tính góc nghiêng tư thế (Roll/Pitch) theo nguyên lý nào?**
    - A. Tắt hoàn toàn tín hiệu đo của gia tốc kế
    - B. Kết hợp lọc thông cao cho con quay hồi chuyển và thông thấp cho gia tốc kế
    - C. Lấy trung bình cộng số học của hai giá trị thô
    - D. Chỉ dùng tích phân con quay hồi chuyển theo thời gian
-   - *Đáp án:* **B**
-   - *Giải thích:* Bộ lọc bù kết hợp tỷ trọng lớn (ví dụ 98%) từ tích phân Gyro mượt mà trong ngắn hạn và 2% từ góc gia tốc kế tuyệt đối để triệt tiêu hiện tượng trôi góc (drift).
 
 3. **Cảm biến từ trường QMC5883L (địa chỉ 0x0D) cung cấp dữ liệu nào phục vụ phân hệ xác định tư thế vệ tinh?**
    - A. Cường độ từ trường 3 trục dùng để tính góc hướng La bàn (Heading)
    - B. Vận tốc quay quanh trục Z
    - C. Độ ẩm môi trường xung quanh vỏ vệ tinh
    - D. Gia tốc trọng trường dọc theo trục thẳng đứng
-   - *Đáp án:* **A**
-   - *Giải thích:* QMC5883L đo từ trường Trái Đất trên 3 trục X, Y, Z, giúp thuật toán xác định góc hướng la bàn (Heading = atan2(Y, X) * 180 / PI).
 
 ---
 
@@ -194,16 +182,12 @@ void loop() {
    - B. Bus I2C ở tốc độ 400 kHz
    - C. Cổng UART2 ở tốc độ 9600 baud
    - D. Giao tiếp 1-Wire ở tốc độ 115200 baud
-   - *Đáp án:* **C**
-   - *Giải thích:* Module L76X truyền luồng ký tự ASCII các bản tin NMEA định kỳ mỗi giây qua cổng nối tiếp phần cứng UART2 (RX=16, TX=17) ở tốc độ 9600 baud.
 
 2. **Bản tin NMEA nào sau đây của module GPS chứa thông tin kinh độ, vĩ độ và số lượng vệ tinh đang khóa?**
    - A. `$GPVTG`
    - B. `$GPGGA`
    - C. `$GPGSV`
    - D. `$GPGLL`
-   - *Đáp án:* **B**
-   - *Giải thích:* Bản tin `$GPGGA` (Global Positioning System Fix Data) cung cấp đầy đủ thông tin: thời gian UTC, tọa độ vĩ độ/kinh độ, chỉ số chất lượng định vị và số vệ tinh bắt được.
 
 ---
 
@@ -302,16 +286,12 @@ void loop() {
    - B. $\text{Decimal} = \frac{\text{Degrees} + \text{Minutes}}{100.0}$
    - C. $\text{Decimal} = \text{Degrees} \times \text{Minutes}$
    - D. $\text{Decimal} = \text{Degrees} + \frac{\text{Minutes}}{60.0}$
-   - *Đáp án:* **D**
-   - *Giải thích:* Trong tọa độ địa lý, 1 độ bằng 60 phút góc, nên phần phút phải chia cho 60.0 rồi cộng dồn vào phần nguyên độ để có giá trị số thập phân.
 
 2. **Mã kiểm tra toàn vẹn Checksum trong bản tin NMEA 0183 được tính toán bằng phép toán logic nào trên các ký tự giữa `$` và `*`?**
    - A. Phép cộng dồn modulo 256
    - B. Phép toán XOR từng byte ký tự ASCII
    - C. Mã đa thức CRC-32 tiêu chuẩn mạng
    - D. Phép nhân băm chuỗi ký tự MD5
-   - *Đáp án:* **B**
-   - *Giải thích:* Tiêu chuẩn NMEA 0183 quy định Checksum là phép XOR nhị phân 8-bit liên tiếp của toàn bộ các ký tự nằm giữa dấu `$` và `*`.
 
 ---
 
@@ -358,13 +338,9 @@ void loop() {
    - B. `0x0000` và `0xFFFF`
    - C. `0x1234` và `0x5678`
    - D. `0xAA55` và `0x55AA`
-   - *Đáp án:* **A**
-   - *Giải thích:* Chuẩn JPEG quốc tế sử dụng cặp byte nhị phân `0xFF 0xD8` để báo hiệu bắt đầu luồng dữ liệu ảnh (Start of Image) và `0xFF 0xD9` để kết thúc ảnh (End of Image).
 
 2. **Trong bài thực hành Camera UART (Lab4-04a), điều kiện tiên quyết về phần cứng để lưu trữ ảnh chụp là gì?**
    - A. Phải có kết nối Internet WiFi tốc độ cao
    - B. Phải tắt toàn bộ các cảm biến I2C còn lại
    - C. Phải cấp nguồn 12V riêng cho module Camera
    - D. Bắt buộc phải có thẻ nhớ MicroSD cắm trên bo mạch
-   - *Đáp án:* **D**
-   - *Giải thích:* Do ảnh chụp JPEG có dung lượng vài chục kilobyte vượt quá khả năng lưu trữ tạm thời an toàn trong SRAM, ảnh nhận từ UART phải được ghi trực tiếp vào thẻ nhớ MicroSD qua bus SPI.
