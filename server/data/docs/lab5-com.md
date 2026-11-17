@@ -154,7 +154,22 @@ Module **Ebyte E32-433T20D** sử dụng chip thu phát bán dẫn SX1278 của 
   - **Băng thông (Bandwidth - BW):** Thường chọn $125\text{ kHz}$ cho kênh UHF.
 
 ### 2. Sơ đồ Chân & Các Chế độ Hoạt động của Module Ebyte E32
-Module E32 giao tiếp với vi điều khiển OBC thông qua cổng UART chuẩn và hai chân điều khiển chế độ `M0`, `M1`:
+Module E32 giao tiếp với vi điều khiển OBC thông qua cổng UART1 chuẩn và hai chân điều khiển chế độ `M0`, `M1`:
+
+- **Sơ đồ đấu nối phần cứng chuẩn hóa theo `PTITCube.h` (Lớp `PTIT_COM`):**
+
+| Tín hiệu E32 LoRa | Chân ESP32 (OBC) | Hướng | Vai trò Kỹ thuật |
+| :--- | :--- | :--- | :--- |
+| **TXD** | **GPIO 26 (RX1)** | Input (ESP32) | Đường nhận dữ liệu từ LoRa vào UART1 của OBC |
+| **RXD** | **GPIO 25 (TX1)** | Output (ESP32) | Đường xuất dữ liệu từ UART1 của OBC sang LoRa |
+| **AUX** | **GPIO 27** | Input (ESP32) | Báo trạng thái bận/rảnh (`HIGH` = Rảnh, `LOW` = Bận) |
+| **M0** | **GPIO 32** | Output (ESP32) | Chân chọn Mode 0 (Mức `LOW` ở chế độ hoạt động bình thường) |
+| **M1** | **GPIO 33** | Output (ESP32) | Chân chọn Mode 1 (Mức `LOW` ở chế độ hoạt động bình thường) |
+| **VCC / GND** | **3.3V / GND** | Nguồn | Cấp nguồn vận hành danh định 3.3V từ bus vệ tinh |
+
+> [!IMPORTANT]
+> **Lưu ý Chuẩn Hóa Chân LoRa & An Toàn ESP32:**
+> Toàn bộ các chân GPIO kết nối module LoRa E32 bắt buộc phải tuân thủ nghiêm ngặt theo thư viện `PTITCube.h`. Tuyệt đối không sử dụng GPIO 35 (hoặc các chân Input-Only 34, 36, 39) làm chân điều khiển `M0`/`M1` vì các chân này không hỗ trợ ngõ ra `OUTPUT`.
 
 | Chế độ Hoạt động | Chân M0 | Chân M1 | Chức năng Kỹ thuật |
 | :--- | :--- | :--- | :--- |
