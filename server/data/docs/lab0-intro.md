@@ -15,15 +15,16 @@ CubeSat đã tạo nên một cuộc cách mạng mang tính đột phá (New Sp
 3. **Đóng gói Kín Giảm Thiểu Rủi ro cho Tên lửa Mẹ (Containerized Launch Integration):** Vệ tinh được nhốt hoàn toàn bên trong ống phóng dạng hộp kín có nắp đậy (như P-POD). Mọi nguy cơ bung vỡ chi tiết, đoản mạch hay phát sóng ngoài ý muốn đều bị cô lập hoàn toàn, bảo vệ an toàn tuyệt đối cho tên lửa đẩy và tải trọng thương mại chính.
 
 ```mermaid
-timeline
-    title Lịch sử Phát triển của Chuẩn CubeSat và Kỷ nguyên New Space
-    1999 : Khởi xướng tiêu chuẩn 1U bởi GS. Jordi Puig-Suari (CalPoly) & GS. Bob Twiggs (Stanford)
-    2003 : Chuyến bay đầu tiên đưa 6 vệ tinh CubeSat 1U của các trường đại học lên quỹ đạo (tên lửa Rokot)
-    2006 : Ra mắt tiêu chuẩn mở rộng CubeSat Design Specification (CDS) hỗ trợ cấu hình 2U và 3U
-    2012 : Vệ tinh F-1 của FSpace (Việt Nam) được phóng lên quỹ đạo từ Trạm Vũ trụ Quốc tế ISS
-    2014 : Bùng nổ chòm vệ tinh thương mại Planet Labs Dove (hơn 100 vệ tinh 3U chụp ảnh toàn cầu)
-    2018 : Sứ mệnh MarCO (NASA JPL) - Cặp đôi CubeSat 6U đầu tiên bay liên hành tinh hỗ trợ tàu InSight đổ bộ Sao Hỏa
-    Hiện nay : Mở rộng lên 6U, 12U, 27U; tích hợp động cơ đẩy ion và liên kết quang học laser liên vệ tinh
+flowchart TD
+    T1["<b>1999</b>: Khởi xướng tiêu chuẩn 1U bởi GS. Jordi Puig-Suari (CalPoly) & GS. Bob Twiggs (Stanford)"]
+    T2["<b>2003</b>: Chuyến bay đầu tiên đưa 6 vệ tinh CubeSat 1U của các trường đại học lên quỹ đạo (tên lửa Rokot)"]
+    T3["<b>2006</b>: Ra mắt tiêu chuẩn mở rộng CubeSat Design Specification (CDS) hỗ trợ cấu hình 2U và 3U"]
+    T4["<b>2012</b>: Vệ tinh F-1 của FSpace (Việt Nam) được phóng lên quỹ đạo từ Trạm Vũ trụ Quốc tế ISS"]
+    T5["<b>2014</b>: Bùng nổ chòm vệ tinh thương mại Planet Labs Dove (hơn 100 vệ tinh 3U chụp ảnh toàn cầu)"]
+    T6["<b>2018</b>: Sứ mệnh MarCO (NASA JPL) - Cặp đôi CubeSat 6U đầu tiên bay liên hành tinh hỗ trợ tàu InSight đổ bộ Sao Hỏa"]
+    T7["<b>Hiện nay</b>: Mở rộng lên 6U, 12U, 27U; tích hợp động cơ đẩy ion và liên kết quang học laser liên vệ tinh"]
+
+    T1 --> T2 --> T3 --> T4 --> T5 --> T6 --> T7
 ```
 
 ---
