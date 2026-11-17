@@ -1,5 +1,21 @@
 # Nhật ký quyết định
 
+## 18/11/2026 — Quiz theo bài và nâng cấp lớp lên Lab 0 mới (LAB0-02)
+
+- Mỗi bài `quiz` có ngân hàng câu hỏi và chính sách riêng, khoá theo `lesson_id` (migration `0016_lesson_quiz_banks`; bank và chính sách cũ được gán `labtest-<lab>`). Giảng viên soạn, duyệt, xuất bản câu hỏi và đặt số câu mỗi lượt (1-20), điểm đạt, thời gian, số lượt ngay trong Cấu hình chương trình. Lab Test giữ nguyên: đúng 20 câu đã duyệt, mỗi lượt rút 5 câu.
+- Quiz theo bài chỉ hoàn thành bằng cách đạt điểm (`finalize`), không có nút "Hoàn thành". Bật một bài quiz chưa có ngân hàng đã xuất bản bị chặn khi xuất bản cấu hình (`QUIZ_BANK_NOT_READY`), vì bài quiz không thể hoàn thành sẽ khoá mọi bài sau nó trong lab.
+- Lớp đã xuất bản bị ghim vào một phiên bản giáo trình; không có đường nâng cấp trên giao diện. Thêm `fastapi-backend/scripts/upgrade_class_course_version.py`: một giao dịch tạo cấu hình lớp mới, trỏ lại tiến độ, lượt thi, ngân hàng câu hỏi sang phiên bản mới và xuất bản. Mặc định chỉ thay Lab 0 (tạo phiên bản giáo trình lai: Lab 1-8 của lớp giữ nguyên, Lab 0 lấy từ bản mới nhất), vì lớp 1 đang dùng bản giáo trình trước khi cấu trúc lại Lab 1-8 và nhiều ID bài đã đổi tên.
+- Bài mới của Lab 0 được chép vào lớp ở trạng thái TẮT để sinh viên đã hoàn thành Lab 0 không mất hoàn thành và Lab 1+ không bị khoá; giảng viên bật sau khi thêm nội dung. Lớp 1 đã được nâng cấp ngày 18/11/2026 trên cơ sở dữ liệu dev (40 dòng tiến độ giữ nguyên), có sao lưu `pg_dump` trước đó.
+- Xem trước công khai cho khách vẫn chỉ gồm `components`; không mở thêm bài nào.
+
+## 17/11/2026 — Khung rỗng Lab 0 và loại bài mới `quiz` (LAB0-01)
+
+- Lab 0 có 10 mục: Video 0.1 (`overview`), Doc 0.1 (`document`), câu hỏi `quiz-0-1`, Doc 0.2 (`document-0-2`), câu hỏi `quiz-0-2`, Video 0.2 (`video-0-2`), Thực hành 3D (`components`), câu hỏi `quiz-0-3`, Tổng hợp (`summary-0`) và `labtest-0`. Giữ nguyên ID cũ `overview`, `document`, `components` để không mất tiến độ đã lưu.
+- Thêm loại bài `quiz` (migration `0015_lesson_type_quiz`) thay vì gắn câu hỏi vào bài cha, vì người dùng muốn mỗi bộ câu hỏi là một mục riêng trên menu. Việc này lệch kế hoạch LMS (4 loại bài), nên ghi lại tại đây. `quiz` mặc định tắt, không bắt buộc, không thể tự hoàn thành bằng sự kiện `complete` từ client, và không có đáp án trong dữ liệu seed.
+- Đáp án chỉ lưu ở server: `fastapi-backend/app/firmware/curriculum/lab0/quiz-*.json` và `labtest-0.json` là chỗ dự trữ, exporter không đọc nên không vào `seed.json` hay bundle. Bộ nạp câu hỏi/chấm quiz theo bài chưa làm.
+- Xem trước công khai giữ nguyên ranh giới cũ: chỉ `components` có `preview_allowed=true`; khách không thấy các mục mới của Lab 0. Downgrade `0015` từ chối chạy nếu còn bài `quiz`, tránh làm mất dữ liệu.
+- Chưa làm: mô hình 3D WebGL, nội dung video/tài liệu/câu hỏi. Các lab 1-8 không đổi.
+
 ## 08/11/2026 — Mở rộng soạn đề Lab Test 4 dạng câu hỏi & đề mẫu tham khảo (QUIZ-01/02)
 
 - Hỗ trợ 4 dạng câu hỏi theo cấu trúc đề mẫu: `single_choice` (Phần I: 1 đáp án đúng), `multiple_choice` (Phần II: nhiều đáp án đúng `a|b|d`), `true_false` (Phần III: Đúng/Sai 4 mệnh đề `a:Đ|b:S|c:S|d:Đ`, hỗ trợ tiền tố `[0,1,2,...]` điều khiển thứ tự đảo mệnh đề khi sinh đề), và `short_answer` (Phần IV: trả lời ngắn).

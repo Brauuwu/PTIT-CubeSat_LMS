@@ -136,8 +136,8 @@ class ReportAPITests(unittest.IsolatedAsyncioTestCase):
         ).json()
         body = course.settings_payload(draft)
         for item in body["lessons"]:
-            item["required"] = item["lesson_id"] == "document" or item["lesson_id"].startswith(
-                "summary-"
+            item["required"] = item["lesson_id"] == "document" or (
+                item["lesson_id"].startswith("summary-") and item["lesson_id"] != "summary-0"
             )
             if item["lesson_id"] == "document":
                 item["params"] = {"markdown": "Tài liệu lớp B (dữ liệu kiểm thử)."}

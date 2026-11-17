@@ -35,7 +35,16 @@ from app.services.learning_progress import (
     student_member,
 )
 from app.services.learning_rules import lesson_version, satisfies
-from app.services.question_banks import conflict, invalid, policy_json, questions, uid
+from app.services.question_banks import (
+    LABTEST_QUESTIONS,
+    conflict,
+    invalid,
+    is_labtest,
+    lesson_key,
+    policy_json,
+    questions,
+    uid,
+)
 
 
 def now():
@@ -105,23 +114,24 @@ async def receipt(db, key, member_id, payload):
     return old, digest
 
 
-async def context(db, access, lab_id):
+def find_quiz_lesson(config, target):
+    """The Lab Test of a lab (int target) or a quiz lesson by id (str target)."""
+    key = lesson_key(target)
+    for lab in config["labs"]:
+        for q in lab["lessons"]:
+            if q["id"] == key and q["type"] in ("labtest", "quiz"):
+                return lab["id"], q
+    return None, None
+
+
+async def context(db, access, target):
     member = await student_member(db, access, lock=True)
     config = await raw_config(db, access)
-    lesson = next(
-        (
-            q
-            for lab in config["labs"]
-            if lab["id"] == lab_id
-            for q in lab["lessons"]
-            if q["type"] == "labtest"
-        ),
-        None,
-    )
+    lab_id, lesson = find_quiz_lesson(config, target)
     if lesson is None:
-        invalid("Không tìm thấy Lab Test.")
+        invalid("Không tìm thấy bài kiểm tra.")
     await ensure_available(db, access, config, lesson["id"])
-    return member, config, lesson
+    return member, config, lesson, lab_id
 
 
 async def finalize(db, attempt, *, submit=False):
@@ -209,6 +219,7 @@ async def serialize(db, attempt, *, result=False):
         "id": attempt.id,
         "class_id": attempt.class_id,
         "lab_id": attempt.lab_id,
+        "lesson_id": attempt.lesson_id,
         "status": attempt.status,
         "number": attempt.number,
         "policy": attempt.policy,
@@ -226,8 +237,8 @@ async def serialize(db, attempt, *, result=False):
     }
 
 
-async def start(db, access, lab_id, request):
-    member, config, lesson = await context(db, access, lab_id)
+async def start(db, access, target, request):
+    member, config, lesson, lab_id = await context(db, access, target)
     version = lesson_version(config, lesson["id"])
     old, digest = await receipt(
         db, request.idempotency_key, member.id, {"action": "start", "version": version}
@@ -243,10 +254,14 @@ async def start(db, access, lab_id, request):
         else:
             path = await member_path(db, config, member)
             lab = next(lab for lab in path["labs"] if lab["id"] == lab_id)
+            # Only the Lab Test waits for the whole lab; a lesson quiz is gated by the lesson order.
             missing = [
                 q["id"]
                 for q in lab["lessons"]
-                if q["id"] != lesson["id"] and q["required"] and not satisfies(q["status"])
+                if lesson["type"] == "labtest"
+                and q["id"] != lesson["id"]
+                and q["required"]
+                and not satisfies(q["status"])
             ]
             if missing:
                 raise LMSError(
@@ -255,7 +270,7 @@ async def start(db, access, lab_id, request):
                     "Hoàn thành các bài bắt buộc trước khi làm Lab Test.",
                     {"lesson_ids": missing},
                 )
-            policy = await db.get(QuizPolicy, (access.classroom.id, lab_id))
+            policy = await db.get(QuizPolicy, (access.classroom.id, lesson["id"]))
             bank = await db.get(QuestionBank, policy.bank_id) if policy and policy.bank_id else None
             if (
                 not bank
@@ -272,6 +287,7 @@ async def start(db, access, lab_id, request):
                     if k in lesson["params"]
                 }
             )
+            snapshot["pass_score"] = min(snapshot["pass_score"], snapshot["num_questions"])
             limit = await allowance(db, member.id, version, snapshot["max_attempts"])
             if len(rows) >= limit or any(a.revealed_at for a in rows):
                 raise LMSError(
@@ -283,8 +299,15 @@ async def start(db, access, lab_id, request):
                 if deadline <= now():
                     raise LMSError(409, "ATTEMPT_EXPIRED", "Bài test đã đóng.")
             pool = [q for q in await questions(db, bank.id) if q.status == "approved"]
-            if len(pool) != 20:
-                raise LMSError(409, "BANK_NOT_READY", "Ngân hàng cần đúng 20 câu đã duyệt.")
+            draw = snapshot["num_questions"]
+            if (len(pool) != LABTEST_QUESTIONS) if is_labtest(lesson["id"]) else (len(pool) < draw):
+                raise LMSError(
+                    409,
+                    "BANK_NOT_READY",
+                    f"Ngân hàng cần đúng {LABTEST_QUESTIONS} câu đã duyệt."
+                    if is_labtest(lesson["id"])
+                    else f"Ngân hàng cần ít nhất {draw} câu đã duyệt.",
+                )
             attempt = QuizAttempt(
                 id=uid(),
                 class_id=access.classroom.id,
@@ -302,7 +325,7 @@ async def start(db, access, lab_id, request):
             db.add(attempt)
             await db.flush()
             rng = secrets.SystemRandom()
-            for position, question in enumerate(rng.sample(pool, 5)):
+            for position, question in enumerate(rng.sample(pool, draw)):
                 content = deepcopy(question.content)
                 q_type = content.get("question_type", "single_choice")
                 if q_type == "true_false":
@@ -415,8 +438,8 @@ async def get_result(db, attempt, *, submit=False):
     return response
 
 
-async def history(db, access, lab_id):
-    member, config, lesson = await context(db, access, lab_id)
+async def history(db, access, target):
+    member, config, lesson, _ = await context(db, access, target)
     rows = await attempt_rows(db, member.id, lesson_version(config, lesson["id"]))
     for attempt in rows:
         await finalize(db, attempt)
@@ -425,21 +448,12 @@ async def history(db, access, lab_id):
     return response
 
 
-async def grant(db, access, lab_id, request):
+async def grant(db, access, target, request):
     member = await student_member(db, access, lock=True, membership_id=request.membership_id)
     config = await raw_config(db, access)
-    lesson = next(
-        (
-            q
-            for lab in config["labs"]
-            if lab["id"] == lab_id
-            for q in lab["lessons"]
-            if q["type"] == "labtest"
-        ),
-        None,
-    )
+    _, lesson = find_quiz_lesson(config, target)
     if not lesson:
-        invalid("Không tìm thấy Lab Test.")
+        invalid("Không tìm thấy bài kiểm tra.")
     version = lesson_version(config, lesson["id"])
     old = await db.get(QuizAttemptGrant, request.idempotency_key)
     if old:
@@ -468,7 +482,7 @@ async def grant(db, access, lab_id, request):
     return {"granted": request.extra_attempts, "membership_id": member.id}
 
 
-async def statistics(db, access, lab_id):
+async def statistics(db, access, target):
     prompt = QuizAttemptItem.snapshot["prompt"].as_string()
     correct = QuizAttemptItem.snapshot["correct_choice_id"].as_string()
     rows = (
@@ -490,7 +504,7 @@ async def statistics(db, access, lab_id):
                 )
                 .where(
                     QuizAttempt.class_id == access.classroom.id,
-                    QuizAttempt.lab_id == lab_id,
+                    QuizAttempt.lesson_id == lesson_key(target),
                     QuizAttempt.status != "active",
                 )
                 .group_by(QuizAttemptItem.question_version_id, prompt)

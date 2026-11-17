@@ -38,7 +38,7 @@ test('every document has topic-specific reading; video links remain explicit unt
 });
 
 test('lesson URLs restore selection, invalid/cross-lab IDs fall back and Lab0 keeps three sections', () => {
-  assert.deepEqual(getLessonsForLab(0).map(item => item.id), ['overview', 'document', 'components']);
+  assert.deepEqual(getLessonsForLab(0).map(item => item.id), ['overview', 'document', 'quiz-0-1', 'document-0-2', 'quiz-0-2', 'video-0-2', 'components', 'quiz-0-3', 'summary-0']);
   const url = new URL(lessonUrl('lab4', 'Lab4-02b_IMU_Library'), 'http://localhost');
   assert.equal(getLessonForLab(4, url.searchParams.get('lesson')).id, 'Lab4-02b_IMU_Library');
   assert.equal(getLessonForLab(1, 'Lab4-02b_IMU_Library').id, 'video-1-1');

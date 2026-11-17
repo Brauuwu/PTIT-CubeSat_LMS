@@ -8,6 +8,14 @@ import { getLessonsForLab } from '../src/data/curriculum.js';
 import { lessonReadingContent } from '../src/data/lesson-reading.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+// Lab 0 scaffold content lives on the server side. Quiz and lab-test answer files in this folder are never read here.
+const lab0Dir = resolve(root, 'fastapi-backend/app/firmware/curriculum/lab0');
+const LAB0_FILES = {
+  overview: 'video-0-1.json', 'video-0-2': 'video-0-2.json', document: 'doc-0-1.md', 'document-0-2': 'doc-0-2.md',
+  'summary-0': 'summary-0.md', components: 'practice-explorer.json',
+};
+const lab0Text = id => readFileSync(resolve(lab0Dir, LAB0_FILES[id]), 'utf8').replaceAll(String.fromCharCode(13), '').trim();
+const lab0Json = id => JSON.parse(lab0Text(id));
 const objectives = [
   ['', 'Tổng quan các phân hệ'], ['', 'Web IDE và kết nối OBC'],
   ['Nguồn và pin|Đo điện áp pin|Thư viện pin|Tiết kiệm năng lượng', 'Đọc điện áp, giải thích kết quả, minh chứng chế độ tiết kiệm năng lượng'],
@@ -38,23 +46,38 @@ const labs = LABS.map(lab => {
   const source = getLessonsForLab(lab.id);
   const lessons = source.map((item, index) => {
     const type = item.type === 'summary' ? 'document' : item.type === 'components' ? 'practice' : item.type;
+    const lab0 = lab.id === 0;
     const content = { group: groupFor(lab.id, item, index, source.length), estimated_minutes: null, todos: [] };
-    if (type === 'video') { content.url = lab.id === 0 ? '' : item.videoUrl || ''; content.todos.push('TODO GV: cung cấp URL video thật và thời lượng.'); }
+    if (type === 'video') {
+      if (lab0) Object.assign(content, lab0Json(item.id));
+      else content.url = item.videoUrl || '';
+      content.url = content.url || '';
+      content.todos.push('TODO GV: cung cấp URL video thật và thời lượng.');
+    }
     if (type === 'document') {
-      content.markdown = item.type === 'summary' ? `# Tổng kết\n\n${item.description || lab.description}\n\n## Minh chứng đầu ra\n\n${objectives[lab.id][1]}` : lab.id === 0 ? '' : lessonReadingContent(lab, item);
-      if (!content.markdown) content.todos.push('TODO GV: bổ sung tài liệu giới thiệu Lab 0.');
+      content.markdown = lab0 ? lab0Text(item.id) : item.type === 'summary' ? `# Tổng kết\n\n${item.description || lab.description}\n\n## Minh chứng đầu ra\n\n${objectives[lab.id][1]}` : lessonReadingContent(lab, item);
+      if (!content.markdown) content.todos.push('TODO GV: bổ sung tài liệu Lab 0.');
     }
     if (type === 'practice') {
       content.exercise_id = item.exerciseCode || '';
       content.repository_url = item.repositoryUrl || '';
       content.mode = item.type === 'components' ? 'exploration' : 'hardware';
       content.instructions = '';
+      if (lab0) Object.assign(content, lab0Json(item.id));
       content.evidence = objectives[lab.id][1];
       content.todos.push('TODO GV: bổ sung hướng dẫn, rubric, kết quả mong đợi và lỗi thường gặp từ học liệu đã duyệt.');
     }
-    return { id: item.id, lab_id: lab.id, type, order_no: index, title: item.type === 'summary' ? 'Tổng kết' : item.title,
-      content, completion_rule: { kind: type === 'practice' ? 'teacher_review' : type === 'video' ? 'watched_ratio' : 'read_confirmation', ...(type === 'video' ? { ratio: 0.9 } : {}) },
-      preview_allowed: item.id === 'components', default_enabled: type !== 'video', default_required: type === 'document' && !!content.markdown };
+    if (type === 'quiz') {
+      // Answers stay server-only; the seed carries just the slot id and readiness flag.
+      content.bank_key = item.id;
+      content.bank_ready = false;
+      content.todos.push('TODO GV: soạn và duyệt câu hỏi kiểm tra (đáp án chỉ lưu ở server).');
+    }
+    const completionKind = type === 'practice' ? 'teacher_review' : type === 'video' ? 'watched_ratio' : type === 'quiz' ? 'quiz_pass' : 'read_confirmation';
+    return { id: item.id, lab_id: lab.id, type, order_no: index, title: item.type === 'summary' && !lab0 ? 'Tổng kết' : item.title,
+      content, completion_rule: { kind: completionKind, ...(type === 'video' ? { ratio: 0.9 } : {}), ...(type === 'quiz' ? { pass_score: null } : {}) },
+      preview_allowed: item.id === 'components',
+      default_enabled: type !== 'video' && type !== 'quiz', default_required: type === 'document' && !!content.markdown };
   });
   if (lab.id >= 2) {
     const groups = objectives[lab.id][0].split('|');
@@ -69,7 +92,7 @@ const labs = LABS.map(lab => {
 // Hash and compare with LF endings so a Windows (autocrlf) checkout matches a Linux one.
 const lf = text => text.replace(/\r\n/g, '\n');
 const sourceHash = createHash('sha256');
-for (const path of ['src/data/curriculum.js', 'src/data/labs.js', 'src/data/lesson-reading.js', 'scripts/export-curriculum.mjs']) sourceHash.update(lf(readFileSync(resolve(root, path), 'utf8')));
+for (const path of ['src/data/curriculum.js', 'src/data/labs.js', 'src/data/lesson-reading.js', 'scripts/export-curriculum.mjs', ...Object.values(LAB0_FILES).map(name => `fastapi-backend/app/firmware/curriculum/lab0/${name}`)]) sourceHash.update(lf(readFileSync(resolve(root, path), 'utf8')));
 const output = JSON.stringify({ course_id: 'cubesat', course_title: 'CubeSAT Learning Platform', source_hash: sourceHash.digest('hex'), labs, legacy }, null, 2) + '\n';
 const target = resolve(root, 'fastapi-backend/app/firmware/curriculum/seed.json');
 if (process.argv.includes('--check')) {

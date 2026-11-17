@@ -13,6 +13,15 @@ const QUESTION_TYPE_LABELS = {
   short_answer: 'Phần IV — Trả lời ngắn',
 };
 
+// Lab Test banks live under /labs/:labId; per-lesson quiz banks under /lessons/:lessonId.
+const bankBase = (classId, labId, lessonId) => lessonId
+  ? `/api/classes/${classId}/lessons/${encodeURIComponent(lessonId)}`
+  : `/api/classes/${classId}/labs/${labId}`;
+const bankNeed = bank => bank.required_questions || 20;
+const bankReady = bank => (bank.kind === 'quiz' ? bank.approved_count >= bankNeed(bank) : bank.approved_count === bankNeed(bank));
+const bankTitle = (bank, labId) => (bank.kind === 'quiz' ? `Câu hỏi ${bank.lesson_id}` : `Ngân hàng Lab ${labId}`);
+const bankPage = (classId, labId, lessonId) => `/classes/${classId}/${lessonId ? `lessons/${encodeURIComponent(lessonId)}` : `labs/${labId}`}/questions`;
+
 function toBase64(buffer) {
   const bytes = new Uint8Array(buffer);
   let binary = '';
@@ -105,7 +114,7 @@ function parseTrueFalseMap(raw, choices) {
   return map;
 }
 
-export function BankEditor({ initial, classId, labId, reload, inline = false, onBankChange = null }) {
+export function BankEditor({ initial, classId, labId, lessonId = null, reload, inline = false, onBankChange = null }) {
   const [bank, setBank] = useState(initial);
   const [selected, setSelected] = useState(initial.questions[0]?.id || null);
   const [question, setQuestion] = useState(() => initial.questions[0] ? editableQuestion(initial.questions[0]) : emptyQuestion());
@@ -116,8 +125,9 @@ export function BankEditor({ initial, classId, labId, reload, inline = false, on
   const [questionFile, setQuestionFile] = useState(null);
   const [answerFile, setAnswerFile] = useState(null);
   const guard = useRef(false);
-  const base = `/api/classes/${classId}/labs/${labId}`;
+  const base = bankBase(classId, labId, lessonId);
   const url = base + '/question-bank';
+  const labNo = bank.lab_id ?? labId;
   const draft = bank.status === 'draft';
   const edited = selected && JSON.stringify(question) !== JSON.stringify(editableQuestion(bank.questions.find(q => q.id === selected)));
   const field = key => ({ value: question[key], onChange: event => setQuestion(current => ({ ...current, [key]: event.target.value })) });
@@ -233,15 +243,15 @@ export function BankEditor({ initial, classId, labId, reload, inline = false, on
 
   return <div className={inline ? 'lms-inline-bank' : ''}>
     {!inline && <>
-      <header className="lms-heading"><div><h1>Ngân hàng Lab {labId}</h1><p>Phiên bản {bank.version} · {labels[bank.status]} · {bank.approved_count}/20 câu đã duyệt</p></div><Link to={`/classes/${classId}/curriculum`}>Cấu hình chương trình</Link></header>
-      <nav className="lms-actions" aria-label="Ngân hàng theo lab">{Array.from({ length: 9 }, (_, id) => <Link key={id} aria-current={id === Number(labId) ? 'page' : undefined} to={`/classes/${classId}/labs/${id}/questions`}>Lab {id}</Link>)}</nav>
+      <header className="lms-heading"><div><h1>{bankTitle(bank, labId)}</h1><p>Phiên bản {bank.version} · {labels[bank.status]} · {bank.approved_count}/{bankNeed(bank)} câu đã duyệt</p></div><Link to={`/classes/${classId}/curriculum`}>Cấu hình chương trình</Link></header>
+      {!lessonId && <nav className="lms-actions" aria-label="Ngân hàng theo lab">{Array.from({ length: 9 }, (_, id) => <Link key={id} aria-current={id === Number(labId) ? 'page' : undefined} to={`/classes/${classId}/labs/${id}/questions`}>Lab {id}</Link>)}</nav>}
     </>}
     {inline && <div className="lms-heading" style={{ margin: '12px 0' }}>
       <div>
-        <strong>Ngân hàng câu hỏi Lab {labId}</strong>
-        <span className="lms-secondary">Phiên bản {bank.version} · {labels[bank.status]} · <strong>{bank.approved_count}/20</strong> câu đã duyệt (tổng {bank.questions.length} câu)</span>
+        <strong>{bank.kind === 'quiz' ? bankTitle(bank, labId) : `Ngân hàng câu hỏi Lab ${labId}`}</strong>
+        <span className="lms-secondary">Phiên bản {bank.version} · {labels[bank.status]} · <strong>{bank.approved_count}/{bankNeed(bank)}</strong> câu đã duyệt (tổng {bank.questions.length} câu)</span>
       </div>
-      <Link to={`/classes/${classId}/labs/${labId}/questions`}>Mở trang ngân hàng đầy đủ</Link>
+      <Link to={bankPage(classId, labId, lessonId)}>Mở trang ngân hàng đầy đủ</Link>
     </div>}
     <Notice {...notice} />
     <div className="lms-actions">
@@ -252,12 +262,12 @@ export function BankEditor({ initial, classId, labId, reload, inline = false, on
         </button>
       )}
       {draft && (
-        <button type="button" className="lms-primary" disabled={busy || bank.approved_count !== 20} onClick={() => mutate(url + '/publish', { expected_revision: bank.revision })}>
-          Xuất bản 20 câu đã duyệt
+        <button type="button" className="lms-primary" disabled={busy || !bankReady(bank)} onClick={() => mutate(url + '/publish', { expected_revision: bank.revision })}>
+          Xuất bản các câu đã duyệt ({bank.approved_count}/{bankNeed(bank)})
         </button>
       )}
     </div>
-    <p>Mỗi đề thi rút ngẫu nhiên 5 câu từ 20 câu đã duyệt. Hỗ trợ 4 dạng câu hỏi theo đề mẫu (1 đáp án, nhiều đáp án, Đúng/Sai 4 ý a-b-c-d, trả lời ngắn).</p>
+    <p>{bank.kind === 'quiz' ? `Mỗi lượt rút ngẫu nhiên ${bank.policy.num_questions} câu từ các câu đã duyệt (cần ít nhất ${bankNeed(bank)} câu).` : 'Mỗi đề thi rút ngẫu nhiên 5 câu từ 20 câu đã duyệt.'} Hỗ trợ 4 dạng câu hỏi theo đề mẫu (1 đáp án, nhiều đáp án, Đúng/Sai 4 ý a-b-c-d, trả lời ngắn).</p>
     {!draft && <form className="lms-panel" onSubmit={async event => { event.preventDefault(); const result = await mutate(url + '/fork', { expected_revision: bank.revision, reason, retire_question_id: retire || null }); if (result) select(null); }}>
       <h2>Tạo phiên bản sửa</h2><p>Lượt đang làm và kết quả cũ giữ nguyên. Thu hồi câu sẽ tạm ngừng cấp đề mới cho đến khi xuất bản bản sửa.</p>
       <div className="lms-form-grid"><label>Câu cần thu hồi (nếu có)<select value={retire} onChange={event => setRetire(event.target.value)}><option value="">Chỉ tạo phiên bản mới</option>{bank.questions.map(q => <option key={q.id} value={q.question_id}>{q.prompt.slice(0, 100)}</option>)}</select></label><label>Lý do<textarea required minLength={5} maxLength={1000} value={reason} onChange={event => setReason(event.target.value)} /></label></div><button disabled={busy}>Tạo bản sửa</button>
@@ -423,19 +433,19 @@ export function BankEditor({ initial, classId, labId, reload, inline = false, on
       </form>
     </section>}
     {!inline && <>
-      <PolicyForm key={bank.policy.revision} initial={bank.policy} busy={busy} onSave={value => mutate(base + '/quiz-policy', value, 'PUT')} />
-      {bank.ai_available && draft && <GenerationForm classId={classId} labId={labId} revision={bank.revision} url={url} busy={busy} mutate={mutate} onReload={reload} />}
+      <PolicyForm key={bank.policy.revision} initial={bank.policy} kind={bank.kind} busy={busy} onSave={value => mutate(base + '/quiz-policy', value, 'PUT')} />
+      {bank.ai_available && draft && <GenerationForm classId={classId} labId={labNo} revision={bank.revision} url={url} busy={busy} mutate={mutate} onReload={reload} />}
       <TeacherResults base={base} />
     </>}
   </div>;
 }
 
-function PolicyForm({ initial, busy, onSave }) {
+function PolicyForm({ initial, busy, onSave, kind = 'labtest' }) {
   const [value, setValue] = useState(initial);
   const [close, setClose] = useState(initial.closes_at ? new Date(Date.parse(initial.closes_at) - new Date(initial.closes_at).getTimezoneOffset() * 60000).toISOString().slice(0, 16) : '');
   return <details className="lms-panel"><summary><h2>Chính sách bài test</h2></summary><p>Áp dụng cho lượt mới. Tham số riêng trong cấu hình chương trình đã xuất bản được ưu tiên. Các lượt đang thi giữ chính sách ban đầu.</p>
     <form onSubmit={event => { event.preventDefault(); const { revision, ...fields } = value; onSave({ ...fields, expected_revision: revision, closes_at: close ? new Date(close).toISOString() : null }); }}><div className="lms-form-grid">
-      {[['time_limit_minutes', 'Thời gian (phút)', 180], ['pass_score', 'Điểm đạt / 5', 5], ['max_attempts', 'Số lượt tối đa', 100]].map(([key, label, max]) => <label key={key}>{label}<input type="number" min={1} max={max} required value={value[key]} onChange={event => setValue(current => ({ ...current, [key]: Number(event.target.value) }))} /></label>)}
+      {[['time_limit_minutes', 'Thời gian (phút)', 180], ...(kind === 'quiz' ? [['num_questions', 'Số câu mỗi lượt', 20]] : []), ['pass_score', `Điểm đạt / ${kind === 'quiz' ? value.num_questions : 5}`, kind === 'quiz' ? value.num_questions : 5], ['max_attempts', 'Số lượt tối đa', 100]].map(([key, label, max]) => <label key={key}>{label}<input type="number" min={1} max={max} required value={value[key]} onChange={event => setValue(current => ({ ...current, [key]: Number(event.target.value) }))} /></label>)}
       <label>Công bố đáp án<select value={value.reveal_policy} onChange={event => setValue(current => ({ ...current, reveal_policy: event.target.value }))}><option value="after_attempts">Sau khi hết lượt</option><option value="after_close">Sau khi đóng bài test</option><option value="immediate">Ngay sau nộp (không thi lại sau khi xem)</option><option value="never">Không công bố</option></select></label>
       <label>Đóng bài test (giờ địa phương)<input type="datetime-local" value={close} required={value.reveal_policy === 'after_close'} onChange={event => setClose(event.target.value)} /></label>
     </div><button disabled={busy}>Lưu chính sách</button></form></details>;
@@ -457,7 +467,7 @@ function GenerationForm({ classId, labId, revision, url, busy, mutate, onReload 
 function TeacherResults({ base }) {
   const stats = useLmsResource(base + '/quiz-statistics');
   const [page, setPage] = useState(1);
-  const members = useLmsResource(base.replace(/\/labs\/\d+$/, '') + `/members?status=active&page=${page}&page_size=20`);
+  const members = useLmsResource(base.replace(/\/(?:labs\/\d+|lessons\/[^/]+)$/, '') + `/members?status=active&page=${page}&page_size=20`);
   const [member, setMember] = useState('');
   const [extra, setExtra] = useState(1);
   const [reason, setReason] = useState('');
@@ -477,15 +487,15 @@ function TeacherResults({ base }) {
     <section className="lms-panel"><h2>Tỷ lệ đúng theo phiên bản câu</h2><button onClick={stats.reload}>Cập nhật thống kê</button><Notice error={stats.error} />{!stats.data?.length ? <p>Chưa có lượt đã chấm.</p> : <div className="lms-table-wrap"><table><caption className="sr-only">Tỷ lệ trả lời đúng theo từng phiên bản câu hỏi</caption><thead><tr><th>Câu hỏi</th><th>Lượt đúng / Tổng</th><th>Tỷ lệ đúng</th></tr></thead><tbody>{stats.data.map(row => <tr key={row.question_version_id}><td>{row.prompt}<small> {row.question_version_id.slice(0, 8)}</small></td><td>{row.correct}/{row.total}</td><td>{Math.round(row.correct_ratio * 100)}%</td></tr>)}</tbody></table></div>}</section></>;
 }
 
-export function InlineQuestionBank({ classId, labId, onPublished = null }) {
-  const url = `/api/classes/${classId}/labs/${labId}/question-bank`;
+export function InlineQuestionBank({ classId, labId, lessonId = null, onPublished = null }) {
+  const url = bankBase(classId, labId, lessonId) + '/question-bank';
   const { data: bank, loading, error, reload } = useLmsResource(url);
   const [questionFile, setQuestionFile] = useState(null);
   const [answerFile, setAnswerFile] = useState(null);
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState({});
 
-  if (loading) return <p role="status">Đang tải ngân hàng câu hỏi Lab {labId}…</p>;
+  if (loading) return <p role="status">Đang tải ngân hàng câu hỏi {lessonId ? lessonId : `Lab ${labId}`}…</p>;
   if (error) return <><Notice error={error} /><button type="button" onClick={reload}>Thử lại</button></>;
 
   const draft = bank.status === 'draft';
@@ -560,7 +570,7 @@ export function InlineQuestionBank({ classId, labId, onPublished = null }) {
         method: 'POST',
         body: JSON.stringify({ expected_revision: bank.revision }),
       });
-      setNotice({ message: 'Đã xuất bản ngân hàng 20 câu hỏi.' });
+      setNotice({ message: 'Đã xuất bản ngân hàng câu hỏi.' });
       reload();
       if (onPublished) onPublished();
     } catch (err) {
@@ -574,9 +584,9 @@ export function InlineQuestionBank({ classId, labId, onPublished = null }) {
     <div className="lms-inline-bank">
       <div className="lms-actions" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <strong>Thêm file câu hỏi & đáp án (Lab Test {labId})</strong>
+          <strong>Thêm file câu hỏi & đáp án ({lessonId ? lessonId : `Lab Test ${labId}`})</strong>
           <span className="lms-secondary">
-            Phiên bản {bank.version} · {labels[bank.status]} · Đã duyệt <strong>{bank.approved_count}/20</strong> câu (tổng {bank.questions.length} câu)
+            Phiên bản {bank.version} · {labels[bank.status]} · Đã duyệt <strong>{bank.approved_count}/{bankNeed(bank)}</strong> câu (tổng {bank.questions.length} câu)
           </span>
           <span className="lms-secondary">
             <strong>Mẫu File câu hỏi:</strong>{' '}
@@ -589,7 +599,7 @@ export function InlineQuestionBank({ classId, labId, onPublished = null }) {
           </span>
         </div>
         <div className="lms-actions">
-          <Link to={`/classes/${classId}/labs/${labId}/questions`} className="lms-btn-link">
+          <Link to={bankPage(classId, labId, lessonId)} className="lms-btn-link">
             Mở trang riêng để soạn câu hỏi
           </Link>
         </div>
@@ -608,7 +618,7 @@ export function InlineQuestionBank({ classId, labId, onPublished = null }) {
             </label>
             <button className="lms-primary" disabled={busy || !questionFile}>Thêm file câu hỏi</button>
           </form>
-          {(draftCount > 0 || bank.approved_count === 20) && (
+          {(draftCount > 0 || bankReady(bank)) && (
             <div className="lms-actions" style={{ marginTop: '10px' }}>
               {draftCount > 0 && (
                 <button type="button" disabled={busy} onClick={approveAll}>
@@ -618,10 +628,10 @@ export function InlineQuestionBank({ classId, labId, onPublished = null }) {
               <button
                 type="button"
                 className="lms-primary"
-                disabled={busy || bank.approved_count !== 20}
+                disabled={busy || !bankReady(bank)}
                 onClick={publishBank}
               >
-                Xuất bản 20 câu đã duyệt
+                Xuất bản các câu đã duyệt ({bank.approved_count}/{bankNeed(bank)})
               </button>
             </div>
           )}
@@ -636,9 +646,9 @@ export function InlineQuestionBank({ classId, labId, onPublished = null }) {
 }
 
 export default function QuestionBankPage() {
-  const { classId, labId } = useParams();
-  const { data, loading, error, reload } = useLmsResource(`/api/classes/${classId}/labs/${labId}/question-bank`);
+  const { classId, labId, lessonId } = useParams();
+  const { data, loading, error, reload } = useLmsResource(bankBase(classId, labId, lessonId) + '/question-bank');
   if (loading) return <p role="status">Đang tải ngân hàng…</p>;
   if (error) return <><Notice error={error} /><Link to={`/classes/${classId}/curriculum`}>Về cấu hình chương trình</Link><button onClick={reload}>Thử lại</button></>;
-  return <BankEditor key={`${classId}:${labId}:${data.revision}`} initial={data} classId={classId} labId={labId} reload={reload} />;
+  return <BankEditor key={`${classId}:${lessonId || labId}:${data.revision}`} initial={data} classId={classId} labId={labId} lessonId={lessonId} reload={reload} />;
 }

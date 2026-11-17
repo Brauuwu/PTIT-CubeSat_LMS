@@ -111,7 +111,7 @@ class QuizAPITests(unittest.IsolatedAsyncioTestCase):
     async def test_seed_empty_and_publish_requires_exact_20(self):
         async with self.sessions() as db:
             self.assertEqual(
-                (await db.execute(select(func.count()).select_from(QuestionBank))).scalar_one(), 9
+                (await db.execute(select(func.count()).select_from(QuestionBank))).scalar_one(), 12
             )
             self.assertEqual(
                 (await db.execute(select(func.count()).select_from(QuestionVersion))).scalar_one(),

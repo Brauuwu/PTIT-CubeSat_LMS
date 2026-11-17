@@ -14,7 +14,7 @@ const IDEPanel = lazy(() => import('../components/editor/IDEPanel'));
 const LabPracticeActions = lazy(() => import('../components/editor/LabPracticeActions'));
 const PracticeVisualization = lazy(() => import('../components/visualization/PracticeVisualization'));
 const ComponentViewer = lazy(() => import('../components/interactive/ComponentViewer'));
-const types = { video: 'Video', document: 'Tài liệu', practice: 'Thực hành', labtest: 'Lab test' };
+const types = { video: 'Video', document: 'Tài liệu', practice: 'Thực hành', quiz: 'Câu hỏi', labtest: 'Lab test' };
 
 function Practice({ lesson, labId, classId, preview, staffView, onRefresh }) {
   const { user } = useAuth();
@@ -128,9 +128,12 @@ function LessonContent({ lesson, labId, classId, preview, staffView = false, onR
     </>}
     {lesson.type === 'document' && <DocViewer content={lesson.content.markdown || '# Tài liệu đang được cập nhật'} docPath={undefined} />}
     {lesson.type === 'practice' && <Practice lesson={lesson} labId={labId} classId={classId} preview={preview} staffView={staffView} onRefresh={onRefresh} />}
+    {lesson.type === 'quiz' && (preview || !lesson.content.bank_ready
+      ? <p className="lesson-achieved" role="status">{preview ? 'Chế độ xem toàn bộ không tạo lượt làm bài.' : 'Câu hỏi kiểm tra của mục này chưa sẵn sàng.'} {staffView && <Link to={`/classes/${classId}/lessons/${encodeURIComponent(lesson.id)}/questions`}>Soạn câu hỏi</Link>}</p>
+      : <Suspense fallback={<p>Đang tải câu hỏi…</p>}><QuizPanel classId={classId} labId={labId} lessonId={lesson.id} title={lesson.title} policySummary={lesson.content} onRefresh={onRefresh} /></Suspense>)}
     {lesson.type === 'labtest' && (preview ? <p>Chế độ xem toàn bộ dành cho Giảng viên / Quản trị viên không tạo lượt thi sinh viên. Mỗi đề thi gồm 5 câu rút ngẫu nhiên từ ngân hàng 20 câu đã duyệt ({lesson.content.time_limit_minutes || 10} phút · điểm đạt {lesson.content.pass_score || 4}/5 · tối đa {lesson.content.max_attempts || 3} lượt). <Link to={`/classes/${classId}/labs/${labId}/questions`}>Mở ngân hàng câu hỏi Lab {labId}</Link></p> : <Suspense fallback={<p>Đang tải bài kiểm tra…</p>}><QuizPanel classId={classId} labId={labId} policySummary={lesson.content} onRefresh={onRefresh} /></Suspense>)}
     {pagination}
-    {!preview && !staffView && <section className="lesson-completion" aria-label="Hoàn thành bài học">
+    {!preview && !staffView && lesson.type !== 'quiz' && <section className="lesson-completion" aria-label="Hoàn thành bài học">
       <button type="button" className="btn btn-primary" disabled={completionLocked} onClick={() => confirm('complete')}>
         {completionLabel}
       </button>

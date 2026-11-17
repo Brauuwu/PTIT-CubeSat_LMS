@@ -55,13 +55,13 @@ async def cross_role_flow(t, call, sessions, tokens):
 
     body = course.settings_payload(await ok(5, "GET", base + "/curriculum?draft=true"))
     for item in body["lessons"]:
-        item["required"] = item["lesson_id"] == "document" or item["lesson_id"].startswith(
-            "summary-"
+        item["required"] = item["lesson_id"] == "document" or (
+            item["lesson_id"].startswith("summary-") and item["lesson_id"] != "summary-0"
         )
         if item["lesson_id"] == "document":
             item["params"] = {"markdown": "Định hướng học tập (dữ liệu kiểm thử)."}
         # Every enabled lesson before the Lab Test must be completed in order; keep Lab 0 to document.
-        if item["lesson_id"] in ("overview", "components"):
+        if item["lesson_id"] in ("overview", "components", "document-0-2", "summary-0"):
             item["enabled"] = False
     body = await apply(body)
 

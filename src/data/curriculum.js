@@ -733,14 +733,22 @@ export const CURRICULUM = {
   }
 };
 
-const INTRO_LESSONS = [
-  { id: 'overview', type: 'video', label: '01', title: 'Tổng quan bài học' },
-  { id: 'document', type: 'document', label: '02', title: 'Tài liệu hướng dẫn' },
-  { id: 'components', type: 'components', label: '03', title: 'Thành phần' },
+// Lab 0 scaffold: content (video URLs, docs, 3D practice, quiz answers) is added later on the server.
+// Keep the legacy ids `overview`, `document` and `components`; existing progress points at them.
+const LAB0_LESSONS = [
+  { id: 'overview', type: 'video', label: 'Video 0.1', title: 'Kỷ nguyên vệ tinh nhỏ CubeSat và các phân hệ trên không gian' },
+  { id: 'document', type: 'document', label: 'Doc 0.1', title: 'Lịch sử CubeSat, chuẩn CalPoly, ống phóng P-POD và môi trường quỹ đạo LEO' },
+  { id: 'quiz-0-1', type: 'quiz', label: 'Câu hỏi Doc 0.1', title: 'Câu hỏi kiểm tra Doc 0.1' },
+  { id: 'document-0-2', type: 'document', label: 'Doc 0.2', title: 'Kiến trúc vệ tinh 1U và vai trò 6 phân hệ cốt lõi' },
+  { id: 'quiz-0-2', type: 'quiz', label: 'Câu hỏi Doc 0.2', title: 'Câu hỏi kiểm tra Doc 0.2' },
+  { id: 'video-0-2', type: 'video', label: 'Video 0.2', title: 'Demo tương tác mô hình vệ tinh 3D thời gian thực (WebGL)' },
+  { id: 'components', type: 'components', label: 'Thực hành', title: 'Khám phá và phân tích các phân hệ trên mô hình 3D' },
+  { id: 'quiz-0-3', type: 'quiz', label: 'Câu hỏi Thực hành', title: 'Câu hỏi kiểm tra Thực hành' },
+  { id: 'summary-0', type: 'summary', label: 'Tổng hợp', title: 'Tổng hợp Lab 0' },
 ];
 
-export const LESSON_TYPE_LABELS = { video: 'Video', document: 'Tài liệu', practice: 'Thực hành', summary: 'Tổng hợp', components: 'Thành phần' };
-export function getLessonsForLab(labId) { return CURRICULUM[labId]?.lessons || INTRO_LESSONS; }
+export const LESSON_TYPE_LABELS = { video: 'Video', document: 'Tài liệu', practice: 'Thực hành', summary: 'Tổng hợp', components: 'Thành phần', quiz: 'Câu hỏi' };
+export function getLessonsForLab(labId) { return CURRICULUM[labId]?.lessons || LAB0_LESSONS; }
 export function getLessonForLab(labId, requestedId) {
   const lessons = getLessonsForLab(labId);
   return lessons.find(lesson => lesson.id === requestedId) || lessons[0];

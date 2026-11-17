@@ -10,7 +10,7 @@ import TelemetryControls from '../groundstation/TelemetryControls';
 import PracticeVisualization from '../visualization/PracticeVisualization';
 import { useLmsResource } from '../classes/use-lms-resource';
 
-const LESSON_TYPE_LABELS = { video: 'Video', document: 'Tài liệu', practice: 'Thực hành', summary: 'Tổng hợp', components: 'Thành phần' };
+const LESSON_TYPE_LABELS = { video: 'Video', document: 'Tài liệu', practice: 'Thực hành', summary: 'Tổng hợp', components: 'Thành phần', quiz: 'Câu hỏi' };
 
 function LabStateTitle({ lab, lesson, position }) {
   return <header className="lab-state-title lab-state-title--compact">
@@ -140,6 +140,10 @@ function LoadedLabLayout({ lab, catalog, editorPanel, visualizationPanel = null,
         {lesson.type === 'document' && <section className="lab-workspace lab-doc-workspace" aria-label={`${lesson.label}: ${lesson.title}`}>
           <span className="lab-workspace-badge" aria-hidden="true">▤</span>
           <div className="lab-doc-surface"><DocViewer key={lesson.id} docPath={lab.id === 0 ? lab.docPath : undefined} content={lesson.reading} /></div>
+        </section>}
+        {lesson.type === 'quiz' && <section className="lesson-reading-card" aria-label={`${lesson.label}: ${lesson.title}`}>
+          <h2>{lesson.title}</h2>
+          <p>Câu hỏi kiểm tra của mục này đang được biên soạn. Đáp án chỉ lưu trên máy chủ và sẽ mở khi ngân hàng câu hỏi được duyệt.</p>
         </section>}
         {lesson.type === 'components' && <section className="lab-workspace lab-components-workspace" aria-label="Khám phá các phân hệ CubeSat">{visualizationPanel}</section>}
         {lesson.type === 'practice' && <>

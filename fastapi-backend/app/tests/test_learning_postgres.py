@@ -48,7 +48,10 @@ class LearningPostgresTests(unittest.IsolatedAsyncioTestCase):
         self.body = course.settings_payload(await self.draft())
         for item in self.body["lessons"]:
             # Same fixture as test_learning: every enabled lesson gates the next one.
-            active = item["lesson_id"] == "document" or item["lesson_id"].startswith("summary-")
+            # summary-0 is an empty Lab 0 scaffold slot, so it cannot be a required lesson.
+            active = item["lesson_id"] == "document" or (
+                item["lesson_id"].startswith("summary-") and item["lesson_id"] != "summary-0"
+            )
             item["enabled"] = active or item["lesson_id"] == "Lab2-01a_Battery_I2C"
             item["required"] = active
             if item["lesson_id"] == "document":

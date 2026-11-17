@@ -4,7 +4,7 @@ import { Notice } from './LmsCommon';
 import { acknowledge, quizCacheKey, quizTabId, readQuizCache } from './quiz-storage';
 import './quiz.css';
 
-export default function QuizPanel({ classId, labId, onRefresh, policySummary }) {
+export default function QuizPanel({ classId, labId, lessonId = null, title = '', onRefresh, policySummary }) {
   const { user } = useAuth();
   const [attempt, setAttempt] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -17,7 +17,10 @@ export default function QuizPanel({ classId, labId, onRefresh, policySummary }) 
   const [tabId] = useState(() => quizTabId(sessionStorage));
   const state = useRef({ attempt: null, dirty: {}, pending: null, conflict: false, working: false, deadline: 0, lastSync: 0 });
   const startKey = useRef(null);
-  const base = `/api/classes/${classId}/labs/${labId}/attempts`;
+  const base = lessonId
+    ? `/api/classes/${classId}/lessons/${encodeURIComponent(lessonId)}/attempts`
+    : `/api/classes/${classId}/labs/${labId}/attempts`;
+  const draw = policySummary.num_questions || 5;
   const cacheKey = useCallback(id => quizCacheKey(user.id, classId, id, tabId), [user.id, classId, tabId]);
   const persist = useCallback(() => {
     const current = state.current;
@@ -142,9 +145,9 @@ export default function QuizPanel({ classId, labId, onRefresh, policySummary }) 
   if (loading) return <p role="status">Đang khôi phục lượt thi…</p>;
   const active = attempt?.status === 'active';
   const selections = { ...attempt?.answers, ...dirty };
-  return <section className="quiz-panel" aria-label={`Bài kiểm tra Lab ${labId}`}>
+  return <section className="quiz-panel" aria-label={lessonId ? `Câu hỏi ${title || lessonId}` : `Bài kiểm tra Lab ${labId}`}>
     <Notice {...notice} />
-    {!attempt && <><h3>Kiểm tra cuối Lab {labId}</h3><p>Đề gồm 5 câu, thời gian {policySummary.time_limit_minutes} phút, đạt từ {policySummary.pass_score}/5 điểm. Số lượt tiêu chuẩn: {policySummary.max_attempts}.</p><p>Thời gian bắt đầu tính ngay khi bạn mở đề; tải lại trang sẽ giữ nguyên lượt thi.</p><button className="lms-primary" onClick={start} disabled={busy}>Bắt đầu làm bài</button></>}
+    {!attempt && <><h3>{lessonId ? (title || 'Câu hỏi kiểm tra') : `Kiểm tra cuối Lab ${labId}`}</h3><p>Đề gồm {draw} câu, thời gian {policySummary.time_limit_minutes} phút, đạt từ {policySummary.pass_score}/{draw} điểm. Số lượt tiêu chuẩn: {policySummary.max_attempts}.</p><p>Thời gian bắt đầu tính ngay khi bạn mở đề; tải lại trang sẽ giữ nguyên lượt thi.</p><button className="lms-primary" onClick={start} disabled={busy}>Bắt đầu làm bài</button></>}
     {attempt && <>
       <div className="quiz-status"><div><strong>Lượt {attempt.number}</strong><p>Đạt từ {attempt.policy.pass_score}/5 · Còn {attempt.remaining_attempts} lượt sau lượt này</p></div>
         {active ? <div><strong className="quiz-clock" aria-label="Thời gian còn lại">{Math.floor(seconds / 60)}:{String(seconds % 60).padStart(2, '0')}</strong><p role="status">{Object.keys(dirty).length ? 'Đang chờ lưu…' : 'Đã lưu trên server'}</p></div>
