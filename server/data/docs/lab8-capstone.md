@@ -56,16 +56,12 @@ Nguyên tắc: "Không trùng lặp, Không bỏ sót" - Mọi thông số kỹ 
    - B. Thay thế toàn bộ linh kiện phần cứng sau khi thử nghiệm
    - C. Đánh giá tính khả thi kiến trúc sơ bộ và xác nhận thiết kế đáp ứng yêu cầu sứ mệnh
    - D. Công bố dữ liệu khoa học sau khi kết thúc sứ mệnh
-   - *Đáp án:* **C**
-   - *Giải thích:* PDR xác nhận kiến trúc thiết kế sơ bộ, phân bổ yêu cầu xuống các phân hệ và ngân sách kỹ thuật (khối lượng, năng lượng) có tính khả thi trước khi bước vào giai đoạn thiết kế chi tiết (CDR).
 
 2. **Ma trận truy xuất yêu cầu (Requirements Traceability Matrix - RTM) trong dự án CubeSat dùng để làm gì?**
    - A. Liên kết từng yêu cầu nhiệm vụ với khối mã nguồn phần mềm và kịch bản thử nghiệm
    - B. Theo dõi vị trí quỹ đạo không gian của vệ tinh
    - C. Quản lý chi phí tài chính mua sắm linh kiện
    - D. Tự động sinh mã nguồn nhúng cho vi điều khiển
-   - *Đáp án:* **A**
-   - *Giải thích:* RTM bảo đảm không có yêu cầu nào của khách hàng/sứ mệnh bị bỏ sót trong thiết kế phần mềm, đồng thời mọi dòng mã nguồn đều phục vụ một mục tiêu kỹ thuật cụ thể đã được kiểm chứng.
 
 ---
 
@@ -104,16 +100,12 @@ flowchart TD
    - B. Tần số vô tuyến và mức công suất phát
    - C. Tỷ lệ phần trăm pin và dòng tiêu thụ
    - D. Ba góc xoay Euler (Roll, Pitch, Yaw) hoặc Vector Quaternion (q0, q1, q2, q3)
-   - *Đáp án:* **D**
-   - *Giải thích:* Tư thế góc nghiêng trong không gian 3 chiều được biểu diễn chính xác qua bộ 3 góc Euler (Roll quanh trục X, Pitch quanh trục Y, Yaw quanh trục Z) hoặc Quaternion để tránh hiện tượng khóa trục (Gimbal Lock).
 
 2. **Khối GPS Map Widget trên giao diện mặt đất hiển thị thông tin thực địa nào của vệ tinh/trạm di động?**
    - A. Bản đồ nhiệt độ bên trong lõi vi xử lý
    - B. Quỹ đạo chuyển động mặt đất (Ground Track) và vị trí kinh độ/vĩ độ thời gian thực
    - C. Sơ đồ các đường mạch đồng trên bo mạch OBC
    - D. Danh sách các bài thực hành đã hoàn thành
-   - *Đáp án:* **B**
-   - *Giải thích:* GPS Map biểu diễn tọa độ thập phân WGS-84 nhận từ gói viễn trắc lên bản đồ số vệ tinh, giúp người vận hành theo dõi vết quét mặt đất của vệ tinh theo thời gian thực.
 
 ---
 
@@ -146,13 +138,9 @@ flowchart TD
    - B. Bật toàn bộ đèn LED và camera chụp ảnh liên tục
    - C. Tự động xóa sạch toàn bộ mã nguồn chương trình trong Flash
    - D. Tăng tần số xung nhịp CPU lên mức tối đa
-   - *Đáp án:* **A**
-   - *Giải thích:* Chế độ Safe Mode tối thiểu hóa dòng tiêu thụ xuống mức thấp nhất, bảo toàn năng lượng để duy trì mạch giám sát và chờ các tấm pin mặt trời nạp lại khi ra vùng có nắng.
 
 2. **Quy trình nghiệm thu và bảo vệ đồ án Capstone trên hệ thống CubeSat-LMS bao gồm những nội dung chính nào?**
    - A. Chỉ nộp bản vẽ 3D mà không cần chạy code thực tế
    - B. Thi công lắp ráp tên lửa đẩy mô hình tại phòng lab
    - C. Trình diễn hoạt động firmware tích hợp, truyền nhận viễn trắc lên Dashboard và báo cáo kỹ thuật
    - D. Chờ vệ tinh thật trên quỹ đạo gửi tín hiệu về máy bay
-   - *Đáp án:* **C**
-   - *Giải thích:* Sinh viên bảo vệ đồ án thông qua việc nạp mã nguồn hoàn chỉnh vào bộ kit, vận hành kịch bản sứ mệnh thực tế, truyền dữ liệu không dây về Dashboard LMS và phân tích dữ liệu trong báo cáo kỹ thuật.
