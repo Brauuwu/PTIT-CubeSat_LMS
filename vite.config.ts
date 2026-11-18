@@ -10,6 +10,8 @@ export default defineConfig(({ mode }) => {
   const key = env.DEV_HTTPS_KEY
   const frontendPort = Number(env.VITE_DEV_PORT || 5175)
   const backendPort = Number(env.VITE_BACKEND_PORT || 8005)
+  // Listen on this machine only. Set VITE_DEV_HOST=0.0.0.0 to share the dev server on the LAN on purpose.
+  const lanHost = env.VITE_DEV_HOST
   if (Boolean(cert) !== Boolean(key)) throw new Error('Set both DEV_HTTPS_CERT and DEV_HTTPS_KEY')
   return {
   plugins: [react(), tailwindcss(), {
@@ -48,9 +50,19 @@ export default defineConfig(({ mode }) => {
   server: {
     https: cert && key ? { cert: readFileSync(cert), key: readFileSync(key) } : undefined,
     port: frontendPort,
-    host: true,
+    host: lanHost || 'localhost',
     strictPort: true,
-    allowedHosts: true,
+    allowedHosts: lanHost ? true : undefined,
+    fs: {
+      // The dev server serves every file under the project root. Keep secrets, server code, logs and
+      // operations files out of reach even for a client that can open the port.
+      deny: [
+        '.env', '.env.*', '*.{crt,pem,key}', '**/.git/**',
+        '**/logs/**', '**/*.log', '**/fastapi-backend/**', '**/compiler-backend/**', '**/mosquitto/**',
+        '**/deploy/**', '**/Docs/**', '**/scripts/**', '**/tests/**', '**/.vscode/**', '**/.agents/**',
+        'docker-compose*.yml', 'Dockerfile', 'nginx*.conf', 'setup-local.*', 'AGENTS.md', 'DESIGN.md', 'PRODUCT.md', 'SKILL.md', 'README.md', 'vite.config.*',
+      ],
+    },
     proxy: {
       '/api': {
         target: `http://127.0.0.1:${backendPort}`,
