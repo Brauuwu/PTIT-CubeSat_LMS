@@ -11,7 +11,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const objectives = [
   ['', 'Tổng quan các phân hệ'], ['', 'Web IDE và kết nối OBC'],
   ['Nguồn và pin|Đo điện áp pin|Thư viện pin|Tiết kiệm năng lượng', 'Đọc điện áp, giải thích kết quả, minh chứng chế độ tiết kiệm năng lượng'],
-  ['MicroSD/SPI|Ghi log|Quản lý file qua lệnh|Task/scheduler|Khóa tài nguyên|Watchdog', 'File log đọc được, xử lý lỗi thẻ nhớ, lịch chạy task và minh chứng phục hồi khi treo'],
+  ['MicroSD/SPI|Ghi log|Quản lý file qua lệnh|Task/scheduler và Mutex|Watchdog và sự kiện', 'File log đọc được, xử lý lỗi thẻ nhớ, lịch chạy task và minh chứng phục hồi khi treo'],
   ['Môi trường|IMU|GPS|Camera|Tích hợp cảm biến', 'Dữ liệu từng cảm biến và bài tổng hợp; đối chiếu cấu hình phần cứng'],
   ['Gửi telemetry|Nhận lệnh|Liên lạc hai chiều', 'Bản tin gửi/nhận, phản hồi lệnh, xử lý tình huống mất kết nối'],
   ['Lắp ráp cơ khí', 'Checklist lắp ráp và minh chứng khung vệ tinh hoàn chỉnh'],
@@ -23,10 +23,10 @@ function groupFor(lab, item, index, count) {
   const id = item.id;
   let group = 0;
   if (lab === 2) group = /Power_Saving|document-2-2/.test(id) ? 3 : /01b/.test(id) ? 2 : /01a|video-2-2|Detect_Battery/.test(id) ? 1 : 0;
-  else if (lab === 3) group = /Watchdog|video-3-4|document-3-4/.test(id) ? 5 : /document-3-3/.test(id) ? 4 : /Scheduler|video-3-3|document-3-2/.test(id) ? 3 : /02_Linux/.test(id) ? 2 : /01b/.test(id) ? 1 : 0;
-  else if (lab === 4) group = /Read_All|Camera_Multiplexer|document-4-3/.test(id) ? 4 : /04[a-b]?_Camera|4-5/.test(id) ? 3 : /03[a-b]?_GPS|Detect_GPS|4-4|document-4-2/.test(id) ? 2 : /02[a-b]?_IMU|Detect_IMU|4-3/.test(id) ? 1 : 0;
-  else if (lab === 5) group = /03_Satellite/.test(id) ? 2 : /02[a-b]?_Receive|5-3|document-5-2/.test(id) ? 1 : 0;
-  else if (lab === 7) group = /RTOS/.test(id) ? 1 : 0;
+  else if (lab === 3) group = /Watchdog|Event_Driven|video-3-4|document-3-4/.test(id) ? 4 : /Scheduler|video-3-3|document-3-3/.test(id) ? 3 : /02_Linux|document-3-cli/.test(id) ? 2 : /01b/.test(id) ? 1 : 0;
+  else if (lab === 4) group = /Read_All|Camera_Multiplexer|document-4-3|document-4-sensors|video-4-5/.test(id) ? 4 : /04[a-b]?_Camera|document-4-camera/.test(id) ? 3 : /03[a-c]?_GPS|Detect_GPS|video-4-4|document-4-gnss|document-4-2/.test(id) ? 2 : /02[a-b]?_IMU|Detect_IMU|video-4-3|document-4-imu/.test(id) ? 1 : 0;
+  else if (lab === 5) group = /03_Satellite|video-5-3|document-5-2/.test(id) ? 2 : /02[a-b]?_Receive/.test(id) ? 1 : 0;
+  else if (lab === 7) group = /RTOS|video-7-2|document-7-[23]/.test(id) ? 1 : 0;
   else if (lab === 8) group = item.type === 'summary' ? 3 : /Custom_Mission|video-8-2/.test(id) ? 2 : /document-8/.test(id) ? 1 : 0;
   if (item.type === 'summary') group = groups.length - 1;
   return groups[Math.max(0, group)] || `Phần ${index + 1}/${count}`;
@@ -34,20 +34,23 @@ function groupFor(lab, item, index, count) {
 const legacy = LABS.map(lab => ({ ...lab, lessons: getLessonsForLab(lab.id).map(item => ({ ...item,
   reading: item.type === 'document' ? lessonReadingContent(lab, item) : '',
 })) }));
+// Checkpoint quizzes and the Lab Test page are legacy-view pages only: the course model keeps the
+// four lesson types of the LMS plan and appends its own server-graded labtest below.
+const LEGACY_ONLY = new Set(['quiz', 'labtest']);
 const labs = LABS.map(lab => {
-  const source = getLessonsForLab(lab.id);
+  const source = getLessonsForLab(lab.id).filter(item => !LEGACY_ONLY.has(item.type));
   const lessons = source.map((item, index) => {
-    const type = item.type === 'summary' ? 'document' : item.type === 'components' ? 'practice' : item.type;
+    const type = item.type === 'summary' ? 'document' : item.type === 'components' || item.type === 'assembly' ? 'practice' : item.type;
     const content = { group: groupFor(lab.id, item, index, source.length), estimated_minutes: null, todos: [] };
     if (type === 'video') { content.url = lab.id === 0 ? '' : item.videoUrl || ''; content.todos.push('TODO GV: cung cấp URL video thật và thời lượng.'); }
     if (type === 'document') {
-      content.markdown = item.type === 'summary' ? `# Tổng kết\n\n${item.description || lab.description}\n\n## Minh chứng đầu ra\n\n${objectives[lab.id][1]}` : lab.id === 0 ? '' : lessonReadingContent(lab, item);
+      content.markdown = item.type === 'summary' ? `# Tổng kết\n\n${item.description || lab.description}\n\n## Minh chứng đầu ra\n\n${objectives[lab.id][1]}` : item.id === 'document' ? '' : lessonReadingContent(lab, item);
       if (!content.markdown) content.todos.push('TODO GV: bổ sung tài liệu giới thiệu Lab 0.');
     }
     if (type === 'practice') {
       content.exercise_id = item.exerciseCode || '';
       content.repository_url = item.repositoryUrl || '';
-      content.mode = item.type === 'components' ? 'exploration' : 'hardware';
+      content.mode = item.type === 'components' ? 'exploration' : item.type === 'assembly' ? 'assembly' : 'hardware';
       content.instructions = '';
       content.evidence = objectives[lab.id][1];
       content.todos.push('TODO GV: bổ sung hướng dẫn, rubric, kết quả mong đợi và lỗi thường gặp từ học liệu đã duyệt.');

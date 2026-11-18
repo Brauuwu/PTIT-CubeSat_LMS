@@ -7,7 +7,8 @@ export default function TaskTimeline({ events }) {
     grid: { left: 75, right: 20, top: 20, bottom: 85 },
     tooltip: { trigger: 'item', valueFormatter: value => typeof value === 'number' ? new Date(value).toLocaleTimeString() : String(value) },
     xAxis: { type: 'time', splitNumber: 3, axisLabel: { hideOverlap: true, fontSize: 10 } },
-    yAxis: { type: 'category', data: ['LED', 'Sensor', 'Network'] },
+    // Rows follow the task names actually seen in the log (current and older Lab3-03 firmware).
+    yAxis: { type: 'category', data: [...new Set(events.map(event => event.name))] },
     dataZoom: [{ type: 'inside' }, { type: 'slider', height: 18, bottom: 8 }],
     series: phases.map((phase, index) => ({
       name: labels[index], type: 'scatter', symbolSize: 12,

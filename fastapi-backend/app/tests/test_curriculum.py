@@ -39,7 +39,8 @@ class CurriculumTests(unittest.IsolatedAsyncioTestCase):
         response = await self.client.get("/api/curriculum/exercises")
         self.assertEqual(response.status_code, 200)
         actual = response.json()["exercises"]
-        self.assertEqual({item["id"] for item in actual}, {item["id"] for item in expected})
+        # Exercises removed from the lesson list stay compilable so old drafts and links keep working.
+        self.assertLessEqual({item["id"] for item in expected}, {item["id"] for item in actual})
         for item in actual:
             content = (
                 (curriculum.SOURCE_DIR / item["file"]).read_text(encoding="utf-8-sig").encode()
@@ -57,8 +58,8 @@ class CurriculumTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn("attachment;", response.headers["content-disposition"])
         self.assertIn("Lab3-04_Watchdog_And_Event.ino", response.headers["content-disposition"])
-        self.assertIn("scheduler.enableWatchdog(10)", response.text)
-        self.assertIn("std::sqrt(ax * ax + ay * ay + az * az)", response.text)
+        self.assertIn("esp_task_wdt_init(WDT_TIMEOUT_SEC, true)", response.text)
+        self.assertIn("esp_task_wdt_reset()", response.text)
         metadata = next(
             item
             for item in curriculum.catalog()["exercises"]

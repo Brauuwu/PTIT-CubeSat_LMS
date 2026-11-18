@@ -9,6 +9,9 @@ constexpr uint8_t SD_CS_PIN = 13;
 constexpr uint8_t SD_SCK_PIN = 18;
 constexpr uint8_t SD_MISO_PIN = 19;
 constexpr uint8_t SD_MOSI_PIN = 23;
+// ESP32-CAM (UART2 GPIO14/15 on the CAM side) runs at 115200; the GPS module at 9600.
+constexpr uint32_t CAM_BAUD = 115200;
+constexpr uint32_t GPS_BAUD = 9600;
 }
 
 PTIT_Camera::PTIT_Camera() : gpsSelectPin(12), camSelectPin(14), sdReady(false) {
@@ -38,36 +41,45 @@ bool PTIT_Camera::init(uint8_t gpsSelectPin, uint8_t camSelectPin) {
     if (gpsSelectPin != 255 && camSelectPin != 255) {
         pinMode(this->gpsSelectPin, OUTPUT);
         pinMode(this->camSelectPin, OUTPUT);
+        // Break-Before-Make: open both 74HC4066 switches, then hand UART2 to GPS by default.
+        digitalWrite(this->camSelectPin, LOW);
         digitalWrite(this->gpsSelectPin, LOW);
-        digitalWrite(this->camSelectPin, HIGH); // Mặc định mở kênh Camera
+        delayMicroseconds(50);
+        digitalWrite(this->gpsSelectPin, HIGH);
     }
 
     Serial.println("[Camera] Khởi tạo giao tiếp Master-Slave với ESP32-CAM (UART2)...");
-    Serial2.begin(115200, SERIAL_8N1, 16, 17); // Mở cổng Serial2 để giao tiếp với ESP32-CAM
+    // UART2 idles at the GPS baud; selectCamera() switches to CAM_BAUD before a capture.
+    // Without a MUX the camera is wired directly, so UART2 stays at the camera baud.
+    const uint32_t idleBaud = (gpsSelectPin != 255 && camSelectPin != 255) ? GPS_BAUD : CAM_BAUD;
+    if (Serial2.baudRate() == 0) Serial2.begin(idleBaud, SERIAL_8N1, 16, 17);
+    else if (Serial2.baudRate() != idleBaud) { Serial2.flush(); Serial2.updateBaudRate(idleBaud); }
 
     return initializeSd();
 }
 
 void PTIT_Camera::selectGPS() {
     if (gpsSelectPin != 255 && camSelectPin != 255) {
-        digitalWrite(gpsSelectPin, HIGH);
+        // Break-Before-Make: turn the camera channel off before enabling GPS.
         digitalWrite(camSelectPin, LOW);
-        // Trả lại cấu hình UART cho GPS
-        if (Serial2.baudRate() != 9600) { Serial2.flush(); Serial2.updateBaudRate(9600); }
+        delayMicroseconds(50);
+        digitalWrite(gpsSelectPin, HIGH);
+        if (Serial2.baudRate() != GPS_BAUD) { Serial2.flush(); Serial2.updateBaudRate(GPS_BAUD); }
     }
 }
 
 void PTIT_Camera::selectCamera() {
     if (gpsSelectPin != 255 && camSelectPin != 255) {
+        // Break-Before-Make: turn GPS off before enabling the camera channel.
         digitalWrite(gpsSelectPin, LOW);
+        delayMicroseconds(50);
         digitalWrite(camSelectPin, HIGH);
-        // Đặt lại cấu hình UART cho Camera
-        if (Serial2.baudRate() != 115200) { Serial2.flush(); Serial2.updateBaudRate(115200); }
     }
+    if (Serial2.baudRate() != CAM_BAUD) { Serial2.flush(); Serial2.updateBaudRate(CAM_BAUD); }
 }
 
 bool PTIT_Camera::isReady() const {
-    // Storage readiness only. Camera health is known from the CAPTURE response.
+    // Storage readiness only. Camera health is known from the capture response.
     return sdReady;
 }
 
@@ -76,6 +88,13 @@ bool PTIT_Camera::capture() {
 }
 
 bool PTIT_Camera::captureToFile(const char* path) {
+    const bool saved = captureOnCameraChannel(path);
+    // Always hand UART2 back to GPS, whether the capture succeeded or failed.
+    selectGPS();
+    return saved;
+}
+
+bool PTIT_Camera::captureOnCameraChannel(const char* path) {
     if (!sdReady && !initializeSd()) {
         Serial.println("[Camera] Lỗi: Thẻ nhớ SD chưa sẵn sàng.");
         return false;
@@ -87,9 +106,9 @@ bool PTIT_Camera::captureToFile(const char* path) {
     // Dọn dẹp bộ nhớ đệm
     while(Serial2.available()) Serial2.read();
 
-    // 1. Gửi lệnh CAPTURE
-    Serial.println("[Camera] Đang gửi lệnh chụp ảnh tới ESP32-CAM...");
-    Serial2.print("CAPTURE\n");
+    // 1. Gửi lệnh 'p' (PTITCube CAM_Firmware); slave trả SIZE:<n> -> OK -> JPEG -> DONE
+    Serial.println("[Camera] Đang gửi lệnh chụp ảnh tới ESP32-CAM (lệnh 'p')...");
+    Serial2.print("p\n");
     Serial2.flush();
 
     // 2. Chờ ESP32-CAM phản hồi về SIZE
@@ -170,7 +189,7 @@ bool PTIT_Camera::captureToFile(const char* path) {
         }
         if (Serial2.available()) {
             int bytesToRead = Serial2.available();
-            if (bytesToRead > sizeof(buf)) bytesToRead = sizeof(buf);
+            if (bytesToRead > (int)sizeof(buf)) bytesToRead = sizeof(buf);
             if (bytesToRead > imageSize - receivedBytes) bytesToRead = imageSize - receivedBytes;
             
             int bytesRead = Serial2.readBytes(buf, bytesToRead);

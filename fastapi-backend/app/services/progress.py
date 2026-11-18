@@ -11,6 +11,9 @@ from app.schemas.progress import LabProgressResponse
 
 # Lab không có bước biên dịch (chỉ video + tài liệu) — tiêu chí hoàn thành khác các lab còn lại
 LAB_IDS_WITHOUT_COMPILER = {0}
+# Trang câu hỏi kiểm tra và Lab Test chấm ở server (quy tắc 5, 6): không hoàn thành bằng nút
+# "Hoàn thành bài học", không chặn mở khóa và không nằm trong mẫu số hoàn thành lab.
+NON_SEQUENTIAL_LESSON_TYPES = {"quiz", "labtest"}
 
 
 def _to_response(p) -> LabProgressResponse:
@@ -70,13 +73,23 @@ class ProgressService:
             (lesson_meta and lesson_meta.get("type") == "summary")
             or str(lesson_id).startswith("summary-")
         )
+        if lesson_meta and lesson_meta.get("type") in NON_SEQUENTIAL_LESSON_TYPES:
+            raise LMSError(
+                409,
+                "LESSON_NOT_SELF_COMPLETABLE",
+                "Phần câu hỏi được chấm ở server, không đánh dấu hoàn thành thủ công.",
+            )
         item = lessons.get(lesson_id)
         if item is None:
             if is_summary:
                 item = {"started_at": datetime.now(timezone.utc).isoformat(), "completed": False}
             else:
                 raise LMSError(409, "LESSON_NOT_STARTED", "Hãy mở bài học trước khi hoàn thành.")
-        lesson_ids = [lesson["id"] for lesson in lab["lessons"]] if lab else []
+        lesson_ids = [
+            lesson["id"]
+            for lesson in (lab["lessons"] if lab else [])
+            if lesson.get("type") not in NON_SEQUENTIAL_LESSON_TYPES
+        ]
         index = lesson_ids.index(lesson_id) if lesson_id in lesson_ids else -1
         if index > 0 and not all(lessons.get(previous, {}).get("completed") for previous in lesson_ids[:index]):
             raise LMSError(403, "PREREQUISITE_NOT_MET", "Bạn cần hoàn thành bài học trước để mở khóa bài này.")

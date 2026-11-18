@@ -1,5 +1,5 @@
 // Reviewed classroom source for the ESP32 OBC hardware profile.
-// Upstream: https://github.com/PTITCube/Lab7-02_RTOS_Satellite_System/blob/836100ba0b0b7b8e2eab4660a60864761aef745a/src/main.cpp
+// Upstream: https://github.com/PTITCube/Lab7-02_RTOS_Satellite_System/blob/a48ff30199ecdaa701bf32ee382e9ee5d0feea11/src/main.cpp
 // Unlock only after successful lock. Full runtime integration still requires validation.
 /**
  * CUBESAT FIRMWARE - MAIN FILE
@@ -24,6 +24,9 @@
 #include <PubSubClient.h>
 #include <atomic>
 
+// Declared before the MQTT helpers below, which log through cdh.
+PTIT_CDH cdh;
+
 // Replace this block with the device configuration returned by registration/rotation.
 // These are runtime constants: library .cpp files do not inherit sketch #defines.
 const char* MQTT_HOST = "";
@@ -46,13 +49,13 @@ bool mqttConfigured = false;
 
 void configureTelemetryMqtt() {
     if (!strlen(MQTT_HOST) || !strlen(DEVICE_UID) || !strlen(MQTT_USERNAME) || !strlen(MQTT_PASSWORD) || !strlen(MQTT_CLIENT_ID)) {
-        Serial.println("[MQTT] Not configured: supply device credential/config block; continuing USB/SD/LoRa.");
+        cdh.println("[MQTT] Not configured: supply device credential/config block; continuing USB/SD/LoRa.");
         return;
     }
     if (MQTT_TLS) {
         if (MQTT_CA_PEM && strlen(MQTT_CA_PEM)) mqttTlsTransport.setCACert(MQTT_CA_PEM);
         else if (MQTT_ALLOW_INSECURE) mqttTlsTransport.setInsecure();
-        else { Serial.println("[MQTT] TLS CA is not configured; MQTT remains offline."); return; }
+        else { cdh.println("[MQTT] TLS CA is not configured; MQTT remains offline."); return; }
         mqttTlsTransport.setHandshakeTimeout(5);
         classroomMqtt.setClient(mqttTlsTransport);
     } else classroomMqtt.setClient(mqttPlainTransport);
@@ -84,7 +87,6 @@ PTIT_GPS gps;
 PTIT_COM lora;
 PTIT_EPS eps;
 PTIT_Storage storage;
-PTIT_CDH cdh;
 PTIT_Camera camera;
 
 PTIT_Scheduler scheduler;
@@ -110,7 +112,7 @@ void cdhLoop() {
     classroomMqtt.loop();
 }
 
-// Sensor: Đọc cảm biến qua I2C (BMP280, MPU6050/MPU6500, QMC5883L)
+// Sensor: Đọc cảm biến qua I2C (BMP280, MPU6500, QMC5883L)
 void sensorLoop() {
     if (isTelemetryPaused) return;
     if (PTIT_Scheduler::lock(PTIT_BUS_I2C)) {
@@ -347,8 +349,8 @@ void telemetryLoop() {
 void serialLoop() {
     static String command;
     static bool discard = false;
-    for (int budget = 0; budget < 64 && Serial.available(); ++budget) {
-        char c = Serial.read();
+    for (int budget = 0; budget < 64 && cdh.available(); ++budget) {
+        char c = cdh.read();
         if (c == '\n') {
             if (!discard) {
                 command.trim();
@@ -374,8 +376,8 @@ void serialLoop() {
 // 3. SETUP - Khởi tạo phân hệ + đăng ký task
 // ============================================================================
 void setup() {
-    Serial.begin(115200);
-    while (!Serial) { delay(10); }
+    cdh.begin(115200);
+    while (!cdh) { delay(10); }
 
     // Khởi tạo các phân hệ
     sensor.init();
@@ -405,7 +407,7 @@ void setup() {
     // Bắt đầu chạy đa nhiệm!
     scheduler.start();
 
-    Serial.println("CubeSat Firmware v2.0 — Đang hoạt động!");
+    cdh.println("CubeSat Firmware v2.0 — Đang hoạt động!");
 }
 
 // ============================================================================

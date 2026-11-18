@@ -6,7 +6,10 @@ import { reduceNetworkReport } from './network-report.js';
 const EXERCISE_PANELS = [
   [/^Lab1-(0[89]|10)/, ['lab1Connection']],
   [/^Lab2-/, ['voltage']],
-  [/^Lab3-01/, ['storage']],
+  // Lab3-01a/b only log to the SD card: the Serial Monitor is the whole view.
+  [/^Lab3-01/, []],
+  // Lab3-02 pairs every typed command with the shell's reply.
+  [/^Lab3-02/, ['shell']],
   [/^Lab4-01/, ['environment']],
   [/^Lab4-02/, ['attitude']],
   [/^Lab4-03/, ['gps']],
@@ -14,7 +17,8 @@ const EXERCISE_PANELS = [
   [/^Lab4-05/, ['environment', 'attitude', 'gps']],
   [/^Lab5-01/, ['radio']],
   [/^Lab5-0[23]/, ['radio', 'commands']],
-  [/^Lab3-04/, ['anomaly', 'attitude']],
+  // Lab3-04 (watchdog) and Lab3-05 (event queue) report events, not measurements: activity log only.
+  [/^Lab3-0[45]/, []],
   [/^Lab4-06/, ['gps', 'camera']],
   [/^Lab7-01/, ['attitude', 'gps', 'voltage', 'environment', 'storage', 'system']],
   [/^Lab7-02/, ['attitude', 'gps', 'voltage', 'camera', 'environment', 'storage', 'network', 'system']],
@@ -25,21 +29,25 @@ const EXERCISE_PANELS = [
 export function practiceProfile(id = '') {
   const lab = Number(/^Lab(\d+)-/.exec(id)?.[1] ?? 0);
   const scheduler = id.startsWith('Lab3-03');
+  const serialOnly = id.startsWith('Lab3-01');
   const panels = [...(EXERCISE_PANELS.find(([pattern]) => pattern.test(id))?.[1] ?? [])];
   let commands = [];
   if (id.startsWith('Lab1-07')) commands = ['1', '0'];
   if (id.startsWith('Lab3-02')) commands = ['pwd', 'ls', 'mkdir demo', 'cd demo', 'touch note.txt', 'rm note.txt', 'cd ..', 'rm demo'];
+  if (id.startsWith('Lab3-04')) commands = ['h'];
+  if (id.startsWith('Lab3-05')) commands = ['A'];
   if (id.startsWith('Lab4-04')) commands = ['p'];
   if (id.startsWith('Lab7-02')) commands = ['ping', 'status', 'uptime', 'get_sensor', 'get_eps', 'get_gps', 'pause', 'resume', 'capture', 'help'];
   const note = scheduler
-    ? 'Lab3-03 dùng nhiệt độ cố định 28,5°C và mô phỏng gửi mạng bằng delay. Bản mẫu đã sửa xuất LED ON/OFF; bản gốc không có log LED. Chỉ hiển thị trạng thái LED khi nhận phản hồi.'
-    : id.startsWith('Lab3-04') ? 'Bản mẫu đã sửa kiểm tra gia tốc ba trục, thời gian rơi và bật watchdog; xuất mẫu cảm biến mỗi giây. Cảnh báo là kết luận của firmware, không thay cho kiểm chứng vật lý.'
+    ? 'Lab3-03 sinh gói viễn trắc giả lập (điện áp, nhiệt độ ngẫu nhiên) và tác vụ tự chẩn đoán trên Core 0. Các số liệu [HK-TELEM] là minh họa, không phải phép đo; LED nhịp tim không có log.'
+    : id.startsWith('Lab3-04') ? 'Gửi h (hoặc nhấn nút GPIO 4) để mô phỏng treo: tác vụ ngừng nạp Watchdog, TWDT reset bo sau khoảng 3 giây và log khởi động báo nguyên nhân TASK WATCHDOG RESET.'
+      : id.startsWith('Lab3-05') ? 'Mọi sự kiện (nút nhấn GPIO 4, cảnh báo nhiệt độ giả lập > 30°C, ký tự gửi qua Serial) đi qua FreeRTOS Queue tới tác vụ Dispatcher. Nhiệt độ là số giả lập, không phải phép đo.'
       : lab === 5 ? 'Log phát LoRa chỉ xác nhận yêu cầu gửi tại OBC. Cần phản hồi từ trạm mặt đất để xác nhận nhận thành công; USB Serial không thay thế đường lệnh LoRa.'
       : lab === 8 ? 'Mẫu Lab8 là khung chương trình. Hãy bổ sung nhiệm vụ và xuất JSON telemetry để dashboard có dữ liệu.'
-        : /^Lab4-02a/.test(id) ? 'RAW_ACCEL là số đếm thanh ghi. Góc nghiêng chỉ suy ra từ hướng vector; không quy đổi sang g khi chưa biết thang đo.'
-          : /^Lab4-04|^Lab4-06/.test(id) ? 'Ảnh lưu trên thẻ SD chưa được truyền về trình duyệt. Preview chỉ xuất hiện khi firmware gửi ảnh về: IMG:base64, IMG_BEGIN/IMG_CHUNK/IMG_END (Lab4-04b) hoặc imageData.'
+        : /^Lab4-02a/.test(id) ? 'Bản mẫu đọc burst 14 byte và quy đổi theo dải mặc định ±2g / ±250°/s. Nếu cấu hình thanh ghi khác dải này, giá trị m/s² và rad/s sẽ sai tỷ lệ.'
+          : /^Lab4-04|^Lab4-06/.test(id) ? 'Ảnh lưu trên thẻ SD chỉ hiện ở đây khi firmware gửi lại ảnh về trình duyệt (IMG_BEGIN/IMG_CHUNK/IMG_END — Lab4-04a, Lab4-04b) hoặc imageData.'
             : 'Hiển thị theo dữ liệu thực nhận. Trường không được xuất hoặc quá hạn sẽ hiện —; log khởi tạo chưa chứng minh toàn bộ hệ thống hoạt động.';
-  return { id, lab, scheduler, panels, commands, note };
+  return { id, lab, scheduler, serialOnly, panels, commands, note };
 }
 
 export const emptyActivity = () => ({ events: [], tasks: {}, subsystems: {}, lineCount: 0, lastLineAt: null });
@@ -89,6 +97,8 @@ function nmeaPosition(line) {
 export function createPracticeDecoder(exerciseId = '') {
   let axes = '';
   let image = null; // chunked Serial JPEG in flight: { size, chunks, bytes }
+  let pendingLat = null; // Lab4-03c latitude line waiting for its longitude line
+  let shell = null; // Lab3-02 command awaiting its reply: { command, entries }
   const profile = practiceProfile(exerciseId);
   return (entry, deviceId = 'serial-local') => {
     const result = { frame: null, events: [], invalidate: [] };
@@ -97,8 +107,25 @@ export function createPracticeDecoder(exerciseId = '') {
     const lower = fold(line);
     const at = entry.receivedAt ?? Date.now();
     const event = (group, phase, extra = {}) => result.events.push({ group, phase, at, text: line.slice(0, 600), ...extra });
-    if (line.startsWith('$')) {
-      const fix = nmeaPosition(line);
+    // Lab3-02 echoes "User> <command>" and then answers with "OK: ...", "ERR: ..." or, for pwd, the path.
+    // Pair them so every command gets a result, not only the ones that fail.
+    if (profile.panels.includes('shell')) {
+      const typed = /^User>\s*(.+)$/.exec(line);
+      if (typed) shell = { command: typed[1].trim().slice(0, 140), entries: 0 };
+      else if (shell) {
+        const verb = shell.command.split(/\s+/)[0].toLowerCase();
+        if (/^(?:📁|📄)|^\[(?:DIR|FILE)\]/u.test(line)) shell.entries++;
+        const reply = /^(OK|ERR):/.exec(line);
+        if (reply || (verb === 'pwd' && /^\/\S*$/.test(line))) {
+          event('shell', reply?.[1] === 'ERR' ? 'error' : 'ok', { command: shell.command, verb, reply: line.slice(0, 300), entries: verb === 'ls' ? shell.entries : null });
+          shell = null;
+        }
+      }
+    }
+    // Lab4-03b prints "[NMEA RAW] [OK  ] [GGA (...)] $GPGGA,...": decode the embedded sentence (checksum re-verified).
+    const embedded = /^\[NMEA RAW\]\s+\[OK\s*\].*\s(\$G[PNLBA](?:GGA|RMC),\S+)$/.exec(line);
+    if (line.startsWith('$') || embedded) {
+      const fix = nmeaPosition(embedded ? embedded[1] : line);
       if (!fix) return result;
       event('gps', fix.valid ? 'sample' : 'waiting');
       if (fix.valid) result.frame = adaptSerialLine(JSON.stringify(fix), deviceId, at);
@@ -138,8 +165,22 @@ export function createPracticeDecoder(exerciseId = '') {
       event('task', phase, { name, illustrative: true, value: match ? Number(match[1]) : null });
       return result;
     }
-    if (/\[su co\]|emergency:|freefall detected|overheat\s*\(|watchdog.*(?:triggered|timed out)|task_wdt.*(?:error|failed)|guru meditation|backtrace:|\bpanic\b/.test(lower)) event('alert', 'error');
-    if (/^\[event\] no current anomaly/.test(lower)) event('alert', 'recovered');
+    // Lab3-03 (library v1.1.0): simulated housekeeping packets and a Core 0 diagnostic task.
+    if (profile.scheduler && /^\[(HK-TELEM|DIAGNOSTIC)\]/.test(line)) {
+      if (line.startsWith('[HK-TELEM]')) {
+        const match = /nhiet do c&dh:\s*([-+]?\d+(?:\.\d+)?)/.exec(lower);
+        event('task', 'sample', { name: 'TelemGen', illustrative: true, value: match ? Number(match[1]) : null });
+      } else {
+        const phase = lower.includes('bat dau') ? 'start' : lower.includes('hoan thanh') ? 'done' : 'log';
+        event('task', phase, { name: 'SysDiag', illustrative: false });
+      }
+      return result;
+    }
+    // Lab3-04 heartbeat feeds the watchdog; Lab3-05 dispatcher handles queued events. Neither is a measurement.
+    if (/^\[obc heartbeat\]/.test(lower)) { event('task', 'sample', { name: 'Heartbeat', illustrative: false }); return result; }
+    if (/^\[dispatcher\]/.test(lower)) { event('task', 'sample', { name: 'Dispatcher', illustrative: /canh bao vien trac/.test(lower) }); return result; }
+    if (/\[su co\b|emergency:|freefall detected|overheat\s*\(|watchdog.*(?:triggered|timed out)|task_wdt.*(?:error|failed)|guru meditation|backtrace:|\bpanic\b/.test(lower)) event('alert', 'error');
+    if (/^\[event\] no current anomaly|^\[fdir\].*phuc hoi/.test(lower)) event('alert', 'recovered');
     if (/^\[event\] anomaly state unknown/.test(lower)) event('alert', 'waiting');
     if (/^led (on|off)$/i.test(line)) event('led', 'ok', { value: /on$/i.test(line) });
     if (profile.scheduler && /^led (on|off)$/i.test(line)) event('task', 'sample', { name: 'LED', value: /on$/i.test(line), illustrative: false });
@@ -160,12 +201,12 @@ export function createPracticeDecoder(exerciseId = '') {
     if (/^\[mqtt\] connected$/.test(lower)) event('network', 'reported');
     if (/^\[mqtt\].*(?:not configured|remains offline)/.test(lower)) event('network', 'waiting');
     if (/^\[mqtt\] publish submitted/.test(lower)) event('network', 'sent');
-    if (/deep sleep|di ngu thoi|vua thuc day|thoi gian ngu/.test(lower)) event('power', 'reported');
-    if (/jpeg saved and validated|da luu anh:|^photo captured!/.test(lower)) event('camera', 'saved');
-    else if (/capture failed|error:capture|chup anh that bai|camera.*(unavailable|khong san sang|init co loi)/.test(lower)) event('camera', 'error');
-    else if (/dang chup|chup anh bang camera/.test(lower)) event('camera', 'start');
+    if (/deep sleep|di ngu thoi|vua thuc day|thoi gian ngu|^\[eps-buck\]|tiet kiem dien trong/.test(lower)) event('power', 'reported');
+    if (/jpeg saved and validated|da luu anh:|da luu anh vao the nho:|^photo captured!/.test(lower)) event('camera', 'saved');
+    else if (/capture failed|error:capture|chup anh that bai|camera.*(unavailable|khong san sang|init co loi)|^\[uart-cam\] loi|^\[loi\] (?:timeout|du lieu|ghi the)/.test(lower)) event('camera', 'error');
+    else if (/dang chup|chup anh bang camera|gui lenh chup anh/.test(lower)) event('camera', 'start');
     if (/sd write ok|\[sd\] telemetry saved|sd card da san sang|da ghi noi dung/.test(lower)) event('storage', 'saved');
-    else if (/\[sd\] log saved/.test(lower)) event('storage', 'saved');
+    else if (/\[sd\] (?:log saved|saved to )/.test(lower)) event('storage', 'saved');
     else if (/sd.*(failed|not ready|chua san sang)|khong tim thay the (sd|nho)|khong the.*(the nho|file)|khong the mo file|^err: (?:directory|sd|mkdir|rmdir|rm\b|touch)/.test(lower) || (profile.lab === 3 && /^err:/.test(lower))) event('storage', 'error');
     else if (/^ok: (?:cd|ls|mkdir|rmdir|rm|touch)\b/.test(lower)) event('storage', 'reported');
     else if (/^user>|^\[dir\]|^\[file\]|^\[storage\]|^(?:📁|📄)|^\/(?:[\w.\-/]*)$|^current directory:/u.test(lower)) event('storage', 'reported');
@@ -175,8 +216,10 @@ export function createPracticeDecoder(exerciseId = '') {
 
     // Only explicitly labelled local snapshots are unwrapped. TX / command / arbitrary prefixes are not telemetry.
     const wrapped = /^\[TELEMETRY\]\s+(EPS|Env|Acc|Gyro|Mag|GPS):\s*(\{.*\})$/.exec(line);
+    // Lab7-01 (upstream 2026-11) prints the whole local snapshot as "[TELEM] {json}".
+    const snapshot = /^\[TELEM\]\s+(\{.*\})$/.exec(line);
     let json;
-    try { if (wrapped || line.startsWith('{')) json = JSON.parse(wrapped ? wrapped[2] : line); } catch { /* A partial/malformed JSON line is not a sample. */ }
+    try { if (wrapped || snapshot || line.startsWith('{')) json = JSON.parse(wrapped ? wrapped[2] : snapshot ? snapshot[1] : line); } catch { /* A partial/malformed JSON line is not a sample. */ }
     if (json && typeof json === 'object' && !Array.isArray(json)) {
       if (!acceptsSerialMetadata(json, deviceId)) return result;
       const noFix = json.valid === false || json.gps?.valid === false;
@@ -184,7 +227,7 @@ export function createPracticeDecoder(exerciseId = '') {
       const normalized = { ...json };
       // Full-satellite nested snapshot has explicit SI field names.
       if (json.eps || json.env || json.imu) {
-        normalized.voltage = json.eps?.batt_v;
+        normalized.voltage = json.eps?.batt_v ?? json.eps?.v;
         normalized.temperature = json.env?.temp;
         normalized.pressure = json.env?.press;
         for (const [axis, letter] of [['X', 'x'], ['Y', 'y'], ['Z', 'z']]) {
@@ -211,13 +254,13 @@ export function createPracticeDecoder(exerciseId = '') {
     if (!/\[error\]|\[loi\]|warning|canh bao/.test(lower)) {
       if (/nhiet do|temperature/.test(lower) && /(?:°|\*|\s|\d)c\b/.test(lower)) add('temperature', '(?:nhiet do(?: \\(temperature\\))?|temperature)');
       if (/ap suat|pressure/.test(lower) && /hpa\b/.test(lower)) add('pressure', '(?:ap suat(?: \\(pressure\\))?|pressure)');
-      if (/battery voltage|dien ap (?:pin|thuc)/.test(lower) && /v\b/.test(lower)) add('voltage', '(?:battery voltage|dien ap (?:pin(?: hien tai)?|thuc))');
+      if (/battery voltage|dien ap (?:pin|thuc)|dien ap\s*[:=]/.test(lower) && /v\b/.test(lower)) add('voltage', '(?:battery voltage|dien ap(?: (?:pin(?: hien tai)?|thuc))?)');
       if (/^sensor: temp=/.test(lower)) { add('temperature', 'temp'); add('pressure', 'press'); }
       if (/^eps: battery=/.test(lower)) add('voltage', 'battery');
       if (/^status: up /.test(lower)) { add('voltage', 'bat'); const up = /up (\d+)s/.exec(lower); if (up) data.uptime_ms = Number(up[1]) * 1000; }
       add('uptime_ms', '\\[uptime', 1000);
       if (/gia toc|accelerometer/.test(lower)) axes = 'acc';
-      if (/goc quay|gyroscope|con quay/.test(lower)) axes = 'gyro';
+      if (/goc quay|gyroscope|con quay|toc do goc/.test(lower)) axes = 'gyro';
       if (/tu truong|magnetometer/.test(lower)) axes = 'mag';
       const xyz = ['x', 'y', 'z'].map(axis => valueAfter(lower, `\\b${axis}`));
       let prefix = '';
@@ -231,9 +274,16 @@ export function createPracticeDecoder(exerciseId = '') {
       if (prefix && xyz.every(Boolean) && (!axes || axes === prefix)) {
         xyz.forEach((match, index) => { data[`${prefix}_${'xyz'[index]}`] = Number(match[1]) * factor; });
       }
-      const coords = new RegExp(`(?:toa do \\(vi do, kinh do\\)\\s*:\\s*|lat[:=]\\s*)${NUMBER}\\s*(?:,\\s*(?:(?:lng|lon)[:=]\\s*)?|[-|]?\\s*(?:lng|lon)[:=])\\s*${NUMBER}`, 'iu').exec(lower);
+      const coords = new RegExp(`(?:toa do \\((?:vi do, kinh do|lat, lng)\\)\\s*:\\s*|lat[:=]\\s*)${NUMBER}\\s*(?:,\\s*(?:(?:lng|lon)[:=]\\s*)?|[-|]?\\s*(?:lng|lon)[:=])\\s*${NUMBER}`, 'iu').exec(lower);
       if (coords) { data.lat = Number(coords[1]); data.lng = Number(coords[2]); }
       if (/cao do so voi mat bien/.test(lower)) add('alt', 'cao do so voi mat bien');
+      // Lab4-03c prints each coordinate on its own labelled line. Pair them (same frame) so a lost
+      // "Toa do" line, or a different order, still draws the map. Hemisphere gives the sign.
+      const latLine = /^\W*vi do \(latitude\)\s*:\s*([\d.]+)\D*(bac|nam)/.exec(lower);
+      const lngLine = /^\W*kinh do \(longitude\)\s*:\s*([\d.]+)\D*(dong|tay)/.exec(lower);
+      if (latLine) pendingLat = Number(latLine[1]) * (latLine[2] === 'nam' ? -1 : 1);
+      if (lngLine && pendingLat !== null) { data.lat = pendingLat; data.lng = Number(lngLine[1]) * (lngLine[2] === 'tay' ? -1 : 1); pendingLat = null; }
+      if (/^\W*cao do \(altitude\)/.test(lower)) add('alt', 'cao do [(]altitude[)]');
       if (/^led (on|off)$/i.test(line)) data.led_on = /on$/i.test(line);
     }
     result.frame = adaptSerialLine(JSON.stringify(data), deviceId, at);

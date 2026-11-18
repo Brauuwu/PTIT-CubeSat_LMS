@@ -1,5 +1,5 @@
 // Reviewed classroom source for the ESP32 OBC hardware profile.
-// Upstream: https://github.com/PTITCube/Lab5-02_Receive_Command/blob/ebc3cbdc50110b826205bdb1aae44ed5c5897ba0/src/main.cpp
+// Upstream: https://github.com/PTITCube/Lab5-02_Receive_Command/blob/a997c5660595ad14ceca863600b032f8211bc273/src/main.cpp
 /**
  * VÍ DỤ: VỆ TINH NHẬN LỆNH ĐIỀU KHIỂN (COMMAND) QUA LORA
  * 
@@ -12,15 +12,18 @@
  */
 
 #include <Arduino.h>
+
 #include <PTITCube.h>
+
+PTIT_CDH cdh;
 
 PTIT_COM myLoRa;
 
 void setup() {
-    Serial.begin(115200);
-    while (!Serial) { delay(10); }
+    cdh.begin(115200);
+    while (!cdh) { delay(10); }
 
-    Serial.println("\n[VỆ TINH] Khởi tạo module LoRa chờ nhận lệnh...");
+    cdh.println("\n[VỆ TINH] Khởi tạo module LoRa chờ nhận lệnh...");
     myLoRa.init();
 
     // Phải cấu hình giống hệt USB-TTL ở trạm mặt đất (Dùng số thập phân)
@@ -28,7 +31,7 @@ void setup() {
     myLoRa.setChannel(23); 
     myLoRa.setTransmissionMode(0); 
     
-    Serial.println("[VỆ TINH] Đang lắng nghe lệnh từ trạm mặt đất...");
+    cdh.println("[VỆ TINH] Đang lắng nghe lệnh từ trạm mặt đất...");
 }
 
 void loop() {

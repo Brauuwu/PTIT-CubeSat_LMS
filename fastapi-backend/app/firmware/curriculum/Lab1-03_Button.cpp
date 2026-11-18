@@ -1,7 +1,7 @@
 // Reviewed classroom source for the ESP32 OBC hardware profile.
-// Upstream: https://github.com/PTITCube/Lab1-03_Button/blob/a6784fec344d8dc9956bffc3bb485191446e17e7/src/main.cpp
+// Upstream: https://github.com/PTITCube/Lab1-03_Button/blob/068216b917ca67b8de8e75a1f2e0b14e58098006/src/main.cpp
 /**
- * VÍ DỤ 1-03: ĐỌC TÍN HIỆU TỪ NÚT NHẤN (BUTTON INPUT)
+ * VÍ DỤ 1-04: ĐỌC TÍN HIỆU TỪ NÚT NHẤN (BUTTON INPUT)
  * 
  * Mô tả:
  * - Sử dụng chế độ INPUT_PULLUP (điện trở kéo lên nội bộ của ESP32).
@@ -20,8 +20,7 @@ void setup() {
 
     Serial.println("\n[EXAMPLE] Bắt đầu bài test Nút nhấn (Button)...");
     pinMode(BUTTON_PIN, INPUT_PULLUP);
-    Serial.println("Hãy nhấn nút nối chân GPIO 4 với GND để kiểm tra.");
-}
+    }
 
 void loop() {
     int currentState = digitalRead(BUTTON_PIN);

@@ -1,5 +1,5 @@
 // Reviewed classroom source for the ESP32 OBC hardware profile.
-// Upstream: https://github.com/PTITCube/Lab3-01b_MicroSD_Library/blob/cc979ecd49ca47fc95def8411ebaffd65d132f83/src/main.cpp
+// Upstream: https://github.com/PTITCube/Lab3-01b_MicroSD_Library/blob/985ba8bbeab459aaf8dee0e0f793db3d64c53cd6/src/main.cpp
 /**
  * VÍ DỤ: LƯU TRỮ LOG VÀO THẺ NHỚ
  * 
@@ -8,31 +8,34 @@
  */
 
 #include <Arduino.h>
+
 #include <PTITCube.h>
+
+PTIT_CDH cdh;
 
 PTIT_Storage myDisk;
 
 void setup() {
-    Serial.begin(115200);
-    while (!Serial) { delay(10); }
+    cdh.begin(115200);
+    while (!cdh) { delay(10); }
 
-    Serial.println("\n[EXAMPLE] Khởi tạo thẻ nhớ...");
+    cdh.println("\n[EXAMPLE] Khởi tạo thẻ nhớ...");
     myDisk.init();
     
     // Ghi thử một dòng Boot vào log
     const bool bootSaved = myDisk.appendFile("/datalog.txt", "=== SYSTEM BOOT: CUBESAT V1 ===\n");
-    Serial.println(bootSaved ? "[SD] log saved" : "[SD] log write failed/not ready");
+    cdh.println(bootSaved ? "[SD] log saved" : "[SD] log write failed/not ready");
 }
 
 void loop() {
     static int counter = 0;
     
     String data = "Hello world #" + String(counter) + " - Uptime: " + String(millis()) + "ms";
-    Serial.println(data);
+    cdh.println(data);
     
     const String line = data + "\n";
     const bool saved = myDisk.appendFile("/datalog.txt", line.c_str());
-    Serial.println(saved ? "[SD] log saved" : "[SD] log write failed/not ready");
+    cdh.println(saved ? "[SD] log saved" : "[SD] log write failed/not ready");
     
     counter++;
     delay(3000);

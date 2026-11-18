@@ -7,12 +7,19 @@ const GROUPS = { system: 'Hệ thống', sensor: 'Cảm biến', camera: 'Camera
 const PHASES = { start: 'Bắt đầu', done: 'Hoàn tất', sample: 'Nhận dữ liệu', saved: 'Đã lưu', waiting: 'Chờ xác nhận', recovered: 'Firmware báo hết điều kiện cảnh báo', error: 'Báo lỗi', sent: 'Đã yêu cầu gửi · chưa có ACK', requested: 'Yêu cầu ghi log · chưa xác nhận ghi SD', received: 'Nhận qua radio', reported: 'Thiết bị báo cáo', ok: 'Đã phản hồi' };
 const time = at => new Date(at).toLocaleTimeString();
 const TaskTimeline = lazy(() => import('./TaskTimeline'));
+// Lab3-03 task cards. TelemGen/SysDiag match the current sketch; Sensor/Network/LED only appear for older firmware logs.
+const TASK_CARDS = {
+  TelemGen: { title: 'Viễn trắc giả lập · minh họa', unit: 'gói', detail: task => task?.value != null ? `${task.value.toFixed(1)} °C · số giả lập trong code` : 'Chờ log [HK-TELEM]' },
+  SysDiag: { title: 'Tự chẩn đoán · Core 0', unit: 'lần hoàn tất', detail: task => task?.durationMs != null ? `Thời gian quan sát: ${task.durationMs} ms` : 'Chờ cặp log bắt đầu / hoàn tất' },
+  Sensor: { title: 'Đọc cảm biến · minh họa', unit: 'lần đọc', detail: task => task?.value != null ? `${task.value.toFixed(1)} °C · giá trị mẫu trong code` : 'Chờ log [Sensor]' },
+  Network: { title: 'Gửi mạng · minh họa', unit: 'lần hoàn tất', detail: task => task?.durationMs != null ? `Thời gian quan sát: ${task.durationMs} ms` : 'Chờ cặp log bắt đầu / hoàn tất' },
+};
 
 /** @param {{ exclude?: string[] }} props Evidence groups already shown by a dedicated panel. */
 export default function PracticeActivity({ exclude = [] }) {
   const { exerciseId, activity, now, mode, link } = useTelemetry();
   const profile = practiceProfile(exerciseId);
-  const tasks = ['Sensor', 'Network'];
+  const tasks = ['TelemGen', 'SysDiag', ...['Sensor', 'Network'].filter(name => activity.tasks[name])];
   const events = activity.events.filter(event => event.group === 'task');
   const recent = activity.lastLineAt !== null && now - activity.lastLineAt <= 5000;
   const live = mode === 'serial' && link === 'connected' && recent;
@@ -27,15 +34,14 @@ export default function PracticeActivity({ exclude = [] }) {
             const task = activity.tasks[name];
             const fresh = live && task && now - task.at <= 5000;
             return <article className="practice-task" key={name}>
-              <div><strong>{name === 'Sensor' ? 'Đọc cảm biến · minh họa' : 'Gửi mạng · minh họa'}</strong><span className={fresh ? 'practice-live-dot' : 'practice-muted-dot'} /></div>
-              <b>{task?.count ?? 0} <small>{name === 'Sensor' ? 'lần đọc' : 'lần hoàn tất'}</small></b>
+              <div><strong>{TASK_CARDS[name].title}</strong><span className={fresh ? 'practice-live-dot' : 'practice-muted-dot'} /></div>
+              <b>{task?.count ?? 0} <small>{TASK_CARDS[name].unit}</small></b>
               <span>{task ? PHASES[task.phase] ?? 'Có log' : 'Chưa quan sát'}</span>
               {task && <span>Lần cuối {time(task.at)}{!fresh && ' · đã cũ / ngắt kết nối'}</span>}
-              {name === 'Sensor' && <span>{task?.value != null ? `${task.value.toFixed(1)} °C · giá trị mẫu trong code` : 'Chờ log [Sensor]'}</span>}
-              {name === 'Network' && <span>{task?.durationMs != null ? `Thời gian quan sát: ${task.durationMs} ms` : 'Chờ cặp log bắt đầu / hoàn tất'}</span>}
+              <span>{TASK_CARDS[name].detail(task)}</span>
             </article>;
           })}
-          <article className="practice-task"><div><strong>LED · GPIO</strong><span className={live && activity.tasks.LED && now - activity.tasks.LED.at <= 5000 ? 'practice-live-dot' : 'practice-muted-dot'} /></div><b>{activity.tasks.LED?.count ?? '—'}</b><span>{activity.tasks.LED ? `Lệnh cuối: ${activity.tasks.LED.value ? 'Bật' : 'Tắt'} · ${time(activity.tasks.LED.at)}` : 'Chưa nhận log LED.'}</span></article>
+          {activity.tasks.LED && <article className="practice-task"><div><strong>LED · GPIO</strong><span className={live && now - activity.tasks.LED.at <= 5000 ? 'practice-live-dot' : 'practice-muted-dot'} /></div><b>{activity.tasks.LED.count}</b><span>{`Lệnh cuối: ${activity.tasks.LED.value ? 'Bật' : 'Tắt'} · ${time(activity.tasks.LED.at)}`}</span></article>}
         </div>
         {events.length ? <Suspense fallback={<p>Đang tải dòng thời gian…</p>}><TaskTimeline events={events} /></Suspense> : <p className="telemetry-empty">Chờ log tác vụ để vẽ dòng thời gian.</p>}
       </>}

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 const lessonUrl = (slug, id) => `/${slug}?lesson=${encodeURIComponent(id)}`;
 import logoSvg from '../../assets/logo.svg';
 import { HomeIcon, ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon, CheckIcon, LockIcon, CircleIcon } from '../common/HeaderIcons';
+import { isSequentialLesson } from '../lessons/lesson-sequence';
 
 export default function CourseSidebar({ labs, currentLabId, activeLesson, onSelectLesson, progress = [], userRole }) {
   const navigate = useNavigate();
@@ -40,15 +41,10 @@ export default function CourseSidebar({ labs, currentLabId, activeLesson, onSele
     const previous = labs.find(candidate => candidate.id === lab.id - 1);
     const previousProgress = previous && progressFor(previous);
     if (previous && !isPrivileged && !previousProgress?.completed_at) return { status: 'locked', label: 'Đang khóa' };
-    const lessons = lab.lessons || [];
-    let completedLessonsCount = 0;
-    if (lab.id === 0) {
-      if (item?.video_watched || item?.lessons?.['overview']?.completed) completedLessonsCount++;
-      if (item?.doc_viewed || item?.lessons?.['document']?.completed) completedLessonsCount++;
-      if (item?.lessons?.['components']?.completed) completedLessonsCount++;
-    } else {
-      completedLessonsCount = lessons.filter(lesson => Boolean(item?.lessons?.[lesson.id]?.completed)).length;
-    }
+    const lessons = (lab.lessons || []).filter(isSequentialLesson);
+    // Lab 0 keeps honouring the older lab-level video/doc flags for its first video and document.
+    const legacyFlag = id => lab.id === 0 && ((id === 'overview' && item?.video_watched) || (id === 'document' && item?.doc_viewed));
+    const completedLessonsCount = lessons.filter(lesson => Boolean(item?.lessons?.[lesson.id]?.completed) || legacyFlag(lesson.id)).length;
     const percent = lessons.length > 0 ? Math.round((completedLessonsCount / lessons.length) * 100) : 0;
     return { status: 'in-progress', label: `Đang học (${percent}%)` };
   };
@@ -117,7 +113,7 @@ export default function CourseSidebar({ labs, currentLabId, activeLesson, onSele
                   <span className="accordion-label">
                     <span className="accordion-title"><span className="curriculum-status-icon">{statusIcon(labState.status)}</span>Lab {lab.id}: {lab.title.split('(')[0].trim()}</span>
                     <span className="curriculum-status-label">{labState.label}</span>
-                    <span className="accordion-meta"><span>{lessons.length} phần</span><span>•</span><span>{lessons.filter(lesson => lesson.type === 'practice' || lesson.type === 'components').length} bài thực hành</span></span>
+                    <span className="accordion-meta"><span>{lessons.length} phần</span><span>•</span><span>{lessons.filter(lesson => lesson.type === 'practice' || lesson.type === 'components' || lesson.type === 'assembly').length} bài thực hành</span></span>
                   </span>
                   <ChevronDownIcon size={14} className={`accordion-chevron ${isExpanded ? 'expanded' : ''}`} />
                 </button>
@@ -129,7 +125,7 @@ export default function CourseSidebar({ labs, currentLabId, activeLesson, onSele
                       const states = labProgress?.lessons || {};
                       const completed = Boolean(states[lesson.id]?.completed);
                       const inProgress = !completed && Boolean(states[lesson.id]?.started_at);
-                      const firstIncomplete = lessons.findIndex(item => !states[item.id]?.completed);
+                      const firstIncomplete = lessons.findIndex(item => isSequentialLesson(item) && !states[item.id]?.completed);
                       const locked = !isPrivileged && (labState.status === 'locked' || (firstIncomplete >= 0 && index > firstIncomplete && !completed));
                       const lessonStatus = completed ? 'completed' : locked ? 'locked' : inProgress || isLessonActive ? 'in-progress' : 'available';
                       return (

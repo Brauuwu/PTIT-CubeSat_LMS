@@ -19,12 +19,20 @@
 #define HREF_GPIO_NUM     23
 #define PCLK_GPIO_NUM     22
 #define FLASH_LED_GPIO     4
+
+// UART0 (GPIO 1/3) is reserved for flashing and PC debug logs.
+// UART2 carries the OBC protocol: TX GPIO 14 -> OBC RX, RX GPIO 15 <- OBC TX (hardware team, 2026-11-17).
+#define OBC_RX_GPIO       15
+#define OBC_TX_GPIO       14
+#define OBC_BAUD          115200
+static HardwareSerial& obc = Serial2;
 static bool cameraReady = false;
 static esp_err_t cameraInitError = ESP_FAIL;
 
 static void sendCaptureError(const char* message) {
-    Serial.print("ERROR:");
-    Serial.println(message);
+    obc.print("ERROR:");
+    obc.println(message);
+    Serial.printf("[CAM] error %s\n", message);
 }
 
 void setup() {
@@ -32,7 +40,8 @@ void setup() {
     digitalWrite(FLASH_LED_GPIO, LOW);
 
     Serial.begin(115200);
-    Serial.setTimeout(250);
+    obc.begin(OBC_BAUD, SERIAL_8N1, OBC_RX_GPIO, OBC_TX_GPIO);
+    obc.setTimeout(250);
     delay(1000);
     Serial.println("Khoi dong ESP32-CAM...");
 
@@ -67,32 +76,36 @@ void setup() {
     cameraReady = err == ESP_OK;
     if (err != ESP_OK) {
         Serial.printf("ERROR:CAMERA_INIT:0x%x\n", err);
+        obc.printf("ERROR:CAMERA_INIT:0x%x\n", err);
         return;
     }
     
     Serial.println("Camera init OK.");
     Serial.println("CAMERA_READY");
+    obc.println("CAMERA_READY");
 }
 
 void loop() {
-    if (Serial.available() == 0) {
+    if (obc.available() == 0) {
         delay(1);
         return;
     }
 
-    String command = Serial.readStringUntil('\n');
+    String command = obc.readStringUntil('\n');
     command.trim();
 
     if (command == "STATUS") {
-        Serial.printf("STATUS:ready=%d,init=0x%x,psram=%d,heap=%u\n", cameraReady, cameraInitError, psramFound(), ESP.getFreeHeap());
+        obc.printf("STATUS:ready=%d,init=0x%x,psram=%d,heap=%u\n", cameraReady, cameraInitError, psramFound(), ESP.getFreeHeap());
         return;
     }
-    if (command != "CAPTURE") {
+    // "p"/"P" is the PTITCube CAM_Firmware / library v1.1.0 command; "CAPTURE" is kept for older OBC sketches.
+    if (command != "CAPTURE" && command != "p" && command != "P") {
         return;
     }
+    Serial.println("[CAM] capture requested by OBC");
 
     if (!cameraReady) {
-        Serial.printf("ERROR:CAMERA_INIT:0x%x\n", cameraInitError);
+        obc.printf("ERROR:CAMERA_INIT:0x%x\n", cameraInitError);
         return;
     }
     camera_fb_t* frame = esp_camera_fb_get();
@@ -108,13 +121,13 @@ void loop() {
     }
 
     digitalWrite(FLASH_LED_GPIO, HIGH);
-    Serial.printf("SIZE:%u\n", frame->len);
+    obc.printf("SIZE:%u\n", frame->len);
 
     unsigned long startTime = millis();
     bool ready = false;
     while (millis() - startTime < 5000) {
-        if (Serial.available()) {
-            String response = Serial.readStringUntil('\n');
+        if (obc.available()) {
+            String response = obc.readStringUntil('\n');
             response.trim();
             if (response == "OK") {
                 ready = true;
@@ -131,13 +144,14 @@ void loop() {
         return;
     }
 
-    Serial.write(frame->buf, frame->len);
-    Serial.flush();
+    obc.write(frame->buf, frame->len);
+    obc.flush();
+    Serial.printf("[CAM] sent %u bytes\n", frame->len);
 
     startTime = millis();
     while (millis() - startTime < 15000) {
-        if (Serial.available()) {
-            String response = Serial.readStringUntil('\n');
+        if (obc.available()) {
+            String response = obc.readStringUntil('\n');
             response.trim();
             if (response == "DONE") {
                 break;

@@ -1,5 +1,5 @@
 // Reviewed classroom source for the ESP32 OBC hardware profile.
-// Upstream: https://github.com/PTITCube/Lab4-04_Camera_Snapshot/blob/c14459b6a893a4008f87387fc134cf8aff5b817c/src/main.cpp
+// Upstream: https://github.com/PTITCube/Lab4-04_Camera_Snapshot/blob/7ce21ac459b7eb6d96bdb7603b67803ba6b12053/src/main.cpp
 // Lab4-04: OBC MUX pins 12/14; send p to capture. Preserve existing SD images.
 // Source: https://github.com/PTITCube/Lab4-04_Camera_Snapshot
 /**
@@ -16,50 +16,53 @@
  */
 
 #include <Arduino.h>
+
 #include <PTITCube.h>
 #include <SD.h>
+
+PTIT_CDH cdh;
 
 PTIT_Camera camera;
 int imageCount = 0;
 
 void setup() {
-    Serial.begin(115200);
+    cdh.begin(115200);
     delay(2000);
     
-    Serial.println("\n--- CAMERA / SD INITIALIZATION ---");
+    cdh.println("\n--- CAMERA / SD INITIALIZATION ---");
 
     if (!camera.init(12, 14)) {
-        Serial.println("[Loi] Khong the khoi tao the nho!");
-        Serial.println("[SD] Kiem tra the; gui p de thu mount/chup lai.");
+        cdh.println("[Loi] Khong the khoi tao the nho!");
+        cdh.println("[SD] Kiem tra the; gui p de thu mount/chup lai.");
     }
 
-    Serial.println("[OK] Nhap 'p' de chup anh.");
+    cdh.println("[OK] Nhap 'p' de chup anh.");
 }
 
 void loop() {
-    if (Serial.available() > 0) {
-        char command = Serial.read();
+    if (cdh.available() > 0) {
+        char command = cdh.read();
 
         if (command == 'p' || command == 'P') {
             String path;
             do { path = "/photos/image_" + String(imageCount++) + ".jpg"; } while (SD.exists(path.c_str()));
-            Serial.println("[Camera] Dang chup: " + path);
+            cdh.println("[Camera] Dang chup: " + path);
 
             if (camera.captureToFile(path.c_str())) {
-                Serial.println("[OK] Da luu anh: " + path);
+                cdh.println("[OK] Da luu anh: " + path);
 
             } else {
-                Serial.println("[Loi] Chup anh that bai.");
+                cdh.println("[Loi] Chup anh that bai.");
             }
         }
 
-        // Consume CR/LF from the same Serial Monitor command.
-        while (Serial.available() > 0) {
-            char trailing = Serial.peek();
+        // Consume CR/LF from the same cdh Monitor command.
+        while (cdh.available() > 0) {
+            char trailing = cdh.peek();
             if (trailing != '\r' && trailing != '\n') {
                 break;
             }
-            Serial.read();
+            cdh.read();
         }
     }
     delay(5);

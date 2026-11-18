@@ -6,6 +6,7 @@ import { createPracticeDecoder, emptyActivity, reduceActivity, practiceProfile }
 import { createTelemetryStore, currentReadings, telemetryStatus } from '../src/telemetry/store.js';
 import { adaptSerialLine } from '../src/telemetry/adapters.js';
 import { visualizationPlan } from '../src/telemetry/visualization-plan.js';
+import { describeShellResult } from '../src/telemetry/shell-results.js';
 
 const entry = (text, at = 10000) => ({ text, receivedAt: at, type: 'rx', origin: 'serial' });
 
@@ -106,6 +107,25 @@ test('No Fix invalidates the marker immediately; invalid NMEA checksums never pr
   assert.equal(currentReadings(store.getSnapshot()).gpsLon, null);
 });
 
+test('Lab4-03b NMEA RAW lines decode only checksum-verified sentences the sketch marked OK', () => {
+  const decode = createPracticeDecoder('Lab4-03b_GPS_Library');
+  const sentence = '$GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47';
+  assert.ok(decode(entry(`[NMEA RAW] [OK  ] [GGA (Global Positioning Fix)] ${sentence}`)).frame);
+  assert.equal(decode(entry(`[NMEA RAW] [FAIL] [GGA (Global Positioning Fix)] ${sentence}`)).frame, null);
+  assert.equal(decode(entry(`[NMEA RAW] [OK  ] [GGA (Global Positioning Fix)] ${sentence.replace('*47', '*00')}`)).frame, null);
+});
+
+test('simulated Lab3-03 / Lab3-05 values stay task evidence, never physical measurements', () => {
+  const scheduler = createPracticeDecoder('Lab3-03_Multitasking_Scheduler');
+  const telemetry = scheduler(entry('[HK-TELEM] Gói #0001 | Pin: 3.95V | Nhiệt độ C&DH: 27.3C | Uptime: 1s'));
+  assert.equal(telemetry.frame, null);
+  assert.deepEqual(telemetry.events.map(event => [event.name, event.illustrative, event.value]), [['TelemGen', true, 27.3]]);
+  const queue = createPracticeDecoder('Lab3-05_Event_Driven_Queue');
+  const alert = queue(entry('[DISPATCHER] Nhận sự kiện tại t = 900 ms: CẢNH BÁO VIỄN TRẮC! Nhiệt độ C&DH vượt ngưỡng: 33°C'));
+  assert.equal(alert.frame, null);
+  assert.deepEqual(alert.events.map(event => [event.group, event.name, event.illustrative]), [['task', 'Dispatcher', true]]);
+});
+
 test('diagnostic response formats map to the actual measurements and units', () => {
   const decode = createPracticeDecoder('Lab7-02_RTOS_Satellite_System');
   assert.equal(decode(entry('Sensor: Temp=28.50C, Press=1012.25hPa')).frame.temperatureC, 28.5);
@@ -192,16 +212,16 @@ test('each exercise shows only the panels its reference sketch has data for', ()
   const expected = {
     'Lab1-01': [], 'Lab1-02': [], 'Lab1-03': [], 'Lab1-04': [], 'Lab1-05': [], 'Lab1-06': [], 'Lab1-07': [],
     'Lab1-08': ['lab1Connection'], 'Lab1-09': ['lab1Connection'], 'Lab1-10': ['lab1Connection'],
-    'Lab2-01': ['voltage'], 'Lab2-01a': ['voltage'], 'Lab2-01b': ['voltage'], 'Lab2-02': ['voltage'],
-    'Lab3-01': ['storage'], 'Lab3-01a': ['storage'], 'Lab3-01b': ['storage'], 'Lab3-02': ['commands'],
-    'Lab3-03': [], 'Lab3-04': ['anomaly', 'attitude'],
-    'Lab4-01': ['environment'], 'Lab4-01a': ['environment'], 'Lab4-01b': ['environment'],
-    'Lab4-02': ['attitude'], 'Lab4-02a': ['attitude'], 'Lab4-02b': ['attitude'],
-    'Lab4-03': ['gps'], 'Lab4-03a': ['gps'], 'Lab4-03b': ['gps'],
-    'Lab4-04': ['camera', 'commands'], 'Lab4-04a': ['camera', 'commands'], 'Lab4-04b': ['camera', 'commands'],
+    'Lab2-01a': ['voltage'], 'Lab2-01b': ['voltage'], 'Lab2-02': ['voltage'],
+    'Lab3-01a': [], 'Lab3-01b': [], 'Lab3-02': ['shell', 'commands'],
+    'Lab3-03': [], 'Lab3-04': ['commands'], 'Lab3-05': ['commands'],
+    'Lab4-01a': ['environment'], 'Lab4-01b': ['environment'],
+    'Lab4-02a': ['attitude'], 'Lab4-02b': ['attitude'],
+    'Lab4-03a': ['gps'], 'Lab4-03b': ['gps'], 'Lab4-03c': ['gps'],
+    'Lab4-04a': ['camera', 'commands'], 'Lab4-04b': ['camera', 'commands'],
     'Lab4-05': ['environment', 'attitude', 'gps'], 'Lab4-06': ['gps', 'camera'],
-    'Lab5-01': ['radio'], 'Lab5-01a': ['radio'], 'Lab5-01b': ['radio'],
-    'Lab5-02': ['radio', 'commands'], 'Lab5-02a': ['radio', 'commands'], 'Lab5-02b': ['radio', 'commands'], 'Lab5-03': ['radio', 'commands'],
+    'Lab5-01a': ['radio'], 'Lab5-01b': ['radio'],
+    'Lab5-02a': ['radio', 'commands'], 'Lab5-02b': ['radio', 'commands'], 'Lab5-03': ['radio', 'commands'],
     'Lab7-01': ['attitude', 'gps', 'voltage', 'environment', 'storage', 'system'],
     'Lab7-02': ['attitude', 'gps', 'voltage', 'camera', 'environment', 'storage', 'network', 'system', 'commands'],
     'Lab8-01': ['dashboard'],
@@ -269,6 +289,34 @@ test('SD shell reports and errors stay in storage and never invent successful wr
   }
   for (const line of ['ERR: Directory not found', 'ERR: SD not ready', 'ERR: Unknown command']) assert.ok(decode(entry(line)).events.some(event => event.group === 'storage' && event.phase === 'error'));
   assert.equal(decode(entry('Log entry #1 - Uptime: 3000ms')).events.length, 0);
+});
+
+test('Lab3-02 pairs every shell command with its reply, not only failed ones', () => {
+  const decode = createPracticeDecoder('Lab3-02_Linux_FS_Commands');
+  const lines = ['User> pwd', '/', 'User> mkdir demo', '[Storage] Đã tạo thư mục: /demo', 'OK: mkdir /demo', 'User> ls', '[Storage] Nội dung thư mục: /', '📁 demo', '📄 log.txt  (12 bytes)', 'OK: ls /',
+    'User> cd demo', 'OK: cd /demo', 'User> touch note.txt', 'OK: touch /demo/note.txt', 'User> rm note.txt', 'OK: rm /demo/note.txt', 'User> cd nowhere', 'ERR: Directory not found', 'User> foo', 'ERR: Unknown command'];
+  const shell = lines.flatMap(line => decode(entry(line)).events).filter(event => event.group === 'shell');
+  assert.deepEqual(shell.map(event => [event.command, event.phase]), [['pwd', 'ok'], ['mkdir demo', 'ok'], ['ls', 'ok'], ['cd demo', 'ok'], ['touch note.txt', 'ok'], ['rm note.txt', 'ok'], ['cd nowhere', 'error'], ['foo', 'error']]);
+  assert.deepEqual(shell.map(describeShellResult), ['Thư mục hiện tại: /', 'Đã tạo thư mục /demo', 'Đã liệt kê / · 2 mục', 'Đã chuyển tới /demo', 'Đã tạo file /demo/note.txt (giữ nguyên nếu đã có)', 'Đã xóa /demo/note.txt', 'Không tìm thấy thư mục', 'Lệnh không được hỗ trợ']);
+  // A reply without a typed command (e.g. an overlong line) is not attributed to an earlier command.
+  assert.equal(decode(entry('ERR: Command exceeds 128 bytes')).events.some(event => event.group === 'shell'), false);
+  assert.equal(createPracticeDecoder('Lab3-01a_MicroSD_SPI')(entry('User> ls')).events.some(event => event.group === 'shell'), false);
+  assert.equal(practiceProfile('Lab3-01b_MicroSD_Library').serialOnly, true);
+});
+
+test('Lab4-03c plots the labelled latitude/longitude/altitude lines even without the combined coordinate line', () => {
+  const decode = createPracticeDecoder('Lab4-03c_GPS_PTITCube');
+  const frames = ['- Vĩ độ (Latitude)       : 21.028500° Bắc (N)', '- Kinh độ (Longitude)    : 105.854200° Đông (E)', '- Cao độ (Altitude)      : 12.30 m (so với mực nước biển)']
+    .map(text => decode(entry(text)).frame);
+  assert.equal(frames[0], null);
+  assert.ok(Math.abs(frames[1].gpsLat - 21.0285) < 1e-9 && Math.abs(frames[1].gpsLon - 105.8542) < 1e-9);
+  assert.equal(frames[2].gpsAlt, 12.3);
+  const south = createPracticeDecoder('Lab4-03c_GPS_PTITCube');
+  south(entry('- Vĩ độ (Latitude)       : 33.868800° Nam (S)'));
+  const west = south(entry('- Kinh độ (Longitude)    : 151.209300° Tây (W)')).frame;
+  assert.deepEqual([west.gpsLat, west.gpsLon], [-33.8688, -151.2093]);
+  // A longitude with no preceding latitude never produces a half position.
+  assert.equal(createPracticeDecoder('Lab4-03c_GPS_PTITCube')(entry('- Kinh độ (Longitude)    : 105.854200° Đông (E)')).frame, null);
 });
 
 test('Lab4-04b chunked Serial image becomes one validated JPEG frame; corrupt or truncated transfers never do', () => {

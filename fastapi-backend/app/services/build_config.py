@@ -13,7 +13,7 @@ build_flags =
 \t-DARDUINO_USB_CDC_ON_BOOT=1
 \t-DARDUINO_USB_MODE=1
 lib_deps =
-\thttps://github.com/PTITCube/PTITCube-Library.git#218d2b6b78b75140962999cc7aad0c786838bb25
+\thttps://github.com/PTITCube/PTITCube-Library.git#57cf1c32c166a28a8bf6bdde215270288b750d67
 """,
     "esp32": """\
 [platformio]
@@ -26,13 +26,13 @@ framework = arduino
 monitor_speed = 115200
 extra_scripts = post:export_flash_manifest.py
 lib_deps =
-\thttps://github.com/PTITCube/PTITCube-Library.git#218d2b6b78b75140962999cc7aad0c786838bb25
+\thttps://github.com/PTITCube/PTITCube-Library.git#57cf1c32c166a28a8bf6bdde215270288b750d67
 """,
 }
 
 # Bump when compiler-side library fixes change, rejecting stale compiler images.
 _PIO_INI = {
     board: ini
-    + "\n; PTITCube sensor readiness + MPU6500 + GPS aliases + UART2 mutex + camera validation/shared UART patch v6\n"
+    + "\n; PTITCube sensor readiness + MPU6500 + GPS aliases + UART2 mutex + camera validation/shared UART patch + library v1.1.0 (camera p command, break-before-make) v7\n"
     for board, ini in _PIO_INI.items()
 }

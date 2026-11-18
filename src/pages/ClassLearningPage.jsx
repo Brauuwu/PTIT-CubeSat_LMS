@@ -31,7 +31,9 @@ function Practice({ lesson, labId, classId, preview, staffView, onRefresh }) {
     {content.instructions ? <DocViewer content={content.instructions} docPath={undefined} /> : <p>Giảng viên chưa bổ sung hướng dẫn chi tiết cho bài này.</p>}
     {content.evidence && <p><strong>Minh chứng:</strong> {content.evidence}</p>}
     {content.rubric && <><h3>Tiêu chí chấm</h3><DocViewer content={content.rubric} docPath={undefined} /></>}
-    {content.mode === 'exploration' ? <Suspense fallback={<p>Đang tải mô hình…</p>}><ComponentViewer /></Suspense> : (!preview || staffView) && <>
+    {content.mode === 'exploration' ? <Suspense fallback={<p>Đang tải mô hình…</p>}><ComponentViewer /></Suspense>
+      : content.mode === 'assembly' ? <p>Bài lắp ráp cơ khí không cần viết mã: làm theo video hướng dẫn và nộp ảnh sản phẩm hoàn thiện cho giảng viên theo hướng dẫn của lớp.</p>
+      : (!preview || staffView) && <>
       {content.exercise_id && <button onClick={download}>Tải mã mẫu .ino</button>}<Notice error={error} />
       <Suspense fallback={<p>Đang tải không gian thực hành…</p>}>
         <IDEPanel labId={labId} exerciseId={lesson.id} storageScope={`user:${user?.id || 'staff'}:class:${classId}`} setCode={setCode} showToolbar={false} />
@@ -40,7 +42,7 @@ function Practice({ lesson, labId, classId, preview, staffView, onRefresh }) {
         <PracticeVisualization />
       </Suspense>
     </>}
-    {preview && !staffView && content.mode !== 'exploration' && <p>Chế độ xem thử chỉ hiển thị yêu cầu và tiêu chí; không biên dịch hoặc ghi tiến độ.</p>}
+    {preview && !staffView && content.mode !== 'exploration' && content.mode !== 'assembly' && <p>Chế độ xem thử chỉ hiển thị yêu cầu và tiêu chí; không biên dịch hoặc ghi tiến độ.</p>}
   </section>;
 }
 

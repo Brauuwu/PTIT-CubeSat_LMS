@@ -381,6 +381,19 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
 .admin-confirm {
   margin-bottom: 20px;
 }
+.admin-temp-password {
+  display: inline-block; margin: 0 8px; padding: 4px 10px; border-radius: 6px;
+  background: var(--bg-surface); border: 1px solid var(--border-strong);
+  font-family: ui-monospace, Consolas, monospace; font-size: 1rem; user-select: all;
+}
+.admin-temp-password--link {
+  display: block; margin: 8px 0 0; overflow-wrap: anywhere; font-size: 0.88rem;
+}
+.admin-reset-badge {
+  display: inline-block; margin-top: 4px; padding: 2px 8px; border-radius: 999px;
+  background: #fef3c7; border: 1px solid #f59e0b; color: #92400e;
+  font-size: 0.74rem; font-weight: 700;
+}
 .admin-page-panel {
   padding: 18px; border-radius: 12px; border: 1px solid var(--border-subtle); background: var(--bg-surface);
 }
@@ -1385,6 +1398,7 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
 .lesson-summary-list li { margin: 10px 0; }
 .lesson-summary-list button { display: flex; flex-direction: column; gap: 4px; border: 0; background: var(--bg-surface-subtle); padding: 12px; border-radius: 8px; text-align: left; color: var(--cubesat-navy); cursor: pointer; max-width: 100%; }
 .lesson-summary-list code { overflow-wrap: anywhere; }
+.lesson-questions-link { display: inline-flex; margin-top: 4px; font-weight: 600; text-decoration: none; }
 .lesson-source { font-size: 12px; line-height: 1.6; color: var(--text-muted); margin-top: 28px; }
 .lesson-pagination {
   display: flex; align-items: center; justify-content: space-between; gap: 14px;
@@ -1699,22 +1713,36 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
 .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--border-subtle); }
 
 .auth-toggle-visibility {
-  position: absolute; right: 4px; top: 50%; width: 40px; height: 40px; transform: translateY(-50%);
-  background: none; border: none; border-radius: 10px; cursor: pointer; color: var(--text-muted); display: grid; place-items: center; padding: 0;
+  /* Centered with top/bottom/margin-auto rather than transform so global button:active
+     transform never moves the button away from the cursor and drops the click. */
+  position: absolute; right: 4px; top: 0; bottom: 0; margin: auto 0; width: 38px; height: 38px; z-index: 1;
+  background: none; border: none; border-radius: 10px; cursor: pointer; color: var(--text-muted);
+  display: grid; place-items: center; padding: 0;
+  transition: color var(--transition-fast), background var(--transition-fast);
 }
+.auth-toggle-visibility:active:not(:disabled) { transform: none; }
+.auth-input-wrap:has(.auth-toggle-visibility) input { padding-right: 46px; }
+/* Edge draws its own reveal button under ours. */
+.auth-input-wrap input::-ms-reveal, .auth-input-wrap input::-ms-clear { display: none; }
 .auth-toggle-visibility:hover { color: var(--text-heading); background: rgba(10, 65, 116, 0.06); }
+.auth-toggle-visibility:focus-visible { outline: 2px solid var(--brand-primary); outline-offset: -2px; }
 
 .auth-row-between { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; font-size: 0.875rem; }
 .auth-checkbox { display: flex; align-items: center; gap: 8px; color: var(--text-body); cursor: pointer; font-weight: 500; }
 .auth-link-btn {
-  border: 0; background: transparent; padding: 4px 6px; border-radius: 6px;
-  color: var(--text-link); font-size: 0.875rem; font-weight: 600; cursor: pointer;
+  display: inline-block; border: 0; background: transparent; padding: 4px 6px; border-radius: 6px;
+  color: var(--text-link); font-size: 0.875rem; font-weight: 600; cursor: pointer; text-decoration: none;
 }
 .auth-link-btn:hover { color: var(--text-link-hover); text-decoration: underline; }
 .auth-help-notice {
   margin-bottom: 16px; padding: 10px 12px; border-radius: 10px;
   border: 1px solid var(--status-info-border); background: var(--status-info-bg); color: var(--status-info-text);
-  font-size: 0.82rem; line-height: 1.5;
+  font-size: 0.84rem; line-height: 1.55;
+}
+.auth-success-notice {
+  margin-bottom: 16px; padding: 12px 14px; border-radius: 10px;
+  border: 1px solid #86efac; background: #f0fdf4; color: #166534;
+  font-size: 0.88rem; line-height: 1.55; font-weight: 500;
 }
 .auth-submit-spaced { margin-top: 8px; }
 

@@ -61,8 +61,8 @@ async def cross_role_flow(t, call, sessions, tokens):
         if item["lesson_id"] == "document":
             item["params"] = {"markdown": "Định hướng học tập (dữ liệu kiểm thử)."}
         # Every enabled lesson before the Lab Test must be completed in order; keep Lab 0 to document.
-        if item["lesson_id"] in ("overview", "components"):
-            item["enabled"] = False
+        if item["lesson_id"] in ("overview", "components", "document-0-2", "video-0-2", "summary-0"):
+            item.update(enabled=False, required=False)
     body = await apply(body)
 
     # Bank: import 20 drafts, approve each, publish exactly 20.

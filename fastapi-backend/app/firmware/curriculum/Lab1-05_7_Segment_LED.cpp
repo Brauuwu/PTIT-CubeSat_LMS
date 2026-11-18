@@ -1,7 +1,7 @@
 // Reviewed classroom source for the ESP32 OBC hardware profile.
-// Upstream: https://github.com/PTITCube/Lab1-05_7_Segment_LED/blob/00a02bdb462ba0d6ad3582bc420317b07d964d8a/src/main.cpp
+// Upstream: https://github.com/PTITCube/Lab1-05_7_Segment_LED/blob/d641e8393152dc4ebc6f56d20d7a2ff4e9602e24/src/main.cpp
 /**
- * VÍ DỤ 1-05: HIỂN THỊ SỐ TRÊN LED 7 ĐOẠN (7-SEGMENT LED DISPLAY)
+ * VÍ DỤ 1-06: HIỂN THỊ SỐ TRÊN LED 7 ĐOẠN (7-SEGMENT LED DISPLAY)
  * 
  * Mô tả:
  * - Điều khiển 7 thanh LED (A, B, C, D, E, F, G) để tạo thành các chữ số 0 - 9.
@@ -54,8 +54,7 @@ void setup() {
         pinMode(SEG_PINS[i], OUTPUT);
     }
 
-    Serial.println("Bắt đầu đếm số từ 0 đến 9...");
-}
+    }
 
 void loop() {
     for (int count = 0; count <= 9; count++) {

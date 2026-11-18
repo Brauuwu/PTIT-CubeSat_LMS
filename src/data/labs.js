@@ -48,7 +48,7 @@ export const LABS = [
     icon: '📊',
     color: 'var(--accent-orange)',
     bgColor: 'var(--accent-orange-glow)',
-    description: 'Đọc thẻ MicroSD, đọc ADC điện áp pin, trực quan hoá dữ liệu realtime.',
+    description: 'Đọc thẻ MicroSD, đọc điện áp pin qua MAX17048, trực quan hoá dữ liệu realtime.',
     features: ['video', 'document', 'blockly', 'monaco', 'compiler', 'flasher', 'serial', 'voltageChart'],
     videoUrl: '',
     docPath: 'lab3-cdh',

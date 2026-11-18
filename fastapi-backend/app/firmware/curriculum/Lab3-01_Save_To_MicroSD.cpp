@@ -1,5 +1,5 @@
 // Reviewed classroom source for the ESP32 OBC hardware profile.
-// Upstream: https://github.com/PTITCube/Lab3-01_Save_To_MicroSD/blob/1c018c97417f4e0bf18beecdff927ddf1e82b40c/src/main.cpp
+// Upstream: https://github.com/PTITCube/Lab3-01_Save_To_MicroSD/blob/11d24de76647ec9066e2be3ca6ed0c142c8adca7/src/main.cpp
 /**
  * VÍ DỤ: LƯU TRỮ LOG VÀO THẺ NHỚ
  * 
@@ -8,15 +8,18 @@
  */
 
 #include <Arduino.h>
+
 #include <PTITCube.h>
+
+PTIT_CDH cdh;
 
 PTIT_Storage myDisk;
 
 void setup() {
-    Serial.begin(115200);
-    while (!Serial) { delay(10); }
+    cdh.begin(115200);
+    while (!cdh) { delay(10); }
 
-    Serial.println("\n[EXAMPLE] Khởi tạo thẻ nhớ...");
+    cdh.println("\n[EXAMPLE] Khởi tạo thẻ nhớ...");
     myDisk.init();
     
     // Ghi thử một dòng Boot vào log
@@ -29,7 +32,7 @@ void loop() {
     static int counter = 0;
     
     String data = "Hello world #" + String(counter) + " - Uptime: " + String(millis()) + "ms";
-    Serial.println(data);
+    cdh.println(data);
     
     myDisk.logData(data.c_str());
     
