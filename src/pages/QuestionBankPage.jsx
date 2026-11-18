@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { request } from '../contexts/auth-api';
 import { Notice } from '../components/classes/LmsCommon';
 import { useLmsResource } from '../components/classes/use-lms-resource';
+import { useConfirm } from '../components/classes/use-confirm';
 import '../components/classes/quiz.css';
 
 const labels = { draft: 'Nháp', approved: 'Đã duyệt', retired: 'Đã thu hồi', published: 'Đã xuất bản', queued: 'Chờ xử lý', running: 'Đang tạo', succeeded: 'Đã tạo nháp', failed: 'Thất bại' };
@@ -124,6 +125,7 @@ export function BankEditor({ initial, classId, labId, lessonId = null, reload, i
   const [retire, setRetire] = useState('');
   const [questionFile, setQuestionFile] = useState(null);
   const guard = useRef(false);
+  const { ask: askConfirm, dialog: confirmDialog } = useConfirm();
   const base = bankBase(classId, labId, lessonId);
   const url = base + '/question-bank';
   const labNo = bank.lab_id ?? labId;
@@ -187,7 +189,14 @@ export function BankEditor({ initial, classId, labId, lessonId = null, reload, i
   }
 
   async function removeQuestion(q, index) {
-    if (!window.confirm(`Xóa câu ${index + 1}? Hành động này không thể hoàn tác.`)) return;
+    const preview = String(q.prompt || '').trim();
+    const agreed = await askConfirm({
+      title: `Xóa câu ${index + 1}?`,
+      message: `${preview ? `“${preview.length > 90 ? `${preview.slice(0, 90)}…` : preview}” ` : 'Câu hỏi này '}sẽ bị xóa khỏi ngân hàng. Hành động này không thể hoàn tác.`,
+      confirmLabel: 'Xóa câu hỏi',
+      tone: 'danger',
+    });
+    if (!agreed) return;
     const result = await mutate(`${url}/questions/${q.id}`, { expected_revision: bank.revision }, 'DELETE');
     if (result && selected === q.id) select(null);
   }
@@ -241,6 +250,7 @@ export function BankEditor({ initial, classId, labId, lessonId = null, reload, i
   const tfMap = parseTrueFalseMap(question.correct_choice_id, question.choices);
 
   return <div className={inline ? 'lms-inline-bank' : ''}>
+    {confirmDialog}
     {!inline && <>
       <header className="lms-heading"><div><h1>{bankTitle(bank, labId)}</h1><p>Phiên bản {bank.version} · {labels[bank.status]} · {bank.approved_count} câu đã duyệt</p></div><Link to={`/classes/${classId}/curriculum`}>Cấu hình chương trình</Link></header>
       {!lessonId && <nav className="lms-actions" aria-label="Ngân hàng theo lab">{Array.from({ length: 9 }, (_, id) => <Link key={id} aria-current={id === Number(labId) ? 'page' : undefined} to={`/classes/${classId}/labs/${id}/questions`}>Lab {id}</Link>)}</nav>}

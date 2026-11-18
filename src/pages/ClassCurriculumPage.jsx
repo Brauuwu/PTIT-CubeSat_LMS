@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { request } from '../contexts/auth-api';
 import { Notice } from '../components/classes/LmsCommon';
 import { useLmsResource } from '../components/classes/use-lms-resource';
+import { useConfirm } from '../components/classes/use-confirm';
 import { InlineQuestionBank } from './QuestionBankPage';
 
 const labels = { video: 'Video', document: 'Tài liệu', practice: 'Thực hành', quiz: 'Câu hỏi', labtest: 'Lab test' };
@@ -28,6 +29,7 @@ function fileToBase64(file) {
 function LessonSettings({ lesson, labId, classId, onChange, onReload, disabled }) {
   const [importing, setImporting] = useState(false);
   const [importNotice, setImportNotice] = useState({});
+  const { ask: askConfirm, dialog: confirmDialog } = useConfirm();
   async function importDocument(event) {
     const file = event.target.files?.[0];
     event.target.value = '';
@@ -41,7 +43,12 @@ function LessonSettings({ lesson, labId, classId, onChange, onReload, disabled }
       return;
     }
     const current = lesson.params.markdown ?? lesson.content.markdown ?? '';
-    if (current.trim() && !window.confirm('Thay thế nội dung tài liệu hiện tại bằng nội dung từ tệp?')) return;
+    if (current.trim() && !(await askConfirm({
+      title: 'Thay thế nội dung tài liệu?',
+      message: `Nội dung đang soạn sẽ được thay bằng nội dung đọc từ tệp “${file.name}”. Bạn vẫn có thể chỉnh sửa trước khi lưu nháp.`,
+      confirmLabel: 'Thay thế',
+      tone: 'info',
+    }))) return;
     setImporting(true);
     setImportNotice({});
     try {
@@ -112,6 +119,7 @@ function LessonSettings({ lesson, labId, classId, onChange, onReload, disabled }
         <InlineQuestionBank classId={classId} labId={labId} lessonId={lesson.type === 'quiz' ? lesson.id : null} onPublished={onReload} />
       </div>
     )}
+    {confirmDialog}
   </details>;
 }
 
