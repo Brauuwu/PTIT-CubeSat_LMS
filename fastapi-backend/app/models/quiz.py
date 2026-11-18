@@ -23,7 +23,7 @@ from app.models.curriculum import json_type
 class QuestionBank(Base):
     __tablename__ = "question_banks"
     __table_args__ = (
-        UniqueConstraint("class_id", "lab_id", "version", name="uq_bank_version"),
+        UniqueConstraint("class_id", "lesson_id", "version", name="uq_bank_version"),
         ForeignKeyConstraint(
             ["course_version_id", "lab_id"],
             ["labs.course_version_id", "labs.id"],
@@ -35,6 +35,8 @@ class QuestionBank(Base):
     class_id: Mapped[int] = mapped_column(ForeignKey("classes.id", ondelete="RESTRICT"))
     course_version_id: Mapped[str] = mapped_column(Text)
     lab_id: Mapped[int] = mapped_column(Integer)
+    # `labtest-<lab_id>` for the Lab Test bank, or the id of a `quiz` lesson.
+    lesson_id: Mapped[str] = mapped_column(Text)
     version: Mapped[int] = mapped_column(Integer)
     revision: Mapped[int] = mapped_column(Integer, server_default="1")
     status: Mapped[str] = mapped_column(Text, server_default="draft")
@@ -65,14 +67,16 @@ class QuizPolicy(Base):
     __tablename__ = "quiz_policies"
     __table_args__ = (
         CheckConstraint(
-            "num_questions=5 AND pass_score BETWEEN 1 AND 5 AND time_limit_minutes BETWEEN 1 AND 180 AND max_attempts BETWEEN 1 AND 100",
+            "num_questions BETWEEN 1 AND 200 AND pass_score BETWEEN 1 AND 200"
+            " AND time_limit_minutes BETWEEN 1 AND 180 AND max_attempts BETWEEN 1 AND 100",
             name="ck_quiz_policy",
         ),
     )
     class_id: Mapped[int] = mapped_column(
         ForeignKey("classes.id", ondelete="RESTRICT"), primary_key=True
     )
-    lab_id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    lesson_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    lab_id: Mapped[int] = mapped_column(Integer)
     bank_id: Mapped[str | None] = mapped_column(
         ForeignKey("question_banks.id", ondelete="RESTRICT")
     )
@@ -82,7 +86,7 @@ class QuizPolicy(Base):
     pass_score: Mapped[int] = mapped_column(Integer, server_default="4")
     max_attempts: Mapped[int] = mapped_column(Integer, server_default="3")
     score_rule: Mapped[str] = mapped_column(Text, server_default="highest")
-    reveal_policy: Mapped[str] = mapped_column(Text, server_default="after_attempts")
+    reveal_policy: Mapped[str] = mapped_column(Text, server_default="after_pass")
     closes_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 

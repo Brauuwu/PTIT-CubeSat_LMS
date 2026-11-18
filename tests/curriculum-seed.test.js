@@ -10,11 +10,20 @@ const seed = JSON.parse(readFileSync(new URL('../fastapi-backend/app/firmware/cu
 test('seed preserves original IDs while normalizing lesson kinds and adding disabled test slots', () => {
   const lessons = seed.labs.flatMap(lab => lab.lessons);
   const originals = [0, ...Object.keys(CURRICULUM).map(Number)].flatMap(lab => getLessonsForLab(lab));
-  assert.equal(lessons.length, 107);
+  assert.equal(lessons.length, 129);
   for (const item of originals) assert.ok(lessons.some(lesson => lesson.id === item.id));
   assert.equal(lessons.filter(item => item.type === 'practice' && item.lab_id >= 2).length, 34);
   assert.equal(lessons.find(item => item.id === 'summary-2').title, 'Tổng kết');
   assert.equal(lessons.find(item => item.id === 'components').default_required, false);
+  const quizzes = lessons.filter(item => item.type === 'quiz');
+  assert.deepEqual(quizzes.map(item => item.id), ['quiz-0-1', 'quiz-0-2', 'quiz-0-3', ...Array.from({ length: 13 }, (_, i) => `quiz-1-${i + 1}`)]);
+  for (const quiz of quizzes) {
+    assert.equal(quiz.default_enabled, false);
+    assert.equal(quiz.default_required, false);
+    assert.equal(quiz.preview_allowed, false);
+    assert.equal(quiz.content.bank_ready, false);
+  }
+  assert.doesNotMatch(JSON.stringify(seed), /correct_choice|"answers?"|"explanation"/);
   for (const lab of seed.labs) {
     assert.equal(lab.lessons.at(-1).type, 'labtest');
     assert.equal(lab.lessons.at(-1).default_enabled, false);

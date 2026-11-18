@@ -35,7 +35,17 @@ def normalize_true_false_answer(raw: str, valid_ids: list[str], *, partial: bool
             key, val = re.split(r"[:=]", part, maxsplit=1)
             cid = key.strip().lower()
             v = val.strip().upper()
-            if cid not in valid_ids or v not in {"Đ", "D", "T", "TRUE", "1", "S", "F", "FALSE", "0"}:
+            if cid not in valid_ids or v not in {
+                "Đ",
+                "D",
+                "T",
+                "TRUE",
+                "1",
+                "S",
+                "F",
+                "FALSE",
+                "0",
+            }:
                 raise ValueError("Đáp án Đúng/Sai không hợp lệ.")
             mapping[cid] = "Đ" if v in {"Đ", "D", "T", "TRUE", "1"} else "S"
     if not partial and set(mapping.keys()) != set(valid_ids):
@@ -71,7 +81,9 @@ class QuestionInput(InputModel):
     prompt: str = Field(min_length=10, max_length=5000)
     choices: list[Choice] = Field(default_factory=list, max_length=4)
     correct_choice_id: str = Field(min_length=1, max_length=256)
-    explanation: str = Field(default="Đã kiểm tra theo đáp án chuẩn.", min_length=5, max_length=5000)
+    explanation: str = Field(
+        default="Đã kiểm tra theo đáp án chuẩn.", min_length=5, max_length=5000
+    )
     choice_explanations: dict[str, str] = Field(default_factory=dict, max_length=4)
     objective: str = Field(default="Kiểm tra kiến thức Lab", min_length=3, max_length=500)
     difficulty: Literal["easy", "medium", "hard"] = "medium"
@@ -153,12 +165,15 @@ class ImportInput(RevisionInput):
 
 
 class PolicyInput(RevisionInput):
-    num_questions: Literal[5] = 5
+    # Kept for compatibility; attempts always use every approved question.
+    num_questions: int = Field(default=5, ge=1, le=200)
     time_limit_minutes: int = Field(default=10, ge=1, le=180)
-    pass_score: int = Field(default=4, ge=1, le=5)
+    pass_score: int = Field(default=4, ge=1, le=200)
     max_attempts: int = Field(default=3, ge=1, le=100)
     score_rule: Literal["highest"] = "highest"
-    reveal_policy: Literal["after_attempts", "after_close", "immediate", "never"] = "after_attempts"
+    reveal_policy: Literal["after_pass", "after_attempts", "after_close", "immediate", "never"] = (
+        "after_pass"
+    )
     closes_at: datetime | None = None
 
     @model_validator(mode="after")
@@ -176,7 +191,7 @@ class StartInput(InputModel):
 
 class AnswersInput(StartInput):
     expected_revision: int = Field(ge=0)
-    answers: dict[str, str] = Field(max_length=5)
+    answers: dict[str, str] = Field(max_length=200)
 
 
 class GrantInput(StartInput):

@@ -20,7 +20,7 @@ from app.models.tables import Classroom, User
 from app.schemas.quiz import QuestionInput
 from app.services.course_configuration import configuration
 from app.services.permissions import require_class_member
-from app.services.question_banks import add_questions, bank_for, invalid, uid
+from app.services.question_banks import add_questions, bank_for, invalid, lesson_key, uid
 from app.services.quizzes import finalize, now, utc
 
 
@@ -149,8 +149,9 @@ def job_json(job):
     }
 
 
-async def enqueue(db, access, lab_id, request):
-    bank = await bank_for(db, access, lab_id, request.expected_revision, editable=True)
+async def enqueue(db, access, target, request):
+    bank = await bank_for(db, access, target, request.expected_revision, editable=True)
+    lab_id = bank.lab_id
     config = await configuration(db, access, draft=True)
     docs = {
         q["id"]: q
@@ -183,14 +184,17 @@ async def enqueue(db, access, lab_id, request):
     return job_json(job)
 
 
-async def list_jobs(db, access, lab_id):
+async def list_jobs(db, access, target):
     return [
         job_json(j)
         for j in (
             await db.execute(
                 select(QuestionGenerationJob)
                 .join(QuestionBank, QuestionBank.id == QuestionGenerationJob.bank_id)
-                .where(QuestionBank.class_id == access.classroom.id, QuestionBank.lab_id == lab_id)
+                .where(
+                    QuestionBank.class_id == access.classroom.id,
+                    QuestionBank.lesson_id == lesson_key(target),
+                )
                 .order_by(QuestionGenerationJob.created_at.desc())
                 .limit(30)
             )
@@ -198,8 +202,8 @@ async def list_jobs(db, access, lab_id):
     ]
 
 
-async def retry(db, access, lab_id, job_id):
-    bank = await bank_for(db, access, lab_id, editable=True)
+async def retry(db, access, target, job_id):
+    bank = await bank_for(db, access, target, editable=True)
     job = await db.get(QuestionGenerationJob, job_id)
     if not job or job.bank_id != bank.id or job.status != "failed" or job.tries >= 3:
         invalid("Chỉ thử lại job thất bại của bản nháp hiện tại, tối đa 3 lần gọi.")
@@ -237,7 +241,7 @@ async def run_job(sessions, provider=None):
             access = await require_class_member(roles=["teacher"], write=True)(
                 bank.class_id, user, db
             )
-            await bank_for(db, access, bank.lab_id, job.bank_revision, editable=True)
+            await bank_for(db, access, bank.lesson_id, job.bank_revision, editable=True)
         result = await (provider or generator()).generate(sources, count)
         if not isinstance(result, list) or len(result) != count:
             raise ValueError("Unexpected count")
@@ -253,7 +257,7 @@ async def run_job(sessions, provider=None):
             access = await require_class_member(roles=["teacher"], write=True)(
                 bank.class_id, user, db
             )
-            bank = await bank_for(db, access, bank.lab_id, job.bank_revision, editable=True)
+            bank = await bank_for(db, access, bank.lesson_id, job.bank_revision, editable=True)
             job = (
                 await db.execute(
                     select(QuestionGenerationJob)

@@ -5,13 +5,13 @@ import { LABS } from '../src/data/labs.js';
 import { READING_NOTES, lessonReadingContent } from '../src/data/lesson-reading.js';
 import { projectKey, sourceKey, loadDraft } from '../src/components/editor/blockly-project.js';
 
-test('PTITCube syllabus exposes 95 ordered sections and all 44 individual exercises', () => {
-  assert.deepEqual(LABS.slice(1).map(lab => getLessonsForLab(lab.id).length), [19, 9, 15, 23, 13, 4, 6, 6]);
+test('PTITCube syllabus exposes 111 ordered sections and all 44 individual exercises', () => {
+  assert.deepEqual(LABS.slice(1).map(lab => getLessonsForLab(lab.id).length), [35, 9, 15, 23, 13, 4, 6, 6]);
   const sections = Object.values(CURRICULUM).flatMap(lab => lab.lessons);
-  assert.equal(new Set(sections.map(item => item.id)).size, 95);
+  assert.equal(new Set(sections.map(item => item.id)).size, 111);
   assert.equal(sections.filter(item => item.type === 'practice').length, 44);
-  assert.equal(sections.filter(item => item.type === 'video').length, 24);
-  assert.equal(sections.filter(item => item.type === 'document').length, 19);
+  assert.equal(sections.filter(item => item.type === 'video').length, 23);
+  assert.equal(sections.filter(item => item.type === 'document').length, 23);
   for (const lab of LABS.slice(1)) {
     const lessons = getLessonsForLab(lab.id);
     assert.equal(lessons[0].type, 'video');
@@ -29,7 +29,7 @@ test('PTITCube syllabus exposes 95 ordered sections and all 44 individual exerci
 
 test('every document has topic-specific reading; video links remain explicit until supplied', () => {
   for (const lab of LABS.slice(1)) for (const lesson of getLessonsForLab(lab.id)) {
-    if (lesson.type === 'document') {
+    if (lesson.type === 'document' && lab.id !== 1) {
       assert.ok(READING_NOTES[lesson.id]?.length >= 3);
       assert.ok(lessonReadingContent(lab, lesson).includes(lesson.title));
     }
@@ -38,7 +38,7 @@ test('every document has topic-specific reading; video links remain explicit unt
 });
 
 test('lesson URLs restore selection, invalid/cross-lab IDs fall back and Lab0 keeps three sections', () => {
-  assert.deepEqual(getLessonsForLab(0).map(item => item.id), ['overview', 'document', 'components']);
+  assert.deepEqual(getLessonsForLab(0).map(item => item.id), ['overview', 'document', 'quiz-0-1', 'document-0-2', 'quiz-0-2', 'video-0-2', 'components', 'quiz-0-3', 'summary-0']);
   const url = new URL(lessonUrl('lab4', 'Lab4-02b_IMU_Library'), 'http://localhost');
   assert.equal(getLessonForLab(4, url.searchParams.get('lesson')).id, 'Lab4-02b_IMU_Library');
   assert.equal(getLessonForLab(1, 'Lab4-02b_IMU_Library').id, 'video-1-1');

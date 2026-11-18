@@ -10,7 +10,7 @@ from pydantic import ValidationError
 from sqlalchemy import func, select
 
 from app.core.lms_errors import LMSError
-from app.models.curriculum import ClassCourseVersion, CourseVersion
+from app.models.curriculum import ClassCourseVersion, CourseVersion, Lesson
 from app.models.quiz import QuestionBank, QuestionVersion, QuizAttemptItem, QuizPolicy
 from app.schemas.quiz import QuestionInput, normalized
 from app.services.classes import audit
@@ -27,12 +27,47 @@ def uid():
     return str(uuid4())
 
 
+def lesson_key(target):
+    """Bank key: an int lab id means that lab's Lab Test, a string is a lesson id."""
+    return f"labtest-{target}" if isinstance(target, int) else target
+
+
+def is_labtest(key):
+    return key.startswith("labtest-")
+
+
+def required_questions(key, policy):
+    """Approved questions a bank must hold before it can be published (every attempt uses them all)."""
+    return 1
+
+
 def conflict():
     raise LMSError(409, "VERSION_CONFLICT", "Dữ liệu đã thay đổi. Hãy tải lại trước khi lưu.")
 
 
 def invalid(message, details=None):
     raise LMSError(422, "CONFIG_INVALID", message, details or {})
+
+
+async def current_course_id(db, access):
+    course_id = (
+        await db.execute(
+            select(ClassCourseVersion.course_version_id)
+            .where(ClassCourseVersion.class_id == access.classroom.id)
+            .order_by(ClassCourseVersion.version.desc())
+            .limit(1)
+        )
+    ).scalar_one_or_none()
+    if not course_id:
+        course_id = (
+            await db.execute(
+                select(CourseVersion.id)
+                .where(CourseVersion.status == "published")
+                .order_by(CourseVersion.created_at.desc())
+                .limit(1)
+            )
+        ).scalar_one_or_none()
+    return course_id
 
 
 async def seed_banks(db, access, course_id):
@@ -51,70 +86,64 @@ async def seed_banks(db, access, course_id):
     existing = set(
         (
             await db.execute(
-                select(QuestionBank.lab_id).where(QuestionBank.class_id == access.classroom.id)
+                select(QuestionBank.lesson_id).where(QuestionBank.class_id == access.classroom.id)
             )
         ).scalars()
     )
-    for lab_id in range(9):
-        if lab_id not in existing:
+    quiz_lessons = (
+        await db.execute(
+            select(Lesson.id, Lesson.lab_id).where(
+                Lesson.course_version_id == course_id, Lesson.type == "quiz"
+            )
+        )
+    ).all()
+    # One Lab Test bank per lab plus one bank per quiz lesson of this course version.
+    targets = [(f"labtest-{lab_id}", lab_id) for lab_id in range(9)] + [
+        (lesson_id, lab_id) for lesson_id, lab_id in quiz_lessons
+    ]
+    for key, lab_id in targets:
+        if key not in existing:
             db.add(
                 QuestionBank(
                     id=uid(),
                     class_id=access.classroom.id,
                     course_version_id=course_id,
                     lab_id=lab_id,
+                    lesson_id=key,
                     version=1,
                     created_by=access.user.id,
                 )
             )
-        if await db.get(QuizPolicy, (access.classroom.id, lab_id)) is None:
-            db.add(QuizPolicy(class_id=access.classroom.id, lab_id=lab_id))
+        if await db.get(QuizPolicy, (access.classroom.id, key)) is None:
+            defaults = {} if is_labtest(key) else {"num_questions": 3, "pass_score": 2}
+            db.add(
+                QuizPolicy(class_id=access.classroom.id, lesson_id=key, lab_id=lab_id, **defaults)
+            )
     await db.flush()
 
 
-async def bank_for(db, access, lab_id, expected=None, *, editable=False):
-    bank = (
+async def latest_bank(db, access, key):
+    return (
         await db.execute(
             select(QuestionBank)
-            .where(QuestionBank.class_id == access.classroom.id, QuestionBank.lab_id == lab_id)
+            .where(QuestionBank.class_id == access.classroom.id, QuestionBank.lesson_id == key)
             .order_by(QuestionBank.version.desc())
             .limit(1)
             .execution_options(populate_existing=True)
         )
     ).scalar_one_or_none()
-    if bank is None and 0 <= lab_id <= 8:
-        course_id = (
-            await db.execute(
-                select(ClassCourseVersion.course_version_id)
-                .where(ClassCourseVersion.class_id == access.classroom.id)
-                .order_by(ClassCourseVersion.version.desc())
-                .limit(1)
-            )
-        ).scalar_one_or_none()
-        if not course_id:
-            course_id = (
-                await db.execute(
-                    select(CourseVersion.id)
-                    .where(CourseVersion.status == "published")
-                    .order_by(CourseVersion.created_at.desc())
-                    .limit(1)
-                )
-            ).scalar_one_or_none()
+
+
+async def bank_for(db, access, target, expected=None, *, editable=False):
+    """Latest bank of a lab's Lab Test (int target) or of a quiz lesson (lesson id target)."""
+    key = lesson_key(target)
+    bank = await latest_bank(db, access, key)
+    if bank is None and (not isinstance(target, int) or 0 <= target <= 8):
+        course_id = await current_course_id(db, access)
         if course_id:
             await seed_banks(db, access, course_id)
             await db.commit()
-            bank = (
-                await db.execute(
-                    select(QuestionBank)
-                    .where(
-                        QuestionBank.class_id == access.classroom.id,
-                        QuestionBank.lab_id == lab_id,
-                    )
-                    .order_by(QuestionBank.version.desc())
-                    .limit(1)
-                    .execution_options(populate_existing=True)
-                )
-            ).scalar_one_or_none()
+            bank = await latest_bank(db, access, key)
     if bank is None:
         invalid("Lưu cấu hình giáo trình trước khi soạn ngân hàng.")
     if expected is not None and bank.revision != expected:
@@ -153,14 +182,18 @@ def policy_json(policy):
     return result
 
 
-async def view(db, access, lab_id):
+async def view(db, access, target):
     from app.services.question_generation import available
 
-    bank = await bank_for(db, access, lab_id)
+    bank = await bank_for(db, access, target)
     rows = await questions(db, bank.id)
-    policy = await db.get(QuizPolicy, (access.classroom.id, lab_id))
+    policy = await db.get(QuizPolicy, (access.classroom.id, bank.lesson_id))
     return {
         "id": bank.id,
+        "lesson_id": bank.lesson_id,
+        "lab_id": bank.lab_id,
+        "kind": "labtest" if is_labtest(bank.lesson_id) else "quiz",
+        "required_questions": required_questions(bank.lesson_id, policy),
         "version": bank.version,
         "revision": bank.revision,
         "status": bank.status,
@@ -236,8 +269,8 @@ def parse_import(request):
         )
 
 
-async def change_question(db, access, lab_id, request, question_id=None, action="save"):
-    bank = await bank_for(db, access, lab_id, request.expected_revision, editable=True)
+async def change_question(db, access, target, request, question_id=None, action="save"):
+    bank = await bank_for(db, access, target, request.expected_revision, editable=True)
     rows = await questions(db, bank.id)
     row = next((q for q in rows if q.id == question_id), None)
     if question_id and row is None:
@@ -266,18 +299,20 @@ async def change_question(db, access, lab_id, request, question_id=None, action=
         await add_questions(db, bank, [request.question.model_dump()])
     audit(db, access.user.id, "question." + action, bank.id, None, {"question_id": question_id})
     await db.commit()
-    return await view(db, access, lab_id)
+    return await view(db, access, target)
 
 
-async def publish(db, access, lab_id, request):
-    bank = await bank_for(db, access, lab_id, request.expected_revision, editable=True)
+async def publish(db, access, target, request):
+    bank = await bank_for(db, access, target, request.expected_revision, editable=True)
+    policy = await db.get(QuizPolicy, (access.classroom.id, bank.lesson_id))
     approved = [q for q in await questions(db, bank.id) if q.status == "approved"]
-    if len(approved) != 20:
+    need = required_questions(bank.lesson_id, policy)
+    if len(approved) < need:
         raise LMSError(
             409,
             "BANK_NOT_READY",
-            "Cần đúng 20 câu đã được giảng viên duyệt.",
-            {"approved_count": len(approved), "required": 20},
+            "Cần ít nhất 1 câu hỏi đã được giảng viên duyệt.",
+            {"approved_count": len(approved), "required": need},
         )
     validate_distinct([], [q.content for q in approved])
     for q in approved:
@@ -286,27 +321,27 @@ async def publish(db, access, lab_id, request):
             invalid("Câu đã duyệt cần người duyệt.")
     bank.status, bank.published_by = "published", access.user.id
     bank.revision += 1
-    policy = await db.get(QuizPolicy, (access.classroom.id, lab_id))
     policy.bank_id = bank.id
     policy.revision += 1
     audit(db, access.user.id, "bank.publish", bank.id, None, {"version": bank.version})
     await db.commit()
-    return await view(db, access, lab_id)
+    return await view(db, access, target)
 
 
-async def fork(db, access, lab_id, request):
-    bank = await bank_for(db, access, lab_id, request.expected_revision)
+async def fork(db, access, target, request):
+    bank = await bank_for(db, access, target, request.expected_revision)
     if bank.status != "published":
         invalid("Đã có phiên bản nháp đang soạn.")
     rows = await questions(db, bank.id)
-    target = next((q for q in rows if q.question_id == request.retire_question_id), None)
-    if request.retire_question_id and target is None:
+    retired = next((q for q in rows if q.question_id == request.retire_question_id), None)
+    if request.retire_question_id and retired is None:
         invalid("Không tìm thấy câu cần thu hồi.")
     new = QuestionBank(
         id=uid(),
         class_id=bank.class_id,
         course_version_id=bank.course_version_id,
-        lab_id=lab_id,
+        lab_id=bank.lab_id,
+        lesson_id=bank.lesson_id,
         version=bank.version + 1,
         created_by=access.user.id,
         reason=request.reason,
@@ -320,22 +355,22 @@ async def fork(db, access, lab_id, request):
                 bank_id=new.id,
                 question_id=q.question_id,
                 content=deepcopy(q.content),
-                status="retired" if q == target else q.status,
-                reviewer=None if q == target else q.reviewer,
-                reviewed_at=None if q == target else q.reviewed_at,
+                status="retired" if q == retired else q.status,
+                reviewer=None if q == retired else q.reviewer,
+                reviewed_at=None if q == retired else q.reviewed_at,
             )
         )
     affected = 0
-    if target:
+    if retired:
         affected = (
             await db.execute(
                 select(func.count())
                 .select_from(QuizAttemptItem)
-                .where(QuizAttemptItem.question_version_id == target.id)
+                .where(QuizAttemptItem.question_version_id == retired.id)
             )
         ).scalar_one()
         # Stop new attempts until a corrected edition is published. Existing snapshots remain valid.
-        policy = await db.get(QuizPolicy, (bank.class_id, lab_id))
+        policy = await db.get(QuizPolicy, (bank.class_id, bank.lesson_id))
         policy.bank_id = None
         policy.revision += 1
     audit(
@@ -351,23 +386,24 @@ async def fork(db, access, lab_id, request):
         },
     )
     await db.commit()
-    return {**await view(db, access, lab_id), "affected_attempts": affected}
+    return {**await view(db, access, target), "affected_attempts": affected}
 
 
-async def update_policy(db, access, lab_id, request):
-    policy = await db.get(QuizPolicy, (access.classroom.id, lab_id))
+async def update_policy(db, access, target, request):
+    key = lesson_key(target)
+    policy = await db.get(QuizPolicy, (access.classroom.id, key))
     if not policy or policy.revision != request.expected_revision:
         conflict()
-    for key, value in request.model_dump(exclude={"expected_revision"}).items():
-        setattr(policy, key, value)
+    for field, value in request.model_dump(exclude={"expected_revision"}).items():
+        setattr(policy, field, value)
     policy.revision += 1
     audit(
         db,
         access.user.id,
         "quiz.policy",
-        f"{access.classroom.id}:{lab_id}",
+        f"{access.classroom.id}:{key}",
         None,
         policy_json(policy),
     )
     await db.commit()
-    return await view(db, access, lab_id)
+    return await view(db, access, target)

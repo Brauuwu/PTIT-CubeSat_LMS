@@ -14,7 +14,7 @@ Cập nhật 19/10/2026 theo nội dung người dùng cung cấp và [lộ trì
 | 8 | 2 | 2 | 1 | 1 | 6 |
 | Tổng | 24 | 19 | 44 | 8 | 95 |
 
-Video, tài liệu và từng bài thực hành xen kẽ theo thứ tự giáo trình. Lab 0 giữ ba mục. Menu máy tính hiển thị đầy đủ số phần, nhãn loại nội dung và mã bài; điện thoại dùng bộ chọn phần học. Có nút Phần trước/Phần tiếp theo và trang tổng hợp riêng.
+Video, tài liệu và từng bài thực hành xen kẽ theo thứ tự giáo trình. Lab 0 là bộ khung 10 mục (Video 0.1, Doc 0.1, câu hỏi, Doc 0.2, câu hỏi, Video 0.2, Thực hành 3D, câu hỏi, Tổng hợp, Lab Test) với nội dung để trống, xem `fastapi-backend/app/firmware/curriculum/lab0/README.md`. Menu máy tính hiển thị đầy đủ số phần, nhãn loại nội dung và mã bài; điện thoại dùng bộ chọn phần học. Có nút Phần trước/Phần tiếp theo và trang tổng hợp riêng.
 
 ## Nội dung và đường dẫn
 
@@ -55,3 +55,13 @@ Nguồn: các repo trong https://github.com/PTITCube (Lab1, Lab3, Lab6 và các 
 Ánh xạ ID cũ → mới: `fastapi-backend/alembic/versions/0013_curriculum_restructure.py`. Migration đổi khóa trong `lab_progress.lesson_progress` (chuyển sang đúng hàng lab khi bài đổi lab) và có downgrade; cờ/ngày hoàn thành mức lab không bị sửa. Bản nháp trình duyệt dưới khóa cũ vẫn đọc được qua `loadDraft` (`src/components/editor/project-files.js`). Phiên bản khóa học đã xuất bản và lớp đang dùng không bị sửa; seed tạo phiên bản mới theo hash.
 
 Bài thực hành mới từ upstream không có log Serial bổ sung nên panel trực quan chỉ hiện dữ liệu sketch thực in; fixture `tests/fixtures/practice-serial.json` của các bài mới để trống dòng log.
+
+## Nâng cấp lớp lên phiên bản giáo trình mới
+
+Lớp đã xuất bản dùng cố định phiên bản giáo trình lúc xuất bản. Để lớp nhận nội dung mới của Lab 0:
+
+1. `npm run curriculum:export`, `alembic upgrade head`, `npm run curriculum:seed` (tạo phiên bản giáo trình mới).
+2. Sao lưu: `docker exec pscubesat-dev-postgres-1 pg_dump -U cubesat -d cubesat --no-owner > backup.sql`.
+3. Từ `fastapi-backend`: `python scripts/upgrade_class_course_version.py <class_id> --dry-run` (chạy đủ rồi hoàn tác), sau đó `--i-have-a-backup` để chạy thật. Script từ chối chạy nếu lớp có bản nháp chưa xuất bản hoặc tiến độ sau nâng cấp không khớp tiến độ trước.
+4. Bài mới được chép ở trạng thái tắt; giảng viên thêm URL video, tài liệu, câu hỏi trong Cấu hình chương trình rồi bật bài.
+

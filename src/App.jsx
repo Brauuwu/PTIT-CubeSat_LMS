@@ -92,7 +92,7 @@ function ServiceLayout() {
   const location = useLocation();
   const normalizedPath = location.pathname.length > 1 ? location.pathname.replace(/\/+$/, '') : location.pathname;
   const isAuthRoute = AUTH_ROUTES.includes(normalizedPath);
-  const isClassRoute = /^\/classes(?:\/\d+(?:\/(?:curriculum|learn|path|progress|report|labs\/[0-8]\/questions))?)?$/.test(normalizedPath) || ['/admin/users', '/admin/dashboard'].includes(normalizedPath) || normalizedPath === '/preview';
+  const isClassRoute = /^\/classes(?:\/\d+(?:\/(?:curriculum|learn|path|progress|report|labs\/[0-8]\/questions|lessons\/[^/]+\/questions))?)?$/.test(normalizedPath) || ['/admin/users', '/admin/dashboard'].includes(normalizedPath) || normalizedPath === '/preview';
   const isNotFoundRoute = !isAuthRoute && !isClassRoute && !APP_ROUTES.includes(normalizedPath);
   const isLabRoute = /^\/lab[0-8]$/.test(normalizedPath);
   const isClassLearningRoute = /^\/classes\/\d+\/learn$/.test(normalizedPath);
@@ -131,9 +131,10 @@ export default function App() {
         <Route path="/classes" element={<ClassesPage />} />
         <Route path="/classes/lab:labId" element={<LegacyLabAliasRedirect />} />
         <Route path="/classes/:classId" element={<ClassDetailPage />} />
-        <Route element={<LmsLayout roles={['admin', 'teacher']} />}>
+        <Route element={<LmsLayout nested roles={['admin', 'teacher']} />}>
           <Route path="/classes/:classId/curriculum" element={<ClassCurriculumPage />} />
           <Route path="/classes/:classId/labs/:labId/questions" element={<QuestionBankPage />} />
+          <Route path="/classes/:classId/lessons/:lessonId/questions" element={<QuestionBankPage />} />
           <Route path="/classes/:classId/progress" element={<ClassProgressPage />} />
           <Route path="/classes/:classId/report" element={<ClassReportPage />} />
         </Route>

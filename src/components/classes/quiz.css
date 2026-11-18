@@ -8,15 +8,38 @@
   justify-content: space-between;
   align-items: center;
   gap: 1.25rem;
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(12px);
+  background: #ffffff;
   border: 1px solid #cbe0f0;
   border-radius: 16px;
   padding: 1.1rem 1.4rem;
-  position: sticky;
-  top: 12px;
-  z-index: 5;
   box-shadow: 0 10px 26px -6px rgba(10, 65, 116, 0.1);
+}
+
+.quiz-choice-block {
+  margin: 8px 0;
+}
+
+.quiz-choice-note {
+  margin: 6px 0 0 14px;
+  padding: 8px 12px;
+  border-left: 3px solid #9cc9e8;
+  background: #f4f9fd;
+  border-radius: 0 8px 8px 0;
+  color: var(--text-body);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.quiz-picked {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--cubesat-navy);
+  background: #ebf6ff;
+  border: 1px solid #b7d8ef;
+  border-radius: 999px;
+  padding: 2px 10px;
+  white-space: nowrap;
 }
 
 .quiz-status p {
@@ -47,7 +70,9 @@
   box-shadow: 0 4px 14px rgba(10, 65, 116, 0.04);
 }
 
+/* A fieldset legend straddles the card's top border; floating it keeps the heading inside the white card. */
 .quiz-question legend {
+  float: left;
   padding: 0 0 0.75rem;
   margin-bottom: 0.5rem;
   border-bottom: 1px solid #eef5fb;
@@ -57,6 +82,10 @@
   color: var(--cubesat-ink);
   line-height: 1.6;
   overflow-wrap: anywhere;
+}
+
+.quiz-question legend + * {
+  clear: both;
 }
 
 .quiz-question legend span {
@@ -93,6 +122,41 @@
   border-color: var(--brand-primary);
   background: #e8f5ff;
   box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.12);
+}
+
+.lms-shell .quiz-choice.correct {
+  border-color: #16a34a;
+  background: #ecfdf3;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.12);
+}
+
+.lms-shell .quiz-choice.wrong {
+  border-color: #dc2626;
+  background: #fef2f2;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.quiz-choice.correct strong,
+.quiz-choice.correct .quiz-picked {
+  background: #d1fae5;
+  border-color: #86efac;
+  color: #166534;
+}
+
+.quiz-choice.wrong .quiz-picked {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #991b1b;
+}
+
+.quiz-choice-note.correct {
+  border-left-color: #16a34a;
+  background: #f0fdf4;
+}
+
+.quiz-choice-note.wrong {
+  border-left-color: #dc2626;
+  background: #fef2f2;
 }
 
 .quiz-choice input {
@@ -177,6 +241,39 @@
   box-shadow: 0 0 0 1px var(--cubesat-navy), 0 4px 12px rgba(14, 165, 233, 0.12);
 }
 
+.bank-row {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.bank-list .bank-row > button:first-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.bank-list .bank-delete {
+  flex: none;
+  width: 44px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  color: #b42318;
+  border-color: #f1c9c5;
+  background: #fff;
+  cursor: pointer;
+}
+
+.bank-list .bank-delete:hover:not(:disabled) {
+  background: #fdecea;
+  border-color: #b42318;
+}
+
+.bank-list .bank-delete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .bank-list small {
   display: block;
   color: var(--text-muted);
@@ -210,6 +307,29 @@
   margin-top: 2.3rem;
   width: 1.2rem;
   height: 1.2rem;
+}
+
+/* Short explanation under a choice: one dimmed line that grows with its content. */
+.bank-choice > .bank-choice-note {
+  grid-column: 2;
+  width: 100%;
+  min-height: 2.2rem;
+  max-height: 9rem;
+  margin: 0;
+  padding: 6px 12px;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--text-body);
+  background: #ffffff;
+  border: 1px solid #dce8f2;
+  border-radius: 10px;
+  resize: vertical;
+  field-sizing: content;
+}
+
+.bank-choice > .bank-choice-note::placeholder {
+  color: #8aa0b4;
+  font-style: italic;
 }
 
 .bank-choice-tf > select {

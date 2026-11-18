@@ -330,8 +330,9 @@ class LearningAPITests(unittest.IsolatedAsyncioTestCase):
         self.base = f"/api/classes/{self.class_a}"
         self.body = fixtures.settings_payload(await self.fixture.draft())
         for item in self.body["lessons"]:
-            active = item["lesson_id"] == "document" or item["lesson_id"].startswith(
-                "summary-"
+            # summary-0 is an empty Lab 0 scaffold slot, so it cannot be a required lesson.
+            active = item["lesson_id"] == "document" or (
+                item["lesson_id"].startswith("summary-") and item["lesson_id"] != "summary-0"
             )
             item["enabled"] = active or item["lesson_id"] == "Lab2-01a_Battery_I2C"
             item["required"] = active

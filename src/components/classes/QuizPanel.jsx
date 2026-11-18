@@ -4,7 +4,7 @@ import { Notice } from './LmsCommon';
 import { acknowledge, quizCacheKey, quizTabId, readQuizCache } from './quiz-storage';
 import './quiz.css';
 
-export default function QuizPanel({ classId, labId, onRefresh, policySummary }) {
+export default function QuizPanel({ classId, labId, lessonId = null, title = '', onRefresh, policySummary }) {
   const { user } = useAuth();
   const [attempt, setAttempt] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -17,7 +17,9 @@ export default function QuizPanel({ classId, labId, onRefresh, policySummary }) 
   const [tabId] = useState(() => quizTabId(sessionStorage));
   const state = useRef({ attempt: null, dirty: {}, pending: null, conflict: false, working: false, deadline: 0, lastSync: 0 });
   const startKey = useRef(null);
-  const base = `/api/classes/${classId}/labs/${labId}/attempts`;
+  const base = lessonId
+    ? `/api/classes/${classId}/lessons/${encodeURIComponent(lessonId)}/attempts`
+    : `/api/classes/${classId}/labs/${labId}/attempts`;
   const cacheKey = useCallback(id => quizCacheKey(user.id, classId, id, tabId), [user.id, classId, tabId]);
   const persist = useCallback(() => {
     const current = state.current;
@@ -142,13 +144,13 @@ export default function QuizPanel({ classId, labId, onRefresh, policySummary }) 
   if (loading) return <p role="status">Đang khôi phục lượt thi…</p>;
   const active = attempt?.status === 'active';
   const selections = { ...attempt?.answers, ...dirty };
-  return <section className="quiz-panel" aria-label={`Bài kiểm tra Lab ${labId}`}>
+  return <section className="quiz-panel" aria-label={lessonId ? `Câu hỏi ${title || lessonId}` : `Bài kiểm tra Lab ${labId}`}>
     <Notice {...notice} />
-    {!attempt && <><h3>Kiểm tra cuối Lab {labId}</h3><p>Đề gồm 5 câu, thời gian {policySummary.time_limit_minutes} phút, đạt từ {policySummary.pass_score}/5 điểm. Số lượt tiêu chuẩn: {policySummary.max_attempts}.</p><p>Thời gian bắt đầu tính ngay khi bạn mở đề; tải lại trang sẽ giữ nguyên lượt thi.</p><button className="lms-primary" onClick={start} disabled={busy}>Bắt đầu làm bài</button></>}
+    {!attempt && <><h3>{lessonId ? (title || 'Câu hỏi kiểm tra') : `Kiểm tra cuối Lab ${labId}`}</h3><p>Đề gồm toàn bộ câu hỏi giáo viên đã duyệt, thời gian {policySummary.time_limit_minutes} phút, đạt từ {policySummary.pass_score} câu đúng. Số lượt tiêu chuẩn: {policySummary.max_attempts}.</p><p>Thời gian bắt đầu tính ngay khi bạn mở đề; tải lại trang sẽ giữ nguyên lượt thi.</p><button className="lms-primary" onClick={start} disabled={busy}>Bắt đầu làm bài</button></>}
     {attempt && <>
-      <div className="quiz-status"><div><strong>Lượt {attempt.number}</strong><p>Đạt từ {attempt.policy.pass_score}/5 · Còn {attempt.remaining_attempts} lượt sau lượt này</p></div>
+      <div className="quiz-status"><div><strong>Lượt {attempt.number}</strong><p>Đạt từ {attempt.policy.pass_score}/{attempt.items.length} · Còn {attempt.remaining_attempts} lượt sau lượt này</p></div>
         {active ? <div><strong className="quiz-clock" aria-label="Thời gian còn lại">{Math.floor(seconds / 60)}:{String(seconds % 60).padStart(2, '0')}</strong><p role="status">{Object.keys(dirty).length ? 'Đang chờ lưu…' : 'Đã lưu trên server'}</p></div>
-          : <div><strong className="quiz-score">{attempt.score}/5</strong><p>{attempt.passed ? 'Đã đạt' : 'Chưa đạt'} · Cao nhất {attempt.highest_score}/5</p></div>}
+          : <div><strong className="quiz-score">{attempt.score}/{attempt.items.length}</strong><p>{attempt.passed ? 'Đã đạt' : 'Chưa đạt'} · Cao nhất {attempt.highest_score}/{attempt.items.length}</p></div>}
       </div>
       {conflict && <div className="lms-confirm"><p>Giữ lựa chọn vừa sửa trên thiết bị này hay tải lựa chọn đã lưu từ tab khác?</p><div className="lms-actions"><button disabled={busy} onClick={() => resolve(true)}>Giữ lựa chọn trên thiết bị</button><button disabled={busy} onClick={() => resolve(false)}>Dùng bản đã lưu trên server</button></div></div>}
       {!active && <p>{attempt.status === 'expired' ? 'Hết thời gian làm bài. ' : ''}{attempt.revealed ? 'Đáp án được công bố theo cấu hình của giảng viên.' : 'Đáp án và giải thích chưa được công bố.'}</p>}
@@ -163,18 +165,32 @@ export default function QuizPanel({ classId, labId, onRefresh, policySummary }) 
             if (k && v) tfSelected[k] = v;
           });
         }
+        // Explanations are keyed by the choice id, so they follow the choice wherever the shuffle put it.
+        const explain = (choiceId, tone = '') => {
+          const text = item.choice_explanations?.[choiceId];
+          return !active && text ? <p className={`quiz-choice-note${tone}`}>{text}</p> : null;
+        };
+        // After the answers are shown: green for a right choice, red for a choice the student picked wrongly.
+        const revealedItem = !active && Boolean(item.correct_choice_id);
+        const verdict = (correct, picked) => (revealedItem ? (correct ? ' correct' : picked ? ' wrong' : '') : '');
         return <fieldset className="quiz-question" key={item.id} disabled={!active || busy || conflict || seconds === 0}>
           <legend><span>Câu {index + 1}</span> {item.prompt}</legend>
-          {qType === 'single_choice' && item.choices.map(choice => <label className={`quiz-choice${currentAns === choice.id ? ' selected' : ''}`} key={choice.id}>
-            <input type="radio" name={item.id} checked={currentAns === choice.id} onChange={() => choose(item.id, choice.id)} />
-            <span>{choice.text}</span>{item.correct_choice_id === choice.id && <strong>Đáp án đúng</strong>}
-          </label>)}
+          {qType === 'single_choice' && item.choices.map(choice => { const tone = verdict(item.correct_choice_id === choice.id, currentAns === choice.id); return <div className="quiz-choice-block" key={choice.id}>
+            <label className={`quiz-choice${currentAns === choice.id ? ' selected' : ''}${tone}`}>
+              <input type="radio" name={item.id} checked={currentAns === choice.id} onChange={() => choose(item.id, choice.id)} />
+              <span>{choice.text}</span>
+              {!active && currentAns === choice.id && <em className="quiz-picked">Bạn đã chọn</em>}
+              {item.correct_choice_id === choice.id && <strong>Đáp án đúng</strong>}
+            </label>
+            {explain(choice.id, tone)}
+          </div>; })}
           {qType === 'multiple_choice' && <>
             <small className="lms-secondary">Chọn tất cả các phương án đúng:</small>
             {item.choices.map(choice => {
               const isChecked = multiSelected.has(choice.id);
               const isCorrectChoice = item.correct_choice_id?.split('|').includes(choice.id);
-              return <label className={`quiz-choice${isChecked ? ' selected' : ''}`} key={choice.id}>
+              const tone = verdict(isCorrectChoice, isChecked);
+              return <div className="quiz-choice-block" key={choice.id}><label className={`quiz-choice${isChecked ? ' selected' : ''}${tone}`}>
                 <input
                   type="checkbox"
                   checked={isChecked}
@@ -186,8 +202,10 @@ export default function QuizPanel({ classId, labId, onRefresh, policySummary }) 
                     if (sorted) choose(item.id, sorted);
                   }}
                 />
-                <span>{choice.text}</span>{isCorrectChoice && <strong>Đáp án đúng</strong>}
-              </label>;
+                <span>{choice.text}</span>
+                {!active && isChecked && <em className="quiz-picked">Bạn đã chọn</em>}
+                {isCorrectChoice && <strong>Đáp án đúng</strong>}
+              </label>{explain(choice.id, tone)}</div>;
             })}
           </>}
           {qType === 'true_false' && <>
@@ -195,7 +213,9 @@ export default function QuizPanel({ classId, labId, onRefresh, policySummary }) 
             {item.choices.map((choice, cIdx) => {
               const letter = String.fromCharCode(97 + cIdx);
               const val = tfSelected[choice.id] || '';
-              return <div className="quiz-choice quiz-tf-row" key={choice.id}>
+              const rightVal = item.correct_choice_id ? Object.fromEntries(item.correct_choice_id.split('|').map(pair => pair.split(':'))) : {};
+              const tone = verdict(Boolean(val) && val === rightVal[choice.id], Boolean(val));
+              return <div className="quiz-choice-block" key={choice.id}><div className={`quiz-choice quiz-tf-row${tone}`}>
                 <span><strong>{letter})</strong> {choice.text}</span>
                 <div className="quiz-tf-options">
                   {['Đ', 'S'].map(opt => (
@@ -214,7 +234,8 @@ export default function QuizPanel({ classId, labId, onRefresh, policySummary }) 
                     </label>
                   ))}
                 </div>
-              </div>;
+                {!active && val && <em className="quiz-picked">Bạn chọn: {val === 'Đ' ? 'Đúng' : 'Sai'}</em>}
+              </div>{explain(choice.id, tone)}</div>;
             })}
             {item.correct_choice_id && <p className="lms-secondary"><strong>Đáp án đúng:</strong> {item.correct_choice_id}</p>}
           </>}
@@ -237,21 +258,10 @@ export default function QuizPanel({ classId, labId, onRefresh, policySummary }) 
               {item.correct_choice_id && <p className="lms-secondary"><strong>Đáp án đúng:</strong> {item.correct_choice_id}</p>}
             </div>
           )}
-          {!active && item.choice_explanations && Object.entries(item.choice_explanations).map(([choiceId, explanation]) => {
-            if (!explanation) return null;
-            const selectedValue = qType === 'true_false'
-              ? tfSelected[choiceId]
-              : qType === 'multiple_choice'
-              ? (multiSelected.has(choiceId) ? 'Đã chọn' : 'Không chọn')
-              : (currentAns === choiceId ? 'Bạn đã chọn' : '');
-            return <p className="quiz-choice-explanation" key={choiceId}>
-              <strong>Phương án {choiceId.toUpperCase()} {selectedValue ? `(${selectedValue})` : ''}:</strong> {explanation}
-            </p>;
-          })}
           {item.explanation && <div className="quiz-explanation"><p>{item.explanation}</p><small>Nguồn: {item.source_reference}</small></div>}
         </fieldset>;
       })}
-      {active ? <div className="quiz-footer"><p>Đã chọn {Object.keys(selections).length}/5 câu. Hết giờ, server chấm phần đã lưu.</p><button className="lms-primary" disabled={busy || conflict || seconds === 0} onClick={submit}>{busy ? 'Đang nộp…' : 'Nộp bài'}</button></div>
+      {active ? <div className="quiz-footer"><p>Đã chọn {Object.keys(selections).length}/{attempt.items.length} câu. Hết giờ, server chấm phần đã lưu.</p><button className="lms-primary" disabled={busy || conflict || seconds === 0} onClick={submit}>{busy ? 'Đang nộp…' : 'Nộp bài'}</button></div>
         : <div className="lms-actions"><button disabled={busy} onClick={() => resolve(false)}>Cập nhật kết quả</button>{attempt.remaining_attempts > 0 && !attempt.revealed && <button onClick={start} disabled={busy}>Làm lượt tiếp theo</button>}</div>}
     </>}
   </section>;
