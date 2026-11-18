@@ -70,7 +70,9 @@
   box-shadow: 0 4px 14px rgba(10, 65, 116, 0.04);
 }
 
+/* A fieldset legend straddles the card's top border; floating it keeps the heading inside the white card. */
 .quiz-question legend {
+  float: left;
   padding: 0 0 0.75rem;
   margin-bottom: 0.5rem;
   border-bottom: 1px solid #eef5fb;
@@ -80,6 +82,10 @@
   color: var(--cubesat-ink);
   line-height: 1.6;
   overflow-wrap: anywhere;
+}
+
+.quiz-question legend + * {
+  clear: both;
 }
 
 .quiz-question legend span {
@@ -116,6 +122,41 @@
   border-color: var(--brand-primary);
   background: #e8f5ff;
   box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.12);
+}
+
+.lms-shell .quiz-choice.correct {
+  border-color: #16a34a;
+  background: #ecfdf3;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.12);
+}
+
+.lms-shell .quiz-choice.wrong {
+  border-color: #dc2626;
+  background: #fef2f2;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.quiz-choice.correct strong,
+.quiz-choice.correct .quiz-picked {
+  background: #d1fae5;
+  border-color: #86efac;
+  color: #166534;
+}
+
+.quiz-choice.wrong .quiz-picked {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #991b1b;
+}
+
+.quiz-choice-note.correct {
+  border-left-color: #16a34a;
+  background: #f0fdf4;
+}
+
+.quiz-choice-note.wrong {
+  border-left-color: #dc2626;
+  background: #fef2f2;
 }
 
 .quiz-choice input {
