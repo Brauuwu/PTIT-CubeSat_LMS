@@ -3,17 +3,67 @@ import { Link, useParams } from 'react-router-dom';
 import { request } from '../contexts/auth-api';
 import { Notice } from '../components/classes/LmsCommon';
 import { useLmsResource } from '../components/classes/use-lms-resource';
+import { useConfirm } from '../components/classes/use-confirm';
 import { InlineQuestionBank } from './QuestionBankPage';
 
-const labels = { video: 'Video', document: 'Tài liệu', practice: 'Thực hành', labtest: 'Lab test' };
+const labels = { video: 'Video', document: 'Tài liệu', practice: 'Thực hành', quiz: 'Câu hỏi', labtest: 'Lab test' };
 const fields = {
   video: [['url', 'URL video (HTTPS)', 'url'], ['watch_ratio', 'Tỷ lệ xem cần đạt (0–1)', 'number'], ['duration_seconds', 'Thời lượng video (giây)', 'number'], ['tracking_mode', 'Cách ghi nhận video', 'tracking'], ['confirmation_allowed', 'Cho phép SV xác nhận đã xem', 'boolean']],
   document: [['markdown', 'Nội dung tài liệu (Markdown)', 'textarea']],
   practice: [['instructions', 'Hướng dẫn thực hành', 'textarea'], ['rubric', 'Tiêu chí chấm', 'textarea'], ['evidence', 'Minh chứng đầu ra', 'textarea'], ['board', 'Bo mạch', 'board']],
-  labtest: [['time_limit_minutes', 'Thời gian làm bài (phút)', 'number'], ['max_attempts', 'Số lượt làm tối đa', 'number'], ['pass_score', 'Số câu đúng để đạt (trên 5)', 'number']],
+  quiz: [['time_limit_minutes', 'Thời gian làm bài (phút)', 'number'], ['max_attempts', 'Số lượt làm tối đa', 'number'], ['pass_score', 'Số câu đúng để đạt', 'number']],
+  labtest: [['time_limit_minutes', 'Thời gian làm bài (phút)', 'number'], ['max_attempts', 'Số lượt làm tối đa', 'number'], ['pass_score', 'Số câu đúng tối thiểu để đạt', 'number']],
 };
 
+const MAX_DOCUMENT_BYTES = 10 * 1024 * 1024;
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result).split(',', 2)[1] || '');
+    reader.onerror = () => reject(new Error('Không đọc được tệp.'));
+    reader.readAsDataURL(file);
+  });
+}
+
 function LessonSettings({ lesson, labId, classId, onChange, onReload, disabled }) {
+  const [importing, setImporting] = useState(false);
+  const [importNotice, setImportNotice] = useState({});
+  const { ask: askConfirm, dialog: confirmDialog } = useConfirm();
+  async function importDocument(event) {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+    if (!/\.(docx|pdf)$/i.test(file.name)) {
+      setImportNotice({ error: 'Chọn tệp .docx hoặc .pdf. Word cũ (.doc) hãy mở bằng Word và lưu lại thành .docx.' });
+      return;
+    }
+    if (file.size > MAX_DOCUMENT_BYTES) {
+      setImportNotice({ error: 'Tệp vượt quá giới hạn 10 MB.' });
+      return;
+    }
+    const current = lesson.params.markdown ?? lesson.content.markdown ?? '';
+    if (current.trim() && !(await askConfirm({
+      title: 'Thay thế nội dung tài liệu?',
+      message: `Nội dung đang soạn sẽ được thay bằng nội dung đọc từ tệp “${file.name}”. Bạn vẫn có thể chỉnh sửa trước khi lưu nháp.`,
+      confirmLabel: 'Thay thế',
+      tone: 'info',
+    }))) return;
+    setImporting(true);
+    setImportNotice({});
+    try {
+      const result = await request(`/api/classes/${classId}/document-import`, {
+        method: 'POST',
+        body: JSON.stringify({ filename: file.name, content: await fileToBase64(file) }),
+      });
+      param('markdown', result.markdown);
+      setImportNotice({ message: `Đã nhập ${result.characters.toLocaleString('vi-VN')} ký tự từ ${file.name}. Hãy xem lại nội dung rồi bấm Lưu nháp. ${(result.warnings || []).join(' ')}` });
+    } catch (error) {
+      setImportNotice({ error: error.message });
+    } finally {
+      setImporting(false);
+    }
+  }
   function param(key, value) {
     const params = { ...lesson.params };
     if (value === '') delete params[key]; else params[key] = value;
@@ -33,14 +83,23 @@ function LessonSettings({ lesson, labId, classId, onChange, onReload, disabled }
       </div>
       {todos.length > 0 && <div className="curriculum-todo">{todos.map(todo => <p key={todo}>{todo}</p>)}</div>}
       {lesson.type === 'labtest' && lesson.content.bank_ready && (
-        <p className="lesson-achieved">✓ Ngân hàng 20 câu hỏi của Lab {labId} đã được duyệt và xuất bản.</p>
+        <p className="lesson-achieved">✓ Ngân hàng câu hỏi của Lab {labId} đã được duyệt và xuất bản.</p>
       )}
+      {lesson.type === 'video' && <p className="lms-secondary">Video YouTube/Vimeo không đo được đoạn xem: chọn cách ghi nhận "SV xác nhận" và bật cho phép xác nhận. Video .mp4/.webm dùng "Đo đoạn xem" và cần nhập thời lượng.</p>}
+      {lesson.type === 'quiz' && <p className="lms-secondary">Soạn và xuất bản câu hỏi ở khung bên dưới trước, sau đó mới bật bài này. Sinh viên chỉ hoàn thành bài khi đạt điểm.</p>}
+      {lesson.type === 'document' && <div className="lms-import-box">
+        <label>Nhập từ tệp Word (.docx) hoặc PDF
+          <input type="file" accept=".docx,.pdf,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" disabled={importing} onChange={importDocument} />
+        </label>
+        <p className="lms-secondary">Tệp tối đa 10 MB. Nội dung được chuyển thành Markdown để bạn xem lại và chỉnh sửa trước khi lưu; hình ảnh không được nhập. {importing && 'Đang đọc tệp…'}</p>
+        <Notice {...importNotice} />
+      </div>}
       <div className="lms-form-grid">{[...fields[lesson.type], ['estimated_minutes', 'Thời lượng dự kiến (phút)', 'number']].map(([key, label, kind]) => {
         const value = lesson.params[key] ?? lesson.content[key] ?? '';
         const numberBounds = key === 'watch_ratio'
           ? { min: 0, max: 1, step: '0.05' }
           : key === 'pass_score'
-          ? { min: 1, max: 5, step: '1' }
+          ? { min: 1, max: 200, step: '1' }
           : key === 'time_limit_minutes'
           ? { min: 1, max: 180, step: '1' }
           : key === 'max_attempts'
@@ -49,17 +108,18 @@ function LessonSettings({ lesson, labId, classId, onChange, onReload, disabled }
         return <label key={key} className={kind === 'textarea' ? 'lms-wide' : ''}>{label}
           {kind === 'boolean' ? <input type="checkbox" checked={!!value} onChange={event => param(key, event.target.checked)} />
             : kind === 'tracking' ? <select value={value || 'native'} onChange={event => param(key, event.target.value)}><option value="native">Đo đoạn xem (video .mp4/.webm)</option><option value="confirmation">SV xác nhận (nguồn không đo được)</option></select>
-            : kind === 'textarea' ? <textarea rows={5} maxLength={20000} value={value} onChange={event => param(key, event.target.value)} />
+            : kind === 'textarea' ? <textarea rows={8} maxLength={100000} value={value} onChange={event => param(key, event.target.value)} />
             : kind === 'board' ? <select value={value} onChange={event => param(key, event.target.value)}><option value="">Theo lựa chọn của người học</option><option value="esp32">ESP32</option><option value="esp32s3">ESP32-S3</option></select>
               : <input type={kind} {...(kind === 'number' ? numberBounds : { maxLength: 2000 })} value={value} onChange={event => param(key, event.target.value === '' ? '' : kind === 'number' ? Number(event.target.value) : event.target.value)} />}
         </label>;
       })}</div>
     </fieldset>
-    {lesson.type === 'labtest' && (
+    {(lesson.type === 'labtest' || lesson.type === 'quiz') && (
       <div className="lms-import-box" style={{ marginTop: '16px' }}>
-        <InlineQuestionBank classId={classId} labId={labId} onPublished={onReload} />
+        <InlineQuestionBank classId={classId} labId={labId} lessonId={lesson.type === 'quiz' ? lesson.id : null} onPublished={onReload} />
       </div>
     )}
+    {confirmDialog}
   </details>;
 }
 

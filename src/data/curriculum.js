@@ -1,5 +1,7 @@
 // Lesson order follows the PTITCube syllabus README (https://github.com/PTITCube/.github, checked 2026-11-17):
 // video -> doc -> câu hỏi -> ... -> tổng hợp -> Lab Test. Practice IDs never change; quiz/labtest pages carry no answers.
+// Lab 0/1 `quiz-N-M` items are server-graded quiz lessons (banks keyed by lesson id). Items with `checkpointId`
+// (Lab 2-8) are self-review pages of the legacy view only and are not exported to the course model.
 export const CURRICULUM = {
   "0": {
     "objective": "Nắm vững lịch sử, tiêu chuẩn kích thước CubeSat 1U, ống phóng P-POD, môi trường vật lý quỹ đạo LEO và nguyên lý 6 phân hệ cốt lõi.",
@@ -8,61 +10,55 @@ export const CURRICULUM = {
         "id": "overview",
         "type": "video",
         "label": "Video 0.1",
-        "title": "Giới thiệu tổng quan về kỷ nguyên vệ tinh nhỏ CubeSat và các phân hệ trên không gian",
-        "videoUrl": ""
+        "title": "Kỷ nguyên vệ tinh nhỏ CubeSat và các phân hệ trên không gian"
       },
       {
         "id": "document",
         "type": "document",
         "label": "Doc 0.1",
-        "title": "Lịch sử CubeSat, tiêu chuẩn kỹ thuật CalPoly, ống phóng P-POD và môi trường quỹ đạo LEO"
+        "title": "Lịch sử CubeSat, chuẩn CalPoly, ống phóng P-POD và môi trường quỹ đạo LEO"
       },
       {
-        "id": "quiz-doc-0-1",
+        "id": "quiz-0-1",
         "type": "quiz",
-        "label": "Câu hỏi",
-        "title": "Câu hỏi kiểm tra Doc 0.1",
-        "checkpointId": "doc-0-1"
+        "label": "Câu hỏi Doc 0.1",
+        "title": "Câu hỏi kiểm tra Doc 0.1"
       },
       {
         "id": "document-0-2",
         "type": "document",
         "label": "Doc 0.2",
-        "title": "Kiến trúc hệ thống vệ tinh 1U và vai trò 6 phân hệ cốt lõi (OBC, EPS, Sensors & Payload, COM, Structure, ADCS)"
+        "title": "Kiến trúc vệ tinh 1U và vai trò 6 phân hệ cốt lõi"
       },
       {
-        "id": "quiz-doc-0-2",
+        "id": "quiz-0-2",
         "type": "quiz",
-        "label": "Câu hỏi",
-        "title": "Câu hỏi kiểm tra Doc 0.2",
-        "checkpointId": "doc-0-2"
+        "label": "Câu hỏi Doc 0.2",
+        "title": "Câu hỏi kiểm tra Doc 0.2"
       },
       {
         "id": "video-0-2",
         "type": "video",
         "label": "Video 0.2",
-        "title": "Demo tương tác với mô hình vệ tinh 3D thời gian thực trên nền WebGL",
-        "videoUrl": ""
+        "title": "Demo tương tác mô hình vệ tinh 3D thời gian thực (WebGL)"
       },
       {
         "id": "components",
         "type": "components",
         "label": "Thực hành",
-        "title": "Khám phá mô hình 3D và phân tích thông số kỹ thuật từng phân hệ"
+        "title": "Khám phá và phân tích các phân hệ trên mô hình 3D"
       },
       {
-        "id": "quiz-practice-0",
+        "id": "quiz-0-3",
         "type": "quiz",
-        "label": "Câu hỏi",
-        "title": "Câu hỏi kiểm tra Thực hành",
-        "checkpointId": "practice-0"
+        "label": "Câu hỏi Thực hành",
+        "title": "Câu hỏi kiểm tra Thực hành"
       },
       {
         "id": "summary-0",
         "type": "summary",
         "label": "Tổng hợp",
-        "title": "Tổng hợp Lab 0",
-        "description": "Nắm vững cấu trúc tổng thể và mối tương quan phối hợp giữa các phân hệ trên vệ tinh."
+        "title": "Tổng hợp Lab 0"
       },
       {
         "id": "labtest-0",
@@ -86,47 +82,44 @@ export const CURRICULUM = {
         "id": "document-1-1",
         "type": "document",
         "label": "Doc 1.1",
-        "title": "Kiến trúc phần cứng ESP32-WROOM-32, chân Strapping an toàn và bộ nhớ SRAM/Flash"
+        "title": "Kiến trúc phần cứng ESP32-WROOM-32, chân Strapping Pins an toàn và bộ nhớ SRAM/Flash"
       },
       {
-        "id": "quiz-doc-1-1",
+        "id": "quiz-1-1",
         "type": "quiz",
-        "label": "Câu hỏi",
-        "title": "Câu hỏi kiểm tra Doc 1.1",
-        "checkpointId": "doc-1-1"
+        "label": "Câu hỏi Doc 1.1",
+        "title": "Câu hỏi kiểm tra Doc 1.1"
       },
       {
         "id": "video-1-2",
         "type": "video",
         "label": "Video 1.2",
-        "title": "Biên dịch mã nguồn trên Cloud và nạp firmware lần đầu",
+        "title": "Hướng dẫn biên dịch mã nguồn trên Cloud và nạp firmware lần đầu",
         "videoUrl": ""
       },
       {
         "id": "document-1-2",
         "type": "document",
         "label": "Doc 1.2",
-        "title": "Môi trường lập trình Web IDE và nạp firmware trực tiếp qua Web Serial API"
+        "title": "Môi trường lập trình Web IDE và giao thức nạp firmware trực tiếp Web Serial API"
       },
       {
-        "id": "quiz-doc-1-2",
+        "id": "quiz-1-2",
         "type": "quiz",
-        "label": "Câu hỏi",
-        "title": "Câu hỏi kiểm tra Doc 1.2",
-        "checkpointId": "doc-1-2"
+        "label": "Câu hỏi Doc 1.2",
+        "title": "Câu hỏi kiểm tra Doc 1.2"
       },
       {
-        "id": "document-1-3",
+        "id": "doc-1-3",
         "type": "document",
         "label": "Doc 1.3",
-        "title": "Điều khiển LED đơn, chuỗi LED và điều chế xung LEDC PWM"
+        "title": "Nguyên lý phần cứng và lập trình điều khiển LED đơn, chuỗi LED và điều chế xung LEDC PWM"
       },
       {
-        "id": "quiz-doc-1-3",
+        "id": "quiz-1-3",
         "type": "quiz",
-        "label": "Câu hỏi",
-        "title": "Câu hỏi kiểm tra Doc 1.3",
-        "checkpointId": "doc-1-3"
+        "label": "Câu hỏi Doc 1.3",
+        "title": "Câu hỏi kiểm tra Doc 1.3"
       },
       {
         "id": "Lab1-01_Blink_LED",
@@ -153,24 +146,22 @@ export const CURRICULUM = {
         "repositoryUrl": "https://github.com/PTITCube/Lab1-03_PWM_LED"
       },
       {
-        "id": "quiz-practice-1-led",
+        "id": "quiz-1-4",
         "type": "quiz",
-        "label": "Câu hỏi",
-        "title": "Câu hỏi kiểm tra Thực hành LED",
-        "checkpointId": "practice-1-led"
+        "label": "Câu hỏi Thực hành LED",
+        "title": "Câu hỏi kiểm tra Thực hành LED"
       },
       {
-        "id": "document-1-button",
+        "id": "doc-1-4",
         "type": "document",
         "label": "Doc 1.4",
-        "title": "Nút nhấn cơ học: điện trở kéo lên INPUT_PULLUP và chống rung Debounce bằng phần mềm"
+        "title": "Nguyên lý và lập trình nút nhấn cơ học: INPUT_PULLUP và chống rung Debounce"
       },
       {
-        "id": "quiz-doc-1-4",
+        "id": "quiz-1-5",
         "type": "quiz",
-        "label": "Câu hỏi",
-        "title": "Câu hỏi kiểm tra Doc 1.4",
-        "checkpointId": "doc-1-4"
+        "label": "Câu hỏi Doc 1.4",
+        "title": "Câu hỏi kiểm tra Doc 1.4"
       },
       {
         "id": "Lab1-03_Button",
@@ -189,24 +180,22 @@ export const CURRICULUM = {
         "repositoryUrl": "https://github.com/PTITCube/Lab1-04_LED_Button"
       },
       {
-        "id": "quiz-practice-1-button",
+        "id": "quiz-1-6",
         "type": "quiz",
-        "label": "Câu hỏi",
-        "title": "Câu hỏi kiểm tra Thực hành Nút Nhấn",
-        "checkpointId": "practice-1-button"
+        "label": "Câu hỏi Thực hành Nút nhấn",
+        "title": "Câu hỏi kiểm tra Thực hành Nút nhấn"
       },
       {
-        "id": "document-1-74hc595",
+        "id": "doc-1-5",
         "type": "document",
         "label": "Doc 1.5",
-        "title": "IC dịch bit chốt dữ liệu 74HC595 và điều khiển LED 7 đoạn"
+        "title": "Vi mạch dịch bit chốt dữ liệu 74HC595 và điều khiển LED 7 đoạn"
       },
       {
-        "id": "quiz-doc-1-5",
+        "id": "quiz-1-7",
         "type": "quiz",
-        "label": "Câu hỏi",
-        "title": "Câu hỏi kiểm tra Doc 1.5",
-        "checkpointId": "doc-1-5"
+        "label": "Câu hỏi Doc 1.5",
+        "title": "Câu hỏi kiểm tra Doc 1.5"
       },
       {
         "id": "Lab1-05_7_Segment_LED",
@@ -217,24 +206,22 @@ export const CURRICULUM = {
         "repositoryUrl": "https://github.com/PTITCube/Lab1-05_7_Segment_LED"
       },
       {
-        "id": "quiz-practice-1-74hc595",
+        "id": "quiz-1-8",
         "type": "quiz",
-        "label": "Câu hỏi",
-        "title": "Câu hỏi kiểm tra Thực hành 74HC595",
-        "checkpointId": "practice-1-74hc595"
+        "label": "Câu hỏi Thực hành 74HC595",
+        "title": "Câu hỏi kiểm tra Thực hành 74HC595"
       },
       {
-        "id": "document-1-uart",
+        "id": "doc-1-6",
         "type": "document",
         "label": "Doc 1.6",
-        "title": "Giao tiếp nối tiếp bất đồng bộ UART và truyền nhận ký tự với máy tính ở 115200 bps"
+        "title": "Giao tiếp nối tiếp bất đồng bộ UART và truyền nhận ký tự hai chiều ở 115200 bps"
       },
       {
-        "id": "quiz-doc-1-6",
+        "id": "quiz-1-9",
         "type": "quiz",
-        "label": "Câu hỏi",
-        "title": "Câu hỏi kiểm tra Doc 1.6",
-        "checkpointId": "doc-1-6"
+        "label": "Câu hỏi Doc 1.6",
+        "title": "Câu hỏi kiểm tra Doc 1.6"
       },
       {
         "id": "Lab1-06_Serial_Communication",
@@ -253,40 +240,37 @@ export const CURRICULUM = {
         "repositoryUrl": "https://github.com/PTITCube/Lab1-07_Serial_Control_LED"
       },
       {
-        "id": "quiz-practice-1-uart",
+        "id": "quiz-1-10",
         "type": "quiz",
-        "label": "Câu hỏi",
-        "title": "Câu hỏi kiểm tra Thực hành UART",
-        "checkpointId": "practice-1-uart"
+        "label": "Câu hỏi Thực hành UART",
+        "title": "Câu hỏi kiểm tra Thực hành UART"
       },
       {
-        "id": "document-1-4",
+        "id": "doc-1-7",
         "type": "document",
         "label": "Doc 1.7",
-        "title": "Mạng không dây 802.11 (STA và SoftAP) và máy chủ Web HTTP nhúng xử lý GET/POST"
+        "title": "Mạng không dây 802.11 (STA và SoftAP) và máy chủ Web HTTP nhúng GET/POST"
       },
       {
-        "id": "quiz-doc-1-7",
+        "id": "quiz-1-11",
         "type": "quiz",
-        "label": "Câu hỏi",
-        "title": "Câu hỏi kiểm tra Doc 1.7",
-        "checkpointId": "doc-1-7"
+        "label": "Câu hỏi Doc 1.7",
+        "title": "Câu hỏi kiểm tra Doc 1.7"
       },
       {
-        "id": "document-1-millis",
+        "id": "doc-1-8",
         "type": "document",
         "label": "Doc 1.8",
-        "title": "Định thời Non-blocking với millis() và an toàn chống tràn số sau 49.7 ngày"
+        "title": "Lập trình C++ định thời non-blocking với millis() và an toàn tràn số sau 49,7 ngày"
       },
       {
-        "id": "quiz-doc-1-8",
+        "id": "quiz-1-12",
         "type": "quiz",
-        "label": "Câu hỏi",
-        "title": "Câu hỏi kiểm tra Doc 1.8",
-        "checkpointId": "doc-1-8"
+        "label": "Câu hỏi Doc 1.8",
+        "title": "Câu hỏi kiểm tra Doc 1.8"
       },
       {
-        "id": "video-1-4",
+        "id": "video-1-5",
         "type": "video",
         "label": "Video 1.3",
         "title": "Giới thiệu về kết nối WiFi và Máy chủ Web nhúng",
@@ -317,11 +301,10 @@ export const CURRICULUM = {
         "repositoryUrl": "https://github.com/PTITCube/Lab1-10_Web_Server_LED"
       },
       {
-        "id": "quiz-practice-1-wifi",
+        "id": "quiz-1-13",
         "type": "quiz",
-        "label": "Câu hỏi",
-        "title": "Câu hỏi kiểm tra Thực hành WiFi & Web Server",
-        "checkpointId": "practice-1-wifi"
+        "label": "Câu hỏi Thực hành WiFi & Web Server",
+        "title": "Câu hỏi kiểm tra Thực hành WiFi & Web Server"
       },
       {
         "id": "summary-1",

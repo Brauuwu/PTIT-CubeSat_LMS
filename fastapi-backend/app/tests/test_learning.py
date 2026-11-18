@@ -115,11 +115,41 @@ class LearningRulesTests(unittest.TestCase):
     def test_all_enabled_lessons_unlock_strictly_one_by_one(self):
         config = small_config()
         config["labs"][0]["lessons"] = [
-            {"id": "doc-0-1", "title": "Doc 1", "type": "document", "enabled": True, "required": True},
-            {"id": "prac-0-1", "title": "Practice 1", "type": "practice", "enabled": True, "required": False},
-            {"id": "prac-0-2", "title": "Practice 2", "type": "practice", "enabled": True, "required": False},
-            {"id": "doc-0-2", "title": "Doc 2", "type": "document", "enabled": True, "required": True},
-            {"id": "labtest-0", "title": "Lab Test 0", "type": "labtest", "enabled": True, "required": False},
+            {
+                "id": "doc-0-1",
+                "title": "Doc 1",
+                "type": "document",
+                "enabled": True,
+                "required": True,
+            },
+            {
+                "id": "prac-0-1",
+                "title": "Practice 1",
+                "type": "practice",
+                "enabled": True,
+                "required": False,
+            },
+            {
+                "id": "prac-0-2",
+                "title": "Practice 2",
+                "type": "practice",
+                "enabled": True,
+                "required": False,
+            },
+            {
+                "id": "doc-0-2",
+                "title": "Doc 2",
+                "type": "document",
+                "enabled": True,
+                "required": True,
+            },
+            {
+                "id": "labtest-0",
+                "title": "Lab Test 0",
+                "type": "labtest",
+                "enabled": True,
+                "required": False,
+            },
         ]
         after_doc1 = learning_path(config, {"doc-0-1": "completed"})
         self.assertEqual(
@@ -382,9 +412,7 @@ class LearningAPITests(unittest.IsolatedAsyncioTestCase):
         self.base = f"/api/classes/{self.class_a}"
         self.body = fixtures.settings_payload(await self.fixture.draft())
         for item in self.body["lessons"]:
-            active = item["lesson_id"] == "document" or item["lesson_id"].startswith(
-                "summary-"
-            )
+            active = item["lesson_id"] == "document" or item["lesson_id"].startswith("summary-")
             item["enabled"] = active or item["lesson_id"] == "Lab2-01a_Battery_I2C"
             item["required"] = active
             if item["lesson_id"] == "document":

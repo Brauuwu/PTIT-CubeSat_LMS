@@ -71,7 +71,9 @@ class Lesson(Base):
             ondelete="RESTRICT",
         ),
         UniqueConstraint("course_version_id", "lab_id", "order_no", name="uq_lesson_order"),
-        CheckConstraint("type IN ('video','document','practice','labtest')", name="ck_lesson_type"),
+        CheckConstraint(
+            "type IN ('video','document','practice','labtest','quiz')", name="ck_lesson_type"
+        ),
     )
     course_version_id: Mapped[str] = mapped_column(Text, primary_key=True)
     id: Mapped[str] = mapped_column(Text, primary_key=True)

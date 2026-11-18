@@ -10,6 +10,7 @@ from pydantic import ValidationError
 from sqlalchemy import Integer
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
+from app.core.config import get_settings
 from app.core.exceptions import register_exception_handlers
 from app.core.security import create_access_token
 from app.db import get_db
@@ -21,6 +22,10 @@ from app.services import mqtt_consumer
 
 class PlatformTests(unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
+        # These tests cover the legacy (non-class) path; do not inherit LMS_CLASS_MODE from a local .env.
+        lms_flag = patch.object(get_settings(), "lms_class_mode", False)
+        lms_flag.start()
+        self.addCleanup(lms_flag.stop)
         self.engine = create_async_engine("sqlite+aiosqlite:///:memory:")
         original = User.__table__.c.id.type
         User.__table__.c.id.type = original.with_variant(Integer(), "sqlite")

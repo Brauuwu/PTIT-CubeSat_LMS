@@ -13,6 +13,7 @@ from unittest.mock import AsyncMock, patch
 from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
 
+from app.core.config import get_settings
 from app.core.exceptions import register_exception_handlers
 from app.db import get_db
 from app.routers import compiler
@@ -115,6 +116,10 @@ class ArtifactTests(unittest.TestCase):
 
 class CompilerTests(unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
+        # These tests cover the legacy (non-class) path; do not inherit LMS_CLASS_MODE from a local .env.
+        lms_flag = patch.object(get_settings(), "lms_class_mode", False)
+        lms_flag.start()
+        self.addCleanup(lms_flag.stop)
         self.temp = tempfile.TemporaryDirectory()
         self.root = Path(self.temp.name)
         self.patches = [

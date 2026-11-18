@@ -34,6 +34,7 @@ class QuizPostgresTests(unittest.IsolatedAsyncioTestCase):
     complete = learning.LearningPostgresTests.complete
     complete_lesson = learning.LearningPostgresTests.complete_lesson
     bank = quizzes.QuizAPITests.bank
+    set_reveal = quizzes.QuizAPITests.set_reveal
     prepare = quizzes.QuizAPITests.prepare
     start = quizzes.QuizAPITests.start
     correct = quizzes.QuizAPITests.correct

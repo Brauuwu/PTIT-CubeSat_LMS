@@ -27,6 +27,10 @@ from app.services.auth import LOGIN_FAILURES, PAIR_FAILURES
 
 class AuthTests(unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
+        # These tests cover the legacy (non-class) path; do not inherit LMS_CLASS_MODE from a local .env.
+        lms_flag = patch.object(get_settings(), "lms_class_mode", False)
+        lms_flag.start()
+        self.addCleanup(lms_flag.stop)
         self.engine = create_async_engine("sqlite+aiosqlite:///:memory:")
         self.original_types = []
         for table in (User.__table__, AuditLog.__table__):
@@ -149,6 +153,7 @@ class AuthTests(unittest.IsolatedAsyncioTestCase):
         )
         self.assertEqual(me.status_code, 200)
         self.assertEqual(me.json()["full_name"], "Nguyễn Văn A")
+
     async def test_admin_login_requires_admin_route(self):
         signup = await self.client.post(
             "/api/admin/signup",
@@ -418,7 +423,9 @@ class AuthTests(unittest.IsolatedAsyncioTestCase):
 
         # Single-use token is now rejected and old password fails; new password works cleanly.
         self.assertEqual(
-            (await self.client.get(f"/api/auth/reset-password/validate?token={raw_token}")).status_code,
+            (
+                await self.client.get(f"/api/auth/reset-password/validate?token={raw_token}")
+            ).status_code,
             400,
         )
         self.assertEqual(
@@ -435,8 +442,14 @@ class AuthTests(unittest.IsolatedAsyncioTestCase):
 
         async with self.sessions() as db:
             logs = (
-                await db.execute(select(AuditLog).where(AuditLog.action == "user.password_reset_self"))
-            ).scalars().all()
+                (
+                    await db.execute(
+                        select(AuditLog).where(AuditLog.action == "user.password_reset_self")
+                    )
+                )
+                .scalars()
+                .all()
+            )
             self.assertEqual(len(logs), 1)
             self.assertNotIn(raw_token, f"{logs[0].before}{logs[0].after}")
             self.assertNotIn("newsecret123", f"{logs[0].before}{logs[0].after}")

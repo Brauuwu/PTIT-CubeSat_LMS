@@ -134,18 +134,18 @@ class CurriculumAPITests(unittest.IsolatedAsyncioTestCase):
                 (await db.execute(select(func.count()).select_from(CourseVersion))).scalar_one(), 1
             )
             lessons = list((await db.execute(select(Lesson))).scalars())
-            self.assertEqual(len(lessons), 119)
-            # Checkpoint quiz pages live only in the legacy view; the course model keeps 4 lesson types.
+            self.assertEqual(len(lessons), 135)
+            # Lab 2-8 checkpoint pages (checkpointId) live only in the legacy view.
             original = {
                 item["id"]
                 for lab in read_seed()["legacy"]
                 for item in lab["lessons"]
-                if item["type"] != "quiz"
+                if not (item["type"] == "quiz" and item.get("checkpointId"))
             }
             self.assertEqual(
                 {item.id for item in lessons}, original | {f"labtest-{i}" for i in range(9)}
             )
-            self.assertEqual({item.type for item in lessons}, {"video", "document", "practice", "labtest"})
+            self.assertEqual({item.type for item in lessons}, {"video", "document", "practice", "quiz", "labtest"})
             self.assertEqual(
                 len([item for item in lessons if item.type == "practice" and item.lab_id >= 2]), 29
             )

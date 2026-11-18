@@ -1,7 +1,7 @@
 {
   "course_id": "cubesat",
   "course_title": "CubeSAT Learning Platform",
-  "source_hash": "9dabf5b7004db281848383a57e86d1d0e62fdcb831e3074d16880cae62e51dec",
+  "source_hash": "c336e0df02234d782662cb677a1442884017aa329a0ccf47eb0d46cf48e496f6",
   "labs": [
     {
       "id": 0,
@@ -17,14 +17,16 @@
           "lab_id": 0,
           "type": "video",
           "order_no": 0,
-          "title": "Giới thiệu tổng quan về kỷ nguyên vệ tinh nhỏ CubeSat và các phân hệ trên không gian",
+          "title": "Kỷ nguyên vệ tinh nhỏ CubeSat và các phân hệ trên không gian",
           "content": {
-            "group": "Phần 1/6",
+            "group": "Phần 1/9",
             "estimated_minutes": null,
             "todos": [
               "TODO GV: cung cấp URL video thật và thời lượng."
             ],
-            "url": ""
+            "url": "",
+            "duration_seconds": 0,
+            "tracking_mode": "native"
           },
           "completion_rule": {
             "kind": "watched_ratio",
@@ -39,12 +41,12 @@
           "lab_id": 0,
           "type": "document",
           "order_no": 1,
-          "title": "Lịch sử CubeSat, tiêu chuẩn kỹ thuật CalPoly, ống phóng P-POD và môi trường quỹ đạo LEO",
+          "title": "Lịch sử CubeSat, chuẩn CalPoly, ống phóng P-POD và môi trường quỹ đạo LEO",
           "content": {
-            "group": "Phần 2/6",
+            "group": "Phần 2/9",
             "estimated_minutes": null,
             "todos": [
-              "TODO GV: bổ sung tài liệu giới thiệu Lab 0."
+              "TODO GV: bổ sung tài liệu Lab 0."
             ],
             "markdown": ""
           },
@@ -56,16 +58,39 @@
           "default_required": false
         },
         {
+          "id": "quiz-0-1",
+          "lab_id": 0,
+          "type": "quiz",
+          "order_no": 2,
+          "title": "Câu hỏi kiểm tra Doc 0.1",
+          "content": {
+            "group": "Phần 3/9",
+            "estimated_minutes": null,
+            "todos": [
+              "TODO GV: soạn và duyệt câu hỏi kiểm tra (đáp án chỉ lưu ở server)."
+            ],
+            "bank_key": "quiz-0-1",
+            "bank_ready": false
+          },
+          "completion_rule": {
+            "kind": "quiz_pass",
+            "pass_score": null
+          },
+          "preview_allowed": false,
+          "default_enabled": false,
+          "default_required": false
+        },
+        {
           "id": "document-0-2",
           "lab_id": 0,
           "type": "document",
-          "order_no": 2,
-          "title": "Kiến trúc hệ thống vệ tinh 1U và vai trò 6 phân hệ cốt lõi (OBC, EPS, Sensors & Payload, COM, Structure, ADCS)",
+          "order_no": 3,
+          "title": "Kiến trúc vệ tinh 1U và vai trò 6 phân hệ cốt lõi",
           "content": {
-            "group": "Phần 3/6",
+            "group": "Phần 4/9",
             "estimated_minutes": null,
             "todos": [],
-            "markdown": "# Doc 0.2: Kiến trúc hệ thống vệ tinh 1U và vai trò 6 phân hệ cốt lõi (OBC, EPS, Sensors & Payload, COM, Structure, ADCS)\n\nCubeSat 1U là khối 10 × 10 × 11.35 cm; khối lượng tối đa do tiêu chuẩn CDS quy định (1.33 kg ở bản rev.13, 2.0 kg ở bản rev.14).\n\nSáu phân hệ cốt lõi: OBC xử lý lệnh, lập lịch và lưu dữ liệu; EPS thu, lưu và phân phối năng lượng; Sensors & Payload thu dữ liệu nhiệm vụ; COM thu phát viễn trắc/viễn lệnh; Structure đỡ, tản nhiệt và che chắn; ADCS xác định và điều khiển tư thế.\n\nViễn lệnh đi từ trạm mặt đất qua COM tới OBC để giải mã và phân phối; viễn trắc từ cảm biến, EPS được OBC đóng gói rồi gửi qua COM về trạm. Sự cố ở một phân hệ (ví dụ sụt áp EPS) lan sang phân hệ khác, nên OBC giám sát và chuyển sang chế độ an toàn khi cần.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 0: Nắm vững lịch sử, tiêu chuẩn kích thước CubeSat 1U, ống phóng P-POD, môi trường vật lý quỹ đạo LEO và nguyên lý 6 phân hệ cốt lõi.\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
+            "markdown": "# Doc 0.2: Kiến trúc vệ tinh 1U và vai trò 6 phân hệ cốt lõi\n\nCubeSat 1U là khối 10 × 10 × 11.35 cm; khối lượng tối đa do tiêu chuẩn CDS quy định (1.33 kg ở bản rev.13, 2.0 kg ở bản rev.14).\n\nSáu phân hệ cốt lõi: OBC xử lý lệnh, lập lịch và lưu dữ liệu; EPS thu, lưu và phân phối năng lượng; Sensors & Payload thu dữ liệu nhiệm vụ; COM thu phát viễn trắc/viễn lệnh; Structure đỡ, tản nhiệt và che chắn; ADCS xác định và điều khiển tư thế.\n\nViễn lệnh đi từ trạm mặt đất qua COM tới OBC để giải mã và phân phối; viễn trắc từ cảm biến, EPS được OBC đóng gói rồi gửi qua COM về trạm. Sự cố ở một phân hệ (ví dụ sụt áp EPS) lan sang phân hệ khác, nên OBC giám sát và chuyển sang chế độ an toàn khi cần.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 0: Nắm vững lịch sử, tiêu chuẩn kích thước CubeSat 1U, ống phóng P-POD, môi trường vật lý quỹ đạo LEO và nguyên lý 6 phân hệ cốt lõi.\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
           },
           "completion_rule": {
             "kind": "read_confirmation"
@@ -75,18 +100,43 @@
           "default_required": true
         },
         {
+          "id": "quiz-0-2",
+          "lab_id": 0,
+          "type": "quiz",
+          "order_no": 4,
+          "title": "Câu hỏi kiểm tra Doc 0.2",
+          "content": {
+            "group": "Phần 5/9",
+            "estimated_minutes": null,
+            "todos": [
+              "TODO GV: soạn và duyệt câu hỏi kiểm tra (đáp án chỉ lưu ở server)."
+            ],
+            "bank_key": "quiz-0-2",
+            "bank_ready": false
+          },
+          "completion_rule": {
+            "kind": "quiz_pass",
+            "pass_score": null
+          },
+          "preview_allowed": false,
+          "default_enabled": false,
+          "default_required": false
+        },
+        {
           "id": "video-0-2",
           "lab_id": 0,
           "type": "video",
-          "order_no": 3,
-          "title": "Demo tương tác với mô hình vệ tinh 3D thời gian thực trên nền WebGL",
+          "order_no": 5,
+          "title": "Demo tương tác mô hình vệ tinh 3D thời gian thực (WebGL)",
           "content": {
-            "group": "Phần 4/6",
+            "group": "Phần 6/9",
             "estimated_minutes": null,
             "todos": [
               "TODO GV: cung cấp URL video thật và thời lượng."
             ],
-            "url": ""
+            "url": "",
+            "duration_seconds": 0,
+            "tracking_mode": "native"
           },
           "completion_rule": {
             "kind": "watched_ratio",
@@ -100,10 +150,10 @@
           "id": "components",
           "lab_id": 0,
           "type": "practice",
-          "order_no": 4,
-          "title": "Khám phá mô hình 3D và phân tích thông số kỹ thuật từng phân hệ",
+          "order_no": 6,
+          "title": "Khám phá và phân tích các phân hệ trên mô hình 3D",
           "content": {
-            "group": "Phần 5/6",
+            "group": "Phần 7/9",
             "estimated_minutes": null,
             "todos": [
               "TODO GV: bổ sung hướng dẫn, rubric, kết quả mong đợi và lỗi thường gặp từ học liệu đã duyệt."
@@ -112,6 +162,8 @@
             "repository_url": "",
             "mode": "exploration",
             "instructions": "",
+            "model_url": "",
+            "parts": [],
             "evidence": "Tổng quan các phân hệ"
           },
           "completion_rule": {
@@ -122,16 +174,39 @@
           "default_required": false
         },
         {
+          "id": "quiz-0-3",
+          "lab_id": 0,
+          "type": "quiz",
+          "order_no": 7,
+          "title": "Câu hỏi kiểm tra Thực hành",
+          "content": {
+            "group": "Phần 8/9",
+            "estimated_minutes": null,
+            "todos": [
+              "TODO GV: soạn và duyệt câu hỏi kiểm tra (đáp án chỉ lưu ở server)."
+            ],
+            "bank_key": "quiz-0-3",
+            "bank_ready": false
+          },
+          "completion_rule": {
+            "kind": "quiz_pass",
+            "pass_score": null
+          },
+          "preview_allowed": false,
+          "default_enabled": false,
+          "default_required": false
+        },
+        {
           "id": "summary-0",
           "lab_id": 0,
           "type": "document",
-          "order_no": 5,
-          "title": "Tổng kết",
+          "order_no": 8,
+          "title": "Tổng hợp Lab 0",
           "content": {
-            "group": "Phần 6/6",
+            "group": "Phần 9/9",
             "estimated_minutes": null,
             "todos": [],
-            "markdown": "# Tổng kết\n\nNắm vững cấu trúc tổng thể và mối tương quan phối hợp giữa các phân hệ trên vệ tinh.\n\n## Minh chứng đầu ra\n\nTổng quan các phân hệ"
+            "markdown": "# Tổng kết\n\nNắm vững lịch sử, tiêu chuẩn kích thước CubeSat 1U, ống phóng P-POD, môi trường vật lý quỹ đạo LEO và nguyên lý 6 phân hệ cốt lõi.\n\n## Minh chứng đầu ra\n\nTổng quan các phân hệ"
           },
           "completion_rule": {
             "kind": "read_confirmation"
@@ -144,7 +219,7 @@
           "id": "labtest-0",
           "lab_id": 0,
           "type": "labtest",
-          "order_no": 6,
+          "order_no": 9,
           "title": "Kiểm tra cuối Lab 0",
           "content": {
             "todos": [
@@ -168,7 +243,15 @@
       "title": "Máy tính trên bo mạch (OBC)",
       "objectives": "Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).",
       "estimated_minutes": 0,
-      "groups": [],
+      "groups": [
+        "Vi điều khiển và Web IDE",
+        "LED",
+        "Nút nhấn",
+        "LED 7 đoạn",
+        "UART",
+        "WiFi và Web Server",
+        "Tổng hợp"
+      ],
       "evidence": "Web IDE và kết nối OBC",
       "lessons": [
         {
@@ -178,12 +261,14 @@
           "order_no": 0,
           "title": "Giới thiệu về vi điều khiển lõi kép và phân hệ Xử lý Trung tâm (OBC)",
           "content": {
-            "group": "Phần 1/23",
+            "group": "Vi điều khiển và Web IDE",
             "estimated_minutes": null,
             "todos": [
               "TODO GV: cung cấp URL video thật và thời lượng."
             ],
-            "url": ""
+            "url": "",
+            "duration_seconds": 0,
+            "tracking_mode": "native"
           },
           "completion_rule": {
             "kind": "watched_ratio",
@@ -198,12 +283,12 @@
           "lab_id": 1,
           "type": "document",
           "order_no": 1,
-          "title": "Kiến trúc phần cứng ESP32-WROOM-32, chân Strapping an toàn và bộ nhớ SRAM/Flash",
+          "title": "Kiến trúc phần cứng ESP32-WROOM-32, chân Strapping Pins an toàn và bộ nhớ SRAM/Flash",
           "content": {
-            "group": "Phần 2/23",
+            "group": "Vi điều khiển và Web IDE",
             "estimated_minutes": null,
             "todos": [],
-            "markdown": "# Doc 1.1: Kiến trúc phần cứng ESP32-WROOM-32, chân Strapping an toàn và bộ nhớ SRAM/Flash\n\nESP32-WROOM-32 có 2 lõi Xtensa LX6 tới 240 MHz, 520 KB SRAM nội và Flash SPI ngoài (thường 4 MB) chứa chương trình; WiFi 2.4 GHz và Bluetooth tích hợp sẵn.\n\nChân strapping được đọc lúc khởi động: GPIO 0 (chế độ nạp), GPIO 2, GPIO 12 (điện áp Flash) và GPIO 15 (log khởi động). Không kéo các chân này sai mức khi reset. GPIO 34–39 chỉ là ngõ vào; GPIO 6–11 nối Flash nội, không dùng làm GPIO.\n\nTrong Arduino, setup() chạy một lần sau khởi động; loop() lặp lại liên tục. Serial giúp quan sát log và nhận lệnh từ máy tính.\n\nLưu ý phần cứng: toàn bộ bài thực hành Lab 1 chạy trên PCB thí nghiệm rời, không cắm vào chồng bo CubeSat. Nút nhấn GPIO 4 ở Lab 1 chỉ nối với nút trên PCB rời; trên bo vệ tinh, GPIO 4 là chân bật/tắt nguồn Buck của EPS (Lab 2-02).\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
+            "markdown": "# Doc 1.1: Kiến trúc phần cứng ESP32-WROOM-32, chân Strapping Pins an toàn và bộ nhớ SRAM/Flash\n\nESP32-WROOM-32 có 2 lõi Xtensa LX6 tới 240 MHz, 520 KB SRAM nội và Flash SPI ngoài (thường 4 MB) chứa chương trình; WiFi 2.4 GHz và Bluetooth tích hợp sẵn.\n\nChân strapping được đọc lúc khởi động: GPIO 0 (chế độ nạp), GPIO 2, GPIO 12 (điện áp Flash) và GPIO 15 (log khởi động). Không kéo các chân này sai mức khi reset. GPIO 34–39 chỉ là ngõ vào; GPIO 6–11 nối Flash nội, không dùng làm GPIO.\n\nTrong Arduino, setup() chạy một lần sau khởi động; loop() lặp lại liên tục. Serial giúp quan sát log và nhận lệnh từ máy tính.\n\nLưu ý phần cứng: toàn bộ bài thực hành Lab 1 chạy trên PCB thí nghiệm rời, không cắm vào chồng bo CubeSat. Nút nhấn GPIO 4 ở Lab 1 chỉ nối với nút trên PCB rời; trên bo vệ tinh, GPIO 4 là chân bật/tắt nguồn Buck của EPS (Lab 2-02).\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
           },
           "completion_rule": {
             "kind": "read_confirmation"
@@ -213,18 +298,43 @@
           "default_required": true
         },
         {
+          "id": "quiz-1-1",
+          "lab_id": 1,
+          "type": "quiz",
+          "order_no": 2,
+          "title": "Câu hỏi kiểm tra Doc 1.1",
+          "content": {
+            "group": "Vi điều khiển và Web IDE",
+            "estimated_minutes": null,
+            "todos": [
+              "TODO GV: soạn và duyệt câu hỏi kiểm tra (đáp án chỉ lưu ở server)."
+            ],
+            "bank_key": "quiz-1-1",
+            "bank_ready": false
+          },
+          "completion_rule": {
+            "kind": "quiz_pass",
+            "pass_score": null
+          },
+          "preview_allowed": false,
+          "default_enabled": false,
+          "default_required": false
+        },
+        {
           "id": "video-1-2",
           "lab_id": 1,
           "type": "video",
-          "order_no": 2,
-          "title": "Biên dịch mã nguồn trên Cloud và nạp firmware lần đầu",
+          "order_no": 3,
+          "title": "Hướng dẫn biên dịch mã nguồn trên Cloud và nạp firmware lần đầu",
           "content": {
-            "group": "Phần 3/23",
+            "group": "Vi điều khiển và Web IDE",
             "estimated_minutes": null,
             "todos": [
               "TODO GV: cung cấp URL video thật và thời lượng."
             ],
-            "url": ""
+            "url": "",
+            "duration_seconds": 0,
+            "tracking_mode": "native"
           },
           "completion_rule": {
             "kind": "watched_ratio",
@@ -238,13 +348,13 @@
           "id": "document-1-2",
           "lab_id": 1,
           "type": "document",
-          "order_no": 3,
-          "title": "Môi trường lập trình Web IDE và nạp firmware trực tiếp qua Web Serial API",
+          "order_no": 4,
+          "title": "Môi trường lập trình Web IDE và giao thức nạp firmware trực tiếp Web Serial API",
           "content": {
-            "group": "Phần 4/23",
+            "group": "Vi điều khiển và Web IDE",
             "estimated_minutes": null,
             "todos": [],
-            "markdown": "# Doc 1.2: Môi trường lập trình Web IDE và nạp firmware trực tiếp qua Web Serial API\n\nMở từng bài thực hành để viết C++ hoặc nối block trong hai vùng Khởi tạo và Lặp liên tục. Sửa C++ cập nhật ngược Blockly; chỉnh block cập nhật lại mã.\n\nChọn đúng ESP32 hoặc ESP32-S3, biên dịch và đọc log trước khi nạp. Kết nối bo qua USB, chọn đúng cổng Serial và quan sát chương trình sau khi reset.\n\nMỗi bài tự lưu riêng trên trình duyệt. Tải file .ino và xuất JSON Blockly để sao lưu/chuyển máy; thay đổi mã yêu cầu biên dịch lại trước khi nạp.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
+            "markdown": "# Doc 1.2: Môi trường lập trình Web IDE và giao thức nạp firmware trực tiếp Web Serial API\n\nMở từng bài thực hành để viết C++ hoặc nối block trong hai vùng Khởi tạo và Lặp liên tục. Sửa C++ cập nhật ngược Blockly; chỉnh block cập nhật lại mã.\n\nChọn đúng ESP32 hoặc ESP32-S3, biên dịch và đọc log trước khi nạp. Kết nối bo qua USB, chọn đúng cổng Serial và quan sát chương trình sau khi reset.\n\nMỗi bài tự lưu riêng trên trình duyệt. Tải file .ino và xuất JSON Blockly để sao lưu/chuyển máy; thay đổi mã yêu cầu biên dịch lại trước khi nạp.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
           },
           "completion_rule": {
             "kind": "read_confirmation"
@@ -254,16 +364,39 @@
           "default_required": true
         },
         {
-          "id": "document-1-3",
+          "id": "quiz-1-2",
+          "lab_id": 1,
+          "type": "quiz",
+          "order_no": 5,
+          "title": "Câu hỏi kiểm tra Doc 1.2",
+          "content": {
+            "group": "Vi điều khiển và Web IDE",
+            "estimated_minutes": null,
+            "todos": [
+              "TODO GV: soạn và duyệt câu hỏi kiểm tra (đáp án chỉ lưu ở server)."
+            ],
+            "bank_key": "quiz-1-2",
+            "bank_ready": false
+          },
+          "completion_rule": {
+            "kind": "quiz_pass",
+            "pass_score": null
+          },
+          "preview_allowed": false,
+          "default_enabled": false,
+          "default_required": false
+        },
+        {
+          "id": "doc-1-3",
           "lab_id": 1,
           "type": "document",
-          "order_no": 4,
-          "title": "Điều khiển LED đơn, chuỗi LED và điều chế xung LEDC PWM",
+          "order_no": 6,
+          "title": "Nguyên lý phần cứng và lập trình điều khiển LED đơn, chuỗi LED và điều chế xung LEDC PWM",
           "content": {
-            "group": "Phần 5/23",
+            "group": "LED",
             "estimated_minutes": null,
             "todos": [],
-            "markdown": "# Doc 1.3: Điều khiển LED đơn, chuỗi LED và điều chế xung LEDC PWM\n\nLED là diode phát quang, chỉ sáng khi phân cực thuận và luôn cần điện trở hạn dòng: R = (Vcc − Vf) / I. Ví dụ (3.3 V − 2.0 V) / 10 mA ≈ 130 Ω.\n\nNgõ ra GPIO kiểu push-pull lái được cả mức HIGH và LOW: pinMode(pin, OUTPUT) rồi digitalWrite() để bật/tắt. Nhiều LED dùng mảng số chân và vòng lặp để chạy tuần tự.\n\nPWM điều chỉnh độ sáng bằng tỉ lệ thời gian bật (duty cycle) ở tần số cao. Bộ LEDC của ESP32 có 16 kênh: ledcSetup() đặt tần số và độ phân giải, ledcAttachPin() gắn chân, ledcWrite() ghi duty; với độ phân giải 8 bit, duty từ 0 đến 255.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
+            "markdown": "# Doc 1.3: Nguyên lý phần cứng và lập trình điều khiển LED đơn, chuỗi LED và điều chế xung LEDC PWM\n\nLED là diode phát quang, chỉ sáng khi phân cực thuận và luôn cần điện trở hạn dòng: R = (Vcc − Vf) / I. Ví dụ (3.3 V − 2.0 V) / 10 mA ≈ 130 Ω.\n\nNgõ ra GPIO kiểu push-pull lái được cả mức HIGH và LOW: pinMode(pin, OUTPUT) rồi digitalWrite() để bật/tắt. Nhiều LED dùng mảng số chân và vòng lặp để chạy tuần tự.\n\nPWM điều chỉnh độ sáng bằng tỉ lệ thời gian bật (duty cycle) ở tần số cao. Bộ LEDC của ESP32 có 16 kênh: ledcSetup() đặt tần số và độ phân giải, ledcAttachPin() gắn chân, ledcWrite() ghi duty; với độ phân giải 8 bit, duty từ 0 đến 255.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
           },
           "completion_rule": {
             "kind": "read_confirmation"
@@ -271,15 +404,38 @@
           "preview_allowed": false,
           "default_enabled": true,
           "default_required": true
+        },
+        {
+          "id": "quiz-1-3",
+          "lab_id": 1,
+          "type": "quiz",
+          "order_no": 7,
+          "title": "Câu hỏi kiểm tra Doc 1.3",
+          "content": {
+            "group": "LED",
+            "estimated_minutes": null,
+            "todos": [
+              "TODO GV: soạn và duyệt câu hỏi kiểm tra (đáp án chỉ lưu ở server)."
+            ],
+            "bank_key": "quiz-1-3",
+            "bank_ready": false
+          },
+          "completion_rule": {
+            "kind": "quiz_pass",
+            "pass_score": null
+          },
+          "preview_allowed": false,
+          "default_enabled": false,
+          "default_required": false
         },
         {
           "id": "Lab1-01_Blink_LED",
           "lab_id": 1,
           "type": "practice",
-          "order_no": 5,
+          "order_no": 8,
           "title": "Nhấp nháy đèn LED để kiểm tra bo mạch",
           "content": {
-            "group": "Phần 6/23",
+            "group": "LED",
             "estimated_minutes": null,
             "todos": [
               "TODO GV: bổ sung hướng dẫn, rubric, kết quả mong đợi và lỗi thường gặp từ học liệu đã duyệt."
@@ -301,10 +457,10 @@
           "id": "Lab1-02_Control_Multiple_LEDs",
           "lab_id": 1,
           "type": "practice",
-          "order_no": 6,
+          "order_no": 9,
           "title": "Điều khiển nhiều đèn LED (chạy đèn tuần tự)",
           "content": {
-            "group": "Phần 7/23",
+            "group": "LED",
             "estimated_minutes": null,
             "todos": [
               "TODO GV: bổ sung hướng dẫn, rubric, kết quả mong đợi và lỗi thường gặp từ học liệu đã duyệt."
@@ -326,10 +482,10 @@
           "id": "Lab1-03_PWM_LED",
           "lab_id": 1,
           "type": "practice",
-          "order_no": 7,
+          "order_no": 10,
           "title": "Điều chế độ rộng xung LEDC PWM tạo hiệu ứng đèn thở",
           "content": {
-            "group": "Phần 8/23",
+            "group": "LED",
             "estimated_minutes": null,
             "todos": [
               "TODO GV: bổ sung hướng dẫn, rubric, kết quả mong đợi và lỗi thường gặp từ học liệu đã duyệt."
@@ -348,16 +504,39 @@
           "default_required": false
         },
         {
-          "id": "document-1-button",
+          "id": "quiz-1-4",
+          "lab_id": 1,
+          "type": "quiz",
+          "order_no": 11,
+          "title": "Câu hỏi kiểm tra Thực hành LED",
+          "content": {
+            "group": "LED",
+            "estimated_minutes": null,
+            "todos": [
+              "TODO GV: soạn và duyệt câu hỏi kiểm tra (đáp án chỉ lưu ở server)."
+            ],
+            "bank_key": "quiz-1-4",
+            "bank_ready": false
+          },
+          "completion_rule": {
+            "kind": "quiz_pass",
+            "pass_score": null
+          },
+          "preview_allowed": false,
+          "default_enabled": false,
+          "default_required": false
+        },
+        {
+          "id": "doc-1-4",
           "lab_id": 1,
           "type": "document",
-          "order_no": 8,
-          "title": "Nút nhấn cơ học: điện trở kéo lên INPUT_PULLUP và chống rung Debounce bằng phần mềm",
+          "order_no": 12,
+          "title": "Nguyên lý và lập trình nút nhấn cơ học: INPUT_PULLUP và chống rung Debounce",
           "content": {
-            "group": "Phần 9/23",
+            "group": "Nút nhấn",
             "estimated_minutes": null,
             "todos": [],
-            "markdown": "# Doc 1.4: Nút nhấn cơ học: điện trở kéo lên INPUT_PULLUP và chống rung Debounce bằng phần mềm\n\nNgõ vào để hở (floating) nhận nhiễu và đọc ngẫu nhiên HIGH/LOW. INPUT_PULLUP bật điện trở kéo lên nội (khoảng 45 kΩ trên ESP32), nên nút nối giữa GPIO và GND đọc HIGH khi nhả và LOW khi nhấn.\n\nTiếp điểm cơ khí nảy (contact bounce) trong vài mili-giây, tạo nhiều cạnh lên/xuống cho một lần nhấn. Chống rung bằng phần mềm: chỉ chấp nhận trạng thái mới khi nó giữ ổn định qua một khoảng (thường 20–50 ms) đo bằng millis().\n\nPhát hiện sự kiện nhấn bằng cạnh xuống (trước HIGH, nay LOW) rồi mới đảo biến chốt (toggle); không đảo LED ở mỗi vòng loop() khi nút vẫn đang được giữ.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
+            "markdown": "# Doc 1.4: Nguyên lý và lập trình nút nhấn cơ học: INPUT_PULLUP và chống rung Debounce\n\nNgõ vào để hở (floating) nhận nhiễu và đọc ngẫu nhiên HIGH/LOW. INPUT_PULLUP bật điện trở kéo lên nội (khoảng 45 kΩ trên ESP32), nên nút nối giữa GPIO và GND đọc HIGH khi nhả và LOW khi nhấn.\n\nTiếp điểm cơ khí nảy (contact bounce) trong vài mili-giây, tạo nhiều cạnh lên/xuống cho một lần nhấn. Chống rung bằng phần mềm: chỉ chấp nhận trạng thái mới khi nó giữ ổn định qua một khoảng (thường 20–50 ms) đo bằng millis().\n\nPhát hiện sự kiện nhấn bằng cạnh xuống (trước HIGH, nay LOW) rồi mới đảo biến chốt (toggle); không đảo LED ở mỗi vòng loop() khi nút vẫn đang được giữ.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
           },
           "completion_rule": {
             "kind": "read_confirmation"
@@ -367,13 +546,36 @@
           "default_required": true
         },
         {
+          "id": "quiz-1-5",
+          "lab_id": 1,
+          "type": "quiz",
+          "order_no": 13,
+          "title": "Câu hỏi kiểm tra Doc 1.4",
+          "content": {
+            "group": "Nút nhấn",
+            "estimated_minutes": null,
+            "todos": [
+              "TODO GV: soạn và duyệt câu hỏi kiểm tra (đáp án chỉ lưu ở server)."
+            ],
+            "bank_key": "quiz-1-5",
+            "bank_ready": false
+          },
+          "completion_rule": {
+            "kind": "quiz_pass",
+            "pass_score": null
+          },
+          "preview_allowed": false,
+          "default_enabled": false,
+          "default_required": false
+        },
+        {
           "id": "Lab1-03_Button",
           "lab_id": 1,
           "type": "practice",
-          "order_no": 9,
+          "order_no": 14,
           "title": "Đọc trạng thái nút nhấn",
           "content": {
-            "group": "Phần 10/23",
+            "group": "Nút nhấn",
             "estimated_minutes": null,
             "todos": [
               "TODO GV: bổ sung hướng dẫn, rubric, kết quả mong đợi và lỗi thường gặp từ học liệu đã duyệt."
@@ -395,10 +597,10 @@
           "id": "Lab1-04_LED_Button",
           "lab_id": 1,
           "type": "practice",
-          "order_no": 10,
+          "order_no": 15,
           "title": "Dùng nút nhấn bật/tắt đèn LED",
           "content": {
-            "group": "Phần 11/23",
+            "group": "Nút nhấn",
             "estimated_minutes": null,
             "todos": [
               "TODO GV: bổ sung hướng dẫn, rubric, kết quả mong đợi và lỗi thường gặp từ học liệu đã duyệt."
@@ -417,16 +619,39 @@
           "default_required": false
         },
         {
-          "id": "document-1-74hc595",
+          "id": "quiz-1-6",
+          "lab_id": 1,
+          "type": "quiz",
+          "order_no": 16,
+          "title": "Câu hỏi kiểm tra Thực hành Nút nhấn",
+          "content": {
+            "group": "Nút nhấn",
+            "estimated_minutes": null,
+            "todos": [
+              "TODO GV: soạn và duyệt câu hỏi kiểm tra (đáp án chỉ lưu ở server)."
+            ],
+            "bank_key": "quiz-1-6",
+            "bank_ready": false
+          },
+          "completion_rule": {
+            "kind": "quiz_pass",
+            "pass_score": null
+          },
+          "preview_allowed": false,
+          "default_enabled": false,
+          "default_required": false
+        },
+        {
+          "id": "doc-1-5",
           "lab_id": 1,
           "type": "document",
-          "order_no": 11,
-          "title": "IC dịch bit chốt dữ liệu 74HC595 và điều khiển LED 7 đoạn",
+          "order_no": 17,
+          "title": "Vi mạch dịch bit chốt dữ liệu 74HC595 và điều khiển LED 7 đoạn",
           "content": {
-            "group": "Phần 12/23",
+            "group": "LED 7 đoạn",
             "estimated_minutes": null,
             "todos": [],
-            "markdown": "# Doc 1.5: IC dịch bit chốt dữ liệu 74HC595 và điều khiển LED 7 đoạn\n\n74HC595 gồm thanh ghi dịch 8 bit và thanh ghi chốt 8 bit. Mỗi cạnh lên của SH_CP dịch bit đang có ở DS vào; cạnh lên của ST_CP chép thanh ghi dịch ra 8 ngõ Q0–Q7 cùng lúc.\n\nshiftOut(dataPin, clockPin, MSBFIRST hoặc LSBFIRST, value) gửi 8 bit. Kéo latch xuống LOW trước khi dịch và lên HIGH sau khi dịch để LED không hiện trạng thái trung gian. Chỉ cần 3 chân GPIO và có thể nối tiếp nhiều IC qua chân Q7′.\n\nLED 7 đoạn chung cathode bật đoạn bằng mức 1, chung anode bằng mức 0. Bảng mã byte cho chữ số 0–9 phụ thuộc cách nối Q0–Q7 tới các đoạn a–g, dp; mỗi đoạn cần điện trở hạn dòng riêng.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
+            "markdown": "# Doc 1.5: Vi mạch dịch bit chốt dữ liệu 74HC595 và điều khiển LED 7 đoạn\n\n74HC595 gồm thanh ghi dịch 8 bit và thanh ghi chốt 8 bit. Mỗi cạnh lên của SH_CP dịch bit đang có ở DS vào; cạnh lên của ST_CP chép thanh ghi dịch ra 8 ngõ Q0–Q7 cùng lúc.\n\nshiftOut(dataPin, clockPin, MSBFIRST hoặc LSBFIRST, value) gửi 8 bit. Kéo latch xuống LOW trước khi dịch và lên HIGH sau khi dịch để LED không hiện trạng thái trung gian. Chỉ cần 3 chân GPIO và có thể nối tiếp nhiều IC qua chân Q7′.\n\nLED 7 đoạn chung cathode bật đoạn bằng mức 1, chung anode bằng mức 0. Bảng mã byte cho chữ số 0–9 phụ thuộc cách nối Q0–Q7 tới các đoạn a–g, dp; mỗi đoạn cần điện trở hạn dòng riêng.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
           },
           "completion_rule": {
             "kind": "read_confirmation"
@@ -436,13 +661,36 @@
           "default_required": true
         },
         {
+          "id": "quiz-1-7",
+          "lab_id": 1,
+          "type": "quiz",
+          "order_no": 18,
+          "title": "Câu hỏi kiểm tra Doc 1.5",
+          "content": {
+            "group": "LED 7 đoạn",
+            "estimated_minutes": null,
+            "todos": [
+              "TODO GV: soạn và duyệt câu hỏi kiểm tra (đáp án chỉ lưu ở server)."
+            ],
+            "bank_key": "quiz-1-7",
+            "bank_ready": false
+          },
+          "completion_rule": {
+            "kind": "quiz_pass",
+            "pass_score": null
+          },
+          "preview_allowed": false,
+          "default_enabled": false,
+          "default_required": false
+        },
+        {
           "id": "Lab1-05_7_Segment_LED",
           "lab_id": 1,
           "type": "practice",
-          "order_no": 12,
+          "order_no": 19,
           "title": "Hiển thị chữ số trên LED 7 đoạn",
           "content": {
-            "group": "Phần 13/23",
+            "group": "LED 7 đoạn",
             "estimated_minutes": null,
             "todos": [
               "TODO GV: bổ sung hướng dẫn, rubric, kết quả mong đợi và lỗi thường gặp từ học liệu đã duyệt."
@@ -461,16 +709,39 @@
           "default_required": false
         },
         {
-          "id": "document-1-uart",
+          "id": "quiz-1-8",
+          "lab_id": 1,
+          "type": "quiz",
+          "order_no": 20,
+          "title": "Câu hỏi kiểm tra Thực hành 74HC595",
+          "content": {
+            "group": "LED 7 đoạn",
+            "estimated_minutes": null,
+            "todos": [
+              "TODO GV: soạn và duyệt câu hỏi kiểm tra (đáp án chỉ lưu ở server)."
+            ],
+            "bank_key": "quiz-1-8",
+            "bank_ready": false
+          },
+          "completion_rule": {
+            "kind": "quiz_pass",
+            "pass_score": null
+          },
+          "preview_allowed": false,
+          "default_enabled": false,
+          "default_required": false
+        },
+        {
+          "id": "doc-1-6",
           "lab_id": 1,
           "type": "document",
-          "order_no": 13,
-          "title": "Giao tiếp nối tiếp bất đồng bộ UART và truyền nhận ký tự với máy tính ở 115200 bps",
+          "order_no": 21,
+          "title": "Giao tiếp nối tiếp bất đồng bộ UART và truyền nhận ký tự hai chiều ở 115200 bps",
           "content": {
-            "group": "Phần 14/23",
+            "group": "UART",
             "estimated_minutes": null,
             "todos": [],
-            "markdown": "# Doc 1.6: Giao tiếp nối tiếp bất đồng bộ UART và truyền nhận ký tự với máy tính ở 115200 bps\n\nUART truyền bất đồng bộ: đường rảnh ở mức 1; mỗi khung gồm 1 start bit (0), 5–8 bit dữ liệu (thường 8, bit thấp gửi trước), parity tùy chọn và 1–2 stop bit. Cấu hình phổ biến là 8N1.\n\nHai bên phải cùng tốc độ baud. Ở 115200 bps với 8N1 (10 bit mỗi byte) truyền được khoảng 11 520 byte/giây. TX bên này nối RX bên kia và hai bên chung GND.\n\nByte nhận được nằm trong bộ đệm (FIFO phần cứng và bộ đệm driver). Serial.available() cho biết số byte đang chờ, Serial.read() lấy từng byte; đọc không kịp sẽ tràn bộ đệm và mất dữ liệu.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
+            "markdown": "# Doc 1.6: Giao tiếp nối tiếp bất đồng bộ UART và truyền nhận ký tự hai chiều ở 115200 bps\n\nUART truyền bất đồng bộ: đường rảnh ở mức 1; mỗi khung gồm 1 start bit (0), 5–8 bit dữ liệu (thường 8, bit thấp gửi trước), parity tùy chọn và 1–2 stop bit. Cấu hình phổ biến là 8N1.\n\nHai bên phải cùng tốc độ baud. Ở 115200 bps với 8N1 (10 bit mỗi byte) truyền được khoảng 11 520 byte/giây. TX bên này nối RX bên kia và hai bên chung GND.\n\nByte nhận được nằm trong bộ đệm (FIFO phần cứng và bộ đệm driver). Serial.available() cho biết số byte đang chờ, Serial.read() lấy từng byte; đọc không kịp sẽ tràn bộ đệm và mất dữ liệu.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
           },
           "completion_rule": {
             "kind": "read_confirmation"
@@ -480,13 +751,36 @@
           "default_required": true
         },
         {
+          "id": "quiz-1-9",
+          "lab_id": 1,
+          "type": "quiz",
+          "order_no": 22,
+          "title": "Câu hỏi kiểm tra Doc 1.6",
+          "content": {
+            "group": "UART",
+            "estimated_minutes": null,
+            "todos": [
+              "TODO GV: soạn và duyệt câu hỏi kiểm tra (đáp án chỉ lưu ở server)."
+            ],
+            "bank_key": "quiz-1-9",
+            "bank_ready": false
+          },
+          "completion_rule": {
+            "kind": "quiz_pass",
+            "pass_score": null
+          },
+          "preview_allowed": false,
+          "default_enabled": false,
+          "default_required": false
+        },
+        {
           "id": "Lab1-06_Serial_Communication",
           "lab_id": 1,
           "type": "practice",
-          "order_no": 14,
+          "order_no": 23,
           "title": "Gửi và nhận dữ liệu từ máy tính",
           "content": {
-            "group": "Phần 15/23",
+            "group": "UART",
             "estimated_minutes": null,
             "todos": [
               "TODO GV: bổ sung hướng dẫn, rubric, kết quả mong đợi và lỗi thường gặp từ học liệu đã duyệt."
@@ -508,10 +802,10 @@
           "id": "Lab1-07_Serial_Control_LED",
           "lab_id": 1,
           "type": "practice",
-          "order_no": 15,
+          "order_no": 24,
           "title": "Điều khiển LED bằng lệnh gửi từ máy tính",
           "content": {
-            "group": "Phần 16/23",
+            "group": "UART",
             "estimated_minutes": null,
             "todos": [
               "TODO GV: bổ sung hướng dẫn, rubric, kết quả mong đợi và lỗi thường gặp từ học liệu đã duyệt."
@@ -530,16 +824,39 @@
           "default_required": false
         },
         {
-          "id": "document-1-4",
+          "id": "quiz-1-10",
+          "lab_id": 1,
+          "type": "quiz",
+          "order_no": 25,
+          "title": "Câu hỏi kiểm tra Thực hành UART",
+          "content": {
+            "group": "UART",
+            "estimated_minutes": null,
+            "todos": [
+              "TODO GV: soạn và duyệt câu hỏi kiểm tra (đáp án chỉ lưu ở server)."
+            ],
+            "bank_key": "quiz-1-10",
+            "bank_ready": false
+          },
+          "completion_rule": {
+            "kind": "quiz_pass",
+            "pass_score": null
+          },
+          "preview_allowed": false,
+          "default_enabled": false,
+          "default_required": false
+        },
+        {
+          "id": "doc-1-7",
           "lab_id": 1,
           "type": "document",
-          "order_no": 16,
-          "title": "Mạng không dây 802.11 (STA và SoftAP) và máy chủ Web HTTP nhúng xử lý GET/POST",
+          "order_no": 26,
+          "title": "Mạng không dây 802.11 (STA và SoftAP) và máy chủ Web HTTP nhúng GET/POST",
           "content": {
-            "group": "Phần 17/23",
+            "group": "WiFi và Web Server",
             "estimated_minutes": null,
             "todos": [],
-            "markdown": "# Doc 1.7: Mạng không dây 802.11 (STA và SoftAP) và máy chủ Web HTTP nhúng xử lý GET/POST\n\nWiFi Station kết nối vào mạng có sẵn; Access Point tạo mạng để thiết bị khác kết nối. Phân biệt tên mạng, địa chỉ IP và trạng thái kết nối.\n\nMáy chủ HTTP tiếp nhận request theo đường dẫn và trả response gồm mã trạng thái, header và nội dung. Trình duyệt gửi yêu cầu để đọc trạng thái hoặc điều khiển LED.\n\nĐọc địa chỉ IP trên Serial, kiểm tra máy tính ở đúng mạng. Không đưa mật khẩu WiFi thực vào kho mã hoặc báo cáo công khai.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
+            "markdown": "# Doc 1.7: Mạng không dây 802.11 (STA và SoftAP) và máy chủ Web HTTP nhúng GET/POST\n\nWiFi Station kết nối vào mạng có sẵn; Access Point tạo mạng để thiết bị khác kết nối. Phân biệt tên mạng, địa chỉ IP và trạng thái kết nối.\n\nMáy chủ HTTP tiếp nhận request theo đường dẫn và trả response gồm mã trạng thái, header và nội dung. Trình duyệt gửi yêu cầu để đọc trạng thái hoặc điều khiển LED.\n\nĐọc địa chỉ IP trên Serial, kiểm tra máy tính ở đúng mạng. Không đưa mật khẩu WiFi thực vào kho mã hoặc báo cáo công khai.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
           },
           "completion_rule": {
             "kind": "read_confirmation"
@@ -549,16 +866,39 @@
           "default_required": true
         },
         {
-          "id": "document-1-millis",
+          "id": "quiz-1-11",
+          "lab_id": 1,
+          "type": "quiz",
+          "order_no": 27,
+          "title": "Câu hỏi kiểm tra Doc 1.7",
+          "content": {
+            "group": "WiFi và Web Server",
+            "estimated_minutes": null,
+            "todos": [
+              "TODO GV: soạn và duyệt câu hỏi kiểm tra (đáp án chỉ lưu ở server)."
+            ],
+            "bank_key": "quiz-1-11",
+            "bank_ready": false
+          },
+          "completion_rule": {
+            "kind": "quiz_pass",
+            "pass_score": null
+          },
+          "preview_allowed": false,
+          "default_enabled": false,
+          "default_required": false
+        },
+        {
+          "id": "doc-1-8",
           "lab_id": 1,
           "type": "document",
-          "order_no": 17,
-          "title": "Định thời Non-blocking với millis() và an toàn chống tràn số sau 49.7 ngày",
+          "order_no": 28,
+          "title": "Lập trình C++ định thời non-blocking với millis() và an toàn tràn số sau 49,7 ngày",
           "content": {
-            "group": "Phần 18/23",
+            "group": "WiFi và Web Server",
             "estimated_minutes": null,
             "todos": [],
-            "markdown": "# Doc 1.8: Định thời Non-blocking với millis() và an toàn chống tràn số sau 49.7 ngày\n\ndelay() chặn CPU: trong lúc chờ, chương trình không đọc nút, không phục vụ lệnh và không cập nhật watchdog. Phần mềm bay cần vòng lặp không chặn để nhiều công việc cùng tiến triển.\n\nmillis() trả số mili-giây từ khi khởi động, kiểu unsigned long 32 bit, quay về 0 sau 2^32 ms ≈ 49.7 ngày. Mẫu định thời: if (millis() - lastRun >= INTERVAL) { lastRun = millis(); ... }.\n\nPhép trừ số không dấu tính theo modulo 2^32 nên hiệu millis() - lastRun vẫn đúng khi bộ đếm tràn. Viết millis() >= lastRun + INTERVAL thì sai ngay tại thời điểm tràn.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
+            "markdown": "# Doc 1.8: Lập trình C++ định thời non-blocking với millis() và an toàn tràn số sau 49,7 ngày\n\ndelay() chặn CPU: trong lúc chờ, chương trình không đọc nút, không phục vụ lệnh và không cập nhật watchdog. Phần mềm bay cần vòng lặp không chặn để nhiều công việc cùng tiến triển.\n\nmillis() trả số mili-giây từ khi khởi động, kiểu unsigned long 32 bit, quay về 0 sau 2^32 ms ≈ 49.7 ngày. Mẫu định thời: if (millis() - lastRun >= INTERVAL) { lastRun = millis(); ... }.\n\nPhép trừ số không dấu tính theo modulo 2^32 nên hiệu millis() - lastRun vẫn đúng khi bộ đếm tràn. Viết millis() >= lastRun + INTERVAL thì sai ngay tại thời điểm tràn.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
           },
           "completion_rule": {
             "kind": "read_confirmation"
@@ -568,18 +908,43 @@
           "default_required": true
         },
         {
-          "id": "video-1-4",
+          "id": "quiz-1-12",
+          "lab_id": 1,
+          "type": "quiz",
+          "order_no": 29,
+          "title": "Câu hỏi kiểm tra Doc 1.8",
+          "content": {
+            "group": "WiFi và Web Server",
+            "estimated_minutes": null,
+            "todos": [
+              "TODO GV: soạn và duyệt câu hỏi kiểm tra (đáp án chỉ lưu ở server)."
+            ],
+            "bank_key": "quiz-1-12",
+            "bank_ready": false
+          },
+          "completion_rule": {
+            "kind": "quiz_pass",
+            "pass_score": null
+          },
+          "preview_allowed": false,
+          "default_enabled": false,
+          "default_required": false
+        },
+        {
+          "id": "video-1-5",
           "lab_id": 1,
           "type": "video",
-          "order_no": 18,
+          "order_no": 30,
           "title": "Giới thiệu về kết nối WiFi và Máy chủ Web nhúng",
           "content": {
-            "group": "Phần 19/23",
+            "group": "WiFi và Web Server",
             "estimated_minutes": null,
             "todos": [
               "TODO GV: cung cấp URL video thật và thời lượng."
             ],
-            "url": ""
+            "url": "",
+            "duration_seconds": 0,
+            "tracking_mode": "native"
           },
           "completion_rule": {
             "kind": "watched_ratio",
@@ -593,10 +958,10 @@
           "id": "Lab1-08_WiFi_Connection",
           "lab_id": 1,
           "type": "practice",
-          "order_no": 19,
+          "order_no": 31,
           "title": "Kết nối vào mạng WiFi có sẵn",
           "content": {
-            "group": "Phần 20/23",
+            "group": "WiFi và Web Server",
             "estimated_minutes": null,
             "todos": [
               "TODO GV: bổ sung hướng dẫn, rubric, kết quả mong đợi và lỗi thường gặp từ học liệu đã duyệt."
@@ -618,10 +983,10 @@
           "id": "Lab1-09_WiFi_AP_Mode",
           "lab_id": 1,
           "type": "practice",
-          "order_no": 20,
+          "order_no": 32,
           "title": "Phát WiFi từ vệ tinh",
           "content": {
-            "group": "Phần 21/23",
+            "group": "WiFi và Web Server",
             "estimated_minutes": null,
             "todos": [
               "TODO GV: bổ sung hướng dẫn, rubric, kết quả mong đợi và lỗi thường gặp từ học liệu đã duyệt."
@@ -643,10 +1008,10 @@
           "id": "Lab1-10_Web_Server_LED",
           "lab_id": 1,
           "type": "practice",
-          "order_no": 21,
+          "order_no": 33,
           "title": "Dựng máy chủ điều khiển LED qua trình duyệt",
           "content": {
-            "group": "Phần 22/23",
+            "group": "WiFi và Web Server",
             "estimated_minutes": null,
             "todos": [
               "TODO GV: bổ sung hướng dẫn, rubric, kết quả mong đợi và lỗi thường gặp từ học liệu đã duyệt."
@@ -665,13 +1030,36 @@
           "default_required": false
         },
         {
+          "id": "quiz-1-13",
+          "lab_id": 1,
+          "type": "quiz",
+          "order_no": 34,
+          "title": "Câu hỏi kiểm tra Thực hành WiFi & Web Server",
+          "content": {
+            "group": "WiFi và Web Server",
+            "estimated_minutes": null,
+            "todos": [
+              "TODO GV: soạn và duyệt câu hỏi kiểm tra (đáp án chỉ lưu ở server)."
+            ],
+            "bank_key": "quiz-1-13",
+            "bank_ready": false
+          },
+          "completion_rule": {
+            "kind": "quiz_pass",
+            "pass_score": null
+          },
+          "preview_allowed": false,
+          "default_enabled": false,
+          "default_required": false
+        },
+        {
           "id": "summary-1",
           "lab_id": 1,
           "type": "document",
-          "order_no": 22,
+          "order_no": 35,
           "title": "Tổng kết",
           "content": {
-            "group": "Phần 23/23",
+            "group": "Tổng hợp",
             "estimated_minutes": null,
             "todos": [],
             "markdown": "# Tổng kết\n\nHoàn thiện kỹ năng lập trình nhúng C++ cơ bản và điều khiển toàn diện các linh kiện ngoại vi của bo mạch OBC.\n\n## Minh chứng đầu ra\n\nWeb IDE và kết nối OBC"
@@ -687,11 +1075,11 @@
           "id": "labtest-1",
           "lab_id": 1,
           "type": "labtest",
-          "order_no": 23,
+          "order_no": 36,
           "title": "Kiểm tra cuối Lab 1",
           "content": {
             "todos": [
-              "TODO GV: ngân hàng 20 câu chưa được soạn/duyệt."
+              "TODO GV: ngân hàng 10 câu chưa được soạn/duyệt."
             ],
             "bank_ready": false
           },
@@ -2749,61 +3137,56 @@
           "id": "overview",
           "type": "video",
           "label": "Video 0.1",
-          "title": "Giới thiệu tổng quan về kỷ nguyên vệ tinh nhỏ CubeSat và các phân hệ trên không gian",
-          "videoUrl": "",
+          "title": "Kỷ nguyên vệ tinh nhỏ CubeSat và các phân hệ trên không gian",
           "reading": ""
         },
         {
           "id": "document",
           "type": "document",
           "label": "Doc 0.1",
-          "title": "Lịch sử CubeSat, tiêu chuẩn kỹ thuật CalPoly, ống phóng P-POD và môi trường quỹ đạo LEO",
-          "reading": "# Doc 0.1: Lịch sử CubeSat, tiêu chuẩn kỹ thuật CalPoly, ống phóng P-POD và môi trường quỹ đạo LEO\n\n\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 0: Nắm vững lịch sử, tiêu chuẩn kích thước CubeSat 1U, ống phóng P-POD, môi trường vật lý quỹ đạo LEO và nguyên lý 6 phân hệ cốt lõi.\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
+          "title": "Lịch sử CubeSat, chuẩn CalPoly, ống phóng P-POD và môi trường quỹ đạo LEO",
+          "reading": "# Doc 0.1: Lịch sử CubeSat, chuẩn CalPoly, ống phóng P-POD và môi trường quỹ đạo LEO\n\n\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 0: Nắm vững lịch sử, tiêu chuẩn kích thước CubeSat 1U, ống phóng P-POD, môi trường vật lý quỹ đạo LEO và nguyên lý 6 phân hệ cốt lõi.\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
         },
         {
-          "id": "quiz-doc-0-1",
+          "id": "quiz-0-1",
           "type": "quiz",
-          "label": "Câu hỏi",
+          "label": "Câu hỏi Doc 0.1",
           "title": "Câu hỏi kiểm tra Doc 0.1",
-          "checkpointId": "doc-0-1",
           "reading": ""
         },
         {
           "id": "document-0-2",
           "type": "document",
           "label": "Doc 0.2",
-          "title": "Kiến trúc hệ thống vệ tinh 1U và vai trò 6 phân hệ cốt lõi (OBC, EPS, Sensors & Payload, COM, Structure, ADCS)",
-          "reading": "# Doc 0.2: Kiến trúc hệ thống vệ tinh 1U và vai trò 6 phân hệ cốt lõi (OBC, EPS, Sensors & Payload, COM, Structure, ADCS)\n\nCubeSat 1U là khối 10 × 10 × 11.35 cm; khối lượng tối đa do tiêu chuẩn CDS quy định (1.33 kg ở bản rev.13, 2.0 kg ở bản rev.14).\n\nSáu phân hệ cốt lõi: OBC xử lý lệnh, lập lịch và lưu dữ liệu; EPS thu, lưu và phân phối năng lượng; Sensors & Payload thu dữ liệu nhiệm vụ; COM thu phát viễn trắc/viễn lệnh; Structure đỡ, tản nhiệt và che chắn; ADCS xác định và điều khiển tư thế.\n\nViễn lệnh đi từ trạm mặt đất qua COM tới OBC để giải mã và phân phối; viễn trắc từ cảm biến, EPS được OBC đóng gói rồi gửi qua COM về trạm. Sự cố ở một phân hệ (ví dụ sụt áp EPS) lan sang phân hệ khác, nên OBC giám sát và chuyển sang chế độ an toàn khi cần.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 0: Nắm vững lịch sử, tiêu chuẩn kích thước CubeSat 1U, ống phóng P-POD, môi trường vật lý quỹ đạo LEO và nguyên lý 6 phân hệ cốt lõi.\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
+          "title": "Kiến trúc vệ tinh 1U và vai trò 6 phân hệ cốt lõi",
+          "reading": "# Doc 0.2: Kiến trúc vệ tinh 1U và vai trò 6 phân hệ cốt lõi\n\nCubeSat 1U là khối 10 × 10 × 11.35 cm; khối lượng tối đa do tiêu chuẩn CDS quy định (1.33 kg ở bản rev.13, 2.0 kg ở bản rev.14).\n\nSáu phân hệ cốt lõi: OBC xử lý lệnh, lập lịch và lưu dữ liệu; EPS thu, lưu và phân phối năng lượng; Sensors & Payload thu dữ liệu nhiệm vụ; COM thu phát viễn trắc/viễn lệnh; Structure đỡ, tản nhiệt và che chắn; ADCS xác định và điều khiển tư thế.\n\nViễn lệnh đi từ trạm mặt đất qua COM tới OBC để giải mã và phân phối; viễn trắc từ cảm biến, EPS được OBC đóng gói rồi gửi qua COM về trạm. Sự cố ở một phân hệ (ví dụ sụt áp EPS) lan sang phân hệ khác, nên OBC giám sát và chuyển sang chế độ an toàn khi cần.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 0: Nắm vững lịch sử, tiêu chuẩn kích thước CubeSat 1U, ống phóng P-POD, môi trường vật lý quỹ đạo LEO và nguyên lý 6 phân hệ cốt lõi.\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
         },
         {
-          "id": "quiz-doc-0-2",
+          "id": "quiz-0-2",
           "type": "quiz",
-          "label": "Câu hỏi",
+          "label": "Câu hỏi Doc 0.2",
           "title": "Câu hỏi kiểm tra Doc 0.2",
-          "checkpointId": "doc-0-2",
           "reading": ""
         },
         {
           "id": "video-0-2",
           "type": "video",
           "label": "Video 0.2",
-          "title": "Demo tương tác với mô hình vệ tinh 3D thời gian thực trên nền WebGL",
-          "videoUrl": "",
+          "title": "Demo tương tác mô hình vệ tinh 3D thời gian thực (WebGL)",
           "reading": ""
         },
         {
           "id": "components",
           "type": "components",
           "label": "Thực hành",
-          "title": "Khám phá mô hình 3D và phân tích thông số kỹ thuật từng phân hệ",
+          "title": "Khám phá và phân tích các phân hệ trên mô hình 3D",
           "reading": ""
         },
         {
-          "id": "quiz-practice-0",
+          "id": "quiz-0-3",
           "type": "quiz",
-          "label": "Câu hỏi",
+          "label": "Câu hỏi Thực hành",
           "title": "Câu hỏi kiểm tra Thực hành",
-          "checkpointId": "practice-0",
           "reading": ""
         },
         {
@@ -2811,7 +3194,6 @@
           "type": "summary",
           "label": "Tổng hợp",
           "title": "Tổng hợp Lab 0",
-          "description": "Nắm vững cấu trúc tổng thể và mối tương quan phối hợp giữa các phân hệ trên vệ tinh.",
           "reading": ""
         },
         {
@@ -2856,22 +3238,21 @@
           "id": "document-1-1",
           "type": "document",
           "label": "Doc 1.1",
-          "title": "Kiến trúc phần cứng ESP32-WROOM-32, chân Strapping an toàn và bộ nhớ SRAM/Flash",
-          "reading": "# Doc 1.1: Kiến trúc phần cứng ESP32-WROOM-32, chân Strapping an toàn và bộ nhớ SRAM/Flash\n\nESP32-WROOM-32 có 2 lõi Xtensa LX6 tới 240 MHz, 520 KB SRAM nội và Flash SPI ngoài (thường 4 MB) chứa chương trình; WiFi 2.4 GHz và Bluetooth tích hợp sẵn.\n\nChân strapping được đọc lúc khởi động: GPIO 0 (chế độ nạp), GPIO 2, GPIO 12 (điện áp Flash) và GPIO 15 (log khởi động). Không kéo các chân này sai mức khi reset. GPIO 34–39 chỉ là ngõ vào; GPIO 6–11 nối Flash nội, không dùng làm GPIO.\n\nTrong Arduino, setup() chạy một lần sau khởi động; loop() lặp lại liên tục. Serial giúp quan sát log và nhận lệnh từ máy tính.\n\nLưu ý phần cứng: toàn bộ bài thực hành Lab 1 chạy trên PCB thí nghiệm rời, không cắm vào chồng bo CubeSat. Nút nhấn GPIO 4 ở Lab 1 chỉ nối với nút trên PCB rời; trên bo vệ tinh, GPIO 4 là chân bật/tắt nguồn Buck của EPS (Lab 2-02).\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
+          "title": "Kiến trúc phần cứng ESP32-WROOM-32, chân Strapping Pins an toàn và bộ nhớ SRAM/Flash",
+          "reading": "# Doc 1.1: Kiến trúc phần cứng ESP32-WROOM-32, chân Strapping Pins an toàn và bộ nhớ SRAM/Flash\n\nESP32-WROOM-32 có 2 lõi Xtensa LX6 tới 240 MHz, 520 KB SRAM nội và Flash SPI ngoài (thường 4 MB) chứa chương trình; WiFi 2.4 GHz và Bluetooth tích hợp sẵn.\n\nChân strapping được đọc lúc khởi động: GPIO 0 (chế độ nạp), GPIO 2, GPIO 12 (điện áp Flash) và GPIO 15 (log khởi động). Không kéo các chân này sai mức khi reset. GPIO 34–39 chỉ là ngõ vào; GPIO 6–11 nối Flash nội, không dùng làm GPIO.\n\nTrong Arduino, setup() chạy một lần sau khởi động; loop() lặp lại liên tục. Serial giúp quan sát log và nhận lệnh từ máy tính.\n\nLưu ý phần cứng: toàn bộ bài thực hành Lab 1 chạy trên PCB thí nghiệm rời, không cắm vào chồng bo CubeSat. Nút nhấn GPIO 4 ở Lab 1 chỉ nối với nút trên PCB rời; trên bo vệ tinh, GPIO 4 là chân bật/tắt nguồn Buck của EPS (Lab 2-02).\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
         },
         {
-          "id": "quiz-doc-1-1",
+          "id": "quiz-1-1",
           "type": "quiz",
-          "label": "Câu hỏi",
+          "label": "Câu hỏi Doc 1.1",
           "title": "Câu hỏi kiểm tra Doc 1.1",
-          "checkpointId": "doc-1-1",
           "reading": ""
         },
         {
           "id": "video-1-2",
           "type": "video",
           "label": "Video 1.2",
-          "title": "Biên dịch mã nguồn trên Cloud và nạp firmware lần đầu",
+          "title": "Hướng dẫn biên dịch mã nguồn trên Cloud và nạp firmware lần đầu",
           "videoUrl": "",
           "reading": ""
         },
@@ -2879,30 +3260,28 @@
           "id": "document-1-2",
           "type": "document",
           "label": "Doc 1.2",
-          "title": "Môi trường lập trình Web IDE và nạp firmware trực tiếp qua Web Serial API",
-          "reading": "# Doc 1.2: Môi trường lập trình Web IDE và nạp firmware trực tiếp qua Web Serial API\n\nMở từng bài thực hành để viết C++ hoặc nối block trong hai vùng Khởi tạo và Lặp liên tục. Sửa C++ cập nhật ngược Blockly; chỉnh block cập nhật lại mã.\n\nChọn đúng ESP32 hoặc ESP32-S3, biên dịch và đọc log trước khi nạp. Kết nối bo qua USB, chọn đúng cổng Serial và quan sát chương trình sau khi reset.\n\nMỗi bài tự lưu riêng trên trình duyệt. Tải file .ino và xuất JSON Blockly để sao lưu/chuyển máy; thay đổi mã yêu cầu biên dịch lại trước khi nạp.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
+          "title": "Môi trường lập trình Web IDE và giao thức nạp firmware trực tiếp Web Serial API",
+          "reading": "# Doc 1.2: Môi trường lập trình Web IDE và giao thức nạp firmware trực tiếp Web Serial API\n\nMở từng bài thực hành để viết C++ hoặc nối block trong hai vùng Khởi tạo và Lặp liên tục. Sửa C++ cập nhật ngược Blockly; chỉnh block cập nhật lại mã.\n\nChọn đúng ESP32 hoặc ESP32-S3, biên dịch và đọc log trước khi nạp. Kết nối bo qua USB, chọn đúng cổng Serial và quan sát chương trình sau khi reset.\n\nMỗi bài tự lưu riêng trên trình duyệt. Tải file .ino và xuất JSON Blockly để sao lưu/chuyển máy; thay đổi mã yêu cầu biên dịch lại trước khi nạp.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
         },
         {
-          "id": "quiz-doc-1-2",
+          "id": "quiz-1-2",
           "type": "quiz",
-          "label": "Câu hỏi",
+          "label": "Câu hỏi Doc 1.2",
           "title": "Câu hỏi kiểm tra Doc 1.2",
-          "checkpointId": "doc-1-2",
           "reading": ""
         },
         {
-          "id": "document-1-3",
+          "id": "doc-1-3",
           "type": "document",
           "label": "Doc 1.3",
-          "title": "Điều khiển LED đơn, chuỗi LED và điều chế xung LEDC PWM",
-          "reading": "# Doc 1.3: Điều khiển LED đơn, chuỗi LED và điều chế xung LEDC PWM\n\nLED là diode phát quang, chỉ sáng khi phân cực thuận và luôn cần điện trở hạn dòng: R = (Vcc − Vf) / I. Ví dụ (3.3 V − 2.0 V) / 10 mA ≈ 130 Ω.\n\nNgõ ra GPIO kiểu push-pull lái được cả mức HIGH và LOW: pinMode(pin, OUTPUT) rồi digitalWrite() để bật/tắt. Nhiều LED dùng mảng số chân và vòng lặp để chạy tuần tự.\n\nPWM điều chỉnh độ sáng bằng tỉ lệ thời gian bật (duty cycle) ở tần số cao. Bộ LEDC của ESP32 có 16 kênh: ledcSetup() đặt tần số và độ phân giải, ledcAttachPin() gắn chân, ledcWrite() ghi duty; với độ phân giải 8 bit, duty từ 0 đến 255.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
+          "title": "Nguyên lý phần cứng và lập trình điều khiển LED đơn, chuỗi LED và điều chế xung LEDC PWM",
+          "reading": "# Doc 1.3: Nguyên lý phần cứng và lập trình điều khiển LED đơn, chuỗi LED và điều chế xung LEDC PWM\n\nLED là diode phát quang, chỉ sáng khi phân cực thuận và luôn cần điện trở hạn dòng: R = (Vcc − Vf) / I. Ví dụ (3.3 V − 2.0 V) / 10 mA ≈ 130 Ω.\n\nNgõ ra GPIO kiểu push-pull lái được cả mức HIGH và LOW: pinMode(pin, OUTPUT) rồi digitalWrite() để bật/tắt. Nhiều LED dùng mảng số chân và vòng lặp để chạy tuần tự.\n\nPWM điều chỉnh độ sáng bằng tỉ lệ thời gian bật (duty cycle) ở tần số cao. Bộ LEDC của ESP32 có 16 kênh: ledcSetup() đặt tần số và độ phân giải, ledcAttachPin() gắn chân, ledcWrite() ghi duty; với độ phân giải 8 bit, duty từ 0 đến 255.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
         },
         {
-          "id": "quiz-doc-1-3",
+          "id": "quiz-1-3",
           "type": "quiz",
-          "label": "Câu hỏi",
+          "label": "Câu hỏi Doc 1.3",
           "title": "Câu hỏi kiểm tra Doc 1.3",
-          "checkpointId": "doc-1-3",
           "reading": ""
         },
         {
@@ -2933,26 +3312,24 @@
           "reading": ""
         },
         {
-          "id": "quiz-practice-1-led",
+          "id": "quiz-1-4",
           "type": "quiz",
-          "label": "Câu hỏi",
+          "label": "Câu hỏi Thực hành LED",
           "title": "Câu hỏi kiểm tra Thực hành LED",
-          "checkpointId": "practice-1-led",
           "reading": ""
         },
         {
-          "id": "document-1-button",
+          "id": "doc-1-4",
           "type": "document",
           "label": "Doc 1.4",
-          "title": "Nút nhấn cơ học: điện trở kéo lên INPUT_PULLUP và chống rung Debounce bằng phần mềm",
-          "reading": "# Doc 1.4: Nút nhấn cơ học: điện trở kéo lên INPUT_PULLUP và chống rung Debounce bằng phần mềm\n\nNgõ vào để hở (floating) nhận nhiễu và đọc ngẫu nhiên HIGH/LOW. INPUT_PULLUP bật điện trở kéo lên nội (khoảng 45 kΩ trên ESP32), nên nút nối giữa GPIO và GND đọc HIGH khi nhả và LOW khi nhấn.\n\nTiếp điểm cơ khí nảy (contact bounce) trong vài mili-giây, tạo nhiều cạnh lên/xuống cho một lần nhấn. Chống rung bằng phần mềm: chỉ chấp nhận trạng thái mới khi nó giữ ổn định qua một khoảng (thường 20–50 ms) đo bằng millis().\n\nPhát hiện sự kiện nhấn bằng cạnh xuống (trước HIGH, nay LOW) rồi mới đảo biến chốt (toggle); không đảo LED ở mỗi vòng loop() khi nút vẫn đang được giữ.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
+          "title": "Nguyên lý và lập trình nút nhấn cơ học: INPUT_PULLUP và chống rung Debounce",
+          "reading": "# Doc 1.4: Nguyên lý và lập trình nút nhấn cơ học: INPUT_PULLUP và chống rung Debounce\n\nNgõ vào để hở (floating) nhận nhiễu và đọc ngẫu nhiên HIGH/LOW. INPUT_PULLUP bật điện trở kéo lên nội (khoảng 45 kΩ trên ESP32), nên nút nối giữa GPIO và GND đọc HIGH khi nhả và LOW khi nhấn.\n\nTiếp điểm cơ khí nảy (contact bounce) trong vài mili-giây, tạo nhiều cạnh lên/xuống cho một lần nhấn. Chống rung bằng phần mềm: chỉ chấp nhận trạng thái mới khi nó giữ ổn định qua một khoảng (thường 20–50 ms) đo bằng millis().\n\nPhát hiện sự kiện nhấn bằng cạnh xuống (trước HIGH, nay LOW) rồi mới đảo biến chốt (toggle); không đảo LED ở mỗi vòng loop() khi nút vẫn đang được giữ.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
         },
         {
-          "id": "quiz-doc-1-4",
+          "id": "quiz-1-5",
           "type": "quiz",
-          "label": "Câu hỏi",
+          "label": "Câu hỏi Doc 1.4",
           "title": "Câu hỏi kiểm tra Doc 1.4",
-          "checkpointId": "doc-1-4",
           "reading": ""
         },
         {
@@ -2974,26 +3351,24 @@
           "reading": ""
         },
         {
-          "id": "quiz-practice-1-button",
+          "id": "quiz-1-6",
           "type": "quiz",
-          "label": "Câu hỏi",
-          "title": "Câu hỏi kiểm tra Thực hành Nút Nhấn",
-          "checkpointId": "practice-1-button",
+          "label": "Câu hỏi Thực hành Nút nhấn",
+          "title": "Câu hỏi kiểm tra Thực hành Nút nhấn",
           "reading": ""
         },
         {
-          "id": "document-1-74hc595",
+          "id": "doc-1-5",
           "type": "document",
           "label": "Doc 1.5",
-          "title": "IC dịch bit chốt dữ liệu 74HC595 và điều khiển LED 7 đoạn",
-          "reading": "# Doc 1.5: IC dịch bit chốt dữ liệu 74HC595 và điều khiển LED 7 đoạn\n\n74HC595 gồm thanh ghi dịch 8 bit và thanh ghi chốt 8 bit. Mỗi cạnh lên của SH_CP dịch bit đang có ở DS vào; cạnh lên của ST_CP chép thanh ghi dịch ra 8 ngõ Q0–Q7 cùng lúc.\n\nshiftOut(dataPin, clockPin, MSBFIRST hoặc LSBFIRST, value) gửi 8 bit. Kéo latch xuống LOW trước khi dịch và lên HIGH sau khi dịch để LED không hiện trạng thái trung gian. Chỉ cần 3 chân GPIO và có thể nối tiếp nhiều IC qua chân Q7′.\n\nLED 7 đoạn chung cathode bật đoạn bằng mức 1, chung anode bằng mức 0. Bảng mã byte cho chữ số 0–9 phụ thuộc cách nối Q0–Q7 tới các đoạn a–g, dp; mỗi đoạn cần điện trở hạn dòng riêng.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
+          "title": "Vi mạch dịch bit chốt dữ liệu 74HC595 và điều khiển LED 7 đoạn",
+          "reading": "# Doc 1.5: Vi mạch dịch bit chốt dữ liệu 74HC595 và điều khiển LED 7 đoạn\n\n74HC595 gồm thanh ghi dịch 8 bit và thanh ghi chốt 8 bit. Mỗi cạnh lên của SH_CP dịch bit đang có ở DS vào; cạnh lên của ST_CP chép thanh ghi dịch ra 8 ngõ Q0–Q7 cùng lúc.\n\nshiftOut(dataPin, clockPin, MSBFIRST hoặc LSBFIRST, value) gửi 8 bit. Kéo latch xuống LOW trước khi dịch và lên HIGH sau khi dịch để LED không hiện trạng thái trung gian. Chỉ cần 3 chân GPIO và có thể nối tiếp nhiều IC qua chân Q7′.\n\nLED 7 đoạn chung cathode bật đoạn bằng mức 1, chung anode bằng mức 0. Bảng mã byte cho chữ số 0–9 phụ thuộc cách nối Q0–Q7 tới các đoạn a–g, dp; mỗi đoạn cần điện trở hạn dòng riêng.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
         },
         {
-          "id": "quiz-doc-1-5",
+          "id": "quiz-1-7",
           "type": "quiz",
-          "label": "Câu hỏi",
+          "label": "Câu hỏi Doc 1.5",
           "title": "Câu hỏi kiểm tra Doc 1.5",
-          "checkpointId": "doc-1-5",
           "reading": ""
         },
         {
@@ -3006,26 +3381,24 @@
           "reading": ""
         },
         {
-          "id": "quiz-practice-1-74hc595",
+          "id": "quiz-1-8",
           "type": "quiz",
-          "label": "Câu hỏi",
+          "label": "Câu hỏi Thực hành 74HC595",
           "title": "Câu hỏi kiểm tra Thực hành 74HC595",
-          "checkpointId": "practice-1-74hc595",
           "reading": ""
         },
         {
-          "id": "document-1-uart",
+          "id": "doc-1-6",
           "type": "document",
           "label": "Doc 1.6",
-          "title": "Giao tiếp nối tiếp bất đồng bộ UART và truyền nhận ký tự với máy tính ở 115200 bps",
-          "reading": "# Doc 1.6: Giao tiếp nối tiếp bất đồng bộ UART và truyền nhận ký tự với máy tính ở 115200 bps\n\nUART truyền bất đồng bộ: đường rảnh ở mức 1; mỗi khung gồm 1 start bit (0), 5–8 bit dữ liệu (thường 8, bit thấp gửi trước), parity tùy chọn và 1–2 stop bit. Cấu hình phổ biến là 8N1.\n\nHai bên phải cùng tốc độ baud. Ở 115200 bps với 8N1 (10 bit mỗi byte) truyền được khoảng 11 520 byte/giây. TX bên này nối RX bên kia và hai bên chung GND.\n\nByte nhận được nằm trong bộ đệm (FIFO phần cứng và bộ đệm driver). Serial.available() cho biết số byte đang chờ, Serial.read() lấy từng byte; đọc không kịp sẽ tràn bộ đệm và mất dữ liệu.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
+          "title": "Giao tiếp nối tiếp bất đồng bộ UART và truyền nhận ký tự hai chiều ở 115200 bps",
+          "reading": "# Doc 1.6: Giao tiếp nối tiếp bất đồng bộ UART và truyền nhận ký tự hai chiều ở 115200 bps\n\nUART truyền bất đồng bộ: đường rảnh ở mức 1; mỗi khung gồm 1 start bit (0), 5–8 bit dữ liệu (thường 8, bit thấp gửi trước), parity tùy chọn và 1–2 stop bit. Cấu hình phổ biến là 8N1.\n\nHai bên phải cùng tốc độ baud. Ở 115200 bps với 8N1 (10 bit mỗi byte) truyền được khoảng 11 520 byte/giây. TX bên này nối RX bên kia và hai bên chung GND.\n\nByte nhận được nằm trong bộ đệm (FIFO phần cứng và bộ đệm driver). Serial.available() cho biết số byte đang chờ, Serial.read() lấy từng byte; đọc không kịp sẽ tràn bộ đệm và mất dữ liệu.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
         },
         {
-          "id": "quiz-doc-1-6",
+          "id": "quiz-1-9",
           "type": "quiz",
-          "label": "Câu hỏi",
+          "label": "Câu hỏi Doc 1.6",
           "title": "Câu hỏi kiểm tra Doc 1.6",
-          "checkpointId": "doc-1-6",
           "reading": ""
         },
         {
@@ -3047,45 +3420,42 @@
           "reading": ""
         },
         {
-          "id": "quiz-practice-1-uart",
+          "id": "quiz-1-10",
           "type": "quiz",
-          "label": "Câu hỏi",
+          "label": "Câu hỏi Thực hành UART",
           "title": "Câu hỏi kiểm tra Thực hành UART",
-          "checkpointId": "practice-1-uart",
           "reading": ""
         },
         {
-          "id": "document-1-4",
+          "id": "doc-1-7",
           "type": "document",
           "label": "Doc 1.7",
-          "title": "Mạng không dây 802.11 (STA và SoftAP) và máy chủ Web HTTP nhúng xử lý GET/POST",
-          "reading": "# Doc 1.7: Mạng không dây 802.11 (STA và SoftAP) và máy chủ Web HTTP nhúng xử lý GET/POST\n\nWiFi Station kết nối vào mạng có sẵn; Access Point tạo mạng để thiết bị khác kết nối. Phân biệt tên mạng, địa chỉ IP và trạng thái kết nối.\n\nMáy chủ HTTP tiếp nhận request theo đường dẫn và trả response gồm mã trạng thái, header và nội dung. Trình duyệt gửi yêu cầu để đọc trạng thái hoặc điều khiển LED.\n\nĐọc địa chỉ IP trên Serial, kiểm tra máy tính ở đúng mạng. Không đưa mật khẩu WiFi thực vào kho mã hoặc báo cáo công khai.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
+          "title": "Mạng không dây 802.11 (STA và SoftAP) và máy chủ Web HTTP nhúng GET/POST",
+          "reading": "# Doc 1.7: Mạng không dây 802.11 (STA và SoftAP) và máy chủ Web HTTP nhúng GET/POST\n\nWiFi Station kết nối vào mạng có sẵn; Access Point tạo mạng để thiết bị khác kết nối. Phân biệt tên mạng, địa chỉ IP và trạng thái kết nối.\n\nMáy chủ HTTP tiếp nhận request theo đường dẫn và trả response gồm mã trạng thái, header và nội dung. Trình duyệt gửi yêu cầu để đọc trạng thái hoặc điều khiển LED.\n\nĐọc địa chỉ IP trên Serial, kiểm tra máy tính ở đúng mạng. Không đưa mật khẩu WiFi thực vào kho mã hoặc báo cáo công khai.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
         },
         {
-          "id": "quiz-doc-1-7",
+          "id": "quiz-1-11",
           "type": "quiz",
-          "label": "Câu hỏi",
+          "label": "Câu hỏi Doc 1.7",
           "title": "Câu hỏi kiểm tra Doc 1.7",
-          "checkpointId": "doc-1-7",
           "reading": ""
         },
         {
-          "id": "document-1-millis",
+          "id": "doc-1-8",
           "type": "document",
           "label": "Doc 1.8",
-          "title": "Định thời Non-blocking với millis() và an toàn chống tràn số sau 49.7 ngày",
-          "reading": "# Doc 1.8: Định thời Non-blocking với millis() và an toàn chống tràn số sau 49.7 ngày\n\ndelay() chặn CPU: trong lúc chờ, chương trình không đọc nút, không phục vụ lệnh và không cập nhật watchdog. Phần mềm bay cần vòng lặp không chặn để nhiều công việc cùng tiến triển.\n\nmillis() trả số mili-giây từ khi khởi động, kiểu unsigned long 32 bit, quay về 0 sau 2^32 ms ≈ 49.7 ngày. Mẫu định thời: if (millis() - lastRun >= INTERVAL) { lastRun = millis(); ... }.\n\nPhép trừ số không dấu tính theo modulo 2^32 nên hiệu millis() - lastRun vẫn đúng khi bộ đếm tràn. Viết millis() >= lastRun + INTERVAL thì sai ngay tại thời điểm tràn.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
+          "title": "Lập trình C++ định thời non-blocking với millis() và an toàn tràn số sau 49,7 ngày",
+          "reading": "# Doc 1.8: Lập trình C++ định thời non-blocking với millis() và an toàn tràn số sau 49,7 ngày\n\ndelay() chặn CPU: trong lúc chờ, chương trình không đọc nút, không phục vụ lệnh và không cập nhật watchdog. Phần mềm bay cần vòng lặp không chặn để nhiều công việc cùng tiến triển.\n\nmillis() trả số mili-giây từ khi khởi động, kiểu unsigned long 32 bit, quay về 0 sau 2^32 ms ≈ 49.7 ngày. Mẫu định thời: if (millis() - lastRun >= INTERVAL) { lastRun = millis(); ... }.\n\nPhép trừ số không dấu tính theo modulo 2^32 nên hiệu millis() - lastRun vẫn đúng khi bộ đếm tràn. Viết millis() >= lastRun + INTERVAL thì sai ngay tại thời điểm tràn.\n\n## Tự kiểm tra\n\n- Giải thích các khái niệm bằng sơ đồ hoặc ví dụ.\n- Xác định cấu hình phần cứng và cách quan sát kết quả cho bài thực hành liên quan.\n- Ghi lại điểm chưa rõ để đối chiếu khi chạy chương trình.\n\nMục tiêu Lab 1: Làm chủ vi điều khiển ESP32-WROOM-32, môi trường Web IDE, nạp firmware qua Web Serial API, nguyên lý và lập trình từng linh kiện ngoại vi cơ bản (LED, nút nhấn, LED 7 đoạn 74HC595, UART, WiFi/Web Server).\n\n[Lộ trình và các kho bài thực hành PTITCube](https://github.com/PTITCube)\n"
         },
         {
-          "id": "quiz-doc-1-8",
+          "id": "quiz-1-12",
           "type": "quiz",
-          "label": "Câu hỏi",
+          "label": "Câu hỏi Doc 1.8",
           "title": "Câu hỏi kiểm tra Doc 1.8",
-          "checkpointId": "doc-1-8",
           "reading": ""
         },
         {
-          "id": "video-1-4",
+          "id": "video-1-5",
           "type": "video",
           "label": "Video 1.3",
           "title": "Giới thiệu về kết nối WiFi và Máy chủ Web nhúng",
@@ -3120,11 +3490,10 @@
           "reading": ""
         },
         {
-          "id": "quiz-practice-1-wifi",
+          "id": "quiz-1-13",
           "type": "quiz",
-          "label": "Câu hỏi",
+          "label": "Câu hỏi Thực hành WiFi & Web Server",
           "title": "Câu hỏi kiểm tra Thực hành WiFi & Web Server",
-          "checkpointId": "practice-1-wifi",
           "reading": ""
         },
         {

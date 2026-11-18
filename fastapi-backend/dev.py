@@ -1,5 +1,6 @@
 """Development server with compiler output excluded from reload watching."""
 
+import os
 from pathlib import Path
 
 import uvicorn
@@ -12,9 +13,10 @@ if __name__ == "__main__":
     (root / "build_cache").mkdir(exist_ok=True)
     uvicorn.run(
         "app.main:app",
-        host="0.0.0.0",
+        # Local only by default; set BACKEND_HOST=0.0.0.0 to expose the dev API on the LAN on purpose.
+        host=os.environ.get("BACKEND_HOST", "127.0.0.1"),
         port=8005,
         reload=True,
         reload_dirs=[str(root / "app")],
-        reload_excludes=[str(root / "build_cache")],
+        reload_excludes=[str(build_cache)],
     )

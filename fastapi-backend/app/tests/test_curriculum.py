@@ -5,16 +5,22 @@ import unittest
 from hashlib import sha256
 from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import patch
 
 import httpx
 from fastapi import FastAPI
 
+from app.core.config import get_settings
 from app.routers import curriculum
 from app.services.auth import get_current_user
 
 
 class CurriculumTests(unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
+        # These tests cover the legacy (non-class) path; do not inherit LMS_CLASS_MODE from a local .env.
+        lms_flag = patch.object(get_settings(), "lms_class_mode", False)
+        lms_flag.start()
+        self.addCleanup(lms_flag.stop)
         self.app = FastAPI()
         self.app.include_router(curriculum.router)
         self.user = SimpleNamespace(id=1)

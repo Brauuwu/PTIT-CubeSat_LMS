@@ -25,6 +25,7 @@ ALLOWED_PARAMS = {
     "document": {"markdown", "estimated_minutes"},
     "practice": {"instructions", "rubric", "board", "evidence", "estimated_minutes"},
     "labtest": {"time_limit_minutes", "max_attempts", "pass_score", "estimated_minutes"},
+    "quiz": {"time_limit_minutes", "max_attempts", "pass_score", "estimated_minutes"},
 }
 
 
@@ -84,7 +85,7 @@ async def course_data(db, version_id):
 
 
 def defaults(lesson):
-    enabled = lesson.type != "labtest" and (
+    enabled = lesson.type not in {"labtest", "quiz"} and (
         lesson.type != "video" or bool(lesson.content.get("url"))
     )
     return {
@@ -120,16 +121,16 @@ async def configuration(
         version_id = row.course_version_id
     labs, lessons = await course_data(db, version_id)
     quiz_policies = {
-        p.lab_id: p
+        p.lesson_id: p
         for p in (
             await db.execute(select(QuizPolicy).where(QuizPolicy.class_id == access.classroom.id))
         ).scalars()
     }
     quiz_banks = {
-        lab_id: course_id
-        for lab_id, course_id in (
+        lesson_id: course_id
+        for lesson_id, course_id in (
             await db.execute(
-                select(QuizPolicy.lab_id, QuestionBank.course_version_id)
+                select(QuizPolicy.lesson_id, QuestionBank.course_version_id)
                 .join(QuestionBank, QuestionBank.id == QuizPolicy.bank_id)
                 .where(
                     QuizPolicy.class_id == access.classroom.id, QuestionBank.status == "published"
@@ -198,18 +199,23 @@ async def configuration(
             content = safe_content(
                 lesson.content, lesson.type, manager=access.can_manage and not student_view
             )
-            if lesson.type == "labtest" and lab.id in quiz_policies:
+            if lesson.type in ("labtest", "quiz") and lesson.id in quiz_policies:
                 content.update(
                     {
-                        key: getattr(quiz_policies[lab.id], key)
-                        for key in ("time_limit_minutes", "pass_score", "max_attempts")
+                        key: getattr(quiz_policies[lesson.id], key)
+                        for key in (
+                            "time_limit_minutes",
+                            "pass_score",
+                            "max_attempts",
+                            "num_questions",
+                        )
                     }
                 )
             content.update(
                 {k: v for k, v in values["params"].items() if k in ALLOWED_PARAMS[lesson.type]}
             )
-            if lesson.type == "labtest":
-                content["bank_ready"] = quiz_banks.get(lab.id) == version_id
+            if lesson.type in ("labtest", "quiz"):
+                content["bank_ready"] = quiz_banks.get(lesson.id) == version_id
             if not access.can_manage or student_view:
                 content.pop("todos", None)
             output["lessons"].append(
@@ -257,7 +263,7 @@ def validate_params(lesson, params):
             valid = value in ("native", "confirmation")
         elif key in {"estimated_minutes", "time_limit_minutes", "max_attempts", "pass_score"}:
             valid = type(value) is int and 0 < value <= {
-                "pass_score": 5,
+                "pass_score": 200,
                 "time_limit_minutes": 180,
                 "max_attempts": 100,
             }.get(key, 10000)
@@ -423,6 +429,22 @@ def validate_configuration(config):
                 }
             )
         for lesson in lab["lessons"]:
+            if (
+                lab["enabled"]
+                and lesson["enabled"]
+                and lesson["type"] == "quiz"
+                and not lesson["content"].get("bank_ready")
+            ):
+                # A quiz completes only by passing, so an enabled quiz without questions would
+                # lock every later lesson of the lab.
+                errors.append(
+                    {
+                        "lab_id": lab["id"],
+                        "lesson_id": lesson["id"],
+                        "code": "QUIZ_BANK_NOT_READY",
+                        "message": "Bài câu hỏi đang bật nhưng chưa có ngân hàng câu hỏi đã duyệt và xuất bản.",
+                    }
+                )
             if not lab["enabled"] or not lesson["enabled"] or not lesson["required"]:
                 continue
             content = lesson["content"]

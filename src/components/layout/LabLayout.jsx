@@ -145,6 +145,10 @@ function LoadedLabLayout({ lab, catalog, editorPanel, visualizationPanel = null,
           <span className="lab-workspace-badge" aria-hidden="true">▤</span>
           <div className="lab-doc-surface"><DocViewer key={lesson.id} docPath={lab.id === 0 && lesson.id === 'document' ? lab.docPath : undefined} content={lesson.reading} /></div>
         </section>}
+        {lesson.type === 'quiz' && !lesson.checkpointId && <section className="lesson-reading-card" aria-label={`${lesson.label}: ${lesson.title}`}>
+          <h2>{lesson.title}</h2>
+          <p>Câu hỏi kiểm tra của mục này đang được biên soạn. Đáp án chỉ lưu trên máy chủ và sẽ mở khi ngân hàng câu hỏi được duyệt.</p>
+        </section>}
         {lesson.type === 'components' && <section className="lab-workspace lab-components-workspace" aria-label="Khám phá các phân hệ CubeSat">{visualizationPanel}</section>}
         {lesson.type === 'practice' && <>
           <section className="lesson-practice-brief" aria-label="Yêu cầu bài thực hành">
@@ -174,7 +178,7 @@ function LoadedLabLayout({ lab, catalog, editorPanel, visualizationPanel = null,
             <Link className="btn btn-sm btn-outline lesson-questions-link" to={`/lab${lab.id}/questions`}>Xem tất cả câu hỏi của Lab {lab.id}</Link>
           </div>
         </section>}
-        {lesson.type === 'quiz' && <section className="lesson-reading-card lesson-quiz" aria-label={lesson.title}>
+        {lesson.type === 'quiz' && lesson.checkpointId && <section className="lesson-reading-card lesson-quiz" aria-label={lesson.title}>
           {checkpoint ? <CheckpointCard as="div" checkpoint={checkpoint}
             renderExercise={id => <button type="button" className="lesson-quiz-exercise" onClick={() => selectLesson(id)}><code>{id}</code></button>} />
             : <p>Chưa có nội dung cho phần câu hỏi này.</p>}

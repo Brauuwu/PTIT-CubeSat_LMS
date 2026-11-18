@@ -19,7 +19,11 @@ test('PTITCube syllabus exposes 179 ordered sections and all 39 individual exerc
     // README pattern: ... -> Tổng hợp -> Lab Test, and every Doc is followed by its check questions.
     assert.deepEqual(lessons.slice(-2).map(item => [item.type, item.id]), [['summary', `summary-${lab.id}`], ['labtest', `labtest-${lab.id}`]]);
     lessons.forEach((item, index) => { if (item.type === 'document') assert.equal(lessons[index + 1].type, 'quiz', `${item.id} must be followed by a quiz`); });
-    for (const quiz of lessons.filter(item => item.type === 'quiz')) assert.equal(quiz.id, `quiz-${quiz.checkpointId}`);
+    // Lab 2-8: self-review checkpoints; Lab 0/1: server-graded quiz lessons `quiz-<lab>-<n>` (no checkpoint).
+    for (const quiz of lessons.filter(item => item.type === 'quiz')) {
+      if (lab.id <= 1) assert.match(quiz.id, new RegExp(`^quiz-${lab.id}-[0-9]+$`));
+      else assert.equal(quiz.id, `quiz-${quiz.checkpointId}`);
+    }
     assert.equal(lab.description, CURRICULUM[lab.id].objective);
     if (lab.id === 0) continue;
     for (const lesson of lessons.filter(item => item.type === 'practice')) {
@@ -37,7 +41,7 @@ test('PTITCube syllabus exposes 179 ordered sections and all 39 individual exerc
   assert.equal(next(4, 'Lab4-03b_GPS_Library'), 'quiz-practice-4-nmea-raw');
   assert.equal(next(4, 'quiz-doc-4-4'), 'Lab4-03c_GPS_PTITCube');
   // Practice groups are followed by their own check questions.
-  assert.equal(next(1, 'Lab1-03_PWM_LED'), 'quiz-practice-1-led');
+  assert.equal(next(1, 'Lab1-03_PWM_LED'), 'quiz-1-4');
   assert.equal(next(3, 'Lab3-05_Event_Driven_Queue'), 'quiz-practice-3-wdt-event');
 });
 
@@ -47,13 +51,13 @@ test('every document has topic-specific reading; video links remain explicit unt
       assert.ok(READING_NOTES[lesson.id]?.length >= 3);
       assert.ok(lessonReadingContent(lab, lesson).includes(lesson.title));
     }
-    if (lesson.type === 'video') assert.equal(lesson.videoUrl, '');
+    if (lesson.type === 'video') assert.equal(lesson.videoUrl ?? '', '');
   }
 });
 
 test('lesson URLs restore selection, invalid/cross-lab IDs fall back and Lab0 keeps its original IDs', () => {
   assert.deepEqual(getLessonsForLab(0).map(item => item.id), [
-    'overview', 'document', 'quiz-doc-0-1', 'document-0-2', 'quiz-doc-0-2', 'video-0-2', 'components', 'quiz-practice-0', 'summary-0', 'labtest-0',
+    'overview', 'document', 'quiz-0-1', 'document-0-2', 'quiz-0-2', 'video-0-2', 'components', 'quiz-0-3', 'summary-0', 'labtest-0',
   ]);
   const url = new URL(lessonUrl('lab4', 'Lab4-02b_IMU_Library'), 'http://localhost');
   assert.equal(getLessonForLab(4, url.searchParams.get('lesson')).id, 'Lab4-02b_IMU_Library');

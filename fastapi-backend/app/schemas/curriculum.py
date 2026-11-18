@@ -26,3 +26,9 @@ class SettingsInput(InputModel):
 
 class PublishInput(InputModel):
     expected_version: int = Field(ge=1)
+
+
+class DocumentImportInput(InputModel):
+    filename: str = Field(min_length=1, max_length=255)
+    # Base64 of a .docx or PDF file of at most 10 MB (about 13.4 million base64 characters).
+    content: str = Field(min_length=4, max_length=14_500_000)

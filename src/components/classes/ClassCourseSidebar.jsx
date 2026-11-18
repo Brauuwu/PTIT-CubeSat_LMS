@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import logoSvg from '../../assets/logo.svg';
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, CheckIcon, CircleIcon, HomeIcon, LockIcon } from '../common/HeaderIcons';
 
-const typeLabels = { video: 'Video', document: 'Tài liệu', practice: 'Thực hành', labtest: 'Lab test' };
+const typeLabels = { video: 'Video', document: 'Tài liệu', practice: 'Thực hành', quiz: 'Câu hỏi', labtest: 'Lab test' };
 
 function stateFor(lab, unlockedView = false) {
   const lessons = lab.lessons || [];

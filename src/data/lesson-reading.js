@@ -11,12 +11,12 @@ export const READING_NOTES = {
     'Chọn đúng ESP32 hoặc ESP32-S3, biên dịch và đọc log trước khi nạp. Kết nối bo qua USB, chọn đúng cổng Serial và quan sát chương trình sau khi reset.',
     'Mỗi bài tự lưu riêng trên trình duyệt. Tải file .ino và xuất JSON Blockly để sao lưu/chuyển máy; thay đổi mã yêu cầu biên dịch lại trước khi nạp.',
   ],
-  'document-1-3': [
+  'doc-1-3': [
     'LED là diode phát quang, chỉ sáng khi phân cực thuận và luôn cần điện trở hạn dòng: R = (Vcc − Vf) / I. Ví dụ (3.3 V − 2.0 V) / 10 mA ≈ 130 Ω.',
     'Ngõ ra GPIO kiểu push-pull lái được cả mức HIGH và LOW: pinMode(pin, OUTPUT) rồi digitalWrite() để bật/tắt. Nhiều LED dùng mảng số chân và vòng lặp để chạy tuần tự.',
     'PWM điều chỉnh độ sáng bằng tỉ lệ thời gian bật (duty cycle) ở tần số cao. Bộ LEDC của ESP32 có 16 kênh: ledcSetup() đặt tần số và độ phân giải, ledcAttachPin() gắn chân, ledcWrite() ghi duty; với độ phân giải 8 bit, duty từ 0 đến 255.',
   ],
-  'document-1-4': [
+  'doc-1-7': [
     'WiFi Station kết nối vào mạng có sẵn; Access Point tạo mạng để thiết bị khác kết nối. Phân biệt tên mạng, địa chỉ IP và trạng thái kết nối.',
     'Máy chủ HTTP tiếp nhận request theo đường dẫn và trả response gồm mã trạng thái, header và nội dung. Trình duyệt gửi yêu cầu để đọc trạng thái hoặc điều khiển LED.',
     'Đọc địa chỉ IP trên Serial, kiểm tra máy tính ở đúng mạng. Không đưa mật khẩu WiFi thực vào kho mã hoặc báo cáo công khai.',
@@ -98,22 +98,22 @@ export const READING_NOTES = {
     'Sáu phân hệ cốt lõi: OBC xử lý lệnh, lập lịch và lưu dữ liệu; EPS thu, lưu và phân phối năng lượng; Sensors & Payload thu dữ liệu nhiệm vụ; COM thu phát viễn trắc/viễn lệnh; Structure đỡ, tản nhiệt và che chắn; ADCS xác định và điều khiển tư thế.',
     'Viễn lệnh đi từ trạm mặt đất qua COM tới OBC để giải mã và phân phối; viễn trắc từ cảm biến, EPS được OBC đóng gói rồi gửi qua COM về trạm. Sự cố ở một phân hệ (ví dụ sụt áp EPS) lan sang phân hệ khác, nên OBC giám sát và chuyển sang chế độ an toàn khi cần.',
   ],
-  'document-1-button': [
+  'doc-1-4': [
     'Ngõ vào để hở (floating) nhận nhiễu và đọc ngẫu nhiên HIGH/LOW. INPUT_PULLUP bật điện trở kéo lên nội (khoảng 45 kΩ trên ESP32), nên nút nối giữa GPIO và GND đọc HIGH khi nhả và LOW khi nhấn.',
     'Tiếp điểm cơ khí nảy (contact bounce) trong vài mili-giây, tạo nhiều cạnh lên/xuống cho một lần nhấn. Chống rung bằng phần mềm: chỉ chấp nhận trạng thái mới khi nó giữ ổn định qua một khoảng (thường 20–50 ms) đo bằng millis().',
     'Phát hiện sự kiện nhấn bằng cạnh xuống (trước HIGH, nay LOW) rồi mới đảo biến chốt (toggle); không đảo LED ở mỗi vòng loop() khi nút vẫn đang được giữ.',
   ],
-  'document-1-74hc595': [
+  'doc-1-5': [
     '74HC595 gồm thanh ghi dịch 8 bit và thanh ghi chốt 8 bit. Mỗi cạnh lên của SH_CP dịch bit đang có ở DS vào; cạnh lên của ST_CP chép thanh ghi dịch ra 8 ngõ Q0–Q7 cùng lúc.',
     'shiftOut(dataPin, clockPin, MSBFIRST hoặc LSBFIRST, value) gửi 8 bit. Kéo latch xuống LOW trước khi dịch và lên HIGH sau khi dịch để LED không hiện trạng thái trung gian. Chỉ cần 3 chân GPIO và có thể nối tiếp nhiều IC qua chân Q7′.',
     'LED 7 đoạn chung cathode bật đoạn bằng mức 1, chung anode bằng mức 0. Bảng mã byte cho chữ số 0–9 phụ thuộc cách nối Q0–Q7 tới các đoạn a–g, dp; mỗi đoạn cần điện trở hạn dòng riêng.',
   ],
-  'document-1-uart': [
+  'doc-1-6': [
     'UART truyền bất đồng bộ: đường rảnh ở mức 1; mỗi khung gồm 1 start bit (0), 5–8 bit dữ liệu (thường 8, bit thấp gửi trước), parity tùy chọn và 1–2 stop bit. Cấu hình phổ biến là 8N1.',
     'Hai bên phải cùng tốc độ baud. Ở 115200 bps với 8N1 (10 bit mỗi byte) truyền được khoảng 11 520 byte/giây. TX bên này nối RX bên kia và hai bên chung GND.',
     'Byte nhận được nằm trong bộ đệm (FIFO phần cứng và bộ đệm driver). Serial.available() cho biết số byte đang chờ, Serial.read() lấy từng byte; đọc không kịp sẽ tràn bộ đệm và mất dữ liệu.',
   ],
-  'document-1-millis': [
+  'doc-1-8': [
     'delay() chặn CPU: trong lúc chờ, chương trình không đọc nút, không phục vụ lệnh và không cập nhật watchdog. Phần mềm bay cần vòng lặp không chặn để nhiều công việc cùng tiến triển.',
     'millis() trả số mili-giây từ khi khởi động, kiểu unsigned long 32 bit, quay về 0 sau 2^32 ms ≈ 49.7 ngày. Mẫu định thời: if (millis() - lastRun >= INTERVAL) { lastRun = millis(); ... }.',
     'Phép trừ số không dấu tính theo modulo 2^32 nên hiệu millis() - lastRun vẫn đúng khi bộ đếm tràn. Viết millis() >= lastRun + INTERVAL thì sai ngay tại thời điểm tràn.',

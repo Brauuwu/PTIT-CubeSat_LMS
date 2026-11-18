@@ -1,3 +1,5 @@
+import asyncio
+
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -5,9 +7,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.db import get_db
 from app.models.curriculum import CourseVersion
 from app.models.tables import UserRole
-from app.schemas.curriculum import PublishInput, SettingsInput
+from app.schemas.curriculum import DocumentImportInput, PublishInput, SettingsInput
 from app.services import course_configuration as service
 from app.services.auth import get_required_user
+from app.services.document_import import import_document
 from app.services.permissions import (
     ClassAccess,
     require_class_member,
@@ -59,6 +62,15 @@ async def settings(
     db: AsyncSession = Depends(get_db),
 ):
     return await service.save_settings(db, access, request)
+
+
+@router.post("/api/classes/{class_id}/document-import")
+async def document_import(
+    request: DocumentImportInput,
+    _: ClassAccess = Depends(write_class),
+):
+    """Convert an uploaded Word (.docx) or PDF file to Markdown for the teacher to review."""
+    return await asyncio.to_thread(import_document, request.content)
 
 
 @router.post("/api/classes/{class_id}/publish")
