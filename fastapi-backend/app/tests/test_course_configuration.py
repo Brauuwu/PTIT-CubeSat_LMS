@@ -134,7 +134,7 @@ class CurriculumAPITests(unittest.IsolatedAsyncioTestCase):
                 (await db.execute(select(func.count()).select_from(CourseVersion))).scalar_one(), 1
             )
             lessons = list((await db.execute(select(Lesson))).scalars())
-            self.assertEqual(len(lessons), 113)
+            self.assertEqual(len(lessons), 129)
             original = {item["id"] for lab in read_seed()["legacy"] for item in lab["lessons"]}
             self.assertEqual(
                 {item.id for item in lessons}, original | {f"labtest-{i}" for i in range(9)}

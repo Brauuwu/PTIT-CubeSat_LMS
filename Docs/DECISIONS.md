@@ -1,5 +1,12 @@
 # Nhật ký quyết định
 
+## 18/11/2026 — Cấu trúc Lab 1 theo khung Lab 0 (LAB1-01)
+
+- Lab 1 có 36 mục: Video 1.1-1.3, Doc 1.1-1.8, 13 mục `quiz` (`quiz-1-1`…`quiz-1-13`) sau từng doc và từng nhóm thực hành, 10 bài thực hành, `summary-1` và `labtest-1`. Doc, tổng hợp và video là khung rỗng ở `fastapi-backend/app/firmware/curriculum/lab1/` (giảng viên bổ sung sau); quiz và Lab Test chỉ là khung (mặc định tắt, câu hỏi do giảng viên soạn).
+- Giữ nguyên 10 ID thực hành `Lab1-01`…`Lab1-10` cùng mã nguồn; danh sách yêu cầu có thêm `Lab1-03_PWM_LED` và đánh số lại, nhưng chưa có mã và đổi ID sẽ mất tiến độ nên chưa thêm. PWM được dạy trong Doc 1.3 như kiến thức mở rộng. Bài 74HC595 vẫn là `Lab1-05_7_Segment_LED` (điều khiển trực tiếp 7 chân), Doc 1.5 giải thích cách chuyển sang 74HC595.
+- ID mới: `doc-1-3`…`doc-1-8` và `video-1-5` (Video 1.3 về WiFi) để không đổi nghĩa `document-1-3`, `document-1-4`, `video-1-3`, `video-1-4` cũ; các ID cũ này không còn trong phiên bản giáo trình mới. Lớp đã ghim phiên bản cũ không bị ảnh hưởng; nâng lớp lên cấu trúc mới cần script nâng cấp riêng (chưa làm), tiến độ doc/video cũ không chuyển sang ID mới.
+- Lab Test của Lab 1 hướng tới 10 câu (giảng viên cấu hình trong ngân hàng, không còn ràng buộc cứng số câu).
+
 ## 18/11/2026 — Quiz theo bài và nâng cấp lớp lên Lab 0 mới (LAB0-02)
 
 - Mỗi bài `quiz` có ngân hàng câu hỏi và chính sách riêng, khoá theo `lesson_id` (migration `0016_lesson_quiz_banks`; bank và chính sách cũ được gán `labtest-<lab>`). Giảng viên soạn, duyệt, xuất bản câu hỏi và đặt số câu mỗi lượt (1-20), điểm đạt, thời gian, số lượt ngay trong Cấu hình chương trình. Lab Test giữ nguyên: đúng 20 câu đã duyệt, mỗi lượt rút 5 câu.
