@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { loginDestination } from '../contexts/auth-session';
 import AuthLayout from '../components/common/AuthLayout';
-import { EyeIcon } from '../components/common/AuthIcons';
+import PasswordInput from '../components/common/PasswordInput';
 import { useAuth } from '../contexts/auth-api';
 import GoogleSignIn from '../components/common/GoogleSignIn';
 
@@ -16,7 +16,6 @@ export default function SignUpPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState(/** @type {Record<string, string>} */ ({}));
   const [submitting, setSubmitting] = useState(false);
 
@@ -98,48 +97,35 @@ export default function SignUpPage() {
 
         <div className="auth-field">
           <label htmlFor="password">Mật khẩu</label>
-          <div className={`auth-input-wrap ${errors.password ? 'has-error' : ''}`}>
-            <input
-              id="password"
-              required
-              minLength={6}
-              autoComplete="new-password"
-              type={showPassword ? 'text' : 'password'}
-              placeholder="********"
-              aria-invalid={Boolean(errors.password)}
-              aria-describedby={errors.password ? 'signup-password-error' : undefined}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <button
-              type="button"
-              className="auth-toggle-visibility"
-              onClick={() => setShowPassword((v) => !v)}
-              aria-label="Hiện/ẩn mật khẩu"
-              aria-pressed={showPassword}
-            >
-              <EyeIcon open={showPassword} />
-            </button>
-          </div>
+          <PasswordInput
+            id="password"
+            required
+            minLength={6}
+            autoComplete="new-password"
+            placeholder="********"
+            hasError={Boolean(errors.password)}
+            aria-invalid={Boolean(errors.password)}
+            aria-describedby={errors.password ? 'signup-password-error' : undefined}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
           {errors.password && <div id="signup-password-error" className="auth-error-text" role="alert">⚠ {errors.password}</div>}
         </div>
 
         <div className="auth-field">
           <label htmlFor="confirmPassword">Xác nhận mật khẩu</label>
-          <div className={`auth-input-wrap ${errors.confirmPassword ? 'has-error' : ''}`}>
-            <input
-              id="confirmPassword"
-              required
-              minLength={6}
-              autoComplete="new-password"
-              type={showPassword ? 'text' : 'password'}
-              placeholder="********"
-              aria-invalid={Boolean(errors.confirmPassword)}
-              aria-describedby={errors.confirmPassword ? 'signup-confirm-error' : undefined}
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-          </div>
+          <PasswordInput
+            id="confirmPassword"
+            required
+            minLength={6}
+            autoComplete="new-password"
+            placeholder="********"
+            hasError={Boolean(errors.confirmPassword)}
+            aria-invalid={Boolean(errors.confirmPassword)}
+            aria-describedby={errors.confirmPassword ? 'signup-confirm-error' : undefined}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
           {errors.confirmPassword && <div id="signup-confirm-error" className="auth-error-text" role="alert">⚠ {errors.confirmPassword}</div>}
         </div>
 

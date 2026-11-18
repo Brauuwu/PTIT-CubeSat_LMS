@@ -41,6 +41,22 @@ class AdminUserResponse(BaseModel):
     role: UserRole
     status: AccountStatus
     created_at: datetime | None
+    pending_password_reset: bool = False
+    reset_requested_at: datetime | None = None
+
+
+class PasswordResetResponse(BaseModel):
+    user_id: int
+    email: str
+    temporary_password: str
+
+
+class PasswordResetLinkResponse(BaseModel):
+    user_id: int
+    email: str
+    reset_path: str
+    reset_url: str
+    expires_at: datetime
 
 
 class ClassCreate(InputModel):

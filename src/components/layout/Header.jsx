@@ -42,6 +42,7 @@ export default function Header() {
 
       <div className="header-actions">
         {classMode && <Link to="/classes" className="header-class-link">Lớp học</Link>}
+        {!classMode && user?.role === 'admin' && <Link to="/admin/users" className="header-class-link">Tài khoản</Link>}
         <Link to="/" className="header-icon-action header-route-action" aria-label="Trang chủ" title="Trang chủ">
           <HomeIcon size={17} />
         </Link>

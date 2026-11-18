@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthLayout from '../components/common/AuthLayout';
+import PasswordInput from '../components/common/PasswordInput';
 import { useAuth } from '../contexts/auth-api';
 
 export default function AdminSignUpPage() {
@@ -67,16 +68,36 @@ export default function AdminSignUpPage() {
 
         <div className="auth-field">
           <label htmlFor="admin-password">Mật khẩu</label>
-          <div className="auth-input-wrap">
-            <input id="admin-password" name="password" type="password" required minLength={6} value={form.password} onChange={handleChange} placeholder="••••••••" autoComplete="new-password" aria-invalid={Boolean(error)} aria-describedby={error ? 'admin-signup-error' : undefined} />
-          </div>
+          <PasswordInput
+            id="admin-password"
+            name="password"
+            required
+            minLength={6}
+            value={form.password}
+            onChange={handleChange}
+            placeholder="••••••••"
+            autoComplete="new-password"
+            hasError={Boolean(error)}
+            aria-invalid={Boolean(error)}
+            aria-describedby={error ? 'admin-signup-error' : undefined}
+          />
         </div>
 
         <div className="auth-field">
           <label htmlFor="admin-confirm-password">Xác nhận mật khẩu</label>
-          <div className="auth-input-wrap">
-            <input id="admin-confirm-password" name="confirmPassword" type="password" required minLength={6} value={form.confirmPassword} onChange={handleChange} placeholder="••••••••" autoComplete="new-password" aria-invalid={Boolean(error)} aria-describedby={error ? 'admin-signup-error' : undefined} />
-          </div>
+          <PasswordInput
+            id="admin-confirm-password"
+            name="confirmPassword"
+            required
+            minLength={6}
+            value={form.confirmPassword}
+            onChange={handleChange}
+            placeholder="••••••••"
+            autoComplete="new-password"
+            hasError={Boolean(error)}
+            aria-invalid={Boolean(error)}
+            aria-describedby={error ? 'admin-signup-error' : undefined}
+          />
         </div>
 
         {error && <div id="admin-signup-error" className="auth-error-text" role="alert">{error}</div>}

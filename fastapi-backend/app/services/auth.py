@@ -375,6 +375,9 @@ class AuthService:
             raise ValueError("Mật khẩu hiện tại không chính xác.")
 
         current_user.password_hash = await run_in_threadpool(hash_password, request.new_password)
+        from app.services.password_reset import revoke_open_resets
+
+        await revoke_open_resets(self.db_session, current_user.id)
         await self.db_session.commit()
         logger.info(f"[AuthService] 🔒 Password changed: user_id={current_user.id}")
 

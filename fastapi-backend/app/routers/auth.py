@@ -8,7 +8,7 @@ Authentication API Endpoints:
   POST /api/auth/logout   — Đăng xuất (thu hồi token vào PostgreSQL, cache trên Redis)
 """
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from fastapi.security import OAuth2PasswordBearer
 from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -22,12 +22,22 @@ from app.models.tables import User
 from app.schemas.auth import (
     AuthTokenResponse,
     ChangePasswordRequest,
+    ForgotPasswordRequest,
+    ForgotPasswordResponse,
     GoogleLoginRequest,
     LoginRequest,
+    PasswordResetConfigResponse,
     RegisterRequest,
+    ResetPasswordConfirmRequest,
+    ResetPasswordValidateResponse,
     UserResponse,
 )
 from app.services.auth import AuthService, get_required_user
+from app.services.password_reset import (
+    confirm_password_reset,
+    request_password_reset,
+    validate_reset_token,
+)
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login", auto_error=False)
@@ -40,11 +50,19 @@ async def google_config():
 
 @router.post("/google", response_model=AuthTokenResponse)
 async def google_login(req: GoogleLoginRequest, db: AsyncSession = Depends(get_db)):
+    logger.info("[Auth] Attempting Google Sign-In")
     claims = await verify_google_credential(req.credential)
     try:
-        return await AuthService(db).login_google(claims)
+        result = await AuthService(db).login_google(claims)
     except ValueError as exc:
+        logger.warning(
+            "[Auth] Google Sign-In rejected for {}: {}",
+            mask_email(claims.get("email", "")),
+            str(exc),
+        )
         raise HTTPException(status_code=401, detail=str(exc)) from exc
+    logger.info(f"[Auth] ✅ Google Sign-In succeeded for {mask_email(result.user.email)}")
+    return result
 
 
 @router.post("/register", response_model=AuthTokenResponse, status_code=201)
@@ -101,3 +119,46 @@ async def logout(
     """Đăng xuất — thu hồi JWT token hiện tại vào PostgreSQL."""
     await AuthService(db).logout_user(token)
     return {"message": "Đã đăng xuất thành công."}
+
+
+@router.get("/password-reset/config", response_model=PasswordResetConfigResponse)
+async def password_reset_config():
+    settings = get_settings()
+    return {
+        "smtp_enabled": settings.smtp_configured,
+        "token_ttl_minutes": settings.password_reset_token_ttl_minutes,
+    }
+
+
+@router.post("/forgot-password", response_model=ForgotPasswordResponse, status_code=200)
+async def forgot_password(
+    req: ForgotPasswordRequest,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+):
+    """Gửi yêu cầu đặt lại mật khẩu qua email (khi có SMTP) hoặc hàng chờ quản trị viên."""
+    return await request_password_reset(
+        db,
+        str(req.email),
+        client_ip(request.scope),
+        request.headers.get("origin"),
+    )
+
+
+@router.get("/reset-password/validate", response_model=ResetPasswordValidateResponse)
+async def check_reset_token(
+    token: str = Query(..., min_length=16, max_length=512),
+    db: AsyncSession = Depends(get_db),
+):
+    await validate_reset_token(db, token)
+    return {"valid": True}
+
+
+@router.post("/reset-password", status_code=200)
+async def reset_password(
+    req: ResetPasswordConfirmRequest,
+    db: AsyncSession = Depends(get_db),
+):
+    """Đặt lại mật khẩu mới bằng token dùng một lần."""
+    await confirm_password_reset(db, req.token, req.new_password)
+    return {"message": "Đặt lại mật khẩu thành công. Bạn có thể đăng nhập bằng mật khẩu mới."}

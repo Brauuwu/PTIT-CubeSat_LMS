@@ -4,9 +4,13 @@ from fastapi import HTTPException
 from google.auth.exceptions import GoogleAuthError, TransportError
 from google.auth.transport.requests import Request
 from google.oauth2 import id_token
+from loguru import logger
 from starlette.concurrency import run_in_threadpool
 
 from app.core.config import get_settings
+
+# Allow modest clock drift (e.g. local NTP lag behind Google's UTC clock) when checking iat/exp.
+_GOOGLE_CLOCK_SKEW_SECONDS = 60
 
 
 @lru_cache
@@ -20,15 +24,22 @@ async def verify_google_credential(credential: str) -> dict:
         raise HTTPException(503, "Đăng nhập Google chưa được cấu hình trên máy chủ.")
     try:
         claims = await run_in_threadpool(
-            id_token.verify_oauth2_token, credential, _google_request(), client_id
+            id_token.verify_oauth2_token,
+            credential,
+            _google_request(),
+            client_id,
+            clock_skew_in_seconds=_GOOGLE_CLOCK_SKEW_SECONDS,
         )
     except ValueError as exc:
+        logger.warning("[GoogleAuth] ID token rejected ({}): {}", type(exc).__name__, str(exc)[:200])
         raise HTTPException(
             401, "Thông tin đăng nhập Google không hợp lệ hoặc đã hết hạn."
         ) from exc
     except TransportError as exc:
+        logger.warning("[GoogleAuth] Google cert fetch failed: {}", type(exc).__name__)
         raise HTTPException(503, "Không thể xác thực với Google. Vui lòng thử lại.") from exc
     except GoogleAuthError as exc:
+        logger.warning("[GoogleAuth] GoogleAuthError: {}", type(exc).__name__)
         raise HTTPException(401, "Thông tin đăng nhập Google không hợp lệ.") from exc
     if claims.get("iss") not in ("accounts.google.com", "https://accounts.google.com"):
         raise HTTPException(401, "Nguồn phát hành token Google không hợp lệ.")

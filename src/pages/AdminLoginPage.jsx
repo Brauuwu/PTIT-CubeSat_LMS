@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthLayout from '../components/common/AuthLayout';
+import PasswordInput from '../components/common/PasswordInput';
 import { useAuth } from '../contexts/auth-api';
 
 export default function AdminLoginPage() {
@@ -60,19 +61,24 @@ export default function AdminLoginPage() {
 
         <div className="auth-field">
           <label htmlFor="admin-password">Mật khẩu</label>
-          <div className="auth-input-wrap">
-            <input
-              id="admin-password"
-              type="password"
-              required
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              placeholder="••••••••"
-              autoComplete="current-password"
-              aria-invalid={Boolean(error)}
-              aria-describedby={error ? 'admin-login-error' : undefined}
-            />
-          </div>
+          <PasswordInput
+            id="admin-password"
+            required
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            placeholder="••••••••"
+            autoComplete="current-password"
+            hasError={Boolean(error)}
+            aria-invalid={Boolean(error)}
+            aria-describedby={error ? 'admin-login-error' : undefined}
+          />
+        </div>
+
+        <div className="auth-row-between">
+          <span />
+          <Link to="/forgot-password" className="auth-link-btn">
+            Quên mật khẩu?
+          </Link>
         </div>
 
         {error && <div id="admin-login-error" className="auth-error-text" role="alert">{error}</div>}

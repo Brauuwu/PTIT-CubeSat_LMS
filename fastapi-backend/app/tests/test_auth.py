@@ -8,7 +8,7 @@ from unittest.mock import AsyncMock, patch
 from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
 from loguru import logger
-from sqlalchemy import Integer, select
+from sqlalchemy import JSON, Integer, select
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 from app.core.config import get_settings
@@ -17,7 +17,8 @@ from app.core.google_auth import verify_google_credential
 from app.core.logging import configure_console_encoding, mask_email
 from app.core.security import create_access_token
 from app.db import get_db
-from app.models.db_models import Base, GoogleIdentity, RevokedToken, User
+from app.models.db_models import Base, GoogleIdentity, PasswordResetToken, RevokedToken, User
+from app.models.tables import AuditLog
 from app.routers import compiler, curriculum, health
 from app.routers.admin import router as admin_router
 from app.routers.auth import router
@@ -27,12 +28,25 @@ from app.services.auth import LOGIN_FAILURES, PAIR_FAILURES
 class AuthTests(unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
         self.engine = create_async_engine("sqlite+aiosqlite:///:memory:")
-        self.original_id_type = User.__table__.c.id.type
-        User.__table__.c.id.type = self.original_id_type.with_variant(Integer(), "sqlite")
+        self.original_types = []
+        for table in (User.__table__, AuditLog.__table__):
+            col = table.c.id
+            self.original_types.append((col, col.type))
+            col.type = col.type.with_variant(Integer(), "sqlite")
+        for col in (AuditLog.__table__.c.before, AuditLog.__table__.c.after):
+            self.original_types.append((col, col.type))
+            col.type = col.type.with_variant(JSON(), "sqlite")
         async with self.engine.begin() as conn:
             await conn.run_sync(
                 lambda c: Base.metadata.create_all(
-                    c, tables=[User.__table__, GoogleIdentity.__table__, RevokedToken.__table__]
+                    c,
+                    tables=[
+                        User.__table__,
+                        GoogleIdentity.__table__,
+                        RevokedToken.__table__,
+                        AuditLog.__table__,
+                        PasswordResetToken.__table__,
+                    ],
                 )
             )
         self.sessions = async_sessionmaker(self.engine, expire_on_commit=False)
@@ -57,7 +71,8 @@ class AuthTests(unittest.IsolatedAsyncioTestCase):
         await self.client.aclose()
         self.redis_patch.stop()
         await self.engine.dispose()
-        User.__table__.c.id.type = self.original_id_type
+        for col, original in self.original_types:
+            col.type = original
 
     async def register(self, email="student@gmail.com", password="secret123"):
         return await self.client.post(
@@ -336,6 +351,115 @@ class AuthTests(unittest.IsolatedAsyncioTestCase):
                 )
             worker.assert_not_awaited()
 
+    async def test_forgot_password_no_smtp_queues_without_enumerating(self):
+        config = await self.client.get("/api/auth/password-reset/config")
+        self.assertEqual(config.status_code, 200)
+        self.assertFalse(config.json()["smtp_enabled"])
+
+        await self.register("student@gmail.com", "secret123")
+        with patch.object(get_settings(), "smtp_host", ""):
+            existing = await self.client.post(
+                "/api/auth/forgot-password", json={"email": "STUDENT@gmail.com"}
+            )
+            missing = await self.client.post(
+                "/api/auth/forgot-password", json={"email": "nobody@example.com"}
+            )
+        self.assertEqual(existing.status_code, 200)
+        self.assertEqual(missing.status_code, 200)
+        self.assertEqual(existing.json(), missing.json())
+        self.assertEqual(existing.json()["delivery_mode"], "admin")
+
+        async with self.sessions() as db:
+            rows = (await db.execute(select(PasswordResetToken))).scalars().all()
+            self.assertEqual(len(rows), 1)
+            self.assertEqual(rows[0].status, "pending")
+            self.assertEqual(rows[0].source, "admin_request")
+            self.assertIsNone(rows[0].token_hash)
+
+    async def test_forgot_password_smtp_dispatches_single_use_reset_token(self):
+        from urllib.parse import parse_qs, urlsplit
+
+        await self.register("student@gmail.com", "secret123")
+        sent = []
+
+        async def fake_send(to_email, reset_url, ttl_minutes):
+            sent.append((to_email, reset_url, ttl_minutes))
+
+        # Trigger brute-force email lockout before reset to confirm reset unlocks login.
+        for _ in range(5):
+            await self.client.post(
+                "/api/auth/login", json={"email": "student@gmail.com", "password": "wrong"}
+            )
+
+        with (
+            patch.object(get_settings(), "smtp_host", "smtp.example.com"),
+            patch.object(get_settings(), "frontend_url", "https://lms.example.com"),
+            patch("app.services.password_reset.send_password_reset_email", side_effect=fake_send),
+        ):
+            res = await self.client.post(
+                "/api/auth/forgot-password", json={"email": "student@gmail.com"}
+            )
+        self.assertEqual(res.status_code, 200, res.text)
+        self.assertEqual(res.json()["delivery_mode"], "email")
+        self.assertEqual(len(sent), 1)
+        self.assertEqual(sent[0][0], "student@gmail.com")
+        self.assertTrue(sent[0][1].startswith("https://lms.example.com/reset-password?token="))
+
+        raw_token = parse_qs(urlsplit(sent[0][1]).query)["token"][0]
+        check = await self.client.get(f"/api/auth/reset-password/validate?token={raw_token}")
+        self.assertEqual(check.status_code, 200)
+        self.assertEqual(check.json(), {"valid": True})
+
+        confirm = await self.client.post(
+            "/api/auth/reset-password",
+            json={"token": raw_token, "new_password": "newsecret123"},
+        )
+        self.assertEqual(confirm.status_code, 200, confirm.text)
+
+        # Single-use token is now rejected and old password fails; new password works cleanly.
+        self.assertEqual(
+            (await self.client.get(f"/api/auth/reset-password/validate?token={raw_token}")).status_code,
+            400,
+        )
+        self.assertEqual(
+            (
+                await self.client.post(
+                    "/api/auth/reset-password",
+                    json={"token": raw_token, "new_password": "another123"},
+                )
+            ).status_code,
+            400,
+        )
+        self.assertEqual((await self.login("secret123")).status_code, 401)
+        self.assertEqual((await self.login("newsecret123")).status_code, 200)
+
+        async with self.sessions() as db:
+            logs = (
+                await db.execute(select(AuditLog).where(AuditLog.action == "user.password_reset_self"))
+            ).scalars().all()
+            self.assertEqual(len(logs), 1)
+            self.assertNotIn(raw_token, f"{logs[0].before}{logs[0].after}")
+            self.assertNotIn("newsecret123", f"{logs[0].before}{logs[0].after}")
+
+    async def test_forgot_password_smtp_error_falls_back_to_admin_queue(self):
+        await self.register("student@gmail.com", "secret123")
+        with (
+            patch.object(get_settings(), "smtp_host", "smtp.example.com"),
+            patch(
+                "app.services.password_reset.send_password_reset_email",
+                side_effect=OSError("smtp down"),
+            ),
+        ):
+            res = await self.client.post(
+                "/api/auth/forgot-password", json={"email": "student@gmail.com"}
+            )
+        self.assertEqual(res.status_code, 200)
+        async with self.sessions() as db:
+            row = (await db.execute(select(PasswordResetToken))).scalar_one()
+            self.assertEqual(row.status, "pending")
+            self.assertEqual(row.source, "admin_request")
+            self.assertIsNone(row.token_hash)
+
 
 class GoogleVerificationTests(unittest.IsolatedAsyncioTestCase):
     async def test_config_missing(self):
@@ -378,6 +502,20 @@ class GoogleVerificationTests(unittest.IsolatedAsyncioTestCase):
             ) as verify:
                 self.assertEqual(await verify_google_credential("signed"), claims)
                 self.assertEqual(verify.call_args.args[2], "server-client")
+                self.assertGreaterEqual(verify.call_args.kwargs.get("clock_skew_in_seconds", 0), 60)
+
+    async def test_verifier_accepts_slightly_ahead_iat_with_clock_skew(self):
+        from datetime import datetime, timezone
+
+        from google.auth import jwt as google_jwt
+
+        now = int(datetime.now(timezone.utc).timestamp())
+        # Simulates Google issuing a token ~2 seconds ahead of a slightly slow local Windows clock.
+        iat = now + 2
+        with self.assertRaises(ValueError):
+            google_jwt._verify_iat_and_exp({"iat": iat, "exp": iat + 3600}, clock_skew_in_seconds=0)
+        # Does not raise when using our configured clock skew tolerance.
+        google_jwt._verify_iat_and_exp({"iat": iat, "exp": iat + 3600}, clock_skew_in_seconds=60)
 
     async def test_invalid_issuer_returns_401(self):
         from google.auth.exceptions import GoogleAuthError

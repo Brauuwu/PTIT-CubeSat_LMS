@@ -40,6 +40,29 @@ class GoogleLoginRequest(BaseModel):
     credential: str = Field(..., min_length=1, max_length=10000)
 
 
+class ForgotPasswordRequest(EmailRequest):
+    email: EmailStr
+
+
+class ResetPasswordConfirmRequest(PasswordRequest):
+    token: str = Field(..., min_length=16, max_length=512)
+    new_password: str = Field(..., min_length=6, description="Mật khẩu mới tối thiểu 6 ký tự")
+
+
+class PasswordResetConfigResponse(BaseModel):
+    smtp_enabled: bool
+    token_ttl_minutes: int
+
+
+class ForgotPasswordResponse(BaseModel):
+    message: str
+    delivery_mode: str
+
+
+class ResetPasswordValidateResponse(BaseModel):
+    valid: bool
+
+
 class UserResponse(BaseModel):
     id: int
     email: str

@@ -14,7 +14,15 @@ export async function authorizedFetch(path, options = {}) {
     headers,
   });
   if (res.status === 401 && token && token === getAuthToken()
-    && !['/api/auth/login', '/api/auth/register', '/api/auth/google'].includes(path)) {
+    && ![
+      '/api/auth/login',
+      '/api/auth/register',
+      '/api/auth/google',
+      '/api/admin/login',
+      '/api/admin/signup',
+      '/api/auth/forgot-password',
+      '/api/auth/reset-password',
+    ].includes(path)) {
     clearAuthToken();
     window.dispatchEvent(new Event(AUTH_EXPIRED_EVENT));
   }

@@ -90,6 +90,21 @@ class Settings(BaseSettings):
     jwt_expire_minutes: int = 1440
     google_client_id: str = ""
 
+    # Email / Password reset (optional; without SMTP, resets queue for Admin approval)
+    smtp_host: str = ""
+    smtp_port: int = Field(default=587, ge=1, le=65535)
+    smtp_user: str = ""
+    smtp_password: str = Field(default="", repr=False)
+    smtp_from: str = ""
+    smtp_use_tls: bool = True
+    smtp_use_ssl: bool = False
+    frontend_url: str = ""
+    password_reset_token_ttl_minutes: int = Field(default=30, ge=5, le=1440)
+
+    @property
+    def smtp_configured(self) -> bool:
+        return bool(self.smtp_host.strip())
+
 
 @lru_cache
 def get_settings() -> Settings:
