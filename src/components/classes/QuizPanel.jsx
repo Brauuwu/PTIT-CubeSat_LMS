@@ -165,18 +165,28 @@ export default function QuizPanel({ classId, labId, lessonId = null, title = '',
             if (k && v) tfSelected[k] = v;
           });
         }
+        // Explanations are keyed by the choice id, so they follow the choice wherever the shuffle put it.
+        const explain = choiceId => {
+          const text = item.choice_explanations?.[choiceId];
+          return !active && text ? <p className="quiz-choice-note">{text}</p> : null;
+        };
         return <fieldset className="quiz-question" key={item.id} disabled={!active || busy || conflict || seconds === 0}>
           <legend><span>Câu {index + 1}</span> {item.prompt}</legend>
-          {qType === 'single_choice' && item.choices.map(choice => <label className={`quiz-choice${currentAns === choice.id ? ' selected' : ''}`} key={choice.id}>
-            <input type="radio" name={item.id} checked={currentAns === choice.id} onChange={() => choose(item.id, choice.id)} />
-            <span>{choice.text}</span>{item.correct_choice_id === choice.id && <strong>Đáp án đúng</strong>}
-          </label>)}
+          {qType === 'single_choice' && item.choices.map(choice => <div className="quiz-choice-block" key={choice.id}>
+            <label className={`quiz-choice${currentAns === choice.id ? ' selected' : ''}`}>
+              <input type="radio" name={item.id} checked={currentAns === choice.id} onChange={() => choose(item.id, choice.id)} />
+              <span>{choice.text}</span>
+              {!active && currentAns === choice.id && <em className="quiz-picked">Bạn đã chọn</em>}
+              {item.correct_choice_id === choice.id && <strong>Đáp án đúng</strong>}
+            </label>
+            {explain(choice.id)}
+          </div>)}
           {qType === 'multiple_choice' && <>
             <small className="lms-secondary">Chọn tất cả các phương án đúng:</small>
             {item.choices.map(choice => {
               const isChecked = multiSelected.has(choice.id);
               const isCorrectChoice = item.correct_choice_id?.split('|').includes(choice.id);
-              return <label className={`quiz-choice${isChecked ? ' selected' : ''}`} key={choice.id}>
+              return <div className="quiz-choice-block" key={choice.id}><label className={`quiz-choice${isChecked ? ' selected' : ''}`}>
                 <input
                   type="checkbox"
                   checked={isChecked}
@@ -188,8 +198,10 @@ export default function QuizPanel({ classId, labId, lessonId = null, title = '',
                     if (sorted) choose(item.id, sorted);
                   }}
                 />
-                <span>{choice.text}</span>{isCorrectChoice && <strong>Đáp án đúng</strong>}
-              </label>;
+                <span>{choice.text}</span>
+                {!active && isChecked && <em className="quiz-picked">Bạn đã chọn</em>}
+                {isCorrectChoice && <strong>Đáp án đúng</strong>}
+              </label>{explain(choice.id)}</div>;
             })}
           </>}
           {qType === 'true_false' && <>
@@ -197,7 +209,7 @@ export default function QuizPanel({ classId, labId, lessonId = null, title = '',
             {item.choices.map((choice, cIdx) => {
               const letter = String.fromCharCode(97 + cIdx);
               const val = tfSelected[choice.id] || '';
-              return <div className="quiz-choice quiz-tf-row" key={choice.id}>
+              return <div className="quiz-choice-block" key={choice.id}><div className="quiz-choice quiz-tf-row">
                 <span><strong>{letter})</strong> {choice.text}</span>
                 <div className="quiz-tf-options">
                   {['Đ', 'S'].map(opt => (
@@ -216,7 +228,8 @@ export default function QuizPanel({ classId, labId, lessonId = null, title = '',
                     </label>
                   ))}
                 </div>
-              </div>;
+                {!active && val && <em className="quiz-picked">Bạn chọn: {val === 'Đ' ? 'Đúng' : 'Sai'}</em>}
+              </div>{explain(choice.id)}</div>;
             })}
             {item.correct_choice_id && <p className="lms-secondary"><strong>Đáp án đúng:</strong> {item.correct_choice_id}</p>}
           </>}
@@ -239,17 +252,6 @@ export default function QuizPanel({ classId, labId, lessonId = null, title = '',
               {item.correct_choice_id && <p className="lms-secondary"><strong>Đáp án đúng:</strong> {item.correct_choice_id}</p>}
             </div>
           )}
-          {!active && item.choice_explanations && Object.entries(item.choice_explanations).map(([choiceId, explanation]) => {
-            if (!explanation) return null;
-            const selectedValue = qType === 'true_false'
-              ? tfSelected[choiceId]
-              : qType === 'multiple_choice'
-              ? (multiSelected.has(choiceId) ? 'Đã chọn' : 'Không chọn')
-              : (currentAns === choiceId ? 'Bạn đã chọn' : '');
-            return <p className="quiz-choice-explanation" key={choiceId}>
-              <strong>Phương án {choiceId.toUpperCase()} {selectedValue ? `(${selectedValue})` : ''}:</strong> {explanation}
-            </p>;
-          })}
           {item.explanation && <div className="quiz-explanation"><p>{item.explanation}</p><small>Nguồn: {item.source_reference}</small></div>}
         </fieldset>;
       })}

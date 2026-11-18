@@ -51,7 +51,14 @@ class QuizAPITests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(response.status_code, 200, response.text)
         return response.json()
 
-    async def prepare(self, count=5):
+    async def set_reveal(self, reveal):
+        bank = await self.bank()
+        policy = {k: v for k, v in bank["policy"].items() if k != "revision"}
+        policy.update(expected_revision=bank["policy"]["revision"], reveal_policy=reveal)
+        response = await self.call(2, "PUT", self.base + "/labs/0/quiz-policy", policy)
+        self.assertEqual(response.status_code, 200, response.text)
+
+    async def prepare(self, count=5, reveal="after_attempts"):
         bank = await self.bank()
         async with self.sessions() as db:
             for index in range(count):
@@ -72,6 +79,9 @@ class QuizAPITests(unittest.IsolatedAsyncioTestCase):
         )
         if response.status_code != 200:
             return response
+        # The default is now `after_pass`; most fixtures here exercise the stricter older rule.
+        if reveal != "after_pass":
+            await self.set_reveal(reveal)
         self.assertEqual(response.status_code, 200, response.text)
         body = deepcopy(self.learning.body)
         for item in body["lessons"]:
@@ -489,6 +499,38 @@ class QuizAPITests(unittest.IsolatedAsyncioTestCase):
         # Every approved question is on the paper: 20 were approved, so 20 are answered.
         self.assertEqual(len(attempt["items"]), 20)
         self.assertEqual(submitted.json()["score"], 20)
+
+    async def submit_attempt(self, *, correct):
+        attempt = (await self.start()).json()
+        self.assertEqual(attempt["policy"]["reveal_policy"], "after_pass")
+        if correct:
+            await self.correct(attempt)
+        result = await self.call(4, "POST", f"/api/attempts/{attempt['id']}/submit")
+        self.assertEqual(result.status_code, 200, result.text)
+        return result.json()
+
+    async def test_after_pass_reveals_explanations_as_soon_as_the_attempt_passes(self):
+        await self.prepare(reveal="after_pass")
+        await self.learning.complete(0)
+        result = await self.submit_attempt(correct=True)
+        self.assertTrue(result["passed"])
+        self.assertTrue(result["revealed"])
+        self.assertIn("correct_choice_id", result["items"][0])
+        self.assertIn("explanation", result["items"][0])
+        # Once the answers were shown the Lab Test locks, so nothing can be retaken.
+        self.assertEqual((await self.start()).json()["code"], "ATTEMPT_LIMIT_REACHED")
+
+    async def test_after_pass_keeps_failed_attempts_hidden_until_the_tries_run_out(self):
+        await self.prepare(reveal="after_pass")
+        await self.learning.complete(0)
+        for number in (1, 2):
+            result = await self.submit_attempt(correct=False)
+            self.assertFalse(result["passed"], number)
+            self.assertFalse(result["revealed"], number)
+            self.assertNotIn("correct_choice_id", result["items"][0])
+        last = await self.submit_attempt(correct=False)
+        self.assertEqual(last["remaining_attempts"], 0)
+        self.assertTrue(last["revealed"])
 
 
 class QuizValidationTests(unittest.TestCase):

@@ -8,6 +8,7 @@
 - Bài mới của Lab 0 được chép vào lớp ở trạng thái TẮT để sinh viên đã hoàn thành Lab 0 không mất hoàn thành và Lab 1+ không bị khoá; giảng viên bật sau khi thêm nội dung. Lớp 1 đã được nâng cấp ngày 18/11/2026 trên cơ sở dữ liệu dev (40 dòng tiến độ giữ nguyên), có sao lưu `pg_dump` trước đó.
 - Xem trước công khai cho khách vẫn chỉ gồm `components`; không mở thêm bài nào.
 - Cập nhật cùng ngày (migration `0017_quiz_all_approved`): bỏ ràng buộc "đúng 20 câu, rút 5" của Lab Test và "số câu mỗi lượt" của quiz. Mỗi lượt làm bài gồm toàn bộ câu đã duyệt (xáo trộn); giảng viên thêm bao nhiêu câu thì sinh viên làm bấy nhiêu. Xuất bản cần ít nhất 1 câu đã duyệt. Điểm đạt được giới hạn không vượt số câu của lượt khi bắt đầu.
+- Công bố đáp án mới `after_pass` (migration `0018_quiz_reveal_after_pass`), thành mặc định: lượt nộp đạt điểm tối thiểu thấy giải thích ngay; lượt chưa đạt vẫn ẩn đến khi hết lượt để còn làm lại. Sau khi đáp án đã được công bố thì khóa làm lại. Giải thích hiện ngay dưới từng lựa chọn (khóa theo id lựa chọn, đúng cả khi đề bị xáo thứ tự); trước đây nhãn "Phương án A-D" dùng id gốc nên lệch với thứ tự hiển thị. Chính sách cũ `after_attempts` được chuyển sang `after_pass`; các lượt đã làm giữ chính sách đã chụp.
 
 ## 17/11/2026 — Khung rỗng Lab 0 và loại bài mới `quiz` (LAB0-01)
 

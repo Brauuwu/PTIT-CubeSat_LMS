@@ -86,7 +86,7 @@ class QuizPolicy(Base):
     pass_score: Mapped[int] = mapped_column(Integer, server_default="4")
     max_attempts: Mapped[int] = mapped_column(Integer, server_default="3")
     score_rule: Mapped[str] = mapped_column(Text, server_default="highest")
-    reveal_policy: Mapped[str] = mapped_column(Text, server_default="after_attempts")
+    reveal_policy: Mapped[str] = mapped_column(Text, server_default="after_pass")
     closes_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 

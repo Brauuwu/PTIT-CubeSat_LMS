@@ -171,11 +171,17 @@ async def serialize(db, attempt, *, result=False):
     if result and finished:
         rule = attempt.policy["reveal_policy"]
         close = attempt.policy.get("closes_at")
+        attempts_done = len(all_attempts) >= limit and not any(
+            a.status == "active" for a in all_attempts
+        )
+        passed_now = attempt.score is not None and attempt.score >= attempt.policy["pass_score"]
         reveal = (
             rule == "immediate"
             or rule == "after_attempts"
-            and len(all_attempts) >= limit
-            and not any(a.status == "active" for a in all_attempts)
+            and attempts_done
+            # Passing opens the explanations at once; a failed attempt waits until the tries run out.
+            or rule == "after_pass"
+            and (passed_now or attempts_done)
             or rule == "after_close"
             and close
             and now() >= utc(datetime.fromisoformat(close))

@@ -171,7 +171,9 @@ class PolicyInput(RevisionInput):
     pass_score: int = Field(default=4, ge=1, le=200)
     max_attempts: int = Field(default=3, ge=1, le=100)
     score_rule: Literal["highest"] = "highest"
-    reveal_policy: Literal["after_attempts", "after_close", "immediate", "never"] = "after_attempts"
+    reveal_policy: Literal["after_pass", "after_attempts", "after_close", "immediate", "never"] = (
+        "after_pass"
+    )
     closes_at: datetime | None = None
 
     @model_validator(mode="after")

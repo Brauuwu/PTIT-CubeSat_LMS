@@ -106,7 +106,8 @@ async def cross_role_flow(t, call, sessions, tokens):
     await ok(6, "POST", events, {"idempotency_key": str(uuid4()), "kind": "complete"})
     t.assertEqual((await ok(6, "GET", base + "/learning-path"))["labs"][1]["access"], "locked")
     attempt = await ok(6, "POST", base + "/labs/0/attempts", {"idempotency_key": str(uuid4())})
-    t.assertEqual(len(attempt["items"]), 5)
+    # Every approved question is on the paper: 20 were approved.
+    t.assertEqual(len(attempt["items"]), 20)
     t.assertNotIn("correct_choice_id", json.dumps(attempt))
     # Synthetic fixtures always mark choice "a" correct; IDs survive shuffling.
     attempt = await ok(
@@ -120,7 +121,7 @@ async def cross_role_flow(t, call, sessions, tokens):
         },
     )
     result = await ok(6, "POST", f"/api/attempts/{attempt['id']}/submit")
-    t.assertEqual((result["score"], result["passed"]), (5, True))
+    t.assertEqual((result["score"], result["passed"]), (20, True))
     path = await ok(6, "GET", base + "/learning-path")
     t.assertTrue(path["labs"][0]["completed"])
     t.assertEqual([path["labs"][i]["access"] for i in (1, 2)], ["available", "available"])
@@ -129,7 +130,7 @@ async def cross_role_flow(t, call, sessions, tokens):
     report = await ok(5, "GET", base + "/reports")
     row = next(s for s in report["students"] if s["user_id"] == 6)
     t.assertEqual(row["completed_labs"], 1)
-    t.assertEqual((row["labs"][0]["best_score"], row["labs"][0]["attempts"]), (5, 1))
+    t.assertEqual((row["labs"][0]["best_score"], row["labs"][0]["attempts"]), (20, 1))
     t.assertEqual(row["attempts_total"], 1)
     t.assertIsNotNone(row["last_activity_at"])
     csv = await call(5, "GET", base + "/reports?format=csv")
