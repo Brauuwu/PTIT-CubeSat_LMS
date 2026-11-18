@@ -7,11 +7,11 @@ import uvicorn
 
 if __name__ == "__main__":
     root = Path(__file__).resolve().parent
+    # This Uvicorn version compares excluded directories with absolute paths. It globs any
+    # exclude that is not an existing directory, and an absolute glob raises on Python 3.12+,
+    # so the directory must exist before the first compile creates it.
     build_cache = root / "build_cache"
-    # Uvicorn only treats an absolute exclude as a directory when it exists;
-    # otherwise it globs it, which Python 3.12+ rejects for absolute patterns.
     build_cache.mkdir(exist_ok=True)
-    # This Uvicorn version compares excluded directories with absolute paths.
     uvicorn.run(
         "app.main:app",
         # Local only by default; set BACKEND_HOST=0.0.0.0 to expose the dev API on the LAN on purpose.

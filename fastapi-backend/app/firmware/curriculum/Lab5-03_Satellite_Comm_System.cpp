@@ -1,5 +1,5 @@
 // Reviewed classroom source for the ESP32 OBC hardware profile.
-// Upstream: https://github.com/PTITCube/Lab5-03_Satellite_Comm_System/blob/2b5efa9f62a9aeb51cf8e47a2e76e6f059c92c77/src/main.cpp
+// Upstream: https://github.com/PTITCube/Lab5-03_Satellite_Comm_System/blob/a156004a4ce2a541fc5f31e1fd2413bb7b6b047a/src/main.cpp
 /**
  * VÍ DỤ TỔNG HỢP: HỆ THỐNG GIAO TIẾP VỆ TINH FULL DUPLEX (COMMAND & TELEMETRY)
  * 
@@ -13,8 +13,11 @@
  */
 
 #include <Arduino.h>
+
 #include <ArduinoJson.h>
 #include <PTITCube.h>
+
+PTIT_CDH cdh;
 
 // Khởi tạo các phân hệ
 PTIT_COM lora;
@@ -25,27 +28,27 @@ PTIT_GPS gps;
 #define LED_PIN 2
 
 void setup() {
-    Serial.begin(115200);
-    while (!Serial) { delay(10); }
+    cdh.begin(115200);
+    while (!cdh) { delay(10); }
 
-    Serial.println("\n==========================================");
-    Serial.println("  VỆ TINH (SATELLITE) ĐANG KHỞI ĐỘNG...");
-    Serial.println("==========================================");
-    
+        cdh.println("  VỆ TINH (SATELLITE) ĐANG KHỞI ĐỘNG...");
+        
     pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, LOW);
 
     // Khởi tạo các module
-    Serial.println("[INIT] Đang khởi tạo LoRa...");
+    cdh.println("[INIT] Đang khởi tạo LoRa...");
     lora.init();
+    // E32 mặc định (init) ở chế độ Fixed-point: 3 byte đầu bản tin bị hiểu là địa chỉ đích nên phản hồi không tới trạm mặt đất.
+    // Chuyển sang Transparent để phản hồi gửi về cùng kênh/địa chỉ với trạm mặt đất.
+    lora.setTransmissionMode(0);
     
-    Serial.println("[INIT] Đang khởi tạo Cảm biến và Nguồn...");
+    cdh.println("[INIT] Đang khởi tạo Cảm biến và Nguồn...");
     eps.init();
     sensor.init(); 
     gps.init();
 
-    Serial.println("==========================================");
-    Serial.println("VỆ TINH SẴN SÀNG NHẬN LỆNH TỪ TRẠM MẶT ĐẤT");
+        cdh.println("VỆ TINH SẴN SÀNG NHẬN LỆNH TỪ TRẠM MẶT ĐẤT");
 }
 
 void loop() {
@@ -60,7 +63,7 @@ void loop() {
         incomingCmd.trim();
         incomingCmd.toLowerCase(); // Chuẩn hóa chữ thường
         
-        Serial.println("\n[RX] Nhận được lệnh từ mặt đất: " + incomingCmd);
+        cdh.println("\n[RX] Nhận được lệnh từ mặt đất: " + incomingCmd);
 
         // --- XỬ LÝ CÁC LỆNH (COMMANDS) ---
         

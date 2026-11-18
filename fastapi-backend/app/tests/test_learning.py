@@ -115,11 +115,41 @@ class LearningRulesTests(unittest.TestCase):
     def test_all_enabled_lessons_unlock_strictly_one_by_one(self):
         config = small_config()
         config["labs"][0]["lessons"] = [
-            {"id": "doc-0-1", "title": "Doc 1", "type": "document", "enabled": True, "required": True},
-            {"id": "prac-0-1", "title": "Practice 1", "type": "practice", "enabled": True, "required": False},
-            {"id": "prac-0-2", "title": "Practice 2", "type": "practice", "enabled": True, "required": False},
-            {"id": "doc-0-2", "title": "Doc 2", "type": "document", "enabled": True, "required": True},
-            {"id": "labtest-0", "title": "Lab Test 0", "type": "labtest", "enabled": True, "required": False},
+            {
+                "id": "doc-0-1",
+                "title": "Doc 1",
+                "type": "document",
+                "enabled": True,
+                "required": True,
+            },
+            {
+                "id": "prac-0-1",
+                "title": "Practice 1",
+                "type": "practice",
+                "enabled": True,
+                "required": False,
+            },
+            {
+                "id": "prac-0-2",
+                "title": "Practice 2",
+                "type": "practice",
+                "enabled": True,
+                "required": False,
+            },
+            {
+                "id": "doc-0-2",
+                "title": "Doc 2",
+                "type": "document",
+                "enabled": True,
+                "required": True,
+            },
+            {
+                "id": "labtest-0",
+                "title": "Lab Test 0",
+                "type": "labtest",
+                "enabled": True,
+                "required": False,
+            },
         ]
         after_doc1 = learning_path(config, {"doc-0-1": "completed"})
         self.assertEqual(
@@ -274,6 +304,33 @@ class LegacyProgressTests(unittest.IsolatedAsyncioTestCase):
         self.assertIsNotNone(result.completed_at)
         self.db.commit.assert_awaited_once()
 
+    async def test_reset_lesson_returns_to_incomplete_and_clears_lab_completion(self):
+        old = (datetime.now(timezone.utc) - timedelta(minutes=2)).isoformat()
+        self.progress.completed_at = datetime.now(timezone.utc)
+        self.progress.lesson_progress = {
+            "first": {"started_at": old, "completed": True, "completed_at": old},
+            "second": {"started_at": old, "completed": True, "completed_at": old},
+        }
+
+        result = await self.service.reset_lesson(self.user, 0, "first")
+
+        self.assertFalse(result.lessons["first"]["completed"])
+        self.assertNotIn("completed_at", result.lessons["first"])
+        self.assertEqual(result.lessons["first"]["started_at"], old)
+        self.assertTrue(result.lessons["second"]["completed"])
+        self.assertIsNone(result.completed_at)
+        self.db.commit.assert_awaited_once()
+
+    async def test_reset_incomplete_lesson_is_noop(self):
+        self.progress.lesson_progress = {
+            "first": {"started_at": datetime.now(timezone.utc).isoformat(), "completed": False},
+        }
+
+        result = await self.service.reset_lesson(self.user, 0, "first")
+
+        self.assertFalse(result.lessons["first"]["completed"])
+        self.db.commit.assert_not_awaited()
+
     async def test_teacher_can_complete_without_waiting(self):
         self.user.role = UserRole.teacher
         self.progress.lesson_progress = {
@@ -320,6 +377,58 @@ class LegacyProgressTests(unittest.IsolatedAsyncioTestCase):
         self.assertIsNotNone(result.completed_at)
         self.db.commit.assert_awaited_once()
 
+    def _seed_with_questions(self):
+        return {
+            "legacy": [
+                {
+                    "id": 1,
+                    "lessons": [
+                        {"id": "first", "type": "document"},
+                        {"id": "quiz-doc-1-1", "type": "quiz"},
+                        {"id": "second", "type": "document"},
+                        {"id": "summary-1", "type": "summary"},
+                        {"id": "labtest-1", "type": "labtest"},
+                    ],
+                }
+            ]
+        }
+
+    async def test_question_pages_do_not_gate_next_lesson_or_lab_completion(self):
+        old = (datetime.now(timezone.utc) - timedelta(minutes=2)).isoformat()
+        self.progress.lab_id = 1
+        self.progress.lesson_progress = {
+            "first": {"started_at": old, "completed": True},
+            "second": {"started_at": old, "completed": False},
+        }
+
+        with patch("app.services.progress.read_seed", return_value=self._seed_with_questions()):
+            await self.service.complete_lesson(self.user, 1, "second")
+            result = await self.service.complete_lesson(self.user, 1, "summary-1")
+
+        self.assertTrue(result.lessons["second"]["completed"])
+        self.assertNotIn("quiz-doc-1-1", result.lessons)
+        self.assertNotIn("labtest-1", result.lessons)
+        self.assertIsNotNone(result.completed_at)
+
+    async def test_question_pages_cannot_be_marked_complete_by_client(self):
+        self.user.role = UserRole.teacher
+        old = (datetime.now(timezone.utc) - timedelta(minutes=2)).isoformat()
+        self.progress.lab_id = 1
+        self.progress.lesson_progress = {
+            "quiz-doc-1-1": {"started_at": old, "completed": False},
+            "labtest-1": {"started_at": old, "completed": False},
+        }
+
+        with patch("app.services.progress.read_seed", return_value=self._seed_with_questions()):
+            for lesson_id in ("quiz-doc-1-1", "labtest-1"):
+                with self.assertRaises(Exception) as context:
+                    await self.service.complete_lesson(self.user, 1, lesson_id)
+                self.assertEqual(context.exception.code, "LESSON_NOT_SELF_COMPLETABLE")
+
+        self.assertFalse(self.progress.lesson_progress["labtest-1"]["completed"])
+        self.assertIsNone(self.progress.completed_at)
+        self.db.commit.assert_not_awaited()
+
 
 class LearningAPITests(unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
@@ -330,10 +439,7 @@ class LearningAPITests(unittest.IsolatedAsyncioTestCase):
         self.base = f"/api/classes/{self.class_a}"
         self.body = fixtures.settings_payload(await self.fixture.draft())
         for item in self.body["lessons"]:
-            # summary-0 is an empty Lab 0 scaffold slot, so it cannot be a required lesson.
-            active = item["lesson_id"] == "document" or (
-                item["lesson_id"].startswith("summary-") and item["lesson_id"] != "summary-0"
-            )
+            active = item["lesson_id"] == "document" or item["lesson_id"].startswith("summary-")
             item["enabled"] = active or item["lesson_id"] == "Lab2-01a_Battery_I2C"
             item["required"] = active
             if item["lesson_id"] == "document":
@@ -381,7 +487,7 @@ class LearningAPITests(unittest.IsolatedAsyncioTestCase):
 
     async def complete(self, lab):
         lessons = (
-            ["document"]
+            ["document", "summary-0"]
             if lab == 0
             else ["Lab2-01a_Battery_I2C", "summary-2"]
             if lab == 2
@@ -647,6 +753,9 @@ class LearningAPITests(unittest.IsolatedAsyncioTestCase):
         for item in body["lessons"]:
             if item["lesson_id"] in {"components", "labtest-0"}:
                 item.update(enabled=True, required=False)
+            # Keep this scenario to doc -> practice -> labtest; Doc 0.2 and the summary are covered elsewhere.
+            if item["lesson_id"] in {"document-0-2", "summary-0"}:
+                item.update(enabled=False, required=False)
         await self.apply(body)
 
         # Before completing "document", "components" and "labtest-0" are locked.

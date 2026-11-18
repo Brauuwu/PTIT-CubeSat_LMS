@@ -2,8 +2,8 @@ export const PANEL_LABELS = {
   voltage: 'Điện áp pin', environment: 'Môi trường', attitude: 'Tư thế 3D',
   gps: 'Định vị GPS', camera: 'Camera', system: 'System Check',
   network: 'WiFi / Web server', storage: 'Lưu trữ SD', radio: 'Liên lạc LoRa',
-  anomaly: 'Phát hiện sự cố', commands: 'Bảng lệnh', dashboard: 'Dashboard tùy biến',
-  lab1Connection: 'Kết nối WiFi',
+  anomaly: 'Phát hiện sự cố', commands: 'Bảng lệnh', groundStation: 'Trạm mặt đất', dashboard: 'Dashboard tùy biến',
+  lab1Connection: 'Kết nối WiFi', shell: 'Kết quả lệnh',
 };
 
 // Subsystems each full-satellite sketch actually exercises; the rest would only ever show "no evidence".

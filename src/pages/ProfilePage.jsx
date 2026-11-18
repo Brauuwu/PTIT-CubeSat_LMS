@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth, request } from '../contexts/auth-api';
 import { LABS } from '../data/lab-metadata';
 import { CheckIcon, LockIcon } from '../components/common/HeaderIcons';
+import PasswordInput from '../components/common/PasswordInput';
 
 import DeviceManager from '../components/profile/DeviceManager';
 
@@ -76,11 +77,6 @@ function ChangePasswordForm() {
     }
   }
 
-  const inputStyle = {
-    width: '100%', height: '42px', padding: '0 12px', borderRadius: '8px',
-    border: '1px solid var(--border-strong)', fontSize: '0.9rem',
-  };
-
   return (
     <div className="card">
       <div className="card-header">Đổi mật khẩu</div>
@@ -88,15 +84,15 @@ function ChangePasswordForm() {
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px', maxWidth: '360px' }}>
           <div>
             <label htmlFor="profile-current-password" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '6px' }}>Mật khẩu hiện tại</label>
-            <input id="profile-current-password" type="password" autoComplete="current-password" style={inputStyle} value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} required aria-invalid={Boolean(error)} aria-describedby={error ? 'profile-password-error' : undefined} />
+            <PasswordInput id="profile-current-password" autoComplete="current-password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} required aria-invalid={Boolean(error)} aria-describedby={error ? 'profile-password-error' : undefined} />
           </div>
           <div>
             <label htmlFor="profile-new-password" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '6px' }}>Mật khẩu mới</label>
-            <input id="profile-new-password" type="password" autoComplete="new-password" minLength={6} style={inputStyle} value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required aria-invalid={Boolean(error)} aria-describedby={error ? 'profile-password-error' : undefined} />
+            <PasswordInput id="profile-new-password" autoComplete="new-password" minLength={6} value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required aria-invalid={Boolean(error)} aria-describedby={error ? 'profile-password-error' : undefined} />
           </div>
           <div>
             <label htmlFor="profile-confirm-password" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '6px' }}>Xác nhận mật khẩu mới</label>
-            <input id="profile-confirm-password" type="password" autoComplete="new-password" minLength={6} style={inputStyle} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required aria-invalid={Boolean(error)} aria-describedby={error ? 'profile-password-error' : undefined} />
+            <PasswordInput id="profile-confirm-password" autoComplete="new-password" minLength={6} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required aria-invalid={Boolean(error)} aria-describedby={error ? 'profile-password-error' : undefined} />
           </div>
           {error && <div id="profile-password-error" className="auth-error-text" role="alert">⚠ {error}</div>}
           {success && <div role="status" style={{ color: '#15803d', fontSize: '0.85rem', fontWeight: 600 }}>✓ Đã đổi mật khẩu thành công</div>}

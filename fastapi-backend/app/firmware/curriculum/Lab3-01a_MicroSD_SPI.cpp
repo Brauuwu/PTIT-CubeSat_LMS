@@ -1,39 +1,74 @@
 // Reviewed classroom source for the ESP32 OBC hardware profile.
-// Upstream: https://github.com/PTITCube/Lab3-01a_MicroSD_SPI/blob/3da6ecdf36f98cb735bc0b5c979bedc3e3d6c9e8/src/main.cpp
+// Upstream: https://github.com/PTITCube/Lab3-01a_MicroSD_SPI/blob/f915167003c54bab762118d7e168f7aec25d599c/src/main.cpp
 /**
  * VÍ DỤ 3-1a: GIAO TIẾP THẺ NHỚ BẰNG SPI THUẦN (SD.h)
+ * 
+ * Mô tả:
+ * Sử dụng thư viện SD gốc (giao tiếp SPI) để ghi log thẻ nhớ.
+ * Định nghĩa chuẩn xác chân phần cứng CubeSat: CS=13, SCK=18, MISO=19, MOSI=23.
+ * Tích hợp đối tượng cdh (PTIT_CDH) chuẩn hóa phân hệ C&DH.
  */
+
 #include <Arduino.h>
 #include <SD.h>
 #include <SPI.h>
+#include <PTITCube.h>
 
-#define SD_CS_PIN 13 // PTIT ESP32 OBC wiring; change explicitly for another board.
+PTIT_CDH cdh;
+
+#define SD_CS_PIN   13
+#define SD_SCK_PIN  18
+#define SD_MISO_PIN 19
+#define SD_MOSI_PIN 23
+
+bool sdReady = false;
+
+// Trả về true chỉ khi toàn bộ dòng (kể cả ký tự xuống dòng) đã được ghi xuống thẻ nhớ.
+bool logData(const char* data) {
+    if (!sdReady) return false;
+    File file = SD.open("/log.txt", FILE_APPEND);
+    if (!file) {
+        cdh.println("[SD] Open /log.txt failed");
+        return false;
+    }
+    const size_t expected = strlen(data) + 2;
+    const size_t written = file.println(data);
+    file.close();
+    if (written != expected) {
+        cdh.printf("[SD] Short write: %u/%u bytes\n", (unsigned)written, (unsigned)expected);
+        return false;
+    }
+    return true;
+}
 
 void setup() {
-    Serial.begin(115200);
-    while (!Serial) { delay(10); }
+    cdh.begin(115200);
+    while (!cdh) { delay(10); }
 
-    Serial.println("\n[RAW] Khởi tạo thẻ nhớ MicroSD bằng thư viện SD gốc...");
-    
-    // Khởi tạo SPI cho thẻ nhớ
-    SPI.begin(18, 19, 23, SD_CS_PIN);
+    cdh.println("[CDH] MicroSD SPI Init");
+    SPI.begin(SD_SCK_PIN, SD_MISO_PIN, SD_MOSI_PIN, SD_CS_PIN);
+
     if (!SD.begin(SD_CS_PIN, SPI, 8000000)) {
-        Serial.println("[ERROR] Lỗi! Không tìm thấy thẻ nhớ hoặc chân cắm sai.");
+        cdh.println("[SD] Mount failed");
+        sdReady = false;
         return;
     }
-    
-    Serial.println("[RAW] Khởi tạo thành công! Kiểm tra file...");
-    
-    File file = SD.open("/test.txt", FILE_APPEND);
-    if (file) {
-        const size_t written = file.println("Hello CubeSat from RAW SPI!");
-        file.close();
-        Serial.println(written == strlen("Hello CubeSat from RAW SPI!\r\n") ? "[RAW] Đã ghi nội dung thử nghiệm vào /test.txt" : "[ERROR] SD short write /test.txt");
-    } else {
-        Serial.println("[ERROR] Không thể mở file /test.txt để ghi.");
-    }
+
+    cdh.printf("[SD] OK. Total: %llu MB, Used: %llu MB\n", 
+               SD.totalBytes() / (1024 * 1024), 
+               SD.usedBytes() / (1024 * 1024));
+    sdReady = true;
+
+    logData("BOOT: PTITCUBE C&DH");
 }
 
 void loop() {
-    // Không làm gì
+    static int counter = 0;
+    char buf[64];
+    snprintf(buf, sizeof(buf), "[DATA] #%d | Uptime: %lums", counter++, millis());
+    
+    cdh.println(buf);
+    if (sdReady) cdh.println(logData(buf) ? "[SD] Saved to /log.txt" : "[SD] Write failed; entry not saved");
+
+    delay(3000);
 }

@@ -202,9 +202,7 @@ def parse_student_rows(fmt: str, content: str) -> list[tuple[int, str, str | Non
     parsed: list[tuple[int, str, str | None]] = []
     for row_number, row in enumerate(raw_rows[1:], start=2):
         email = row[email_col].strip() if email_col < len(row) else ""
-        full_name = (
-            row[name_col].strip() if name_col is not None and name_col < len(row) else ""
-        )
+        full_name = row[name_col].strip() if name_col is not None and name_col < len(row) else ""
         if not email and not full_name:
             continue
         parsed.append((row_number, email, full_name or None))
@@ -375,7 +373,7 @@ def student_template_xlsx() -> bytes:
     sheet_xml = (
         '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
         '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
-        f'<sheetData>{"".join(row_xml)}</sheetData>'
+        f"<sheetData>{''.join(row_xml)}</sheetData>"
         "</worksheet>"
     )
     content_types = (

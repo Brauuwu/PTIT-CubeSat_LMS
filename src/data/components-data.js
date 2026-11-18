@@ -35,7 +35,7 @@ export const CUBESAT_COMPONENTS = [
   },
   {
     id: 'sensor',
-    name: 'Cảm biến — IMU 9 trục',
+    name: 'Sensor — IMU 9 trục',
     icon: '🔬',
     role: 'Thu thập dữ liệu môi trường và chuyển động',
     image: '/images/components/sensor.png',

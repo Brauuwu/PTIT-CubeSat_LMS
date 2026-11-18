@@ -1,5 +1,5 @@
 // Reviewed classroom source for the ESP32 OBC hardware profile.
-// Upstream: https://github.com/PTITCube/Lab1-08_WiFi_Connection/blob/92467044d3fe8b274d003dc37674673ac6c70f5b/src/main.cpp
+// Upstream: https://github.com/PTITCube/Lab1-08_WiFi_Connection/blob/02729eeed59d75f95d77fcb51f87656311f5c40a/src/main.cpp
 #include <Arduino.h>
 #include <WiFi.h>
 

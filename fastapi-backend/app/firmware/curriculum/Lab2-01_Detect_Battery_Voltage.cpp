@@ -1,11 +1,11 @@
 // Reviewed classroom source for the ESP32 OBC hardware profile.
-// Upstream: https://github.com/PTITCube/Lab2-01_Detect_Battery_Voltage/blob/72fb6219618496f9bf8931a9ed8892acb7404084/src/main.cpp
+// Upstream: https://github.com/PTITCube/Lab2-01_Detect_Battery_Voltage/blob/c7f92b12185ebccd9af2ff5d60508dd48d61688e/src/main.cpp
 /**
  * VÍ DỤ 2-1: KIỂM TRA PHÂN HỆ NGUỒN (EPS) - ĐO ĐIỆN ÁP PIN
  * 
  * Mô tả:
- * Ví dụ này minh họa cách sử dụng bộ chuyển đổi tương tự-số (ADC) của ESP32 
- * để đo mức điện áp hiện tại của Pin (Li-ion/Li-po) trên hệ thống vệ tinh.
+ * Ví dụ này minh họa cách đọc điện áp Pin (Li-ion/Li-po) của vệ tinh qua
+ * IC đo nhiên liệu MAX17048 (I2C 0x36) bằng lớp PTIT_EPS của thư viện PTITCube.
  * Qua đó, mạch có thể tự động đưa ra các quyết định ngắt nguồn hoặc sạc.
  */
 
@@ -24,7 +24,7 @@ void setup() {
     // Khởi tạo đối tượng
     myBattery.init();
     
-    Serial.println("[EXAMPLE] Bắt đầu đọc điện áp Pin liên tục...\n");
+    
 }
 
 void loop() {

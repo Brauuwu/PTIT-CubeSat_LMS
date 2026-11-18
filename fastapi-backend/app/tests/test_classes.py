@@ -18,6 +18,7 @@ from app.models.tables import (
     ClassMembership,
     Classroom,
     GoogleIdentity,
+    PasswordResetToken,
     RevokedToken,
     User,
 )
@@ -40,6 +41,7 @@ class ClassAPITests(unittest.IsolatedAsyncioTestCase):
             Classroom.__table__,
             ClassMembership.__table__,
             AuditLog.__table__,
+            PasswordResetToken.__table__,
         ]
         self.original_types = []
         for table in (
@@ -220,6 +222,10 @@ class ClassAPITests(unittest.IsolatedAsyncioTestCase):
             "/api/auth/login",
             "/api/auth/google",
             "/api/auth/google/config",
+            "/api/auth/password-reset/config",
+            "/api/auth/forgot-password",
+            "/api/auth/reset-password/validate",
+            "/api/auth/reset-password",
             "/api/admin/signup",
             "/api/admin/login",
             "/api/curriculum/preview",
@@ -312,6 +318,96 @@ class ClassAPITests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(log.before, {"role": "user", "status": "active"})
             self.assertEqual(log.after, {"role": "teacher", "status": "locked"})
 
+    async def test_admin_resets_forgotten_password(self):
+        url = "/api/admin/users/4/reset-password"
+        for uid in (2, 4):
+            self.assertEqual((await self.call(uid, "POST", url)).status_code, 403)
+        self.assertEqual((await self.client.post(url)).status_code, 401)
+        # Own account and other admins are never reset through this endpoint.
+        await self.call(1, "PATCH", "/api/admin/users/3", {"role": "admin"})
+        for uid in (1, 3):
+            result = await self.call(1, "POST", f"/api/admin/users/{uid}/reset-password")
+            self.assertEqual(result.status_code, 403, result.text)
+            self.assertEqual(result.json()["code"], "FORBIDDEN_ROLE")
+        self.assertEqual(
+            (await self.call(1, "POST", "/api/admin/users/99/reset-password")).status_code, 404
+        )
+
+        result = await self.call(1, "POST", url)
+        self.assertEqual(result.status_code, 200, result.text)
+        temporary = result.json()["temporary_password"]
+        self.assertGreaterEqual(len(temporary), 12)
+
+        async def login(password):
+            return await self.client.post(
+                "/api/auth/login", json={"email": "user4@example.com", "password": password}
+            )
+
+        self.assertEqual((await login("secret123")).status_code, 401)
+        self.assertEqual((await login(temporary)).status_code, 200)
+        async with self.sessions() as db:
+            log = (
+                await db.execute(select(AuditLog).where(AuditLog.action == "user.password_reset"))
+            ).scalar_one()
+            self.assertEqual((log.actor, log.target), (1, "user:4"))
+            self.assertNotIn(temporary, f"{log.before}{log.after}")
+
+    async def test_admin_pending_reset_queue_and_one_time_reset_link(self):
+        from urllib.parse import parse_qs, urlsplit
+
+        link_url = "/api/admin/users/4/reset-link"
+        for uid in (2, 4):
+            self.assertEqual((await self.call(uid, "POST", link_url)).status_code, 403)
+        self.assertEqual((await self.client.post(link_url)).status_code, 401)
+        await self.call(1, "PATCH", "/api/admin/users/3", {"role": "admin"})
+        for uid in (1, 3):
+            self.assertEqual(
+                (await self.call(1, "POST", f"/api/admin/users/{uid}/reset-link")).status_code, 403
+            )
+
+        forgot = await self.client.post(
+            "/api/auth/forgot-password", json={"email": "user4@example.com"}
+        )
+        self.assertEqual(forgot.status_code, 200)
+        queued = await self.call(1, "GET", "/api/admin/users?pending_reset=true")
+        self.assertEqual(queued.status_code, 200, queued.text)
+        self.assertEqual(queued.json()["total"], 1)
+        self.assertEqual(queued.json()["items"][0]["id"], 4)
+        self.assertTrue(queued.json()["items"][0]["pending_password_reset"])
+        self.assertIsNotNone(queued.json()["items"][0]["reset_requested_at"])
+
+        issued = await self.call(1, "POST", link_url)
+        self.assertEqual(issued.status_code, 200, issued.text)
+        body = issued.json()
+        self.assertEqual(body["email"], "user4@example.com")
+        self.assertTrue(body["reset_path"].startswith("/reset-password?token="))
+        raw_token = parse_qs(urlsplit(body["reset_path"]).query)["token"][0]
+
+        after_issue = await self.call(1, "GET", "/api/admin/users?pending_reset=true")
+        self.assertEqual(after_issue.json()["total"], 0)
+
+        done = await self.client.post(
+            "/api/auth/reset-password",
+            json={"token": raw_token, "new_password": "newpass123"},
+        )
+        self.assertEqual(done.status_code, 200, done.text)
+        self.assertEqual(
+            (
+                await self.client.post(
+                    "/api/auth/login", json={"email": "user4@example.com", "password": "newpass123"}
+                )
+            ).status_code,
+            200,
+        )
+        async with self.sessions() as db:
+            log = (
+                await db.execute(
+                    select(AuditLog).where(AuditLog.action == "user.password_reset_link")
+                )
+            ).scalar_one()
+            self.assertEqual((log.actor, log.target), (1, "user:4"))
+            self.assertNotIn(raw_token, f"{log.before}{log.after}")
+
     async def test_student_cannot_manage_or_list_other_students(self):
         await self.add_student()
         for method, url, body in [
@@ -367,7 +463,14 @@ class ClassAPITests(unittest.IsolatedAsyncioTestCase):
                 {"class_mode": False, "legacy_allowed": True},
             )
             self.assertEqual((await self.call(1, "GET", "/api/classes")).status_code, 404)
-            self.assertEqual((await self.call(1, "GET", "/api/admin/users")).status_code, 404)
+            self.assertEqual((await self.call(1, "GET", "/api/admin/users")).status_code, 200)
+            self.assertEqual((await self.call(2, "GET", "/api/admin/users")).status_code, 403)
+            self.assertEqual(
+                (await self.call(1, "POST", "/api/admin/users/4/reset-link")).status_code, 200
+            )
+            self.assertEqual(
+                (await self.call(1, "POST", "/api/admin/users/4/reset-password")).status_code, 200
+            )
             self.assertEqual((await self.call(4, "GET", "/api/boards")).status_code, 401)
 
     async def test_student_import_csv_xlsx_templates_and_permissions(self):
@@ -427,7 +530,9 @@ class ClassAPITests(unittest.IsolatedAsyncioTestCase):
                 )
             await db.commit()
         await self.add_student()  # user4 already active
-        await self.call(2, "POST", f"/api/classes/{self.class_a}/members", {"email": "user6@example.com"})
+        await self.call(
+            2, "POST", f"/api/classes/{self.class_a}/members", {"email": "user6@example.com"}
+        )
         await self.call(2, "DELETE", f"/api/classes/{self.class_a}/members", {"user_id": 6})
 
         # Unauthorized teacher or student cannot import
@@ -545,4 +650,3 @@ class ClassAPITests(unittest.IsolatedAsyncioTestCase):
         )
         self.assertEqual(bad_xlsx.status_code, 422)
         self.assertEqual(bad_xlsx.json()["code"], "CONFIG_INVALID")
-

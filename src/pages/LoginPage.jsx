@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { loginDestination } from '../contexts/auth-session';
 import AuthLayout from '../components/common/AuthLayout';
-import { EyeIcon } from '../components/common/AuthIcons';
+import PasswordInput from '../components/common/PasswordInput';
 import GoogleSignIn from '../components/common/GoogleSignIn';
 import { useAuth } from '../contexts/auth-api';
 
@@ -14,9 +14,7 @@ export default function LoginPage() {
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(true);
-  const [showResetHelp, setShowResetHelp] = useState(false);
   const [errors, setErrors] = useState(/** @type {Record<string, string>} */ ({}));
   const [submitting, setSubmitting] = useState(false);
 
@@ -79,28 +77,17 @@ export default function LoginPage() {
 
         <div className="auth-field">
           <label htmlFor="password">Mật khẩu</label>
-          <div className={`auth-input-wrap ${errors.password ? 'has-error' : ''}`}>
-            <input
-              id="password"
-              type={showPassword ? 'text' : 'password'}
-              required
-              autoComplete="current-password"
-              placeholder="********"
-              aria-invalid={Boolean(errors.password)}
-              aria-describedby={errors.password ? 'login-password-error' : undefined}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <button
-              type="button"
-              className="auth-toggle-visibility"
-              onClick={() => setShowPassword((v) => !v)}
-              aria-label="Hiện/ẩn mật khẩu"
-              aria-pressed={showPassword}
-            >
-              <EyeIcon open={showPassword} />
-            </button>
-          </div>
+          <PasswordInput
+            id="password"
+            required
+            autoComplete="current-password"
+            placeholder="********"
+            hasError={Boolean(errors.password)}
+            aria-invalid={Boolean(errors.password)}
+            aria-describedby={errors.password ? 'login-password-error' : undefined}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
           {errors.password && <div id="login-password-error" className="auth-error-text" role="alert">⚠ {errors.password}</div>}
         </div>
 
@@ -109,21 +96,10 @@ export default function LoginPage() {
             <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} />
             Lưu thiết bị này
           </label>
-          <button
-            type="button"
-            className="auth-link-btn"
-            aria-expanded={showResetHelp}
-            onClick={() => setShowResetHelp((v) => !v)}
-          >
+          <Link to="/forgot-password" className="auth-link-btn">
             Quên mật khẩu?
-          </button>
+          </Link>
         </div>
-
-        {showResetHelp && (
-          <p className="auth-help-notice" role="status">
-            Vui lòng liên hệ giảng viên phụ trách lớp hoặc quản trị viên hệ thống để được cấp lại mật khẩu.
-          </p>
-        )}
 
         <button type="submit" className="auth-submit-btn" disabled={submitting}>
           {submitting ? 'Đang đăng nhập...' : 'Đăng nhập'}

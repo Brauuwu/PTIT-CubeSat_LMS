@@ -1,5 +1,5 @@
 // Reviewed classroom source for the ESP32 OBC hardware profile.
-// Upstream: https://github.com/PTITCube/Lab1-02_Control_Multiple_LEDs/blob/b86299e5e8e81424e5ecdab635aaf54f153e8291/src/main.cpp
+// Upstream: https://github.com/PTITCube/Lab1-02_Control_Multiple_LEDs/blob/88c3940782f99e57e3151b413ec7f6baee0d43c0/src/main.cpp
 /**
  * VÍ DỤ 1-02: ĐIỀU KHIỂN NHIỀU ĐÈN LED (MULTIPLE LEDS)
  * 
@@ -16,7 +16,7 @@ void setup() {
     Serial.begin(115200);
     while (!Serial) { delay(10); }
 
-    Serial.println("\n[EXAMPLE] Bắt đầu bài test Điều khiển nhiều LED...");
+    Serial.println("[BOOT] Multi-LED Test");
     
     for (int i = 0; i < NUM_LEDS; i++) {
         pinMode(LED_PINS[i], OUTPUT);

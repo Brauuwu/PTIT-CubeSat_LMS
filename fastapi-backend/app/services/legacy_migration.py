@@ -253,7 +253,13 @@ async def mapping_report(db, spec=None):
                 await db.execute(select(Lesson.id).where(Lesson.course_version_id == version.id))
             ).scalars()
         )
-    legacy_ids = [item["id"] for lab in read_seed()["legacy"] for item in lab["lessons"]]
+    # Checkpoint quiz pages exist only in the legacy view and hold no learner progress to migrate.
+    legacy_ids = [
+        item["id"]
+        for lab in read_seed()["legacy"]
+        for item in lab["lessons"]
+        if item.get("type") != "quiz"
+    ]
     report = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "database": {

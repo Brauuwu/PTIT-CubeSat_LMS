@@ -8,6 +8,7 @@ SEED = Path(__file__).resolve().parents[1] / "firmware" / "curriculum" / "seed.j
 PRACTICE = [
     "Lab1-01_Blink_LED",
     "Lab1-02_Control_Multiple_LEDs",
+    "Lab1-03_PWM_LED",
     "Lab1-03_Button",
     "Lab1-04_LED_Button",
     "Lab1-05_7_Segment_LED",
@@ -39,7 +40,9 @@ class Lab1ScaffoldTests(unittest.TestCase):
         lessons = self.lessons()
         quizzes = [item["id"] for item in lessons if item["type"] == "quiz"]
         self.assertEqual(quizzes, [f"quiz-1-{n}" for n in range(1, 14)])
-        docs = [item for item in lessons if item["type"] == "document" and item["id"] != "summary-1"]
+        docs = [
+            item for item in lessons if item["type"] == "document" and item["id"] != "summary-1"
+        ]
         self.assertEqual(len(docs), 8)
         self.assertTrue(all("markdown" in item["content"] for item in docs))
         self.assertEqual(len([item for item in lessons if item["type"] == "video"]), 3)

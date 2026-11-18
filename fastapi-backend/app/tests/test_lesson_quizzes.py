@@ -98,7 +98,8 @@ class LessonQuizTests(unittest.IsolatedAsyncioTestCase):
 
         locked = await self.call(4, "POST", self.attempt_url, {"idempotency_key": str(uuid4())})
         self.assertEqual(locked.status_code, 403, locked.text)
-        await self.learning.complete(0)
+        # Doc 0.1 is the only lesson before quiz-0-1; summary-0 comes after the quiz.
+        await self.learning.complete_lesson("document")
 
         started = await self.call(4, "POST", self.attempt_url, {"idempotency_key": str(uuid4())})
         self.assertEqual(started.status_code, 200, started.text)

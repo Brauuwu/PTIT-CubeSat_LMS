@@ -1,5 +1,5 @@
 // Reviewed classroom source for the ESP32 OBC hardware profile.
-// Upstream: https://github.com/PTITCube/Lab1-06_Serial_Communication/blob/0b05af16e4618459976e4fe6d3c14d749fbdaa3c/src/main.cpp
+// Upstream: https://github.com/PTITCube/Lab1-06_Serial_Communication/blob/8330f447a32fcdcf8fd31db2c65aa7dbc5aee62b/src/main.cpp
 #include <Arduino.h>
 void setup() {
     Serial.begin(115200);
@@ -9,7 +9,7 @@ void loop() {
     static bool discard = false;
     static uint32_t greetedAt = 0;
     if (millis() - greetedAt >= 1000) {
-        greetedAt = millis(); Serial.println("Hello HEPTA-SAT / CubeSat!");
+        greetedAt = millis(); Serial.println("Hello PTITCube / CubeSat!");
     }
     for (int budget = 0; budget < 64 && Serial.available(); ++budget) {
         const char c = Serial.read();

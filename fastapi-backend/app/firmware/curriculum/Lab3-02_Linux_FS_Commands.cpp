@@ -1,18 +1,21 @@
 // Reviewed classroom source for the ESP32 OBC hardware profile.
-// Upstream: https://github.com/PTITCube/Lab3-02_Linux_FS_Commands/blob/77ec8cc0fcaa10f5353780785696217d916fac24/src/main.cpp
+// Upstream: https://github.com/PTITCube/Lab3-02_Linux_FS_Commands/blob/eb9fa7faa73f8b001e53254f40c4307f2f52169e/src/main.cpp
 /**
  * VÍ DỤ 2: QUẢN LÝ THẺ NHỚ BẰNG LỆNH KIỂU LINUX
  * 
  * Mô tả:
- * Ví dụ này mô phỏng cách nhận lệnh từ một cổng Serial (ví dụ Ground Station)
+ * Ví dụ này mô phỏng cách nhận lệnh từ một cổng cdh (ví dụ Ground Station)
  * và chuyển nó cho Storage module xử lý như một file system của Linux.
  *
  * Các lệnh hỗ trợ: pwd, cd, ls, mkdir, rm, touch
  */
 
 #include <Arduino.h>
+
 #include <PTITCube.h>
 #include <SD.h>
+
+PTIT_CDH cdh;
 
 PTIT_Storage storage;
 
@@ -39,40 +42,40 @@ String checkedStorageCommand(PTIT_Storage& disk, const String& input) {
 }
 
 void setup() {
-    Serial.begin(115200);
-    while (!Serial) { delay(10); }
+    cdh.begin(115200);
+    while (!cdh) { delay(10); }
 
-    Serial.println("\n[EXAMPLE] Khởi động hệ thống lưu trữ...");
+    cdh.println("\n[EXAMPLE] Khởi động hệ thống lưu trữ...");
     storage.init();
     
     if (storage.isReady()) {
-        Serial.println("[EXAMPLE] SD Card đã sẵn sàng!");
-        Serial.println("Bạn có thể gõ các lệnh sau vào ô Serial Monitor (kèm Enter/NL):");
-        Serial.println("  pwd      - Xem thư mục hiện tại");
-        Serial.println("  ls       - Liệt kê file và thư mục");
-        Serial.println("  mkdir x  - Tạo thư mục tên x");
-        Serial.println("  cd x     - Chuyển vào thư mục x");
-        Serial.println("  touch x  - Tạo file x");
-        Serial.println("  rm x     - Xóa file hoặc thư mục x");
+        cdh.println("[EXAMPLE] SD Card đã sẵn sàng!");
+        cdh.println("Bạn có thể gõ các lệnh sau vào ô cdh Monitor (kèm Enter/NL):");
+        cdh.println("  pwd      - Xem thư mục hiện tại");
+        cdh.println("  ls       - Liệt kê file và thư mục");
+        cdh.println("  mkdir x  - Tạo thư mục tên x");
+        cdh.println("  cd x     - Chuyển vào thư mục x");
+        cdh.println("  touch x  - Tạo file x");
+        cdh.println("  rm x     - Xóa file hoặc thư mục x");
     } else {
-        Serial.println("[EXAMPLE] LỖI: Không tìm thấy thẻ SD.");
+        cdh.println("[EXAMPLE] LỖI: Không tìm thấy thẻ SD.");
     }
 }
 
 void loop() {
     static String command;
     static bool discard = false;
-    for (int budget = 0; budget < 64 && Serial.available(); ++budget) {
-        const char c = Serial.read();
+    for (int budget = 0; budget < 64 && cdh.available(); ++budget) {
+        const char c = cdh.read();
         if (c == '\n') {
             if (!discard) {
                 command.trim();
                 if (command.length()) {
-                    Serial.println("User> " + command);
+                    cdh.println("User> " + command);
                     const String response = checkedStorageCommand(storage, command);
-                    Serial.println(response.length() ? response : "ERR: Unknown command");
+                    cdh.println(response.length() ? response : "ERR: Unknown command");
                 }
-            } else Serial.println("ERR: Command exceeds 128 bytes");
+            } else cdh.println("ERR: Command exceeds 128 bytes");
             command = ""; discard = false;
         } else if (c != '\r' && !discard) {
             if (command.length() < 128) command += c;

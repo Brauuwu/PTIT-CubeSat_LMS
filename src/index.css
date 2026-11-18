@@ -108,7 +108,7 @@
   /* Layout */
   --header-height: 72px;
   --sidebar-width: 280px;
-  --course-rail-width: 64px;
+  --course-rail-width: 72px;
 }
 
 /* ===== Base Reset ===== */
@@ -380,6 +380,19 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
 }
 .admin-confirm {
   margin-bottom: 20px;
+}
+.admin-temp-password {
+  display: inline-block; margin: 0 8px; padding: 4px 10px; border-radius: 6px;
+  background: var(--bg-surface); border: 1px solid var(--border-strong);
+  font-family: ui-monospace, Consolas, monospace; font-size: 1rem; user-select: all;
+}
+.admin-temp-password--link {
+  display: block; margin: 8px 0 0; overflow-wrap: anywhere; font-size: 0.88rem;
+}
+.admin-reset-badge {
+  display: inline-block; margin-top: 4px; padding: 2px 8px; border-radius: 999px;
+  background: #fef3c7; border: 1px solid #f59e0b; color: #92400e;
+  font-size: 0.74rem; font-weight: 700;
 }
 .admin-page-panel {
   padding: 18px; border-radius: 12px; border: 1px solid var(--border-subtle); background: var(--bg-surface);
@@ -968,7 +981,7 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
   display: flex; align-items: flex-start; justify-content: space-between; gap: 24px;
   margin-bottom: 24px;
 }
-.class-learning-heading small, .class-learning-content > small {
+.class-learning-heading small {
   color: var(--text-link); font-size: 0.78rem; font-weight: 700;
 }
 .class-learning-heading h1 {
@@ -978,30 +991,7 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
   color: var(--cubesat-navy); font-size: 0.86rem; font-weight: 600;
 }
 .class-learning-path-link { display: inline-block; margin-bottom: 18px; }
-.class-learning-content {
-  min-width: 0; padding: 0; border: 0; border-radius: 0;
-  background: transparent; box-shadow: none; color: var(--cubesat-ink);
-}
-.class-learning-content > small { display: block; margin-bottom: 10px; }
-.class-learning-content .video-player,
-.class-learning-content .doc-viewer { margin-top: 18px; }
 /* Full HD (1920x1080) frame: 16:9 whatever the page width, never collapsed to a strip. */
-.class-learning-content .video-player {
-  height: auto; aspect-ratio: 16 / 9; max-width: 1920px;
-  overflow: hidden; border-radius: 12px; background: #0f172a;
-}
-.class-learning-content .video-player iframe,
-.class-learning-content .video-player video { position: absolute; inset: 0; width: 100%; height: 100%; }
-.class-learning-content .lms-panel {
-  width: 100%; margin: 18px 0 0; color: var(--cubesat-ink);
-  background: rgba(255, 255, 255, 0.9); border-color: #c9deeb;
-}
-.class-learning-content .lms-panel h2,
-.class-learning-content .lms-panel h3,
-.class-learning-content .submission-panel h3 { color: var(--cubesat-ink); }
-.class-learning-content .lms-panel p,
-.class-learning-content .submission-panel p { color: var(--text-body); }
-.class-learning-content > .lms-notice { color: var(--status-info-text); background: rgba(255, 255, 255, 0.82); }
 .is-learning-shell .player-sidebar button.accordion-header,
 .is-learning-shell .player-sidebar button.sub-lesson-item {
   min-height: 0; padding: 8px 12px; border: 0; border-radius: 10px;
@@ -1025,19 +1015,6 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
   border: 1px solid var(--border-subtle); border-radius: 12px; background: var(--bg-surface);
   box-shadow: var(--shadow-sm);
 }
-.lab-workspace-badge {
-  position: absolute; z-index: 10; top: -14px; left: 24px; width: 32px; height: 32px;
-  display: grid; place-items: center; border-radius: 8px; background: var(--cubesat-navy);
-  color: #fff; font-size: 0.9rem; font-weight: 700; box-shadow: var(--shadow-sm);
-}
-.lab-play-badge { padding-left: 2px; }
-.lab-video-workspace { height: auto; min-height: 0; }
-.lab-video-surface, .lab-doc-surface {
-  height: 100%; min-height: 370px; overflow: hidden; border-radius: 8px; background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-}
-.lab-video-surface { height: auto; min-height: 0; aspect-ratio: 16 / 9; }
-.lab-video-surface .video-player { min-height: 0; }
 /* ===== Lesson heading: context, title, supporting description ===== */
 .lab-state-title {
   width: min(100%, 1320px); margin: 4px auto 46px;
@@ -1070,10 +1047,6 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
 .lab-objectives-title span { font-size: 1.45rem; }
 .lab-objectives-body { min-height: 215px; padding: 30px 40px; display: grid; place-items: center; border-radius: 18px; background: rgba(255,255,255,0.85); }
 .lab-objectives-body p { color: var(--text-muted); font-size: 0.88rem; font-style: italic; }
-.lab-doc-workspace { height: clamp(460px, calc(100vh - 280px), 600px); }
-.lab-doc-surface { min-height: 390px; padding: clamp(24px, 4vw, 56px); overflow: auto; }
-.lab-doc-surface .doc-content { max-width: 100%; min-height: 100%; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
-.lab-components-workspace { height: clamp(480px, calc(100vh - 250px), 650px); min-height: 480px; padding-top: 40px; overflow: hidden; }
 .lab-practice-workspace {
   height: clamp(500px, calc(100vh - 240px), 680px); min-height: 500px; padding: 38px 34px 76px;
   display: flex; flex-direction: column;
@@ -1135,17 +1108,6 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
 
 .component-explorer { height: 100%; min-height: 0; display: grid; grid-template-columns: minmax(220px, 300px) minmax(0, 1fr); gap: 28px; }
 .component-explorer-list { padding: 2px 12px 2px 0; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; }
-.component-explorer-item {
-  width: 100%; min-height: 58px; padding: 8px 10px; display: flex; align-items: center; gap: 12px;
-  border: 1px solid transparent; border-radius: 12px; background: transparent; color: var(--cubesat-ink); cursor: pointer; text-align: left;
-  transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
-}
-.component-explorer-item:hover { background: rgba(255,255,255,0.58); transform: translateX(2px); }
-.component-explorer-item.selected { border-color: rgba(32,121,169,0.28); background: #fff; box-shadow: 0 5px 14px rgba(10,65,116,0.09); }
-.component-explorer-icon { width: 46px; height: 46px; flex: 0 0 46px; display: grid; place-items: center; border-radius: 9px; background: linear-gradient(145deg, #288cb7, #0c5c8b); font-size: 1.45rem; }
-.component-explorer-label { min-width: 0; display: flex; flex-direction: column; }
-.component-explorer-label strong { overflow: hidden; font-size: 1rem; line-height: 1.2; text-overflow: ellipsis; white-space: nowrap; }
-.component-explorer-label small { margin-top: 3px; overflow: hidden; color: var(--text-muted); font-size: 0.68rem; line-height: 1.25; text-overflow: ellipsis; white-space: nowrap; }
 .component-detail { min-width: 0; min-height: 100%; padding: 30px; overflow: auto; border: 2px dashed rgba(95,140,172,0.28); border-radius: 18px; background: rgba(255,255,255,0.82); }
 .component-detail-header { display: flex; align-items: center; gap: 16px; }
 .component-detail-icon { width: 58px; height: 58px; display: grid; place-items: center; flex: 0 0 58px; border-radius: 14px; background: #e8f4fb; font-size: 1.9rem; }
@@ -1382,7 +1344,6 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
 .sub-lesson-copy small { color: #a8d4ec; font-size: 10px; font-weight: 700; opacity: 1; }
 .sub-lesson-copy code { color: #d4e6f2; font-size: 9px; overflow-wrap: anywhere; opacity: 1; }
 .sub-lesson-item.active .sub-lesson-copy code { color: var(--text-muted); }
-.lesson-exercise-code { color: var(--text-muted); font-size: 12px; overflow-wrap: anywhere; }
 .lesson-reading-card, .lesson-practice-brief { padding: 22px 26px; margin: 24px 0; border: 1px solid var(--border-subtle); border-radius: 16px; background: #fff; color: var(--text-body); line-height: 1.75; }
 .lesson-reading-card h2, .lesson-practice-brief h2 { margin: 0 0 10px; font-size: 17px; color: var(--cubesat-ink); }
 .lesson-reading-card p, .lesson-practice-brief p { margin: 8px 0; }
@@ -1392,56 +1353,8 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
 .lesson-summary-list li { margin: 10px 0; }
 .lesson-summary-list button { display: flex; flex-direction: column; gap: 4px; border: 0; background: var(--bg-surface-subtle); padding: 12px; border-radius: 8px; text-align: left; color: var(--cubesat-navy); cursor: pointer; max-width: 100%; }
 .lesson-summary-list code { overflow-wrap: anywhere; }
+.lesson-questions-link { display: inline-flex; margin-top: 4px; font-weight: 600; text-decoration: none; }
 .lesson-source { font-size: 12px; line-height: 1.6; color: var(--text-muted); margin-top: 28px; }
-.lesson-pagination {
-  display: flex; align-items: center; justify-content: space-between; gap: 14px;
-  margin-top: 28px; padding: 14px 18px;
-  background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(8px);
-  border: 1px solid var(--border-subtle); border-radius: 14px;
-  font-size: 0.85rem; font-weight: 600; color: var(--text-muted);
-  box-shadow: 0 4px 14px rgba(10, 65, 116, 0.05);
-}
-.lesson-pagination button {
-  border: 1px solid var(--border-strong); background: #fff; color: var(--cubesat-navy);
-  border-radius: 10px; padding: 9px 16px; font-weight: 600; cursor: pointer;
-  transition: all var(--transition-fast);
-}
-.lesson-pagination button:hover:not(:disabled) {
-  background: var(--bg-surface-hover); border-color: var(--brand-primary); transform: translateY(-1px);
-}
-.lesson-pagination button:disabled { opacity: .45; cursor: not-allowed; }
-.lesson-progress-panel {
-  margin: 20px 0 24px; padding: 18px 22px;
-  border: 1px solid var(--border-subtle); border-radius: 12px;
-  background: var(--bg-surface);
-  box-shadow: var(--shadow-sm);
-}
-.lesson-progress-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; color: var(--cubesat-ink); }
-.lesson-progress-heading div { display: flex; flex-direction: column; gap: 4px; }
-.lesson-progress-heading small { color: var(--text-muted); font-size: 0.8rem; font-weight: 500; }
-.lesson-progress-heading b { color: var(--cubesat-navy); font-family: var(--font-mono); font-size: 1.35rem; font-weight: 800; font-variant-numeric: tabular-nums; }
-.lesson-progress-track { height: 8px; margin-top: 12px; overflow: hidden; border-radius: 99px; background: var(--bg-app); border: 1px solid var(--border-subtle); }
-.lesson-progress-track span { display: block; height: 100%; border-radius: inherit; background: var(--cubesat-navy); transition: width 420ms ease; }
-.lesson-completion {
-  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
-  margin: 20px 0 14px; padding: 16px 20px;
-  border: 1px solid var(--border-subtle); border-radius: 12px;
-  background: var(--bg-surface);
-  box-shadow: var(--shadow-sm);
-}
-.lesson-completion .btn {
-  min-width: 240px; font-variant-numeric: tabular-nums;
-  background: var(--cubesat-navy);
-  border-color: var(--cubesat-navy); color: #ffffff;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
-}
-.lesson-completion .btn:hover:not(:disabled) {
-  background: #072d52; border-color: #072d52;
-}
-.lesson-completion .btn:disabled {
-  background: var(--bg-app); color: var(--text-muted); border-color: var(--border-strong); box-shadow: none; opacity: 1;
-}
-.lesson-completion p { margin: 0; color: var(--status-danger-text); font-size: 13px; }
 @media (max-width: 1100px) {
   .lesson-practice-brief { flex-direction: column; gap: 10px; }
 }
@@ -1562,7 +1475,6 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
   box-shadow: 0 12px 32px rgba(10, 65, 116, 0.06), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
   border: 1px solid rgba(10, 65, 116, 0.12);
 }
-.class-learning-content .doc-content { max-width: 100%; }
 .doc-content h2, .doc-content h3 {
   margin-top: 1.75em;
   margin-bottom: 0.7em;
@@ -1666,22 +1578,18 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
   min-height: 100vh; min-height: 100svh; display: flex; align-items: center; justify-content: center;
   background: #fff;
 }
+/* Kích thước theo Figma: vòng 783px / khung 4366px (~18vw); logo 522px = 66.7% đường kính vòng; hộp ring.svg 814x783 */
 .loading-orbit {
-  position: relative; width: clamp(160px, 18vw, 240px); aspect-ratio: 1; border-radius: 50%;
-  border: 1px solid #1a5a96;
+  position: relative; width: clamp(160px, 17.9vw, 260px); aspect-ratio: 1;
   display: flex; align-items: center; justify-content: center;
 }
-.loading-logo { width: 67%; height: 67%; object-fit: contain; }
-.loading-satellite-track {
-  position: absolute; inset: 0; animation: orbit-spin 3s linear infinite;
+.loading-ring {
+  position: absolute; left: 0; top: 0; width: calc(100% * 814 / 783); height: 100%; max-width: none; display: block;
+  transform-origin: calc(100% * 391.5 / 814) 50%; animation: orbit-spin 6s linear infinite;
 }
-.loading-satellite-pos {
-  position: absolute; top: -5%; left: 50%; transform: translateX(-50%);
-  width: 18%; aspect-ratio: 1;
-}
-.loading-satellite { width: 100%; height: 100%; display: block; animation: orbit-counter-spin 3s linear infinite; }
+.loading-logo { position: relative; width: 66.7%; height: auto; display: block; }
 @keyframes orbit-spin { to { transform: rotate(360deg); } }
-@keyframes orbit-counter-spin { to { transform: rotate(-360deg); } }
+@media (prefers-reduced-motion: reduce) { .loading-ring { animation: none; } }
 .not-found-page {
   min-height: 100vh; min-height: 100svh; display: grid; place-items: center; background: #fff;
 }
@@ -1706,22 +1614,36 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
 .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--border-subtle); }
 
 .auth-toggle-visibility {
-  position: absolute; right: 4px; top: 50%; width: 40px; height: 40px; transform: translateY(-50%);
-  background: none; border: none; border-radius: 10px; cursor: pointer; color: var(--text-muted); display: grid; place-items: center; padding: 0;
+  /* Centered with top/bottom/margin-auto rather than transform so global button:active
+     transform never moves the button away from the cursor and drops the click. */
+  position: absolute; right: 4px; top: 0; bottom: 0; margin: auto 0; width: 38px; height: 38px; z-index: 1;
+  background: none; border: none; border-radius: 10px; cursor: pointer; color: var(--text-muted);
+  display: grid; place-items: center; padding: 0;
+  transition: color var(--transition-fast), background var(--transition-fast);
 }
+.auth-toggle-visibility:active:not(:disabled) { transform: none; }
+.auth-input-wrap:has(.auth-toggle-visibility) input { padding-right: 46px; }
+/* Edge draws its own reveal button under ours. */
+.auth-input-wrap input::-ms-reveal, .auth-input-wrap input::-ms-clear { display: none; }
 .auth-toggle-visibility:hover { color: var(--text-heading); background: rgba(10, 65, 116, 0.06); }
+.auth-toggle-visibility:focus-visible { outline: 2px solid var(--brand-primary); outline-offset: -2px; }
 
 .auth-row-between { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; font-size: 0.875rem; }
 .auth-checkbox { display: flex; align-items: center; gap: 8px; color: var(--text-body); cursor: pointer; font-weight: 500; }
 .auth-link-btn {
-  border: 0; background: transparent; padding: 4px 6px; border-radius: 6px;
-  color: var(--text-link); font-size: 0.875rem; font-weight: 600; cursor: pointer;
+  display: inline-block; border: 0; background: transparent; padding: 4px 6px; border-radius: 6px;
+  color: var(--text-link); font-size: 0.875rem; font-weight: 600; cursor: pointer; text-decoration: none;
 }
 .auth-link-btn:hover { color: var(--text-link-hover); text-decoration: underline; }
 .auth-help-notice {
   margin-bottom: 16px; padding: 10px 12px; border-radius: 10px;
   border: 1px solid var(--status-info-border); background: var(--status-info-bg); color: var(--status-info-text);
-  font-size: 0.82rem; line-height: 1.5;
+  font-size: 0.84rem; line-height: 1.55;
+}
+.auth-success-notice {
+  margin-bottom: 16px; padding: 12px 14px; border-radius: 10px;
+  border: 1px solid #86efac; background: #f0fdf4; color: #166534;
+  font-size: 0.88rem; line-height: 1.55; font-weight: 500;
 }
 .auth-submit-spaced { margin-top: 8px; }
 
@@ -1760,12 +1682,7 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
   .lab-course-view { padding: 28px 22px 64px; }
   .class-learning-heading { align-items: flex-start; gap: 14px; }
   .class-learning-heading h1 { font-size: clamp(1.35rem, 5vw, 2rem); }
-  .class-learning-content { padding: 22px; }
   .lab-workspace { min-height: 410px; padding: 26px; }
-  .lab-video-workspace { min-height: 0; }
-  .lab-doc-surface { min-height: 380px; }
-  .lab-doc-workspace { height: clamp(450px, calc(100vh - 240px), 540px); min-height: 450px; }
-  .lab-doc-surface { min-height: 450px; }
   .component-explorer { grid-template-columns: minmax(190px, 230px) minmax(0, 1fr); gap: 18px; }
   .component-detail { padding: 22px; }
   .lab-practice-workspace { height: auto; min-height: 760px; padding: 34px 24px 82px; overflow: visible; }
@@ -1795,11 +1712,7 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
   .lab-mobile-lessons button span { display: none; }
   .lab-course-view { padding: 22px 12px 48px; }
   .class-learning-heading { flex-direction: column; gap: 8px; }
-  .class-learning-content { padding: 16px; border-radius: 14px; }
   .lab-workspace { min-height: 360px; margin-top: 22px; padding: 18px 12px 12px; border-radius: 20px; }
-  .lab-workspace-badge { top: -20px; left: 18px; width: 44px; height: 44px; border-radius: 13px; font-size: 1.15rem; }
-  .lab-video-surface, .lab-doc-surface { border-radius: 14px; }
-  .lab-doc-surface { min-height: 310px; }
   .lab-state-title { margin-top: 0; margin-bottom: 36px; gap: 9px; }
   .lab-state-title--compact { margin-bottom: 24px; }
   .lab-state-copy { font-size: 22px; }
@@ -1807,17 +1720,8 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
   .lab-objectives { min-height: 250px; margin-top: 42px; padding: 42px 12px 12px; border-radius: 20px; }
   .lab-objectives-title { left: 18px; padding: 9px 16px; font-size: 0.85rem; }
   .lab-objectives-body { min-height: 190px; padding: 24px 14px; text-align: center; }
-  .lab-doc-workspace { min-height: 440px; }
-  .lab-doc-surface { min-height: 400px; padding: 28px 16px; }
-  .lab-video-workspace { min-height: 0; }
-  .lab-doc-workspace { height: 440px; min-height: 440px; }
-  .lab-components-workspace { height: auto; min-height: 720px; padding-top: 34px; overflow: visible; }
   .component-explorer { height: auto; min-height: 660px; grid-template-columns: 1fr; grid-template-rows: auto minmax(360px, 1fr); gap: 14px; }
   .component-explorer-list { padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); overflow: visible; }
-  .component-explorer-item { min-height: 52px; padding: 6px; gap: 7px; }
-  .component-explorer-icon { width: 38px; height: 38px; flex-basis: 38px; font-size: 1.05rem; }
-  .component-explorer-label strong { font-size: 0.78rem; }
-  .component-explorer-label small { display: none; }
   .component-detail { min-height: 360px; padding: 18px; }
   .component-detail-description { font-size: 0.86rem; }
   .lab-practice-workspace { min-height: 720px; padding: 30px 12px 92px; }
@@ -2016,3 +1920,640 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
   line-height: 1.4;
   margin: 0;
 }
+/* ===== Sidebar: badge Lab dùng icon PNG (active / inactive) ===== */
+.course-lab-badge:has(.lab-badge-icon),
+.course-lab-badge.active:has(.lab-badge-icon) { width: 46px; height: 46px; flex-basis: 46px; padding: 0; background: transparent; box-shadow: none; border-radius: 13px; }
+.course-lab-badge:has(.lab-badge-icon):hover { background: transparent; transform: scale(1.06); }
+.course-lab-badge:has(.lab-badge-icon):active { transform: scale(0.96); }
+.course-lab-badge:has(.lab-badge-icon)::before { left: -9px; top: 14px; }
+.lab-badge-icon { width: 100%; height: 100%; display: block; object-fit: contain; pointer-events: none; user-select: none; }
+.course-lab-badge.is-locked .lab-badge-icon { opacity: 0.5; filter: grayscale(0.4); }
+.course-lab-badge:has(.lab-badge-icon) .lab-badge-status { right: -3px; bottom: -3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 4px rgba(10, 65, 116, 0.3); }
+.course-menu-wordmark { display: block; height: 34px; width: auto; max-width: 100%; }
+
+/* ===== Sidebar rail: module bo tròn nổi trên nền sidebar ===== */
+.course-rail {
+  margin: 10px 8px; padding: 14px 0 12px; min-height: 0;
+  background: #BDD8E9; border: 0; border-radius: 30px;
+  box-shadow: 0 6px 18px rgba(0, 20, 45, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+.course-rail-nav { gap: 20px; margin: 16px 0 12px; padding: 6px 0; }
+.course-rail-logo-link:hover, .course-home-link { background: rgba(255, 255, 255, 0.45); }
+.course-home-link { border-color: rgba(255, 255, 255, 0.6); box-shadow: none; }
+.course-lab-badge:has(.lab-badge-icon),
+.course-lab-badge.active:has(.lab-badge-icon) { width: 44px; height: 44px; flex-basis: 44px; }
+.course-lab-badge:has(.lab-badge-icon)::before { display: none; }
+/* Chỉ Lab đã hoàn thành mới có dấu tick: vòng tròn nhỏ ở góc dưới trái */
+.course-lab-badge:has(.lab-badge-icon) .lab-badge-status { display: none; }
+.course-lab-badge.is-completed:has(.lab-badge-icon) .lab-badge-status {
+  display: grid; left: -2px; right: auto; bottom: -2px; width: 15px; height: 15px;
+  border-radius: 50%; background: #16835d; color: #fff; box-shadow: 0 0 0 2px #BDD8E9;
+}
+.course-lab-badge.is-completed:has(.lab-badge-icon) .lab-badge-status svg { width: 9px; height: 9px; }
+
+/* ===== Sidebar rail v3: bo tròn lớn, thu hẹp, vạch trắng đánh dấu Lab đang mở ===== */
+.course-rail { border-radius: 60px; padding-top: 10px; }
+/* Nav rộng hơn khối 8px mỗi bên để vạch đánh dấu không bị cắt bởi overflow cuộn */
+.course-rail-nav { width: auto; align-self: stretch; margin: 16px -8px 12px; padding: 6px 8px; }
+.course-lab-badge.active:has(.lab-badge-icon)::before {
+  display: block; opacity: 1; left: -13px; top: 8px; width: 6px; height: 28px;
+  border-radius: 0 6px 6px 0; background: #fff;
+}
+/* Logo chữ nhỏ hơn, đỉnh ngang đỉnh logo SAT bên rail */
+.course-menu-header { align-items: flex-start; padding-top: 25px; }
+.course-menu-wordmark { height: 26px; }
+.course-collapse-button { margin-top: -6px; }
+
+/* ===== Sidebar rail v4 ===== */
+.course-rail { margin: 10px 3px 10px 13px; border-radius: 50px; }
+.course-rail-nav { margin: 16px -3px 12px -13px; padding: 6px 3px 6px 13px; }
+.course-lab-badge.active:has(.lab-badge-icon)::before { left: -18px; top: 8px; width: 4px; height: 28px; border-radius: 0 3px 3px 0; }
+.course-menu-wordmark { height: 32px; }
+.course-menu-header { padding-left: 24px; }
+
+/* ===== Sidebar rail v5: cách mép trái 9px (giữ nguyên bề rộng 54px) ===== */
+.course-rail { margin: 10px 7px 10px 9px; }
+.course-rail-nav { margin: 16px -7px 12px -9px; padding: 6px 7px 6px 9px; }
+.course-lab-badge.active:has(.lab-badge-icon)::before { left: -14px; }
+
+/* ===== Sidebar rail v6: cách mép trái và nội dung bên phải đều 9px, bo góc nhẹ ===== */
+.course-rail { margin: 10px 9px; border-radius: 26px; }
+.course-rail-nav { margin: 16px -9px 12px; padding: 6px 9px; }
+
+/* ===== Sidebar rail v7: bo góc 14px ===== */
+.course-rail { border-radius: 14px; }
+
+/* ===== Sidebar rail v8: bo 18px, rail cách mép trên/dưới xa hơn (nội dung bên trong giữ nguyên vị trí) ===== */
+.course-rail { border-radius: 18px; margin-top: 14px; margin-bottom: 14px; padding-top: 6px; padding-bottom: 8px; }
+/* Góc phải trên/dưới của sidebar */
+.player-sidebar, .course-menu { border-radius: 0 18px 18px 0; }
+
+/* ===== Sidebar thu gọn: lề trái 9px, lề phải 14px, thanh giữ nguyên bề rộng 54px ===== */
+.player-sidebar.is-collapsed { width: calc(var(--course-rail-width) + 5px); flex-basis: calc(var(--course-rail-width) + 5px); grid-template-columns: calc(var(--course-rail-width) + 5px) minmax(0, 1fr); }
+.player-sidebar.is-collapsed .course-rail { margin-right: 14px; }
+.app-container:has(.player-sidebar.is-collapsed) .header.is-lab-route { left: calc(var(--course-rail-width) + 5px); }
+
+/* ===== Lab hoàn thành: bỏ dấu tick, thay bằng thanh ngang xanh nhỏ dưới icon (chỉ hiện ở Lab đang mở) ===== */
+.course-lab-badge.is-completed:has(.lab-badge-icon) .lab-badge-status { display: none; }
+/* (đã bỏ thanh ngang) Lab hoàn thành: vạch bên trái chuyển sang xanh #19BC80 */
+.course-lab-badge.is-completed:has(.lab-badge-icon)::before {
+  display: block; opacity: 1; left: -14px; top: 50%; bottom: auto; width: 4px; height: 28px;
+  transform: translateY(-50%); border-radius: 0 3px 3px 0; background: #19BC80;
+}
+/* Vạch trắng: căn giữa tuyệt đối theo chiều dọc của icon (trung điểm vạch = trung điểm icon) */
+.course-lab-badge.active:has(.lab-badge-icon)::before { top: 50%; bottom: auto; transform: translateY(-50%); }
+
+/* ===== Panel chỉ hiển thị nội dung của Lab đang chọn ===== */
+.course-menu .accordion-section:not(.current) { display: none; }
+.course-menu .accordion-section.current > .accordion-header { display: none; }
+/* Mốc bắt đầu nội dung = cạnh trên icon Lab 0: rail margin 14 + padding 6 + logo 46 + nav margin 16 + nav padding 6 = 88px */
+.course-menu-header { box-sizing: border-box; height: 88px; min-height: 0; }
+.course-menu .accordion-content { padding-top: 0; }
+.is-learning-shell .player-sidebar .accordion-content { padding-top: 0; }
+
+/* ===== Danh sách bài: bỏ nền xanh thẫm, chiều cao mỗi bài tự co giãn theo độ dài nội dung ===== */
+.course-menu .accordion-content, .is-learning-shell .player-sidebar .accordion-content { background: transparent; }
+.course-menu .sub-lesson-item, .is-learning-shell .player-sidebar button.sub-lesson-item { height: auto; min-height: 0; align-items: flex-start; }
+.course-menu .sub-lesson-icon { margin-top: 1px; }
+.course-menu .sub-lesson-copy { overflow-wrap: anywhere; white-space: normal; }
+
+/* ===== Bỏ hẳn nền khu vực nội dung: dùng thẳng màu navy của sidebar ===== */
+.course-menu .accordion-section, .course-menu .accordion-section.current { background: transparent; border-bottom: 0; }
+.course-menu .curriculum-list, .course-menu .accordion-content { background: transparent; }
+
+/* ===== Màu chủ đạo sidebar: #094174 (chỉ áp dụng trong sidebar, không đổi biến toàn cục) ===== */
+.player-sidebar { --cubesat-navy: #094174; background: #094174; }
+.course-menu { background: #094174; }
+.course-expand-button { background: #094174; }
+
+/* ===== Đồng bộ #094174: bỏ bóng đổ tối quanh thanh Lab (tạo vệt màu khác quanh thanh) ===== */
+.course-rail { box-shadow: none; }
+.player-sidebar, .player-sidebar .course-menu, .player-sidebar .course-expand-button { background: #094174; background-image: none; }
+
+/* Bỏ đường kẻ trắng ngăn cách dưới header của panel */
+.course-menu-header { border-bottom: 0; }
+.course-menu-footer { border-top: 0; }
+
+/* ===== Sidebar: font Plus Jakarta Sans, chữ lớn hơn, căn giữa theo chiều dọc ===== */
+.course-menu, .course-menu * { font-family: 'Plus Jakarta Sans', var(--font-sans); }
+.course-menu .sub-lesson-item, .is-learning-shell .player-sidebar button.sub-lesson-item {
+  align-items: center; gap: 12px; padding: 11px 14px; font-size: 0.9rem; font-weight: 600; line-height: 1.4;
+}
+.course-menu .sub-lesson-icon { margin-top: 0; width: 28px; height: 28px; flex: 0 0 28px; font-size: 0.78rem; font-weight: 700; line-height: 1; display: grid; place-items: center; }
+.course-menu .sub-lesson-copy { justify-content: center; line-height: 1.4; }
+.course-menu .sub-lesson-copy small { font-size: 0.72rem; }
+.course-menu .sub-lesson-copy code { font-size: 0.7rem; }
+
+/* Giảm cỡ chữ sidebar một chút (0.9rem -> 0.82rem) */
+.course-menu .sub-lesson-item, .is-learning-shell .player-sidebar button.sub-lesson-item { font-size: 0.82rem; }
+.course-menu .sub-lesson-icon { width: 26px; height: 26px; flex-basis: 26px; font-size: 0.72rem; }
+.course-menu .sub-lesson-copy small { font-size: 0.68rem; }
+.course-menu .sub-lesson-copy code { font-size: 0.66rem; }
+
+/* Bo góc khung bài trong sidebar: 14px */
+.course-menu .sub-lesson-item, .is-learning-shell .player-sidebar button.sub-lesson-item { border-radius: 14px; }
+
+/* ===== Khung nội dung từng Lab: viền trắng bo 14px, tiêu đề IN HOA + tiến độ ===== */
+.course-menu .curriculum-list { display: flex; flex-direction: column; padding: 0 9px 14px; }
+.course-menu .accordion-section.current {
+  flex: 1 0 auto; display: flex; flex-direction: column;
+  border: 1.5px solid #fff; border-radius: 14px; transition: border-color var(--transition-fast);
+}
+.course-menu .accordion-section.current.is-completed { border-color: #19BC80; }
+.lab-frame-head { padding: 18px 18px 6px; }
+.lab-frame-title { margin: 0; color: #fff; font-size: 1rem; font-weight: 800; line-height: 1.25; letter-spacing: 0.01em; text-transform: uppercase; overflow-wrap: anywhere; }
+.lab-frame-meta { margin: 4px 0 0; color: rgba(255, 255, 255, 0.85); font-size: 0.72rem; font-weight: 500; line-height: 1.3; }
+.course-menu .accordion-content, .is-learning-shell .player-sidebar .accordion-content { padding: 14px 12px 14px; gap: 10px; }
+
+/* Khung Lab co theo số bài, không kéo dài xuống đáy panel */
+.course-menu .accordion-section.current { flex: 0 0 auto; }
+.course-menu .curriculum-list { justify-content: flex-start; }
+
+/* ===== Viền Lab dạng thụt: phần đầu (tiêu đề) rộng ra bên trái 9px, viền uốn cong thụt vào ở khu bài học ===== */
+.course-menu .accordion-section.current { --frame: #fff; border: 0; }
+.course-menu .accordion-section.current.is-completed { --frame: #19BC80; border: 0; }
+.course-menu .lab-frame-head {
+  margin-left: -9px; padding: 16px 18px 8px 12px;
+  border: 1.5px solid var(--frame); border-bottom: 0; border-radius: 14px 14px 0 0; transition: border-color var(--transition-fast);
+}
+.course-menu .lab-frame-bend { display: flex; height: 14px; margin-left: -9px; color: var(--frame); transition: color var(--transition-fast); }
+.course-menu .lab-frame-bend svg { flex: 0 0 10.5px; width: 10.5px; height: 14px; display: block; }
+.course-menu .lab-frame-bend span { flex: 1; border-right: 1.5px solid var(--frame); }
+.course-menu .accordion-section.current .accordion-content {
+  border: 1.5px solid var(--frame); border-top: 0; border-radius: 0 0 14px 14px; padding-top: 4px;
+}
+
+/* Phụ đề Lab: giảm độ đậm 500 -> 400 */
+.course-menu .lab-frame-meta { font-weight: 400; }
+
+/* Đường uốn thoải hơn: cao 26px, tiếp tuyến thẳng đứng ở hai đầu; bù bớt đệm để các bài giữ nguyên vị trí */
+.course-menu .lab-frame-head { padding-bottom: 0; }
+.course-menu .lab-frame-bend { height: 26px; }
+.course-menu .lab-frame-bend svg { height: 26px; }
+.course-menu .accordion-section.current .accordion-content { padding-top: 0; }
+
+/* ===== Bỏ viền/đường uốn; tiêu đề và bài học giãn rộng. Khung bài lùi vào 9px so với tiêu đề ===== */
+.course-menu .accordion-section.current, .course-menu .accordion-section.current.is-completed { border: 0; }
+.course-menu .curriculum-list { padding: 0 9px 14px 0; }
+.course-menu .lab-frame-head { margin: 0; padding: 0 0 0 2px; border: 0; border-radius: 0; }
+.course-menu .lab-frame-title { line-height: 1.1; }
+.course-menu .accordion-section.current .accordion-content { border: 0; border-radius: 0; padding: 14px 0 14px 9px; gap: 10px; }
+.is-learning-shell .player-sidebar .accordion-section.current .accordion-content { padding: 14px 0 14px 9px; }
+
+/* ===== Tiêu đề Lab đứng yên; chỉ danh sách bài cuộn (thanh trượt nằm ngang hàng với khu bài học) ===== */
+.course-menu .curriculum-list { overflow: hidden; }
+.course-menu .accordion-section.current { flex: 1 1 auto; min-height: 0; }
+.course-menu .lab-frame-head { flex: 0 0 auto; }
+.course-menu .accordion-section.current .accordion-content {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain;
+  scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+.course-menu .accordion-content::-webkit-scrollbar { width: 5px; }
+.course-menu .accordion-content::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.3); border-radius: 4px; }
+.course-menu .accordion-content::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.5); }
+
+/* ===== Khung bài học: chiều cao cố định, chữ dài thì cắt 2 dòng (không co giãn theo nội dung) ===== */
+.course-menu .sub-lesson-item, .is-learning-shell .player-sidebar button.sub-lesson-item {
+  flex: 0 0 auto; height: 48px; min-height: 48px; padding-top: 0; padding-bottom: 0; align-items: center; box-sizing: border-box;
+}
+.course-menu .sub-lesson-copy { min-height: 0; max-height: 100%; overflow: hidden; justify-content: center; gap: 1px; line-height: 1.3; }
+.course-menu .sub-lesson-copy > span:not(.sub-lesson-icon) {
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden;
+}
+.course-menu .sub-lesson-copy small, .course-menu .sub-lesson-copy code { display: block; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ===== Khung bài: nền chiều cao tối thiểu 68px (đồng đều), hiển thị đầy đủ nội dung, chỉ cao thêm nếu chữ dài hơn ===== */
+.course-menu .sub-lesson-item, .is-learning-shell .player-sidebar button.sub-lesson-item {
+  height: auto; min-height: 68px; padding-top: 11px; padding-bottom: 11px;
+}
+.course-menu .sub-lesson-copy { max-height: none; overflow: visible; }
+.course-menu .sub-lesson-copy > span:not(.sub-lesson-icon) { display: block; -webkit-line-clamp: unset; line-clamp: unset; overflow: visible; }
+.course-menu .sub-lesson-copy small, .course-menu .sub-lesson-copy code { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
+
+/* Khoảng cách phụ đề Lab -> khung bài đầu tiên: 20px */
+.course-menu .accordion-section.current .accordion-content,
+.is-learning-shell .player-sidebar .accordion-section.current .accordion-content { padding-top: 20px; }
+
+/* Tiêu đề Lab bị cắt dấu/đỉnh chữ ở mép trên vùng cuộn: dịch nội dung xuống và nới chiều cao dòng */
+.course-menu .lab-frame-head { padding-top: 8px; }
+.course-menu .lab-frame-title { line-height: 1.25; }
+
+/* Khối tên Lab + phụ đề: đệm dưới 14px; giảm đệm trên của danh sách bài 20 -> 6px để tổng khoảng cách tới bài đầu vẫn 20px */
+.course-menu .lab-frame-head { padding-bottom: 14px; }
+.course-menu .accordion-section.current .accordion-content,
+.is-learning-shell .player-sidebar .accordion-section.current .accordion-content { padding-top: 6px; }
+
+/* Mỗi phần của tên Lab (tách bởi "/") nằm trên một dòng riêng */
+.course-menu .lab-frame-title-line { display: block; }
+
+/* ===== Thanh trượt: nằm giữa khung bài và mép phải sidebar (rãnh 14px, thanh 4px, mỗi bên cách 5px) ===== */
+.course-menu .curriculum-list { padding-right: 0; }
+.course-menu .lab-frame-head { padding-right: 9px; }
+.course-menu .accordion-section.current .accordion-content {
+  padding-right: 0; scrollbar-gutter: stable; scrollbar-width: auto; scrollbar-color: auto;
+}
+.course-menu .accordion-content::-webkit-scrollbar { width: 14px; }
+.course-menu .accordion-content::-webkit-scrollbar-track { background: transparent; }
+.course-menu .accordion-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.35); background-clip: content-box; border: 5px solid transparent; border-radius: 10px;
+}
+.course-menu .accordion-content::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.6); background-clip: content-box; }
+/* Firefox không hỗ trợ ::-webkit-scrollbar: dùng thanh mảnh mặc định */
+@supports not selector(::-webkit-scrollbar) {
+  .course-menu .accordion-section.current .accordion-content { scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.35) transparent; }
+}
+
+/* ===== Thanh dọc trắng bên trái danh sách bài (kiểu indent guide của VS Code) =====
+   Mép trái của thanh trùng mép trái tên Lab (đệm trái của khối tên Lab = 2px). Thanh gắn vào khung chứ không cuộn theo nội dung. */
+.course-menu .accordion-section.current .accordion-content {
+  background-image: linear-gradient(#FFFFFF, #FFFFFF);
+  background-repeat: no-repeat; background-position: 2px 0; background-size: 1.5px 100%; background-attachment: scroll;
+}
+
+/* ===== Thanh dọc trắng: bo tròn hai đầu, đỉnh chạm cạnh trên khung bài đầu, đáy chạm cạnh dưới khung bài cuối (cuộn cùng danh sách) ===== */
+.course-menu .accordion-section.current .accordion-content { background-image: none; }
+.course-menu .lesson-track { position: relative; display: flex; flex-direction: column; gap: 10px; }
+.course-menu .lesson-track::before {
+  content: ''; position: absolute; top: 0; bottom: 0; left: -7px; width: 1.5px;
+  border-radius: 2px; background: #FFFFFF; pointer-events: none;
+}
+
+/* Bo góc phải trên/dưới của sidebar: 24px */
+.player-sidebar, .course-menu { border-radius: 0 24px 24px 0; }
+
+/* ===== Nút đóng/mở sidebar: cạnh trên/dưới trùng với logo chữ "cubeSAT PTIT LMS" (top 25px, cao 32px) ===== */
+.course-collapse-button { width: 32px; height: 32px; margin-top: 0; flex: 0 0 32px; }
+.course-expand-button { top: 25px; height: 32px; }
+
+/* Nút mở sidebar (khi đóng): rộng 24px, cao giữ 32px, icon căn giữa */
+.course-expand-button { width: 24px; display: grid; place-items: center; padding: 0; }
+
+/* Nút mở sidebar (khi đóng): bỏ đổ bóng, kể cả khi hover */
+.course-expand-button, .course-expand-button:hover, .course-expand-button:focus-visible { box-shadow: none; }
+
+
+/* =====================================================================
+   LAB 0 theo Figma (LMS - LAB 0.1 / 0.2 / 0.3)
+   Kích thước đổi từ khung thiết kế 4366px: 1 đơn vị thiết kế = --u (0.36px).
+   ===================================================================== */
+.header.is-fig, .lab-fig { --u: 0.36px; }
+
+/* Trang nền: nền gradient phủ từ mép trên, sidebar chiếm toàn chiều cao */
+.main-content.is-lab-route:has(.lab-fig) { margin-top: 0; }
+.main-content.is-lab-route:has(.lab-fig) .player-layout { height: 100dvh; }
+.main-content.is-lab-route:has(.lab-fig) .player-sidebar { margin-top: 0; }
+/* Nền "Lab Background" (Figma 2606:96): phủ toàn màn hình phía sau sidebar, đứng yên khi cuộn.
+   Khung .player-layout cao đúng 100dvh và không cuộn; chỉ .player-main (workspace) cuộn bên trong. */
+.player-layout:has(.lab-fig) {
+  background: linear-gradient(152.56deg, #a8d0e9 2.9544%, #f3f3fa 51.477%, #ffffff 59.35%, #a8d0e9 97.201%);
+}
+.player-main:has(.lab-fig) { background: transparent; }
+
+/* Thanh header nổi dạng viên thuốc */
+.header.is-fig {
+  top: calc(44 * var(--u)); height: calc(148 * var(--u)); min-height: 48px;
+  left: calc(var(--sidebar-width) + 200 * var(--u)); right: calc(200 * var(--u) + 14px);
+  padding: 0 calc(60 * var(--u)) 0 calc(87 * var(--u));
+  grid-template-columns: minmax(0, calc(786 * var(--u))) minmax(0, 1fr); gap: 16px;
+  border: 0.3px solid #094174; border-radius: calc(45 * var(--u)); background: rgba(228, 235, 245, 0.7);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 16px 32px -4px rgba(12, 12, 13, 0.1), 0 4px 4px -4px rgba(12, 12, 13, 0.05);
+}
+.app-container:has(.player-sidebar.is-collapsed) .header.is-fig { left: calc(var(--course-rail-width) + 5px + 200 * var(--u)); }
+.header.is-fig .header-search {
+  height: calc(96 * var(--u)); min-height: 32px; padding: 0 calc(37 * var(--u)); gap: calc(26 * var(--u));
+  border: 0; border-radius: calc(45 * var(--u)); background: #f3f3fa; box-shadow: 0 1px 4px rgba(12, 12, 13, 0.05);
+}
+.header.is-fig .header-search:focus-within { background: #fff; box-shadow: 0 0 0 3px rgba(9, 65, 116, 0.18); }
+.header.is-fig .header-search-svg { color: #094174; }
+.header.is-fig .header-search input { color: #094174; font-size: 0.8rem; }
+.header.is-fig .header-search input::placeholder { color: #094174; opacity: 0.5; font-size: 0.8rem; font-weight: 300; }
+.header.is-fig .header-lab-tools { padding-right: 18px; border-right: 1px solid rgba(9, 65, 116, 0.35); }
+.header.is-fig .header-lab-alert, .header.is-fig .header-lab-message { color: #094174; }
+.header.is-fig .header-user { padding: 2px 8px 2px 2px; gap: calc(30 * var(--u)); }
+.header.is-fig .header-avatar { width: 30px; height: 30px; flex-basis: 30px; background: transparent; color: #094174; box-shadow: none; }
+.header.is-fig .header-user-name { max-width: 200px; color: #094174; font-size: calc(50 * var(--u)); font-weight: 700; }
+.header.is-fig .header-account-chevron-svg { color: #094174; }
+
+.lab-course-view.lab-fig {
+  padding: calc(266 * var(--u)) calc(200 * var(--u)) calc(120 * var(--u)); background: transparent; color: #094174;
+  font-family: 'Plus Jakarta Sans', var(--font-sans);
+}
+.lab-fig, .lab-fig button { font-family: 'Plus Jakarta Sans', var(--font-sans); }
+
+/* Thẻ tiến độ */
+.fig-progress {
+  padding: calc(55 * var(--u)) calc(145 * var(--u)) calc(57 * var(--u)); margin: 0;
+  border-radius: calc(45 * var(--u)); background: rgba(221, 232, 243, 0.6);
+  box-shadow: 0 16px 32px -4px rgba(12, 12, 13, 0.1), 0 4px 4px -4px rgba(12, 12, 13, 0.05);
+}
+.fig-progress-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.fig-progress-title { margin: 0; font-size: calc(70 * var(--u)); font-weight: 700; line-height: 1.15; color: #094174; }
+.fig-progress-sub { margin: 0; font-size: calc(35 * var(--u)); font-weight: 400; line-height: 1.3; color: #094174; opacity: 0.66; }
+.fig-progress-percent { font-size: calc(70 * var(--u)); font-weight: 700; color: #094174; font-variant-numeric: tabular-nums; }
+.fig-progress-track {
+  position: relative; height: calc(30 * var(--u)); min-height: 8px; margin-top: calc(53 * var(--u));
+  border: 1px solid #094174; border-radius: 999px; background: rgba(221, 232, 243, 0.6); overflow: hidden;
+}
+.fig-progress-track span { position: absolute; left: 0; top: 0; bottom: 0; display: block; border-radius: inherit; background: #094174; transition: width 420ms ease; }
+
+/* Thẻ nội dung có tab nổi phía trên */
+.fig-card {
+  position: relative; margin-top: calc(206 * var(--u)); padding: calc(130 * var(--u)) calc(145 * var(--u)) calc(100 * var(--u));
+  border-radius: calc(90 * var(--u)); background: rgba(221, 232, 243, 0.7);
+  box-shadow: 0 16px 32px -4px rgba(12, 12, 13, 0.1), 0 4px 4px -4px rgba(12, 12, 13, 0.05);
+}
+.fig-tab {
+  position: absolute; left: calc(145 * var(--u)); top: calc(-146 * var(--u)); z-index: 2;
+  width: calc(832 * var(--u)); height: calc(215 * var(--u)); min-width: 200px; min-height: 56px;
+  display: flex; align-items: center; gap: calc(66 * var(--u)); padding-left: calc(69 * var(--u));
+  border-radius: calc(70 * var(--u)); background: linear-gradient(180deg, #3e54a0, #1c7caf);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25); color: #fff;
+}
+.fig-tab-icon { height: calc(121 * var(--u)); min-height: 30px; width: auto; display: block; flex: none; }
+.fig-tab-label { margin: 0; color: #fff; font-size: calc(60 * var(--u)); font-weight: 800; line-height: 1.2; white-space: nowrap; }
+.fig-tab--square { width: calc(215 * var(--u)); min-width: 56px; padding: 0; justify-content: center; background: linear-gradient(180deg, #3e54a0, #2078ad); }
+.fig-tab--square .fig-tab-icon { height: calc(144 * var(--u)); min-height: 36px; }
+.fig-tab--small { top: calc(-100 * var(--u)); left: calc(136 * var(--u)); width: calc(841 * var(--u)); height: calc(198 * var(--u)); background: linear-gradient(178deg, #3e54a0 10%, #1b7eaf 93%); }
+.fig-tab--small .fig-tab-icon { height: calc(116 * var(--u)); min-height: 28px; }
+
+.fig-surface { background: rgba(243, 243, 250, 0.9); border-radius: calc(44.55 * var(--u)); overflow: hidden; }
+.fig-surface--video { aspect-ratio: 2898 / 1474; display: flex; align-items: center; justify-content: center; background: #0f172a; }
+.fig-surface--video video { width: 100%; height: 100%; max-height: 100% !important; object-fit: contain; }
+.fig-surface--video .video-player { width: 100%; height: 100%; min-height: 0; }
+.fig-surface--video iframe { width: 100%; height: 100%; border: 0; display: block; }
+.fig-surface--doc { height: calc(1474 * var(--u)); min-height: 360px; padding: clamp(20px, 3vw, 48px); overflow: auto; }
+.fig-surface--doc .doc-content { max-width: 100%; min-height: 100%; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+
+/* Thẻ "Mục tiêu bài học" (nhạt hơn) */
+.fig-card--soft { margin-top: calc(252 * var(--u)); padding: calc(200 * var(--u)) calc(145 * var(--u)) calc(130 * var(--u)); background: rgba(221, 232, 243, 0.6); }
+.fig-surface--note { min-height: calc(707 * var(--u)); padding: calc(89 * var(--u)); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: #444652; }
+.fig-surface--note p { margin: 0 0 0.6em; font-size: 0.95rem; line-height: 1.6; }
+.fig-placeholder { font-size: calc(44.55 * var(--u)) !important; font-style: italic; }
+
+/* Dòng tiêu đề LAB 0.x */
+.fig-title { display: flex; align-items: flex-end; gap: calc(10 * var(--u)); margin-top: calc(109 * var(--u)); color: #094174; }
+.fig-title-lab { width: calc(248 * var(--u)); height: auto; display: block; transform: scaleY(-1); flex: none; margin-bottom: calc(6 * var(--u)); }
+.fig-title-number { font-family: 'Bungee Inline', var(--font-sans); font-size: calc(259 * var(--u)); line-height: 0.78; color: #094174; flex: none; }
+.fig-title-text { margin: 0 0 calc(16 * var(--u)) calc(40 * var(--u)); font-size: calc(80 * var(--u)); font-weight: 600; line-height: 1.25; color: #094174; }
+
+/* Thanh điều hướng (Figma "Điều hướng"): Phần trước | Hoàn thành bài học | Phần tiếp theo */
+.fig-pagination {
+  width: calc(1489 * var(--u)); min-width: 340px; max-width: 100%; margin: calc(96 * var(--u)) auto 0;
+  display: flex; align-items: center; justify-content: center; gap: calc(57 * var(--u)); padding: calc(35 * var(--u)) calc(40 * var(--u));
+  border: 1px solid rgba(255, 255, 255, 0.5); border-radius: calc(45 * var(--u)); background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 16px 32px rgba(12, 12, 13, 0.1), 0 4px 4px rgba(12, 12, 13, 0.05);
+}
+.fig-page-button, .fig-complete-button {
+  flex: 1 1 0; min-width: 0; height: calc(123 * var(--u)); min-height: 36px; padding: 0 12px;
+  display: inline-flex; align-items: center; justify-content: center; gap: calc(40 * var(--u));
+  border: 0; border-radius: calc(45 * var(--u)); background: #fff;
+  color: #19206e; font-size: max(0.72rem, calc(34 * var(--u))); font-weight: 700; white-space: nowrap; cursor: pointer;
+  box-shadow: 0 16px 16px rgba(12, 12, 13, 0.1), 0 4px 2px rgba(12, 12, 13, 0.05);
+  transition: transform var(--transition-fast), filter var(--transition-fast);
+}
+.fig-complete-button { background: linear-gradient(90deg, #19206e 0%, #1a619b 69.6%, #1b7daf 100%); color: #fff; }
+.fig-page-button:hover:not(:disabled), .fig-complete-button:hover:not(:disabled) { transform: translateY(-1px); }
+.fig-page-button:disabled { opacity: 0.45; cursor: not-allowed; }
+.fig-complete-button:disabled { cursor: default; filter: saturate(0.55) brightness(1.08); }
+.fig-page-button:focus-visible, .fig-complete-button:focus-visible { outline: 3px solid rgba(25, 32, 110, 0.4); outline-offset: 2px; }
+.fig-page-arrow { width: calc(44 * var(--u)); min-width: 14px; height: auto; display: block; flex: none; }
+.fig-page-arrow--back { transform: rotate(180deg); }
+.fig-pagination-divider { width: 2px; height: calc(85 * var(--u)); min-height: 24px; flex: none; background: #19206e; }
+.fig-complete-error { margin: 10px 0 0; text-align: center; color: var(--status-danger-text); font-size: 0.8rem; font-weight: 600; }
+
+/* Các loại bài khác (thực hành, câu hỏi, tổng hợp, Lab Test, lắp ráp, bài đang khóa) dùng cùng thẻ có tab nổi */
+.fig-surface--body { padding: clamp(16px, 2.4vw, 40px); overflow: visible; color: #444652; }
+.fig-card--practice .fig-surface--body { padding: clamp(10px, 1.4vw, 22px); }
+.fig-card--practice .lesson-practice-brief { margin: 0 0 16px; background: transparent; border: 0; box-shadow: none; padding: 0; }
+.fig-card--practice .lab-practice-workspace { margin: 0; }
+.fig-body-text { line-height: 1.65; overflow-wrap: anywhere; }
+.fig-body-text h2 { margin: 1.2em 0 0.4em; color: #094174; font-size: 1.05rem; font-weight: 700; }
+.fig-body-text h2:first-child { margin-top: 0; }
+.fig-body-text p, .fig-body-text li { color: #444652; }
+.fig-body-text small { display: block; margin-top: 8px; color: #094174; opacity: 0.75; }
+.fig-card--locked .fig-surface--body { text-align: center; }
+.fig-title-code { display: block; margin-top: 6px; font: 600 0.8rem/1.4 var(--font-mono); color: #1a619b; overflow-wrap: anywhere; }
+.lab-fig .lesson-achieved { margin: 16px 0 0; }
+.lab-fig > .lms-notice, .lab-fig > [role="alert"] { margin-top: 16px; }
+/* Thanh nguồn telemetry (Lab 1-8) căn theo lề và kiểu thẻ của khung Lab */
+.player-main:has(.lab-fig) > .telemetry-controls {
+  margin: 14px calc(200 * var(--u)) 0; padding: 12px calc(145 * var(--u));
+  border: 0; border-radius: calc(45 * var(--u)); background: rgba(221, 232, 243, 0.7);
+  box-shadow: 0 16px 32px -4px rgba(12, 12, 13, 0.1), 0 4px 4px -4px rgba(12, 12, 13, 0.05);
+}
+.player-main:has(.lab-fig) > .telemetry-controls label { color: #094174; }
+.player-main:has(> .telemetry-controls) .lab-course-view.lab-fig { padding-top: calc(100 * var(--u)); }
+
+/* Trang học theo lớp nằm trong .lms-shell: giữ kiểu chữ của khung Lab trước quy tắc h1/h2 chung của LMS */
+.lms-shell.is-learning-shell:has(.lab-fig) { height: 100dvh; }
+.lab-fig .fig-tab-label { margin: 0; color: #fff; font-size: calc(60 * var(--u)); font-weight: 800; letter-spacing: normal; }
+.lab-fig .fig-progress-title { margin: 0; color: #094174; font-size: calc(70 * var(--u)); font-weight: 700; letter-spacing: normal; }
+.lab-fig .fig-title-text { margin: 0 0 calc(16 * var(--u)) calc(40 * var(--u)); color: #094174; font-size: calc(80 * var(--u)); font-weight: 600; letter-spacing: normal; }
+.lab-fig .fig-body-text h2 { letter-spacing: normal; }
+.player-sidebar .lab-frame-title { margin: 0; color: #fff; font-size: 1rem; font-weight: 800; letter-spacing: 0.01em; }
+.player-main:has(.lab-fig) > .class-learning-path-link { align-self: center; margin: 0 auto 32px; color: #094174; font-weight: 700; }
+.lab-fig .fig-page-button, .lab-fig .fig-complete-button {
+  min-height: 36px; height: calc(123 * var(--u)); padding: 0 12px; border: 0; border-radius: calc(45 * var(--u));
+  background: #fff; color: #19206e; font-size: max(0.72rem, calc(34 * var(--u))); font-weight: 700;
+  box-shadow: 0 16px 16px rgba(12, 12, 13, 0.1), 0 4px 2px rgba(12, 12, 13, 0.05);
+}
+.lab-fig .fig-complete-button { background: linear-gradient(90deg, #19206e 0%, #1a619b 69.6%, #1b7daf 100%); color: #fff; }
+.lab-fig .fig-page-button:hover:not(:disabled) { background: #fff; border: 0; color: #19206e; box-shadow: 0 16px 16px rgba(12, 12, 13, 0.1), 0 4px 2px rgba(12, 12, 13, 0.05); }
+.lab-fig .fig-complete-button:hover:not(:disabled) { background: linear-gradient(90deg, #19206e 0%, #1a619b 69.6%, #1b7daf 100%); border: 0; color: #fff; }
+.lab-fig .fig-page-button:disabled { opacity: 0.45; box-shadow: 0 16px 16px rgba(12, 12, 13, 0.1), 0 4px 2px rgba(12, 12, 13, 0.05); }
+.lab-fig .fig-complete-button:disabled { opacity: 1; cursor: default; filter: saturate(0.55) brightness(1.08); }
+
+/* Màn hình hẹp: lề cố định thay cho tỉ lệ thiết kế desktop, tab nổi thu gọn, thẻ không tràn ngang */
+@media (max-width: 720px) {
+  .lab-course-view.lab-fig, .player-main:has(> .telemetry-controls) .lab-course-view.lab-fig { padding: 12px 12px 32px; }
+  .player-main:has(.lab-fig) > .telemetry-controls { margin: 12px 12px 0; padding: 12px; border-radius: 16px; }
+  .player-main:has(.lab-fig) > .lab-mobile-lessons { margin: 8px 12px 0; }
+  .fig-progress { padding: 14px 16px; border-radius: 16px; }
+  .lab-fig .fig-progress-title, .fig-progress-percent { font-size: 1.1rem; }
+  .fig-progress-sub { font-size: 0.75rem; }
+  .fig-progress-track { margin-top: 10px; }
+  .fig-card, .fig-card--soft, .fig-card--components { margin-top: 48px; padding: 36px 10px 10px; border-radius: 20px; }
+  .fig-tab, .fig-tab--small { left: 12px; top: -24px; width: auto; height: 48px; min-width: 0; min-height: 0; padding: 0 16px 0 12px; gap: 10px; border-radius: 16px; }
+  .fig-tab--square { width: 48px; padding: 0; }
+  .fig-tab-icon, .fig-tab--small .fig-tab-icon { height: 26px; min-height: 0; }
+  .lab-fig .fig-tab-label { font-size: 0.9rem; }
+  .fig-surface { border-radius: 14px; }
+  .fig-surface--doc { height: auto; min-height: 260px; max-height: 70dvh; padding: 14px; }
+  .fig-surface--doc h1 { font-size: 1.35rem; line-height: 1.3; }
+  .fig-surface--doc h2 { font-size: 1.1rem; }
+  .fig-surface--note { min-height: 0; padding: 16px; }
+  .fig-surface--body { padding: 12px; }
+  .fig-title { flex-wrap: wrap; margin-top: 24px; gap: 4px; }
+  .fig-title-lab { width: 56px; }
+  .fig-title-number { font-size: 3rem; }
+  .lab-fig .fig-title-text { flex-basis: 100%; margin: 6px 0 0; font-size: 1.05rem; }
+  .fig-pagination { width: 100%; min-width: 0; margin-top: 20px; padding: 8px; gap: 6px; border-radius: 16px; }
+  .fig-pagination-divider { display: none; }
+  .lab-fig .fig-page-button, .lab-fig .fig-complete-button { padding: 0 8px; font-size: 0.75rem; border-radius: 12px; white-space: normal; }
+  .header.is-fig { left: calc(var(--course-rail-width) + 8px); right: 8px; padding: 0 10px; border-radius: 16px; }
+}
+
+/* 0.3 — danh sách phân hệ + khung chi tiết nét đứt */
+.fig-card--components { padding: calc(117 * var(--u)) calc(145 * var(--u)) calc(82 * var(--u)); }
+.fig-components .component-explorer {
+  height: calc(1675 * var(--u)); min-height: 440px; grid-template-columns: calc(625 * var(--u)) minmax(0, 1fr); gap: calc(119 * var(--u));
+}
+.fig-components .component-explorer-list { padding: 0; gap: calc(45 * var(--u)); overflow: visible; }
+.fig-comp-item {
+  position: relative; flex: 0 0 auto; width: 100%; height: calc(170 * var(--u)); min-height: 52px;
+  display: flex; align-items: center; gap: calc(30 * var(--u)); padding: 0; border: 0; border-radius: calc(20 * var(--u));
+  background: transparent; color: #19206e; text-align: left; cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+.fig-comp-item:hover:not(.selected) { transform: translateX(2px); }
+.fig-comp-item:focus-visible { outline: 3px solid rgba(9, 65, 116, 0.4); outline-offset: 3px; }
+.fig-comp-icon {
+  position: relative; width: calc(171 * var(--u)); height: 100%; min-width: 52px; flex: none; display: grid; place-items: center;
+  border-radius: calc(20 * var(--u)); background: #1b7bae;
+}
+.fig-comp-icon::after { content: ''; position: absolute; left: 11%; right: 11%; bottom: calc(-12 * var(--u)); height: calc(12 * var(--u)); min-height: 3px; border-radius: 0 0 calc(8 * var(--u)) calc(8 * var(--u)); background: #19206e; }
+.fig-comp-icon img { max-width: 62%; max-height: 62%; width: auto; height: auto; display: block; }
+.fig-comp-emoji { font-size: 1.6rem; line-height: 1; }
+.fig-comp-label { min-width: 0; display: flex; flex-direction: column; gap: calc(14 * var(--u)); }
+.fig-comp-label strong { font-family: 'Montserrat', var(--font-sans); font-size: calc(81 * var(--u)); font-weight: 600; line-height: 1.1; color: #19206e; overflow-wrap: anywhere; }
+.fig-comp-label small { align-self: flex-start; max-width: 100%; padding: 1px 8px; border-radius: calc(8 * var(--u)); background: #eef1f9; color: #19206e; font-size: max(0.62rem, calc(22 * var(--u))); font-weight: 600; line-height: 1.35; }
+.fig-comp-item:first-child .fig-comp-label small { background: #f3f3fa; }
+.fig-comp-item.selected { background: #1b7bae; padding-right: calc(30 * var(--u)); }
+.fig-comp-item.selected::after { content: ''; position: absolute; left: 6%; right: 6%; bottom: calc(-12 * var(--u)); height: calc(12 * var(--u)); min-height: 3px; border-radius: 0 0 calc(8 * var(--u)) calc(8 * var(--u)); background: #19206e; }
+.fig-comp-item.selected .fig-comp-icon::after { display: none; }
+.fig-comp-item.selected .fig-comp-icon { background: transparent; }
+.fig-comp-item.selected .fig-comp-label strong { color: #fff; }
+.fig-comp-item.selected .fig-comp-label small { background: #f3f3fa; }
+.fig-components .component-detail {
+  padding: 30px; border: calc(5.569 * var(--u)) dashed rgba(197, 197, 212, 0.4); border-radius: calc(44.55 * var(--u));
+  background: rgba(243, 243, 250, 0.9); box-shadow: none;
+}
+
+@media (max-width: 1100px) {
+  .header.is-fig, .lab-fig { --u: 0.27px; }
+}
+@media (max-width: 800px) {
+  .fig-components .component-explorer { height: auto; grid-template-columns: 1fr; }
+  .fig-tab-label { white-space: normal; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fig-progress-track span, .fig-page-button, .fig-complete-button, .fig-comp-item { transition: none; }
+}
+
+/* Lab 0: trang và sidebar đứng yên; chỉ workspace cuộn, có thanh cuộn riêng ở bên phải (xem khối cuối). */
+html:has(.lab-fig), body:has(.lab-fig) { overflow: hidden; height: 100%; }
+
+/* ===== Tinh chỉnh thanh điều hướng ===== */
+/* Vách ngăn: mảnh hơn, hai đầu bo tròn, xanh da trời nhạt */
+.fig-pagination-divider { width: 1.5px; border-radius: 999px; background: #8cc4ea; }
+/* Nút đã hoàn thành: cùng tông xanh nhưng nhạt hơn */
+.fig-complete-button.is-done { background: linear-gradient(90deg, #6e7ac4 0%, #6fa6d3 69.6%, #78bfdf 100%); filter: none; opacity: 1; }
+/* Chừa khoảng trống dưới thanh điều hướng khi cuộn hết trang */
+.lab-course-view.lab-fig { padding-bottom: calc(300 * var(--u)); }
+
+/* Khối nội dung Lab 0 không bị co bằng chiều cao màn hình (nếu co thì đệm dưới nằm giữa trang, không chừa khoảng trống ở cuối khi cuộn) */
+.lab-course-view.lab-fig { flex: 0 0 auto; min-height: 0; padding-bottom: calc(300 * var(--u)); }
+
+/* ===== Thanh cuộn của workspace Lab 0: rãnh 14px sát mép phải, thanh mảnh nằm giữa rãnh ===== */
+.player-main:has(.lab-fig) { scrollbar-width: auto; scrollbar-color: auto; scrollbar-gutter: stable; }
+.player-main:has(.lab-fig)::-webkit-scrollbar { width: 14px; }
+.player-main:has(.lab-fig)::-webkit-scrollbar-track { background: transparent; }
+.player-main:has(.lab-fig)::-webkit-scrollbar-thumb {
+  background: rgba(9, 65, 116, 0.4); background-clip: content-box; border: 5px solid transparent; border-radius: 10px;
+}
+.player-main:has(.lab-fig)::-webkit-scrollbar-thumb:hover { background: rgba(9, 65, 116, 0.65); background-clip: content-box; }
+@supports not selector(::-webkit-scrollbar) {
+  .player-main:has(.lab-fig) { scrollbar-width: thin; scrollbar-color: rgba(9, 65, 116, 0.4) transparent; }
+}
+
+/* Nút điều hướng: bình thường không đổ bóng (chỉ khung ngoài có); khi trỏ vào mới hiện bóng xanh */
+.fig-page-button, .fig-complete-button { box-shadow: none; }
+.fig-page-button:hover:not(:disabled), .fig-complete-button:hover:not(:disabled) {
+  box-shadow: 0 10px 18px rgba(26, 97, 155, 0.35), 0 3px 4px rgba(26, 97, 155, 0.2);
+}
+.fig-complete-button.is-done { cursor: pointer; }
+
+/* Icon xuất từ Figma bị lật dọc: lật lại (logo SAT ở tab 0.3, Cảm biến, COM, Storage) */
+.fig-comp-icon img.is-flipped { transform: scaleY(-1); }
+.fig-tab--square .fig-tab-icon { transform: scaleY(-1); }
+
+/* ===== Lab 0.3: bố cục chữ theo mẫu Storage (Figma) áp dụng cho mọi phân hệ =====
+   Tên lệch phải 217 đơn vị so với mép ô icon, đỉnh tên +11; phụ đề nằm trong chip 373 đơn vị ở +118, cùng mép trái với tên,
+   một dòng duy nhất, cỡ chữ tự co theo độ dài (tối đa 24.43). */
+.fig-comp-item { gap: calc(46 * var(--u)); }
+.fig-comp-item.selected { padding-right: 0; }
+.fig-comp-label { align-self: stretch; justify-content: flex-start; gap: 0; padding-top: calc(11 * var(--u)); }
+.fig-comp-label strong { line-height: calc(97 * var(--u)); white-space: nowrap; overflow-wrap: normal; }
+.fig-comp-label small {
+  box-sizing: border-box; width: calc(373 * var(--u)); max-width: 100%; height: calc(34 * var(--u)); margin-top: calc(10 * var(--u));
+  padding: 0 calc(9 * var(--u)); display: flex; align-items: center; overflow: hidden;
+  font-size: calc(min(24.43 * var(--u), 690 * var(--u) / var(--chars, 28))); font-weight: 600; line-height: 1; white-space: nowrap;
+}
+
+/* Tên và phụ đề sát nhau hơn, cả khối căn giữa theo chiều dọc ô icon */
+.fig-comp-label { justify-content: center; padding-top: 0; }
+.fig-comp-label strong { line-height: 1.05; }
+.fig-comp-label small { margin-top: calc(2 * var(--u)); }
+
+/* Phân hệ đang mở: vạch dọc trắng mảnh giữa icon và chữ, nằm đúng trên đường kéo dài mép phải ô icon khi đóng, căn giữa dọc */
+.fig-comp-item.selected::before {
+  content: ''; position: absolute; left: calc(171 * var(--u)); top: 50%; width: 1.5px; height: calc(70.5 * var(--u)); min-height: 18px;
+  transform: translateY(-50%); border-radius: 999px; background: #fff; pointer-events: none;
+}
+
+/* Icon Camera: 50 x 50px (ảnh gốc lớn nên đặt kích thước cố định) */
+.fig-comp-icon img.is-camera { width: 50px; height: 50px; max-width: none; max-height: none; object-fit: contain; }
+
+/* Icon Camera: 45 x 45px (125 đơn vị thiết kế, co theo tỉ lệ), căn chính giữa ô icon cả hai chiều */
+.fig-comp-icon img.is-camera {
+  width: calc(125 * var(--u)); height: calc(125 * var(--u)); min-width: 32px; min-height: 32px;
+  max-width: none; max-height: none; margin: 0; padding: 0; object-fit: contain; object-position: center; place-self: center;
+}
+
+/* ===== Tab đầu mục (Video bài giảng, Tài liệu hướng dẫn, Mục tiêu bài học): thu nhỏ khung và chữ (~75%) ===== */
+.fig-tab { top: calc(-91 * var(--u)); width: calc(640 * var(--u)); height: calc(160 * var(--u)); min-width: 168px; min-height: 46px; gap: calc(48 * var(--u)); padding-left: calc(56 * var(--u)); }
+.fig-tab-icon { height: calc(90 * var(--u)); min-height: 26px; }
+.fig-tab-label { font-size: max(0.85rem, calc(46 * var(--u))); }
+.fig-tab--small { top: calc(-52 * var(--u)); width: calc(640 * var(--u)); height: calc(150 * var(--u)); }
+.fig-tab--small .fig-tab-icon { height: calc(85 * var(--u)); min-height: 24px; }
+/* Tab hình vuông ở 0.3 giữ nguyên */
+.fig-tab--square { top: calc(-146 * var(--u)); width: calc(215 * var(--u)); height: calc(215 * var(--u)); min-width: 56px; min-height: 56px; padding: 0; }
+
+/* ===== Tab có chữ: khung ôm vừa icon + chữ, đệm hai bên bằng nhau để cân xứng ===== */
+.fig-tab:not(.fig-tab--square) { width: auto; min-width: 0; padding: 0 calc(64 * var(--u)); gap: calc(40 * var(--u)); justify-content: center; }
+/* Icon quyển sách xuất từ Figma bị lật dọc: lật lại */
+.fig-tab-icon.is-flipped { transform: scaleY(-1); }
+
+/* =====================================================================
+   Top bar Lab 0 — thiết kế mới (Figma "LMS - LAB 0.1" › Header bar + Line 16)
+   Không còn viên thuốc bao quanh: ô tìm kiếm bên trái; chuông | avatar + tên bên phải; đường kẻ #094174 bên dưới.
+   Vùng cuộn của workspace bắt đầu ngay dưới đường kẻ nên nội dung không trượt qua thanh top bar.
+   ===================================================================== */
+.player-layout:has(.lab-fig) { --u: 0.36px; }
+.header.is-fig {
+  top: calc(70 * var(--u)); height: calc(96 * var(--u)); min-height: 0;
+  padding: 0 calc(58 * var(--u)) 0 0; border: 0; border-radius: 0; background: transparent;
+  backdrop-filter: none; -webkit-backdrop-filter: none; box-shadow: none;
+  grid-template-columns: minmax(0, calc(801 * var(--u))) minmax(0, 1fr); gap: 16px;
+}
+.header.is-fig::after {
+  content: ''; position: absolute; left: 0; right: 0; top: calc(139 * var(--u)); height: max(1px, calc(2 * var(--u)));
+  background: #094174; pointer-events: none;
+}
+.header.is-fig .header-search { height: 100%; min-height: 30px; padding: 0 0 0 calc(52 * var(--u)); gap: calc(33 * var(--u)); }
+.header.is-fig .header-actions { gap: calc(36 * var(--u)); }
+.header.is-fig .header-lab-tools { padding-right: calc(36 * var(--u)); }
+.header.is-fig .header-user { gap: calc(36 * var(--u)); padding-left: 0; }
+.player-main:has(.lab-fig) { margin-top: calc(213 * var(--u)); }
+.lab-course-view.lab-fig { padding-top: calc(53 * var(--u)); }
+@media (max-width: 1100px) { .player-layout:has(.lab-fig) { --u: 0.27px; } }
+
+/* Top bar Lab 0: một nút duy nhất (icon Notification) giữ chức năng kết nối Serial; icon nhỏ */
+.header.is-fig .header-lab-message { width: 32px; height: 32px; flex-basis: 32px; }
+.header-notification-icon { width: 18px; height: auto; display: block; pointer-events: none; }
+.header.is-fig .header-serial-indicator { top: 3px; right: 3px; }
+
+/* Thẻ tiến độ: tiêu đề giữ nguyên chỗ, phụ đề "x/y lesson..." cách xa tiêu đề hơn; thanh tiến độ lùi lại tương ứng để thẻ không đổi chiều cao */
+.fig-progress-sub { margin-top: calc(24 * var(--u)); }
+.fig-progress-track { margin-top: calc(29 * var(--u)); }

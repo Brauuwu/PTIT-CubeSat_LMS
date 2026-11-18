@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from 'react';
 import * as Blockly from 'blockly';
 import { getToolboxForLab, registerCustomBlocks } from './blockly-toolbox.js';
 import { generateArduino } from './arduino-generator.js';
+import { separateOverlappingStacks } from './blockly-layout.js';
 import { projectKey, loadDraft, defaultWorkspace, encodeProject, decodeProject, downloadFile } from './blockly-project.js';
 import './blockly-editor.css';
 
@@ -73,6 +74,7 @@ export default function BlocklyEditor({ labId = 1, exerciseId = '', storageScope
       setNotice('Không đọc được bài đã lưu. Bản lưu cũ được giữ lại. Có thể xuất bài đang sửa rồi nhập lại để tiếp tục lưu.');
       setSaveState('Chưa lưu · lỗi đọc bản cũ');
     } finally { Blockly.Events.enable(); }
+    separateOverlappingStacks(workspace);
     workspace.clearUndo();
     refresh(true, 'load');
     const listener = event => {
@@ -103,7 +105,12 @@ export default function BlocklyEditor({ labId = 1, exerciseId = '', storageScope
 
   useEffect(() => {
     if (!active) return;
-    const frame = requestAnimationFrame(() => { if (workspaceRef.current) Blockly.svgResize(workspaceRef.current); });
+    const frame = requestAnimationFrame(() => {
+      const workspace = workspaceRef.current;
+      if (!workspace) return;
+      Blockly.svgResize(workspace);
+      if (separateOverlappingStacks(workspace)) workspace.scrollCenter();
+    });
     return () => cancelAnimationFrame(frame);
   }, [active]);
 
@@ -116,7 +123,7 @@ export default function BlocklyEditor({ labId = 1, exerciseId = '', storageScope
     const workspace = workspaceRef.current;
     const backup = Blockly.serialization.workspaces.save(workspace);
     Blockly.Events.disable();
-    try { Blockly.serialization.workspaces.load(state, workspace); workspace.clearUndo(); workspace.scrollCenter(); refreshRef.current(reason); }
+    try { Blockly.serialization.workspaces.load(state, workspace); separateOverlappingStacks(workspace); workspace.clearUndo(); workspace.scrollCenter(); refreshRef.current(reason); }
     catch (error) { Blockly.serialization.workspaces.load(backup, workspace); throw error; }
     finally { Blockly.Events.enable(); }
   };

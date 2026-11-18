@@ -17,10 +17,24 @@ export function SerialProvider({ children }) {
   const mountedRef = useRef(true);
   const listenersRef = useRef(new Set());
 
+  const pendingRef = useRef([]);
+  const flushTimerRef = useRef(null);
+  const sequenceRef = useRef(0);
+
+  // A raw NMEA stream (Lab4-03a) arrives as dozens of lines per second. Decoders still see every line at
+  // once, but the visible list is committed at most every 80 ms so the page stays responsive.
   const addLine = useCallback((text, type = 'rx', origin = 'app') => {
     if (!mountedRef.current) return;
-    const entry = { text, type, origin, timestamp: new Date().toLocaleTimeString(), receivedAt: Date.now() };
-    setLines(previous => [...previous, entry].slice(-500));
+    const entry = { id: ++sequenceRef.current, text, type, origin, timestamp: new Date().toLocaleTimeString(), receivedAt: Date.now() };
+    pendingRef.current.push(entry);
+    if (flushTimerRef.current === null) {
+      flushTimerRef.current = setTimeout(() => {
+        flushTimerRef.current = null;
+        const batch = pendingRef.current;
+        pendingRef.current = [];
+        if (mountedRef.current && batch.length) setLines(previous => [...previous, ...batch].slice(-500));
+      }, 80);
+    }
     listenersRef.current.forEach(listener => listener(entry));
   }, []);
   const subscribe = useCallback(listener => {
@@ -144,7 +158,7 @@ export function SerialProvider({ children }) {
 
   useEffect(() => {
     mountedRef.current = true;
-    return () => { mountedRef.current = false; disconnect(); };
+    return () => { mountedRef.current = false; clearTimeout(flushTimerRef.current); flushTimerRef.current = null; pendingRef.current = []; disconnect(); };
   }, [disconnect]);
 
   const send = useCallback(async text => {
@@ -159,7 +173,7 @@ export function SerialProvider({ children }) {
       return false;
     }
   }, [addLine]);
-  const clearLines = useCallback(() => setLines([]), []);
+  const clearLines = useCallback(() => { pendingRef.current = []; setLines([]); }, []);
   const print = useCallback((text, type = 'system') => addLine(text, type), [addLine]);
 
   return <SerialContext.Provider value={{ serialSupport, isConnected, isConnecting, isFlashing, sessionId, lines,

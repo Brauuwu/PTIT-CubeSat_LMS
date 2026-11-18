@@ -23,20 +23,18 @@ const PRESET_COMMANDS = [
   { cmd: 'help', label: '❓ Help', desc: 'Danh sách lệnh' },
 ];
 
-/** @param {{commands?: string[], labId?: number, exerciseId?: string}} props */
-export default function CommandPanel({ commands = [], labId = 0, exerciseId = '' }) {
+/** @param {{commands?: string[]}} props */
+export default function CommandPanel({ commands = [] }) {
   const { isConnected, send } = useSerial();
   const { mode, generation, isCurrentSelection } = useTelemetry();
   const [sending, setSending] = useState(false);
-  const [radioRole, setRadioRole] = useState(false);
-  const groundStation = labId === 5 && radioRole;
-  const available = groundStation && exerciseId.startsWith('Lab5-03') ? ['ping', 'battery', 'sensor', 'imu', 'gps', 'led on', 'led off', 'telemetry'] : commands;
-  const canSend = mode === 'serial' && isConnected && !sending && (groundStation || available.length > 0);
+  const available = commands;
+  const canSend = mode === 'serial' && isConnected && !sending && available.length > 0;
   const presets = available.map(cmd => PRESET_COMMANDS.find(item => item.cmd === cmd) ?? { cmd, label: cmd === 'p' ? 'Chụp ảnh · p' : cmd === '1' ? 'Bật LED · 1' : cmd === '0' ? 'Tắt LED · 0' : cmd });
   const [customCmd, setCustomCmd] = useState('');
   const [history, setHistory] = useState([]);
 
-  useEffect(() => { setHistory([]); setRadioRole(false); setCustomCmd(''); }, [generation]);
+  useEffect(() => { setHistory([]); setCustomCmd(''); }, [generation]);
 
   const sendCommand = async (cmd) => {
     if (!canSend) {
@@ -70,11 +68,7 @@ export default function CommandPanel({ commands = [], labId = 0, exerciseId = ''
         <div style={{ marginBottom: 'var(--space-md)', fontSize: 'var(--font-size-xs)', color: 'var(--text-muted)' }}>
           USB Serial · chờ phản hồi thiết bị sau khi gửi
         </div>
-        {labId === 5 && <label>Cổng USB đang nối với: <select aria-label="Vai trò cổng lệnh" value={groundStation ? 'gs' : 'obc'} onChange={event => setRadioRole(event.target.value === 'gs')}>
-          <option value="obc">OBC</option><option value="gs">Trạm GS qua USB–LoRa</option>
-        </select></label>}
-        {groundStation && <p className="telemetry-empty">Gửi qua cổng USB–LoRa của GS đã chọn.</p>}
-        {!groundStation && available.length === 0 && <p className="telemetry-empty">Bài này không nhận lệnh USB tại OBC.</p>}
+        {available.length === 0 && <p className="telemetry-empty">Bài này không nhận lệnh USB tại OBC.</p>}
         <div className="cmd-btn-grid">
           {presets.map(({ cmd, label }) => (
             <button key={cmd} disabled={!canSend} className="cmd-btn" onClick={() => sendCommand(cmd)} title={cmd}>

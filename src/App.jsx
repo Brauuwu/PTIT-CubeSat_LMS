@@ -27,14 +27,18 @@ const AdminDashboardPage = lazy(() => import('./pages/AdminDashboardPage'));
 const HomePage = lazy(() => import('./pages/HomePage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const SignUpPage = lazy(() => import('./pages/SignUpPage'));
+const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'));
+const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const GroundStationPage = lazy(() => import('./pages/GroundStationPage'));
+const LabQuestionsPage = lazy(() => import('./pages/LabQuestionsPage'));
 const labLoaders = [0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => () => import(`./pages/Lab${i}.jsx`));
 const labComponents = labLoaders.map((load) => lazy(load));
 // Warm the legacy Lab chunks so changing Labs does not show the route-level fallback.
 labLoaders.forEach(load => load());
 
 const AUTH_ROUTES = ['/login', '/signup'];
-const APP_ROUTES = ['/', '/profile', ...Array.from({ length: 9 }, (_, index) => `/lab${index}`)];
+const APP_ROUTES = ['/', '/profile', ...Array.from({ length: 9 }, (_, index) => `/lab${index}`), ...Array.from({ length: 9 }, (_, index) => `/lab${index}/questions`)];
 
 function AuthPage({ children }) {
   const { loading, isAuthenticated, user } = useAuth();
@@ -53,6 +57,15 @@ function ProtectedServices() {
   if (loading) return <LoadingScreen />;
   if (!user && location.pathname !== '/lab0') return <Navigate to="/login" replace state={{ from: `${location.pathname}${location.search}${location.hash}` }} />;
   return <SerialProvider key={user?.id || 'guest'}><TelemetryProvider><ServiceLayout /></TelemetryProvider></SerialProvider>;
+}
+
+// Standalone window for Lab 5: owns its own Serial port (ground-station USB-TTL), separate from the lab's OBC port.
+function GroundStationShell() {
+  const { loading, user } = useAuth();
+  const location = useLocation();
+  if (loading) return <LoadingScreen />;
+  if (!user) return <Navigate to="/login" replace state={{ from: location.pathname }} />;
+  return <SerialProvider key={user.id}><main id="main-content" className="main-content"><Outlet /></main></SerialProvider>;
 }
 
 function PublicLayout() {
@@ -117,6 +130,8 @@ export default function App() {
   return <Suspense fallback={<LoadingScreen />}><Routes>
     <Route path="/login" element={<AuthPage><LoginPage /></AuthPage>} />
     <Route path="/signup" element={<AuthPage><SignUpPage /></AuthPage>} />
+    <Route path="/forgot-password" element={<AuthPage><ForgotPasswordPage /></AuthPage>} />
+    <Route path="/reset-password" element={<ResetPasswordPage />} />
     <Route path="/admin/login" element={<AdminLoginPage />} />
     <Route path="/admin/signup" element={<AdminSignUpPage />} />
     <Route element={<PublicLayout />}>
@@ -124,6 +139,9 @@ export default function App() {
       <Route element={<LmsLayout publicPreview />}>
         <Route path="/preview" element={<ClassLearningPage experience />} />
       </Route>
+    </Route>
+    <Route element={<GroundStationShell />}>
+      <Route path="/groundstation" element={<GroundStationPage />} />
     </Route>
     <Route element={<ProtectedServices />}>
       <Route path="/profile" element={<ProfilePage />} />
@@ -147,6 +165,9 @@ export default function App() {
       </Route>
       {labComponents.map((_, labId) => (
         <Route key={labId} path={`/lab${labId}`} element={<LegacyLabRoute labId={labId} />} />
+      ))}
+      {labComponents.map((_, labId) => (
+        <Route key={`questions-${labId}`} path={`/lab${labId}/questions`} element={<LegacyLabGate labId={labId}><LabQuestionsPage labId={labId} /></LegacyLabGate>} />
       ))}
       <Route path="*" element={<NotFoundPage />} />
     </Route>

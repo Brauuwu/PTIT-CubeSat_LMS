@@ -1,3 +1,5 @@
+// Reviewed classroom source for the ESP32 OBC hardware profile.
+// Upstream: https://github.com/PTITCube/Lab4-01b_Environment_Library/blob/5ff7a04a45106240dbf9d4bc9fd389abbfb8c0f6/src/main.cpp
 // Source: https://github.com/PTITCube/Lab4-01b_Environment_Library (local corrected example)
 /**
  * VÍ DỤ 4-1: ĐỌC CẢM BIẾN MÔI TRƯỜNG (BMP280)
@@ -8,18 +10,21 @@
  */
 
 #include <Arduino.h>
+
 #include <PTITCube.h>
+
+PTIT_CDH cdh;
 
 // Khởi tạo đối tượng cảm biến
 PTIT_Sensor mySensor;
 
 void setup() {
-    Serial.begin(115200);
-    while (!Serial) { delay(10); }
+    cdh.begin(115200);
+    while (!cdh) { delay(10); }
 
-    Serial.println("\n[EXAMPLE] Bắt đầu bài test Cảm biến Môi trường (BMP280)...");
+    cdh.println("\n[EXAMPLE] Bắt đầu bài test Cảm biến Môi trường (BMP280)...");
     
-    // Hàm init() sẽ tự động kết nối với BMP280, MPU6050 và QMC5883 qua I2C
+    // Hàm init() sẽ tự động kết nối với BMP280, MPU6500 và QMC5883 qua I2C
     mySensor.init(true, false, false);
 }
 
@@ -31,16 +36,15 @@ void loop() {
     if (millis() - lastPrint > 2000) {
         lastPrint = millis();
         
-        Serial.println("-------------------------------------------------");
-        float temp = mySensor.getTemperature();
+                float temp = mySensor.getTemperature();
         float pres = mySensor.getPressure();
 
-        Serial.print("Nhiệt độ (Temperature) : ");
-        Serial.print(temp);
-        Serial.println(" *C");
+        cdh.print("Nhiệt độ (Temperature) : ");
+        cdh.print(temp);
+        cdh.println(" *C");
         
-        Serial.print("Áp suất (Pressure)     : ");
-        Serial.print(pres); // PTIT_Sensor::getPressure() already returns hPa
-        Serial.println(" hPa");
+        cdh.print("Áp suất (Pressure)     : ");
+        cdh.print(pres); // PTIT_Sensor::getPressure() already returns hPa
+        cdh.println(" hPa");
     }
 }

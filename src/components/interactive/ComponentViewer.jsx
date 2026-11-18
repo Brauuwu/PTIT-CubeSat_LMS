@@ -1,5 +1,18 @@
 import { useState } from 'react';
 import { CUBESAT_COMPONENTS } from '../../data/components-data';
+import obcIcon from '../../assets/lab-ui/comp-obc.svg';
+import epsIcon from '../../assets/lab-ui/comp-eps.svg';
+import sensorIcon from '../../assets/lab-ui/comp-sensor.svg';
+import gpsIcon from '../../assets/lab-ui/comp-gps.svg';
+import comIcon from '../../assets/lab-ui/comp-com.svg';
+import storageIcon from '../../assets/lab-ui/comp-storage.svg';
+import cdhIcon from '../../assets/lab-ui/comp-cdh.svg';
+import cameraIcon from '../../assets/lab-ui/Camera CubeSAT.svg';
+
+// Icon của từng phân hệ; phân hệ chưa có icon thì dùng emoji trong dữ liệu.
+const ICONS = { obc: obcIcon, eps: epsIcon, sensor: sensorIcon, gps: gpsIcon, com: comIcon, storage: storageIcon, cdh: cdhIcon, camera: cameraIcon };
+// Icon xuất từ Figma bị lật dọc: các phân hệ này cần lật lại cho đúng chiều.
+const FLIPPED = new Set(['sensor', 'com', 'storage']);
 
 export default function ComponentViewer() {
   const [selected, setSelected] = useState(CUBESAT_COMPONENTS[0]);
@@ -12,13 +25,15 @@ export default function ComponentViewer() {
             type="button"
             key={comp.id}
             onClick={() => setSelected(comp)}
-            className={`component-explorer-item ${selected?.id === comp.id ? 'selected' : ''}`}
+            className={`fig-comp-item ${selected?.id === comp.id ? 'selected' : ''}`}
             aria-pressed={selected?.id === comp.id}
           >
-            <span className="component-explorer-icon" aria-hidden="true">{comp.icon}</span>
-            <span className="component-explorer-label">
+            <span className="fig-comp-icon" aria-hidden="true">
+              {ICONS[comp.id] ? <img src={ICONS[comp.id]} alt="" draggable="false" className={[FLIPPED.has(comp.id) && 'is-flipped', comp.id === 'camera' && 'is-camera'].filter(Boolean).join(' ') || undefined} /> : <span className="fig-comp-emoji">{comp.icon}</span>}
+            </span>
+            <span className="fig-comp-label">
               <strong>{comp.name.split('—')[0].trim()}</strong>
-              <small>{comp.role}</small>
+              <small style={/** @type {import('react').CSSProperties} */ ({ '--chars': comp.role.length })}>{comp.role}</small>
             </span>
           </button>
         ))}

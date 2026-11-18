@@ -1,5 +1,5 @@
 // Reviewed classroom source for the ESP32 OBC hardware profile.
-// Upstream: https://github.com/PTITCube/Lab5-01b_Send_Telemetry_Library/blob/ee5daf0e718f55cfc625e74388849270986191dc/src/main.cpp
+// Upstream: https://github.com/PTITCube/Lab5-01b_Send_Telemetry_Library/blob/9d128b113a14ebfdbb16a7bd5364fa9df2c320dc/src/main.cpp
 /**
  * VÍ DỤ: VỆ TINH GỬI DỮ LIỆU (TELEMETRY) QUA LORA
  * 
@@ -10,15 +10,18 @@
  */
 
 #include <Arduino.h>
+
 #include <PTITCube.h>
+
+PTIT_CDH cdh;
 
 PTIT_COM myLoRa;
 
 void setup() {
-    Serial.begin(115200);
-    while (!Serial) { delay(10); }
+    cdh.begin(115200);
+    while (!cdh) { delay(10); }
 
-    Serial.println("\n[VỆ TINH] Khởi tạo module LoRa phát dữ liệu...");
+    cdh.println("\n[VỆ TINH] Khởi tạo module LoRa phát dữ liệu...");
     myLoRa.init();
 
     // Cấu hình Kênh và Địa chỉ sử dụng hệ THẬP PHÂN (Decimal) cho dễ hiểu
@@ -34,8 +37,8 @@ void loop() {
 
     String payload = "PACKET #" + String(counter) + " - CUBESAT TELEMETRY DATA";
     
-    Serial.print("Đang phát xuống mặt đất: ");
-    Serial.println(payload);
+    cdh.print("Đang phát xuống mặt đất: ");
+    cdh.println(payload);
     
     myLoRa.sendMessage(payload);
 

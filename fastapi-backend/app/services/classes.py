@@ -1,12 +1,15 @@
 """Class/account transactions. Membership writes serialize on the class row."""
 
+import secrets
 from datetime import datetime, timezone
 
 from loguru import logger
 from sqlalchemy import func, or_, select
 from sqlalchemy.exc import IntegrityError
+from starlette.concurrency import run_in_threadpool
 
 from app.core.lms_errors import LMSError
+from app.core.security import hash_password
 from app.models.tables import (
     AccountStatus,
     AuditLog,
@@ -19,6 +22,8 @@ from app.models.tables import (
     UserRole,
 )
 from app.schemas.classes import ClassResponse, MemberResponse
+from app.services.auth import LOGIN_FAILURES
+from app.services.password_reset import revoke_open_resets
 
 
 def audit(db, actor, action, target, before, after):
@@ -71,12 +76,13 @@ async def update_user(db, actor, user_id, changes):
     if target is None:
         raise LMSError(404, "CONFIG_INVALID", "Không tìm thấy tài khoản.")
     if target.id == actor.id:
-        raise LMSError(403, "FORBIDDEN_ROLE", "Không thể tự thay đổi quyền hoặc trạng thái tài khoản.")
+        raise LMSError(
+            403, "FORBIDDEN_ROLE", "Không thể tự thay đổi quyền hoặc trạng thái tài khoản."
+        )
     requested_role = changes.get("role", target.role)
     requested_status = changes.get("status", target.status)
-    if (
-        target.role == UserRole.admin
-        and (requested_role != UserRole.admin or requested_status == AccountStatus.locked)
+    if target.role == UserRole.admin and (
+        requested_role != UserRole.admin or requested_status == AccountStatus.locked
     ):
         active_admins = await db.scalar(
             select(func.count(User.id)).where(
@@ -101,6 +107,30 @@ async def update_user(db, actor, user_id, changes):
     await db.commit()
     await db.refresh(target)
     return target
+
+
+async def reset_user_password(db, actor, user_id):
+    """Replace a forgotten password with a one-time-shown temporary one. Never logged or audited."""
+    target = (
+        await db.execute(
+            select(User).where(User.id == user_id, User.deleted_at.is_(None)).with_for_update()
+        )
+    ).scalar_one_or_none()
+    if target is None:
+        raise LMSError(404, "CONFIG_INVALID", "Không tìm thấy tài khoản.")
+    # Admins change their own password in the profile page and never take over another admin.
+    if target.id == actor.id or target.role == UserRole.admin:
+        raise LMSError(403, "FORBIDDEN_ROLE", "Không thể cấp lại mật khẩu cho tài khoản quản trị.")
+    temporary_password = secrets.token_urlsafe(9)
+    target.password_hash = await run_in_threadpool(hash_password, temporary_password)
+    target.updated_at = datetime.now(timezone.utc)
+    await revoke_open_resets(db, target.id)
+    audit(db, actor.id, "user.password_reset", f"user:{target.id}", None, None)
+    await db.commit()
+    # The owner may have locked the email or (email, IP) pair by guessing the forgotten password.
+    LOGIN_FAILURES.reset(f"email:{target.email}")
+    LOGIN_FAILURES.reset_prefix(f"pair:{target.email}:")
+    return {"user_id": target.id, "email": target.email, "temporary_password": temporary_password}
 
 
 async def create_class(db, actor, request):

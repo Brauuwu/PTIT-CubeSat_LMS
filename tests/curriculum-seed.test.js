@@ -9,10 +9,17 @@ const seed = JSON.parse(readFileSync(new URL('../fastapi-backend/app/firmware/cu
 
 test('seed preserves original IDs while normalizing lesson kinds and adding disabled test slots', () => {
   const lessons = seed.labs.flatMap(lab => lab.lessons);
-  const originals = [0, ...Object.keys(CURRICULUM).map(Number)].flatMap(lab => getLessonsForLab(lab));
-  assert.equal(lessons.length, 129);
-  for (const item of originals) assert.ok(lessons.some(lesson => lesson.id === item.id));
-  assert.equal(lessons.filter(item => item.type === 'practice' && item.lab_id >= 2).length, 34);
+  const originals = Object.keys(CURRICULUM).map(Number).flatMap(lab => getLessonsForLab(lab));
+  assert.equal(lessons.length, 135);
+  // Lab 2-8 checkpoints (`checkpointId`) are self-review pages of the legacy view; Lab 0/1 quizzes are server-graded lessons.
+  const legacyOnly = lesson => lesson.type === 'labtest' || (lesson.type === 'quiz' && lesson.checkpointId);
+  for (const item of originals.filter(lesson => !legacyOnly(lesson))) assert.ok(lessons.some(lesson => lesson.id === item.id), item.id);
+  for (const item of originals.filter(lesson => lesson.type === 'quiz' && lesson.checkpointId)) assert.ok(!lessons.some(lesson => lesson.id === item.id), item.id);
+  assert.deepEqual([...new Set(lessons.map(item => item.type))].sort(), ['document', 'labtest', 'practice', 'quiz', 'video']);
+  assert.equal(lessons.filter(item => item.type === 'practice' && item.lab_id >= 2).length, 29);
+  assert.equal(lessons.find(item => item.id === 'assembly-6').content.mode, 'assembly');
+  assert.equal(lessons.find(item => item.id === 'assembly-6').default_required, false);
+  for (const lab of seed.legacy) assert.equal(lab.lessons.filter(item => item.type === 'labtest').length, 1);
   assert.equal(lessons.find(item => item.id === 'summary-2').title, 'Tổng kết');
   assert.equal(lessons.find(item => item.id === 'components').default_required, false);
   const quizzes = lessons.filter(item => item.type === 'quiz');

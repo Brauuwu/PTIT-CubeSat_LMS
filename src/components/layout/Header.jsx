@@ -3,6 +3,7 @@ import { useSerial } from '../../contexts/serial-api';
 import { useAuth } from '../../contexts/auth-api';
 import { getLabBySlug } from '../../data/lab-metadata';
 import logoSvg from '../../assets/logo.svg';
+import notificationIcon from '../../assets/lab-ui/Notification 1.svg';
 import {
   HomeIcon,
   SearchIcon,
@@ -28,7 +29,7 @@ export default function Header() {
   );
 
   return (
-    <header className={`header${isLearningRoute ? ' is-lab-route' : ''}`}>
+    <header className={`header${isLearningRoute ? ' is-lab-route' : ''}${isLearningRoute ? ' is-fig' : ''}`}>
       <Link to="/" className="header-logo" aria-label="PTIT CubeSat LMS — Trang chủ">
         <img src={logoSvg} alt="" />
         <span className="header-wordmark"><strong>CubeSAT</strong><small>PTIT LMS</small></span>
@@ -42,26 +43,43 @@ export default function Header() {
 
       <div className="header-actions">
         {classMode && <Link to="/classes" className="header-class-link">Lớp học</Link>}
+        {!classMode && user?.role === 'admin' && <Link to="/admin/users" className="header-class-link">Tài khoản</Link>}
         <Link to="/" className="header-icon-action header-route-action" aria-label="Trang chủ" title="Trang chủ">
           <HomeIcon size={17} />
         </Link>
         <Link to="/lab0" className="header-icon-action header-route-action header-secondary-action" aria-label="Lộ trình học" title="Lộ trình học">LAB</Link>
         {lab && (
           <span className="header-lab-tools">
-            <button type="button" className="header-icon-action header-lab-alert" aria-label="Thông báo" title="Thông báo">
-              <BellIcon size={18} />
-            </button>
-            <button
-              type="button"
-              className={`header-icon-action header-lab-message ${isConnected ? 'is-connected' : ''}`}
-              onClick={() => isConnected ? disconnect() : connect()}
-              aria-label={isConnected ? 'Ngắt kết nối Web Serial' : 'Kết nối mạch qua Web Serial'}
-              disabled={!isConnected && !serialSupport.available}
-              title={isConnected ? 'Serial đã kết nối' : serialSupport.available ? 'Kết nối Web Serial' : serialSupport.message}
-            >
-              <MessageIcon size={18} />
-              <span className="header-serial-indicator" aria-hidden="true" />
-            </button>
+            {lab.id === 0 ? (
+              <button
+                type="button"
+                className={`header-icon-action header-lab-message ${isConnected ? 'is-connected' : ''}`}
+                onClick={() => isConnected ? disconnect() : connect()}
+                aria-label={isConnected ? 'Ngắt kết nối Web Serial' : 'Kết nối mạch qua Web Serial'}
+                disabled={!isConnected && !serialSupport.available}
+                title={isConnected ? 'Serial đã kết nối' : serialSupport.available ? 'Kết nối Web Serial' : serialSupport.message}
+              >
+                <img src={notificationIcon} alt="" className="header-notification-icon" draggable="false" />
+                <span className="header-serial-indicator" aria-hidden="true" />
+              </button>
+            ) : (
+              <>
+                <button type="button" className="header-icon-action header-lab-alert" aria-label="Thông báo" title="Thông báo">
+                  <BellIcon size={18} />
+                </button>
+                <button
+                  type="button"
+                  className={`header-icon-action header-lab-message ${isConnected ? 'is-connected' : ''}`}
+                  onClick={() => isConnected ? disconnect() : connect()}
+                  aria-label={isConnected ? 'Ngắt kết nối Web Serial' : 'Kết nối mạch qua Web Serial'}
+                  disabled={!isConnected && !serialSupport.available}
+                  title={isConnected ? 'Serial đã kết nối' : serialSupport.available ? 'Kết nối Web Serial' : serialSupport.message}
+                >
+                  <MessageIcon size={18} />
+                  <span className="header-serial-indicator" aria-hidden="true" />
+                </button>
+              </>
+            )}
           </span>
         )}
         {!isLearningRoute && (

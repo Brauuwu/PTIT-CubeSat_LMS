@@ -1,7 +1,7 @@
 // Reviewed classroom source for the ESP32 OBC hardware profile.
-// Upstream: https://github.com/PTITCube/Lab1-04_LED_Button/blob/4c817f5790d454973bc17c1a0d8b325798d59e6c/src/main.cpp
+// Upstream: https://github.com/PTITCube/Lab1-04_LED_Button/blob/9e468ea820a1ecb705c5eea451fe26fe368aab5c/src/main.cpp
 /**
- * VÍ DỤ 1-04: NÚT NHẤN ĐIỀU KHIỂN ĐÈN LED (LED BUTTON)
+ * VÍ DỤ 1-05: NÚT NHẤN ĐIỀU KHIỂN ĐÈN LED (LED BUTTON)
  * 
  * Mô tả:
  * - Đọc trạng thái nút nhấn ở chân GPIO 4 (kết nối với GND, chế độ INPUT_PULLUP).
@@ -25,8 +25,7 @@ void setup() {
     pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, ledState);
 
-    Serial.println("Nhấn nút (GPIO 4) để bật/tắt đèn LED (GPIO 2).");
-}
+    }
 
 void loop() {
     int buttonState = digitalRead(BUTTON_PIN);

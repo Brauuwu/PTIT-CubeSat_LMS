@@ -48,6 +48,10 @@ class FixedWindowLimiter:
     def reset(self, key: str) -> None:
         self._windows.pop(key, None)
 
+    def reset_prefix(self, prefix: str) -> None:
+        for key in [k for k in self._windows if k.startswith(prefix)]:
+            self._windows.pop(key, None)
+
     def clear(self) -> None:
         self._windows.clear()
 
@@ -77,6 +81,9 @@ RULES = (
     _rule("login", "POST", r"^/api/auth/login$", "ip", 60, 60),
     _rule("google_login", "POST", r"^/api/auth/google$", "ip", 60, 60),
     _rule("register", "POST", r"^/api/auth/register$", "ip", 30, 3600),
+    _rule("forgot_password", "POST", r"^/api/auth/forgot-password$", "ip", 10, 600),
+    _rule("reset_password_validate", "GET", r"^/api/auth/reset-password/validate$", "ip", 30, 600),
+    _rule("reset_password", "POST", r"^/api/auth/reset-password$", "ip", 15, 600),
     _rule("password_change", "PATCH", r"^/api/auth/password$", "user", 5, 900),
     _rule("compile", "POST", r"^/api/compile$", "user", 10, 600),
     _rule("quiz_generation", "POST", r"/generation-jobs$", "user", 10, 3600),

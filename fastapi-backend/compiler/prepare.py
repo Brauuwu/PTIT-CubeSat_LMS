@@ -25,6 +25,7 @@ def prepare():
         manifest_path = Path(package.path) / "library.json"
         manifest = json.loads(manifest_path.read_text())
         manifest["dependencies"].pop("https://github.com/espressif/esp32-camera.git", None)
+        manifest["dependencies"].pop("esp32-camera", None)  # v1.1.0 key
         manifest_path.write_text(json.dumps(manifest, indent=2))
         # Versioned local fixes to the pinned upstream library; no user source rewrite.
         shutil.copytree(ROOT / "overrides", Path(package.path) / "src", dirs_exist_ok=True)

@@ -5,16 +5,22 @@ import unittest
 from hashlib import sha256
 from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import patch
 
 import httpx
 from fastapi import FastAPI
 
+from app.core.config import get_settings
 from app.routers import curriculum
 from app.services.auth import get_current_user
 
 
 class CurriculumTests(unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
+        # These tests cover the legacy (non-class) path; do not inherit LMS_CLASS_MODE from a local .env.
+        lms_flag = patch.object(get_settings(), "lms_class_mode", False)
+        lms_flag.start()
+        self.addCleanup(lms_flag.stop)
         self.app = FastAPI()
         self.app.include_router(curriculum.router)
         self.user = SimpleNamespace(id=1)
@@ -39,7 +45,8 @@ class CurriculumTests(unittest.IsolatedAsyncioTestCase):
         response = await self.client.get("/api/curriculum/exercises")
         self.assertEqual(response.status_code, 200)
         actual = response.json()["exercises"]
-        self.assertEqual({item["id"] for item in actual}, {item["id"] for item in expected})
+        # Exercises removed from the lesson list stay compilable so old drafts and links keep working.
+        self.assertLessEqual({item["id"] for item in expected}, {item["id"] for item in actual})
         for item in actual:
             content = (
                 (curriculum.SOURCE_DIR / item["file"]).read_text(encoding="utf-8-sig").encode()
@@ -57,8 +64,8 @@ class CurriculumTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn("attachment;", response.headers["content-disposition"])
         self.assertIn("Lab3-04_Watchdog_And_Event.ino", response.headers["content-disposition"])
-        self.assertIn("scheduler.enableWatchdog(10)", response.text)
-        self.assertIn("std::sqrt(ax * ax + ay * ay + az * az)", response.text)
+        self.assertIn("esp_task_wdt_init(WDT_TIMEOUT_SEC, true)", response.text)
+        self.assertIn("esp_task_wdt_reset()", response.text)
         metadata = next(
             item
             for item in curriculum.catalog()["exercises"]

@@ -2,15 +2,18 @@ from datetime import datetime, timezone
 
 from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.core.lms_errors import LMSError
 from app.models.tables import UserRole
-from app.services.curriculum_seed import read_seed
-
 from app.repository.progress import ProgressRepository
 from app.schemas.progress import LabProgressResponse
+from app.services.curriculum_seed import read_seed
 
 # Lab không có bước biên dịch (chỉ video + tài liệu) — tiêu chí hoàn thành khác các lab còn lại
 LAB_IDS_WITHOUT_COMPILER = {0}
+# Trang câu hỏi kiểm tra và Lab Test chấm ở server (quy tắc 5, 6): không hoàn thành bằng nút
+# "Hoàn thành bài học", không chặn mở khóa và không nằm trong mẫu số hoàn thành lab.
+NON_SEQUENTIAL_LESSON_TYPES = {"quiz", "labtest"}
 
 
 def _to_response(p) -> LabProgressResponse:
@@ -52,7 +55,9 @@ class ProgressService:
     async def start_lesson(self, user, lab_id: int, lesson_id: str) -> LabProgressResponse:
         progress = await self.repo.get_or_create(user.id, lab_id)
         lessons = dict(progress.lesson_progress or {})
-        lessons.setdefault(lesson_id, {"started_at": datetime.now(timezone.utc).isoformat(), "completed": False})
+        lessons.setdefault(
+            lesson_id, {"started_at": datetime.now(timezone.utc).isoformat(), "completed": False}
+        )
         progress.lesson_progress = lessons
         await self.db.commit()
         await self.db.refresh(progress)
@@ -70,25 +75,60 @@ class ProgressService:
             (lesson_meta and lesson_meta.get("type") == "summary")
             or str(lesson_id).startswith("summary-")
         )
+        if lesson_meta and lesson_meta.get("type") in NON_SEQUENTIAL_LESSON_TYPES:
+            raise LMSError(
+                409,
+                "LESSON_NOT_SELF_COMPLETABLE",
+                "Phần câu hỏi được chấm ở server, không đánh dấu hoàn thành thủ công.",
+            )
         item = lessons.get(lesson_id)
         if item is None:
             if is_summary:
                 item = {"started_at": datetime.now(timezone.utc).isoformat(), "completed": False}
             else:
                 raise LMSError(409, "LESSON_NOT_STARTED", "Hãy mở bài học trước khi hoàn thành.")
-        lesson_ids = [lesson["id"] for lesson in lab["lessons"]] if lab else []
+        lesson_ids = [
+            lesson["id"]
+            for lesson in (lab["lessons"] if lab else [])
+            if lesson.get("type") not in NON_SEQUENTIAL_LESSON_TYPES
+        ]
         index = lesson_ids.index(lesson_id) if lesson_id in lesson_ids else -1
-        if index > 0 and not all(lessons.get(previous, {}).get("completed") for previous in lesson_ids[:index]):
-            raise LMSError(403, "PREREQUISITE_NOT_MET", "Bạn cần hoàn thành bài học trước để mở khóa bài này.")
+        if index > 0 and not all(
+            lessons.get(previous, {}).get("completed") for previous in lesson_ids[:index]
+        ):
+            raise LMSError(
+                403, "PREREQUISITE_NOT_MET", "Bạn cần hoàn thành bài học trước để mở khóa bài này."
+            )
         started = datetime.fromisoformat(item["started_at"])
         elapsed = (datetime.now(timezone.utc) - started).total_seconds()
         if user.role not in (UserRole.teacher, UserRole.admin) and not is_summary and elapsed < 60:
-            raise LMSError(409, "MINIMUM_LEARNING_TIME", "Bạn cần học bài này đủ 1 phút trước khi hoàn thành.", {"remaining_seconds": int(60 - elapsed)})
+            raise LMSError(
+                409,
+                "MINIMUM_LEARNING_TIME",
+                "Bạn cần học bài này đủ 1 phút trước khi hoàn thành.",
+                {"remaining_seconds": int(60 - elapsed)},
+            )
         item = {**item, "completed": True, "completed_at": datetime.now(timezone.utc).isoformat()}
         lessons[lesson_id] = item
         progress.lesson_progress = lessons
         if lesson_ids and all(lessons.get(lesson, {}).get("completed") for lesson in lesson_ids):
             progress.completed_at = datetime.now(timezone.utc)
+        await self.db.commit()
+        await self.db.refresh(progress)
+        return _to_response(progress)
+
+    async def reset_lesson(self, user, lab_id: int, lesson_id: str) -> LabProgressResponse:
+        """Đặt lại một bài đã hoàn thành về chưa hoàn thành. Giữ started_at; lab không còn được tính là hoàn thành."""
+        progress = await self.repo.get_or_create(user.id, lab_id)
+        lessons = dict(progress.lesson_progress or {})
+        item = lessons.get(lesson_id)
+        if item is None or not item.get("completed"):
+            return _to_response(progress)
+        lessons[lesson_id] = {
+            key: value for key, value in item.items() if key != "completed_at"
+        } | {"completed": False}
+        progress.lesson_progress = lessons
+        progress.completed_at = None
         await self.db.commit()
         await self.db.refresh(progress)
         return _to_response(progress)

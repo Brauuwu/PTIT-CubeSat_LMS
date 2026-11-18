@@ -1,5 +1,30 @@
 # Nhật ký quyết định
 
+## 19/11/2026 — Áp giao diện mới của Quân (`quanna1402:fix/frontend-v1`)
+
+- Commit của Quân gộp 282 file trên nền `main` cũ. Phần thay đổi thực, tính so với `develop` (`2adb3ab`), được áp bằng 3-way merge. Chỉ lấy đúng phạm vi: trang loading, sidebar các lab, giao diện Lab 0 (nền, thẻ có tab nổi, icon, font) và các asset đi kèm.
+- Không lấy: bỏ `require_lms_enabled` ở API quản lý tài khoản (thay đổi phân quyền phía server, không phải UI), `AdminDashboardPage` (giao diện admin chưa sửa), chỉnh `dev.py`/`scripts/python.mjs` theo máy cá nhân, xoá các file thừa của template Vite.
+- Có lấy endpoint `POST /api/progress/{lab}/lessons/{lesson}/reset` (kèm test), vì nút "Đã hoàn thành" của giao diện mới dùng để đặt lại bài. Endpoint chỉ đổi tiến độ của chính người gọi về chưa hoàn thành, nằm trong router legacy nên chịu `require_legacy_allowed`. Sinh viên lớp pilot không dùng được, và endpoint không mở khoá thêm bài nào.
+- Mở rộng "các phần giống thế": `LabFigView` dựng được mọi loại mục (video, tài liệu, 3D, thực hành, câu hỏi, tổng hợp, Lab Test, lắp ráp, bài đang khoá). Giao diện này dùng cho Lab 0–8 ở đường cũ và cho trang học theo lớp (`ClassLearningPage`). Header kiểu mới bật ở mọi trang học.
+- Trang học theo lớp giữ nguyên nghiệp vụ: % tiến độ lấy từ backend, hoàn thành gửi sự kiện có idempotency key và chờ đủ 60 giây, không có nút đặt lại tiến độ.
+- Tiến độ trên trang và sidebar chỉ đếm bài tuần tự (không tính câu hỏi/Lab Test), theo `isSequentialLesson`.
+- Bổ sung responsive cho màn hình hẹp (≤720px), vì giao diện Lab 0 gốc chỉ thiết kế cho desktop.
+
+## 18/11/2026 — Gộp nhánh cấu trúc lab (Xuân) với quiz theo bài (Trung, PR #4)
+
+- Lab 0 và Lab 1 theo mô hình quiz theo bài của Trung: `quiz-0-1`…`quiz-0-3`, `quiz-1-1`…`quiz-1-13` là bài `quiz` thật trong course model, có ngân hàng câu hỏi riêng và chấm ở server. Các trang checkpoint tự ôn cũ của Lab 0/1 (`quiz-doc-*`, `quiz-practice-*`) bị bỏ. Hai nhánh này chưa từng phát hành nên không có tiến độ nào trỏ vào chúng.
+- Lab 2–8 giữ cấu trúc của Xuân. Các trang câu hỏi có `checkpointId` chỉ là trang tự ôn ở giao diện cũ, không xuất vào course model. Lý do: chưa có ngân hàng câu hỏi, và nếu bật chúng thì việc xuất bản cấu hình lớp sẽ bị chặn (`QUIZ_BANK_NOT_READY`).
+- Lab 1 giữ bài `Lab1-03_PWM_LED` (đứng sau `Lab1-02`, nhóm "LED") và trang Lab Test của Xuân. Thứ tự và ID doc/video lấy theo Trung (`doc-1-3`…`doc-1-8`, `video-1-5`). Phần đọc theo chủ đề trong `lesson-reading.js` được chuyển sang ID mới.
+- Exporter chỉ dùng file nội dung phía server (`firmware/curriculum/lab0|lab1/*.md`) khi file đó có nội dung. Khi file còn rỗng thì dùng phần đọc sẵn có, để tài liệu Lab 0/1 hiện tại không bị trống. Seed có 135 bài: 119 bài cũ cộng 16 bài quiz.
+- Migration `0019_merge_reset_and_quiz` gộp hai head `0015_password_reset_tokens` và chuỗi `0015_lesson_type_quiz`…`0018_quiz_reveal_after_pass`, không thay đổi schema. Điểm merge không dùng được `downgrade -1`; muốn lùi thì lùi về từng parent.
+- Rollback theo hướng của Trung (19/11/2026): khi đã có bài quiz hoặc ngân hàng quiz theo bài, `0015`/`0016` từ chối downgrade. Alembic chạy toàn bộ lệnh trong một transaction, nên lệnh bị từ chối không thay đổi gì và DB ở nguyên head. Các test PostgreSQL opt-in kiểm tra đúng hành vi này qua `cli_refused`: lệnh lùi phải thất bại, `alembic_version` và dữ liệu không đổi. Riêng `test_backfill_keeps_old_published_path` mô phỏng DB cũ bằng seed không có bài quiz, nên vẫn lùi về `0009_quizzes` được. Muốn lùi một DB thật qua 0015 thì phải xoá các phiên bản giáo trình có bài quiz và ngân hàng quiz theo bài trước.
+
+## 13/11/2026 — Cấp lại mật khẩu khi người dùng quên
+
+- Kế hoạch không mô tả luồng quên mật khẩu và hệ thống chưa có hạ tầng gửi email (SMTP), nên chọn phương án an toàn nhất về quyền: chỉ quản trị viên cấp lại, qua `POST /api/admin/users/{user_id}/reset-password` (role đọc từ DB, theo cờ `LMS_CLASS_MODE` như các API `/api/admin/users` khác).
+- Server tự sinh mật khẩu tạm ngẫu nhiên, chỉ trả về một lần cho quản trị viên; không nhận mật khẩu từ client, không ghi mật khẩu vào log hay `audit_logs` (chỉ ghi `user.password_reset`, actor, target).
+- Không cấp lại cho chính mình (dùng đổi mật khẩu ở trang Hồ sơ) và không cấp lại cho tài khoản admin khác, tránh chiếm quyền quản trị. Giảng viên không có quyền này.
+- Giả định/rủi ro còn lại: JWT đã phát trước đó vẫn hiệu lực đến khi hết hạn (chưa có cơ chế thu hồi toàn bộ phiên theo người dùng); chưa bắt buộc đổi mật khẩu ở lần đăng nhập kế tiếp; tự đặt lại qua email là phần mở rộng khi có SMTP.
 ## 18/11/2026 — Cấu trúc Lab 1 theo khung Lab 0 (LAB1-01)
 
 - Lab 1 có 36 mục: Video 1.1-1.3, Doc 1.1-1.8, 13 mục `quiz` (`quiz-1-1`…`quiz-1-13`) sau từng doc và từng nhóm thực hành, 10 bài thực hành, `summary-1` và `labtest-1`. Doc, tổng hợp và video là khung rỗng ở `fastapi-backend/app/firmware/curriculum/lab1/` (giảng viên bổ sung sau); quiz và Lab Test chỉ là khung (mặc định tắt, câu hỏi do giảng viên soạn).
@@ -82,6 +107,7 @@
 - Mã lớp chuẩn hóa uppercase/strip; email thành viên lower/strip. Thêm lặp là no-op; phục hồi dùng đúng bản ghi membership cũ, cập nhật added_by/added_at và xóa removed_at. Audit giữ dấu vết thay đổi.
 - Migration rollback giữ bảng/cột/enum đã thêm để bảo toàn dữ liệu; downgrade chỉ lùi revision. Upgrade sau rollback kiểm tra đối tượng đã tồn tại. Không chạy binary cũ không hiểu role teacher; dùng feature flag tắt module để rollback chức năng. Sẽ kiểm chứng dữ liệu mới còn nguyên qua downgrade/upgrade trên DB thử.
 - UI dùng màu hiện có: nền #f8fafc, bề mặt #ffffff, chữ #0f172a, navy #0a4174, đường viền #e2e8f0; font Inter. Bố cục căn trái, thanh điều hướng quản lý, bảng danh sách có bộ lọc và form rõ nhãn. Không thêm dashboard số liệu chưa có trong scope. Trạng thái lỗi/rỗng và bàn phím/mobile được xử lý cùng luồng chính.
+
 # 2026-10-22 — Lab Test: snapshot, quyền và trải nghiệm
 
 - Ngân hàng theo lớp/lab, xuất bản bất biến; bản sửa sao chép ID logic của câu và ID lựa chọn. Thu hồi câu ngừng cấp đề mới đến khi xuất bản bản sửa, không tự đổi điểm lịch sử; báo số lượt bị ảnh hưởng để GV quyết định cấp lượt/override có lý do.
@@ -92,7 +118,6 @@
 - UI giữ hệ thiết kế hiện có: navy #0a4174 cho thao tác, #0f172a chữ, #ffffff nội dung, #f8fafc nền phụ, #e2e8f0 đường phân chia, #b91c1c lỗi. Inter cho nhãn/nội dung, căn trái; câu hỏi có chiều rộng đọc vừa phải. GV dùng danh sách câu + form biên tập, SV dùng các lựa chọn lớn và thanh thời gian/trạng thái lưu luôn rõ. Không thêm hình trang trí hay animation vào màn hình thi.
 - Phác thảo: GV `[Lab / trạng thái / số đã duyệt] [danh sách câu | nội dung + duyệt]`; SV `[thời gian | đã lưu] [câu + 4 lựa chọn] [nộp bài]`. Đã đối chiếu với luồng học CubeSAT: ưu tiên nguồn tham chiếu, duyệt và trạng thái lưu hơn các thẻ thống kê chung chung.
 
-
 # 2026-11-11 — Cấu trúc lại Lab1, 3, 4, 6, 7 theo tổ chức PTITCube
 
 - Làm theo cấu trúc repo hiện tại của PTITCube. Lab 6 giữ lại chỉ với lắp ráp cơ khí vì không còn bài code nào trên GitHub; số Lab vẫn là 0–8.
@@ -102,3 +127,58 @@
 - Bài mới từ upstream không thêm log Serial; panel trực quan chỉ hiện dữ liệu sketch tự in.
 - Video bài mới của Lab 1 để trống (TODO GV); tài liệu Doc 1.3 tóm lược từ README upstream.
 - Cập nhật cùng ngày: nhóm xác nhận kit vẫn đo pin bằng ADC qua cầu chia áp. Giữ PTITCube-Library `218d2b6` (không nâng lên `41f19ba`/MAX17048); `Lab2-01a_Battery_I2C` dùng lại bản ADC đã kiểm chứng, chỉ đổi ID theo tên repo.
+
+# 2026-11-13 — Xác thực Google, nút xem mật khẩu và luồng cấp lại mật khẩu
+
+- **Clock skew cho Google Sign-In (`_GOOGLE_CLOCK_SKEW_SECONDS = 60`):** `verify_google_credential` truyền `clock_skew_in_seconds=60` vào `id_token.verify_oauth2_token` (Google ID token sống 3600s) vì đồng hồ máy chủ/máy local lệch nhẹ vài giây sau giờ UTC của Google sẽ gây lỗi `InvalidValue("Token used too early")`, khiến người dùng thấy thông báo nhầm là token hết hạn. Mọi lỗi xác thực vẫn được từ chối 401 và chỉ log loại lỗi/lý do đã lọc, không log raw credential.
+- **Mở khóa quản trị tài khoản & cấp lại mật khẩu khỏi `LMS_CLASS_MODE`:** `/api/admin/users`, `PATCH /api/admin/users*`, `/api/admin/users/{id}/reset-password` và `/api/admin/users/{id}/reset-link` luôn hoạt động khi `LMS_CLASS_MODE=false` để Admin quản lý khóa/mở tài khoản và xử lý quên mật khẩu ở mọi chế độ vận hành; quyền `admin` vẫn kiểm tra từ DB ở mỗi request. Các API lớp học (`/api/classes*`, `/api/admin/classes/*`) tiếp tục phụ thuộc `LMS_CLASS_MODE`.
+- **Luồng cấp lại mật khẩu kết hợp Email (SMTP) + Hàng chờ Admin:**
+  - `POST /api/auth/forgot-password` luôn trả HTTP 200 với thông điệp trung tính (không lộ email có tồn tại hay không).
+  - Khi cấu hình `SMTP_HOST`, server tạo token ngẫu nhiên 1 lần (lưu hash SHA-256 trong `password_reset_tokens`, TTL mặc định 30 phút, dựng URL từ `FRONTEND_URL`/`ALLOWED_ORIGINS` đã kiểm duyệt) và gửi qua email; nếu SMTP lỗi hoặc chưa cấu hình, yêu cầu tự chuyển sang trạng thái `pending` để Admin cấp liên kết tự đặt lại 1 lần hoặc mật khẩu tạm tại `/admin/users`.
+  - Token đặt lại chỉ dùng 1 lần (`WITH FOR UPDATE`), tự hết hạn, đặt lại sẽ xóa khóa brute-force theo cả `email` và cặp `email:ip`, thu hồi các yêu cầu cũ và chỉ ghi hành động vào `audit_logs` (không lưu token/mật khẩu). Migration `0015_password_reset_tokens` dùng `IF NOT EXISTS` và giữ bảng khi `downgrade` để bảo toàn lịch sử thu hồi token.
+
+# 2026-11-17 — Đồng bộ bài thực hành với PTITCube (thư viện v1.1.0) và trang câu hỏi cuối Lab
+
+- Kiểm tra lại: 44 bài hiện có đều biên dịch qua với compiler v6, nhưng cả 48 repo Lab và PTITCube-Library đã có commit mới (thư viện v1.1.0, `57cf1c3`). Theo yêu cầu "đồng bộ đầy đủ": merge 3 chiều (bản ghim cũ / bản local đã vá / upstream mới) cho từng sketch, giữ các bản vá an toàn local (giới hạn input Serial, kiểm tra số byte ghi SD, JPEG SOI/EOI, tên ảnh không ghi đè, `hasFix()` thay cho tọa độ 0,0, chân LoRa theo `PTIT_COM`).
+- Lấy upstream khi upstream viết lại theo README: Lab2-01a (MAX17048 qua Wire), Lab2-02 (power gating GPIO 4), Lab3-03, Lab3-04 (TWDT thuần — bỏ bài phát hiện rơi/quá nhiệt và `scripts/test-firmware-logic.py`), Lab4-02a (burst 14 byte), Lab4-03b (NMEA + checksum), Lab4-04a (lưu ảnh vào SD), Lab7-01.
+- Sửa lỗi upstream: đơn vị từ trường Lab4-02/02b (Gauss in nhãn uT), Lab4-01 chia áp suất hai lần, Lab4-05/4-03c coi "có vệ tinh" là có fix, chân M1=GPIO35 (chỉ vào) ở Lab5-01a/02a, `PTIT_CDH` không biên dịch trên ESP32-S3, camera không MUX kẹt ở 9600 baud.
+- Thêm 3 bài: `Lab1-03_PWM_LED`, `Lab3-05_Event_Driven_Queue`, `Lab4-03c_GPS_PTITCube`. Không thêm `Lab3-04_Watchdog_Timer` vì trùng nội dung `Lab3-04_Watchdog_And_Event` (README ghi "hoặc"). ID cũ giữ nguyên; nhãn Lab 1 đánh số lại 01–11 theo README.
+- Compiler: overrides rebase lên v1.1.0, revision v7; lệnh chụp ảnh đổi `CAPTURE` → `p` (camera-slave local nhận cả hai).
+- **Xung đột cần nhóm chốt:** mục 2026-11-11 ghi kit đo pin bằng ADC và cố ý không dùng MAX17048. Thư viện v1.1.0 và README mới dùng MAX17048. Nếu kit thực tế không có MAX17048, Lab2-01a/01b/02 và EPS trong Lab7 sẽ không đọc được pin — khi đó cần override `PTIT_EPS` về ADC và giữ sketch ADC cho Lab2-01a.
+- Trang câu hỏi cuối Lab (`/labN/questions`): khung trống theo các mục "❓ Câu hỏi kiểm tra" của README, dữ liệu tại `src/data/lab-questions.js`. File này nằm trong bundle nên chỉ được chứa đề và lựa chọn; đáp án/giải thích phải ở ngân hàng Lab Test phía server (quy tắc 5). Trang không ghi tiến độ và đi qua cùng cổng `LabEntry` như `/labN`.
+
+# 2026-11-17 (bổ sung) — Đội phần cứng chốt 5 điểm sau đồng bộ v1.1.0
+
+Nguồn: "Báo cáo phản hồi và xác nhận đồng bộ phần cứng PTITCube v1.1.0" (17/11/2026). Thay thế ghi chú "kit đo pin bằng ADC" của mục 2026-11-11.
+
+- **Pin (phương án A):** EPS chỉ dùng MAX17048 qua I2C 0x36, không còn ADC GPIO 34. Giữ thư viện v1.1.0 và các sketch Lab2-01/01a/01b/02 hiện tại; sửa chú thích "ADC" còn sót ở Lab2-01 và mô tả Lab 2 trong `labs.js`. Xung đột ghi ở mục trên coi như đã đóng.
+- **Camera:** UART0 (GPIO 1/3) của ESP32-CAM chỉ để nạp code/debug PC; giao thức với OBC chạy trên UART2 (TX GPIO 14, RX GPIO 15, 115200), lệnh `p`. `firmware/camera-slave` chuyển giao thức sang UART2, log debug vẫn in ở UART0; vẫn nhận `CAPTURE` cho sketch cũ.
+- **LoRa E32:** RX26/TX25 (UART1), AUX27, M0=32, M1=33 theo `PTITCube.h` — trùng bản đã sửa ở Lab5-01a/02a, không đổi thêm.
+- **GPIO 4:** Lab 1 chạy trên PCB thí nghiệm rời, không nối với chân Buck của EPS. Thêm lưu ý vào Doc 1.1.
+- **GPIO 12:** xác nhận khởi động/nạp ổn định với MUX 74HC4066 (mức LOW lúc boot nhờ pull-down nội của MTDI). Không đổi code.
+- Upstream (PTITCube-Library, Lab2-01, Lab5-01a/02a) chưa có commit mới sau `57cf1c3`; không cần đồng bộ lại.
+
+# 2026-11-17 — Tái cấu trúc trình tự bài học theo README PTITCube/.github
+
+- Mỗi Lab 0–8 theo đúng thứ tự README: Video → Doc → Câu hỏi kiểm tra Doc → … → Thực hành → Câu hỏi kiểm tra Thực hành → Tổng hợp → **Lab Test**. Lab 0 có đủ Video 0.1/0.2, Doc 0.1/0.2, khám phá mô hình 3D và 3 phần câu hỏi.
+- Trang câu hỏi (`quiz-<checkpoint>`) và trang `labtest-N` là khung trống: nội dung lấy từ `src/data/lab-questions.js` (chỉ đề và lựa chọn, không đáp án). Chúng **không** chặn bài tiếp theo, không nằm trong mẫu số tiến độ và không thể "Hoàn thành bài học" qua `/api/progress/.../complete` (`LESSON_NOT_SELF_COMPLETABLE`), vì kết quả phải do server chấm (quy tắc 5, 6). Nếu không loại ra, sinh viên sẽ kẹt ở trang chưa có câu hỏi.
+- Kế hoạch LMS chỉ cho 4 loại bài và "không tạo loại bài thứ năm": `quiz` chỉ tồn tại ở chế độ học cũ (`seed.legacy`); mô hình khóa học (`seed.labs`) bỏ qua `quiz` và vẫn tự thêm `labtest-N`. Bài lắp ráp Lab 6 (`assembly-6`) là `practice` với `mode: "assembly"`, không có mã mẫu, không bắt buộc mặc định.
+- ID: giữ nguyên mọi ID bài thực hành và ID bài cũ khi chủ đề khớp README (đổi nhãn số, ví dụ `document-1-4` → Doc 1.7, `document-4-2` → Doc 4.4, `document-5-2` → Doc 5.3, `document-8-2` → Doc 8.3, `video-1-4` → Video 1.3, `video-4-5` → Video 4.5 về xung đột UART). Doc có chủ đề mới dùng ID mới (`document-1-button`, `-74hc595`, `-uart`, `-millis`, `document-3-cli`, `document-4-imu`, `-gnss`, `-camera`, `-sensors`, `document-5-lora`, `document-6-2`, `-6-3`, `document-7-1`, `-7-3`, `document-8-widgets`, `document-0-2`, `video-0-2`).
+- Bỏ khỏi danh sách: `video-1-3` (video GPIO, README không còn, chưa có URL) và `document-3-2` (nội dung Task/scheduler gộp vào Doc 3.3). Tiến độ đã lưu của hai ID này vẫn còn trong `lab_progress.lesson_progress`, không bị xóa.
+- Giữ các bài thực hành "ví dụ cha" (Lab2-01, Lab3-01, Lab4-01…04, Lab5-01/02) dù README không liệt kê, để không mất bài đã biên dịch kiểm chứng và tiến độ/bản nháp của sinh viên; đặt chúng đầu nhóm a/b tương ứng.
+- Sinh viên đang học dở: các Doc mới chèn vào giữa lab trở thành bài chưa hoàn thành, nên phải đọc chúng trước khi tiếp tục; lab đã hoàn thành (`completed_at`) không bị ảnh hưởng. Mô hình khóa học có phiên bản mới (hash nguồn đổi); lớp đang dùng phiên bản cũ không đổi cho đến khi GV chọn phiên bản mới.
+
+## 2026-11-18 — Bỏ bài thực hành "cha", gọn khung thực hành và gợi ý code
+- Quyết định: khi một bài có bản a/b (Lab2-01, Lab3-01, Lab4-01..04, Lab5-01/02) thì bỏ bài cha khỏi danh sách bài học, trang câu hỏi và seed; chỉ còn 39 bài thực hành (lớp học: 29 bài từ Lab 2). Mã nguồn và mục catalog của bài cha được giữ để bản nháp trình duyệt cũ và đường dẫn cũ vẫn biên dịch được; `lab_progress` không bị đổi.
+- Lab3-01a/b chỉ hiển thị Serial Monitor (không bảng SD, không "Kết quả thực hành").
+- Lab3-02: bảng "Kết quả lệnh" ghép mỗi lệnh `User> ...` với phản hồi (OK/ERR/pwd), không chỉ lệnh lỗi. Chỉ đọc log Serial, không suy ra thao tác thành công nếu thiết bị không phản hồi.
+- Gợi ý code Monaco chỉ gồm hàm và biến (hàm Arduino, API PTITCube v1.1.0, khai báo trong chính file); tắt gợi ý từ khóa, snippet, từ lấy từ chú thích/chuỗi.
+- Blockly: các stack gốc chồng nhau được tự dời xuống theo chiều cao thật; bố cục không chồng của sinh viên được giữ nguyên.
+- Rủi ro: sinh viên đang ở giữa bài cha sẽ không còn thấy bài đó trong danh sách; tiến độ cũ vẫn nằm trong DB.
+
+## 2026-11-18 — Sửa Lab 4: IMU 4.2a, GPS 4.3c, Serial Monitor, tên bài 4.4b
+- Lab4-02a: `(Wire.read() << 8) | Wire.read()` có thứ tự đánh giá không xác định trong C++, nên byte thấp có thể bị đọc trước và số liệu IMU sai. Sửa bằng `readInt16()` đọc byte cao rồi byte thấp; cập nhật sha/verified_build trong `catalog.json`. Định dạng log giữ nguyên như 4.2b nên viewer 3D không đổi.
+- Lab4-03c: bộ giải mã ghép thêm các dòng riêng "Vĩ độ … Bắc/Nam", "Kinh độ … Đông/Tây", "Cao độ (altitude)" thành vị trí có dấu, để bản đồ vẫn có điểm khi thiếu dòng "Tọa độ (Vĩ độ, Kinh độ)". Chưa tái hiện được lỗi trên bo thật; cần log Serial thật nếu bản đồ vẫn trống.
+- Serial Monitor: gom dòng nhận được và cập nhật giao diện mỗi 80 ms (bộ giải mã vẫn nhận từng dòng ngay); thêm Tạm dừng/Tiếp tục, Sao chép, tự cuộn theo vị trí cuộn và nút "↓ Cuối". Áp dụng cho mọi bài.
+- Lab4-04b đổi tên: "Chụp ảnh bằng thư viện PTIT_Camera, lưu thẻ SD và gửi ảnh về trình duyệt qua Serial". ID không đổi.
+- Hiển thị ảnh camera qua MQTT: hoãn, kế hoạch riêng ở `Docs/MQTT_PLAN_2026-11-18.md`.

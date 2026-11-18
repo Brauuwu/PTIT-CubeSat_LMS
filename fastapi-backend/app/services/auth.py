@@ -215,9 +215,7 @@ class AuthService:
                 full_name=created_admin.full_name,
                 role=created_admin.role,
                 created_at=(
-                    created_admin.created_at.isoformat()
-                    if created_admin.created_at
-                    else None
+                    created_admin.created_at.isoformat() if created_admin.created_at else None
                 ),
             ),
         )
@@ -261,7 +259,9 @@ class AuthService:
         if require_role is None and user.role == UserRole.admin:
             raise ValueError("Tài khoản quản trị chỉ được đăng nhập từ trang quản trị.")
 
-        logger.info(f"[AuthService] 🔑 User logged in: {mask_email(user.email)} ({user.role.value})")
+        logger.info(
+            f"[AuthService] 🔑 User logged in: {mask_email(user.email)} ({user.role.value})"
+        )
 
         token = create_access_token(
             {
@@ -375,6 +375,9 @@ class AuthService:
             raise ValueError("Mật khẩu hiện tại không chính xác.")
 
         current_user.password_hash = await run_in_threadpool(hash_password, request.new_password)
+        from app.services.password_reset import revoke_open_resets
+
+        await revoke_open_resets(self.db_session, current_user.id)
         await self.db_session.commit()
         logger.info(f"[AuthService] 🔒 Password changed: user_id={current_user.id}")
 

@@ -1,0 +1,43 @@
+.lab-questions-page { width: min(100%, 980px); margin: 0 auto; padding: 32px 24px 64px; }
+.lab-questions-back { margin-bottom: 18px; font-size: 14px; font-weight: 600; }
+.lab-questions-back a { color: var(--text-link); text-decoration: none; }
+.lab-questions-back a:hover { color: var(--text-link-hover); text-decoration: underline; }
+.lab-questions-notice {
+  margin: 0 0 24px; padding: 12px 16px; border: 1px solid var(--status-info-border); border-radius: 10px;
+  background: var(--status-info-bg); color: var(--status-info-text); font-size: 14px; line-height: 1.6;
+}
+.lab-questions-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
+.lab-questions-checkpoint {
+  padding: 20px 24px; border: 1px solid var(--border-subtle); border-radius: 14px;
+  background: var(--bg-surface); color: var(--text-body); line-height: 1.65;
+}
+.lab-questions-checkpoint header { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.lab-questions-checkpoint h2 { margin: 0; font-size: 17px; line-height: 1.4; color: var(--cubesat-ink); }
+.lab-questions-index { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.lab-questions-kind {
+  display: inline-flex; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 700; line-height: 1.6;
+  border: 1px solid var(--border-subtle); background: var(--bg-surface-subtle); color: var(--cubesat-navy);
+}
+.lab-questions-kind--practice { border-color: var(--status-success-border); background: var(--status-success-bg); color: var(--status-success-text); }
+.lab-questions-topics { margin: 12px 0 0; font-size: 14px; }
+.lab-questions-exercises { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin-top: 10px; font-size: 13px; color: var(--text-muted); }
+.lab-questions-exercises ul { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.lab-questions-exercises a, .lesson-quiz-exercise {
+  display: inline-block; padding: 2px 8px; border: 0; border-radius: 6px; background: var(--bg-surface-subtle);
+  color: var(--text-link); font: inherit; text-decoration: none; overflow-wrap: anywhere; cursor: pointer;
+}
+.lab-questions-exercises a:hover, .lesson-quiz-exercise:hover { background: var(--bg-surface-hover); color: var(--text-link-hover); }
+.lesson-quiz .lab-questions-checkpoint { padding: 0; border: 0; background: none; box-shadow: none; }
+.lesson-quiz-note { margin: 16px 0 0; color: var(--text-muted); font-size: 13px; }
+.lab-questions-body { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border-subtle); }
+.lab-questions-empty { margin: 0; color: var(--text-muted); font-size: 13px; font-style: italic; }
+.lab-questions-items { margin: 0; padding-left: 20px; display: grid; gap: 12px; }
+.lab-questions-prompt { margin: 0; color: var(--text-heading); font-weight: 600; }
+.lab-questions-items small { color: var(--text-muted); }
+.lab-questions-choices { margin: 6px 0 0; padding-left: 4px; list-style: none; display: grid; gap: 4px; }
+.lab-questions-summary { margin-top: 24px; }
+
+@media (max-width: 640px) {
+  .lab-questions-page { padding: 20px 16px 48px; }
+  .lab-questions-checkpoint { padding: 16px; }
+}

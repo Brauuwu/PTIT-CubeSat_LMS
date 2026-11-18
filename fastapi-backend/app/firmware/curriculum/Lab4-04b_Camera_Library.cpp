@@ -1,5 +1,5 @@
 // Reviewed classroom source for the ESP32 OBC hardware profile.
-// Upstream: https://github.com/PTITCube/Lab4-04b_Camera_Library/blob/69837a64555aefe193c506fcc18125e0fb334e7f/src/main.cpp
+// Upstream: https://github.com/PTITCube/Lab4-04b_Camera_Library/blob/8c88576eb56544ca54f19a33e576f00441b3db57/src/main.cpp
 // Lab4-04: OBC MUX pins 12/14; send p to capture. Preserve existing SD images.
 // Source: https://github.com/PTITCube/Lab4-04_Camera_Snapshot
 /**
@@ -17,9 +17,12 @@
  */
 
 #include <Arduino.h>
+
 #include <PTITCube.h>
 #include <SD.h>
 #include <base64.h>
+
+PTIT_CDH cdh;
 
 PTIT_Camera camera;
 int imageCount = 0;
@@ -28,69 +31,69 @@ int imageCount = 0;
 // Giao thức: IMG_BEGIN:<số byte> -> nhiều dòng IMG_CHUNK:<base64 của 384 byte> -> IMG_END
 static bool sendImageOverSerial(const String& path) {
     File file = SD.open(path.c_str(), FILE_READ);
-    if (!file) { Serial.println("ERROR:IMG_OPEN"); return false; }
+    if (!file) { cdh.println("ERROR:IMG_OPEN"); return false; }
     const size_t size = file.size();
     if (size == 0 || size > 262144) {
         file.close();
-        Serial.printf("ERROR:IMG_SIZE:%u\n", (unsigned)size);
+        cdh.printf("ERROR:IMG_SIZE:%u\n", (unsigned)size);
         return false;
     }
-    Serial.printf("IMG_BEGIN:%u\n", (unsigned)size);
+    cdh.printf("IMG_BEGIN:%u\n", (unsigned)size);
     uint8_t chunk[384];
     size_t sent = 0;
     while (sent < size) {
         const size_t count = file.read(chunk, sizeof(chunk));
         if (count == 0) break;
-        Serial.print("IMG_CHUNK:");
-        Serial.println(base64::encode(chunk, count));
+        cdh.print("IMG_CHUNK:");
+        cdh.println(base64::encode(chunk, count));
         sent += count;
         delay(2);
     }
     file.close();
-    if (sent != size) { Serial.println("ERROR:IMG_READ"); return false; }
-    Serial.println("IMG_END");
+    if (sent != size) { cdh.println("ERROR:IMG_READ"); return false; }
+    cdh.println("IMG_END");
     return true;
 }
 
 void setup() {
-    Serial.begin(115200);
+    cdh.begin(115200);
     delay(2000);
     
-    Serial.println("\n--- CAMERA / SD INITIALIZATION ---");
+    cdh.println("\n--- CAMERA / SD INITIALIZATION ---");
 
     if (!camera.init(12, 14)) {
-        Serial.println("[Loi] Khong the khoi tao the nho!");
-        Serial.println("[SD] Kiem tra the; gui p de thu mount/chup lai.");
+        cdh.println("[Loi] Khong the khoi tao the nho!");
+        cdh.println("[SD] Kiem tra the; gui p de thu mount/chup lai.");
     }
 
-    Serial.println("[OK] Nhap 'p' de chup anh.");
+    cdh.println("[OK] Nhap 'p' de chup anh.");
 }
 
 void loop() {
-    if (Serial.available() > 0) {
-        char command = Serial.read();
+    if (cdh.available() > 0) {
+        char command = cdh.read();
 
         if (command == 'p' || command == 'P') {
             String path;
             do { path = "/photos/image_" + String(imageCount++) + ".jpg"; } while (SD.exists(path.c_str()));
-            Serial.println("[Camera] Dang chup: " + path);
+            cdh.println("[Camera] Dang chup: " + path);
 
             if (camera.captureToFile(path.c_str())) {
-                Serial.println("[OK] Da luu anh: " + path);
+                cdh.println("[OK] Da luu anh: " + path);
                 sendImageOverSerial(path);
 
             } else {
-                Serial.println("[Loi] Chup anh that bai.");
+                cdh.println("[Loi] Chup anh that bai.");
             }
         }
 
-        // Consume CR/LF from the same Serial Monitor command.
-        while (Serial.available() > 0) {
-            char trailing = Serial.peek();
+        // Consume CR/LF from the same cdh Monitor command.
+        while (cdh.available() > 0) {
+            char trailing = cdh.peek();
             if (trailing != '\r' && trailing != '\n') {
                 break;
             }
-            Serial.read();
+            cdh.read();
         }
     }
     delay(5);

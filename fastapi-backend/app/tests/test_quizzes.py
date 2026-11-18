@@ -121,7 +121,8 @@ class QuizAPITests(unittest.IsolatedAsyncioTestCase):
     async def test_seed_empty_and_publish_requires_an_approved_question(self):
         async with self.sessions() as db:
             self.assertEqual(
-                (await db.execute(select(func.count()).select_from(QuestionBank))).scalar_one(), 12
+                (await db.execute(select(func.count()).select_from(QuestionBank))).scalar_one(),
+                25,  # 9 Lab Test banks + 16 quiz lessons (quiz-0-1..3, quiz-1-1..13)
             )
             self.assertEqual(
                 (await db.execute(select(func.count()).select_from(QuestionVersion))).scalar_one(),
@@ -367,7 +368,7 @@ class QuizAPITests(unittest.IsolatedAsyncioTestCase):
 
         headers = (
             (Path(__file__).resolve().parents[3] / "public/templates/question-bank.csv")
-            .read_text()
+            .read_text(encoding="utf-8-sig")
             .splitlines()[0]
             .split(",")
         )
@@ -559,7 +560,9 @@ class QuizValidationTests(unittest.TestCase):
         )
 
         # 1. Parse sample 4-part exam text
-        parsed_text = [QuestionInput.model_validate(q).model_dump() for q in parse_exam_text(SAMPLE_EXAM_TEXT)]
+        parsed_text = [
+            QuestionInput.model_validate(q).model_dump() for q in parse_exam_text(SAMPLE_EXAM_TEXT)
+        ]
         self.assertEqual(len(parsed_text), 8)
         self.assertEqual(parsed_text[0]["question_type"], "single_choice")
         self.assertEqual(parsed_text[0]["correct_choice_id"], "d")
@@ -585,7 +588,9 @@ class QuizValidationTests(unittest.TestCase):
 
         # 2. Parse sample Excel (.xlsx) with all 4 question types
         xlsx_b64 = base64.b64encode(sample_question_bank_xlsx()).decode()
-        parsed_xlsx = [QuestionInput.model_validate(q).model_dump() for q in parse_xlsx_questions(xlsx_b64)]
+        parsed_xlsx = [
+            QuestionInput.model_validate(q).model_dump() for q in parse_xlsx_questions(xlsx_b64)
+        ]
         self.assertEqual(len(parsed_xlsx), 4)
         self.assertEqual(
             [q["question_type"] for q in parsed_xlsx],
