@@ -8,6 +8,7 @@ import VideoPlayer from '../components/common/VideoPlayer';
 import TelemetryControls from '../components/groundstation/TelemetryControls';
 import { downloadFile } from '../components/editor/project-files';
 import ClassCourseSidebar from '../components/classes/ClassCourseSidebar';
+import LabFigView from '../components/layout/LabFigView';
 
 const QuizPanel = lazy(() => import('../components/classes/QuizPanel'));
 const IDEPanel = lazy(() => import('../components/editor/IDEPanel'));
@@ -68,7 +69,7 @@ function SubmissionPanel({ classId, lessonId, code, rubric, onRefresh }) {
   </section>;
 }
 
-function LessonContent({ lesson, labId, classId, preview, staffView = false, onRefresh, pagination }) {
+function LessonContent({ lesson, labId, classId, preview, staffView = false, onRefresh, fig }) {
   const [notice, setNotice] = useState({});
   const isSummaryLesson = String(lesson.id || '').startsWith('summary-') || /^Tổng hợp\b/i.test(lesson.title || '');
   const [startedAt, setStartedAt] = useState(lesson.progress?.started_at || null);
@@ -123,24 +124,24 @@ function LessonContent({ lesson, labId, classId, preview, staffView = false, onR
     : remainingSeconds > 0
       ? `Đã học ${Math.floor(elapsedSeconds / 60)}:${String(elapsedSeconds % 60).padStart(2, '0')} · còn ${Math.floor(remainingSeconds / 60)}:${String(remainingSeconds % 60).padStart(2, '0')}`
       : 'Hoàn thành bài học';
-  return <><Notice {...notice} />
-    {completed && <p className="lesson-achieved" role="status">✓ {lesson.progress.status === 'waived' ? 'Đã được miễn yêu cầu' : 'Đã hoàn thành'}</p>}
-    {lesson.type === 'video' && <><VideoPlayer url={lesson.content.url} initialPosition={lesson.progress?.last_position || 0} onSegment={preview ? undefined : segment} trackingMode={lesson.content.tracking_mode || 'native'} />
-      {!preview && !lesson.content.confirmation_allowed && !/\.(mp4|webm|ogg|ogv)(?:\?|#|$)/i.test(lesson.content.url) && <p>Nguồn video này chưa hỗ trợ đo đoạn xem. Giảng viên cần bật chế độ xác nhận hoặc cung cấp video đo được.</p>}
-    </>}
-    {lesson.type === 'document' && <DocViewer content={lesson.content.markdown || '# Tài liệu đang được cập nhật'} docPath={undefined} />}
-    {lesson.type === 'practice' && <Practice lesson={lesson} labId={labId} classId={classId} preview={preview} staffView={staffView} onRefresh={onRefresh} />}
-    {lesson.type === 'quiz' && (preview || !lesson.content.bank_ready
+  const unmeasuredVideo = lesson.type === 'video' && !preview && !lesson.content.confirmation_allowed && !/\.(mp4|webm|ogg|ogv)(?:\?|#|$)/i.test(lesson.content.url);
+  const bodyNode = lesson.type === 'practice' ? <Practice lesson={lesson} labId={labId} classId={classId} preview={preview} staffView={staffView} onRefresh={onRefresh} />
+    : lesson.type === 'quiz' ? (preview || !lesson.content.bank_ready
       ? <p className="lesson-achieved" role="status">{preview ? 'Chế độ xem toàn bộ không tạo lượt làm bài.' : 'Câu hỏi kiểm tra của mục này chưa sẵn sàng.'} {staffView && <Link to={`/classes/${classId}/lessons/${encodeURIComponent(lesson.id)}/questions`}>Soạn câu hỏi</Link>}</p>
-      : <Suspense fallback={<p>Đang tải câu hỏi…</p>}><QuizPanel classId={classId} labId={labId} lessonId={lesson.id} title={lesson.title} policySummary={lesson.content} onRefresh={onRefresh} /></Suspense>)}
-    {lesson.type === 'labtest' && (preview ? <p>Chế độ xem toàn bộ dành cho Giảng viên / Quản trị viên không tạo lượt thi sinh viên. Mỗi đề thi gồm toàn bộ câu hỏi đã duyệt ({lesson.content.time_limit_minutes || 10} phút · đạt từ {lesson.content.pass_score || 4} câu đúng · tối đa {lesson.content.max_attempts || 3} lượt). <Link to={`/classes/${classId}/labs/${labId}/questions`}>Mở ngân hàng câu hỏi Lab {labId}</Link></p> : <Suspense fallback={<p>Đang tải bài kiểm tra…</p>}><QuizPanel classId={classId} labId={labId} policySummary={lesson.content} onRefresh={onRefresh} /></Suspense>)}
-    {pagination}
-    {!preview && !staffView && lesson.type !== 'quiz' && <section className="lesson-completion" aria-label="Hoàn thành bài học">
-      <button type="button" className="btn btn-primary" disabled={completionLocked} onClick={() => confirm('complete')}>
-        {completionLabel}
-      </button>
-    </section>}
-  </>;
+      : <Suspense fallback={<p>Đang tải câu hỏi…</p>}><QuizPanel classId={classId} labId={labId} lessonId={lesson.id} title={lesson.title} policySummary={lesson.content} onRefresh={onRefresh} /></Suspense>)
+      : lesson.type === 'labtest' ? (preview ? <p>Chế độ xem toàn bộ dành cho Giảng viên / Quản trị viên không tạo lượt thi sinh viên. Mỗi đề thi gồm toàn bộ câu hỏi đã duyệt ({lesson.content.time_limit_minutes || 10} phút · đạt từ {lesson.content.pass_score || 4} câu đúng · tối đa {lesson.content.max_attempts || 3} lượt). <Link to={`/classes/${classId}/labs/${labId}/questions`}>Mở ngân hàng câu hỏi Lab {labId}</Link></p> : <Suspense fallback={<p>Đang tải bài kiểm tra…</p>}><QuizPanel classId={classId} labId={labId} policySummary={lesson.content} onRefresh={onRefresh} /></Suspense>)
+        : null;
+  return <LabFigView {...fig} lesson={lesson}
+    noticeNode={<>{fig.noticeNode}<Notice {...notice} />
+      {completed && <p className="lesson-achieved" role="status">✓ {lesson.progress.status === 'waived' ? 'Đã được miễn yêu cầu' : 'Đã hoàn thành'}</p>}
+      {unmeasuredVideo && <p className="lesson-achieved" role="status">Nguồn video này chưa hỗ trợ đo đoạn xem. Giảng viên cần bật chế độ xác nhận hoặc cung cấp video đo được.</p>}</>}
+    videoNode={lesson.type === 'video' ? <VideoPlayer url={lesson.content.url} initialPosition={lesson.progress?.last_position || 0} onSegment={preview ? undefined : segment} trackingMode={lesson.content.tracking_mode || 'native'} /> : null}
+    docNode={lesson.type === 'document' ? <DocViewer content={lesson.content.markdown || '# Tài liệu đang được cập nhật'} docPath={undefined} /> : null}
+    bodyNode={bodyNode}
+    showComplete={!preview && !staffView && lesson.type !== 'quiz'}
+    canComplete={!completionLocked} completed={completed} completeLesson={() => confirm('complete')}
+    completeLabel={completed ? '' : completionLabel} completeError="" remainingSeconds={remainingSeconds}
+  />;
 }
 
 async function fetchSource(lessonId, classId) {
@@ -203,28 +204,26 @@ export default function ClassLearningPage({ experience = false }) {
           {activeLessons.map((lesson, index) => <option key={lesson.id} value={lesson.id} disabled={!isPrivileged && (lesson.access === 'locked' || !lesson.content)}>{index + 1}. {types[lesson.type]} · {lesson.title}</option>)}
         </select>
       </div>}
-      <div className="lab-course-view animate-fadeInUp">
+      {!selected ? <div className="lab-course-view animate-fadeInUp">
         {navigationNotice && <Notice error={navigationNotice} />}
-        {!selected ? <><header className="class-learning-heading"><div><small>{experience ? 'Trải nghiệm CubeSAT' : 'Chương trình học của lớp'}</small><h1>Chương trình học của lớp</h1></div><Link to={experience ? '/classes' : `/classes/${classId}`}>Về lớp học</Link></header><p>Chưa có bài học được bật.</p></> : <>
-          <header className="lab-state-title lab-state-title--compact">
-            <div className="lab-state-meta"><span className="lab-state-number">Lab {selected.lab.id} · Phần {lessonIndex + 1}</span><span className="lab-state-section">{types[selected.lesson.type]}</span></div>
-            <h1 className="lab-state-copy">{selected.lesson.title}</h1>
-          </header>
-          {!isPrivileged && <section className="lesson-progress-panel" aria-label="Tiến độ Lab">
-            <div className="lesson-progress-heading"><div><strong>Tiến độ Lab {selected.lab.id}</strong><small>{selected.lab.percent || 0}% tiến độ đã hoàn thành</small></div><b>{selected.lab.percent || 0}%</b></div>
-            <div className="lesson-progress-track"><span style={{ width: `${selected.lab.percent || 0}%` }} /></div>
-          </section>}
-          <article className="class-learning-content" key={`${classId}:${selected.lesson.id}`}>
-            <small>Lab {selected.lab.id} · {types[selected.lesson.type]}</small>
-            {!selected.lesson.content ? <section className="lms-notice"><h3>🔒 Bài học đang khóa</h3><p>Bạn cần hoàn thành bài học trước để mở khóa bài này.</p>{(selected.lesson.reason || selected.lab.reason) && <small>{selected.lesson.reason || selected.lab.reason}</small>}</section> : <LessonContent lesson={selected.lesson} labId={selected.lab.id} classId={classId} preview={preview || isPrivileged} staffView={isPrivileged} onRefresh={reload} pagination={<nav className="lesson-pagination" aria-label="Chuyển phần học">
-              <button type="button" disabled={lessonIndex <= 0} onClick={() => selectLesson(activeLessons[lessonIndex - 1]?.id)}>← Phần trước</button>
-              <span>{lessonIndex + 1} / {activeLessons.length} · {types[selected.lesson.type]}</span>
-              <button type="button" disabled={lessonIndex < 0 || lessonIndex >= activeLessons.length - 1} onClick={() => selectLesson(activeLessons[lessonIndex + 1]?.id)}>Phần tiếp theo →</button>
-            </nav>} />}
-          </article>
+        <header className="class-learning-heading"><div><small>{experience ? 'Trải nghiệm CubeSAT' : 'Chương trình học của lớp'}</small><h1>Chương trình học của lớp</h1></div><Link to={experience ? '/classes' : `/classes/${classId}`}>Về lớp học</Link></header><p>Chưa có bài học được bật.</p>
+      </div> : (() => {
+        const percent = Math.round(selected.lab.percent || 0);
+        const lessonKey = `${classId}:${selected.lesson.id}`;
+        const fig = {
+          lab: { id: selected.lab.id, title: selected.lab.title, description: selected.lab.objectives || '' },
+          lessons: activeLessons, lessonIndex, selectLesson,
+          showProgress: !isPrivileged, completionPercent: percent, progressText: `${percent}% tiến độ đã hoàn thành`,
+          noticeNode: navigationNotice ? <Notice error={navigationNotice} /> : null,
+        };
+        return <>
+          {!selected.lesson.content
+            ? <LabFigView key={lessonKey} {...fig} lesson={selected.lesson} showComplete={false}
+              lockedNode={<div className="fig-body-text"><p>Bạn cần hoàn thành bài học trước để mở khóa bài này.</p>{(selected.lesson.reason || selected.lab.reason) && <small>{selected.lesson.reason || selected.lab.reason}</small>}</div>} />
+            : <LessonContent key={lessonKey} fig={fig} lesson={selected.lesson} labId={selected.lab.id} classId={classId} preview={preview || isPrivileged} staffView={isPrivileged} onRefresh={reload} />}
           {!experience && <Link className="class-learning-path-link" to={`/classes/${classId}/path`}>Lộ trình và tiến độ học tập</Link>}
-        </>}
-      </div>
+        </>;
+      })()}
     </div>
   </div>;
 }

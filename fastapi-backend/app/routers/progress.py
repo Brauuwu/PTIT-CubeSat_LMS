@@ -5,6 +5,7 @@ Tiến độ học tập:
   GET  /api/progress                          — Tiến độ tất cả lab của user hiện tại
   POST /api/progress/{lab_id}/video-watched    — Đánh dấu đã xem hết video
   POST /api/progress/{lab_id}/doc-viewed       — Đánh dấu đã mở tài liệu
+  POST /api/progress/{lab_id}/lessons/{lesson_id}/reset — Đặt lại bài về chưa hoàn thành
 """
 
 from typing import Annotated
@@ -71,3 +72,13 @@ async def complete_lesson(
     current_user: User = Depends(get_required_user),
 ):
     return await ProgressService(db).complete_lesson(current_user, lab_id, lesson_id)
+
+
+@router.post("/{lab_id}/lessons/{lesson_id}/reset", response_model=LabProgressResponse)
+async def reset_lesson(
+    lab_id: Annotated[int, Path(ge=0, le=8)],
+    lesson_id: str = Path(min_length=1, max_length=200),
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_required_user),
+):
+    return await ProgressService(db).reset_lesson(current_user, lab_id, lesson_id)

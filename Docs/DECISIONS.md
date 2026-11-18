@@ -1,5 +1,15 @@
 # Nhật ký quyết định
 
+## 19/11/2026 — Áp giao diện mới của Quân (`quanna1402:fix/frontend-v1`)
+
+- Commit của Quân gộp 282 file trên nền `main` cũ. Phần thay đổi thực, tính so với `develop` (`2adb3ab`), được áp bằng 3-way merge. Chỉ lấy đúng phạm vi: trang loading, sidebar các lab, giao diện Lab 0 (nền, thẻ có tab nổi, icon, font) và các asset đi kèm.
+- Không lấy: bỏ `require_lms_enabled` ở API quản lý tài khoản (thay đổi phân quyền phía server, không phải UI), `AdminDashboardPage` (giao diện admin chưa sửa), chỉnh `dev.py`/`scripts/python.mjs` theo máy cá nhân, xoá các file thừa của template Vite.
+- Có lấy endpoint `POST /api/progress/{lab}/lessons/{lesson}/reset` (kèm test), vì nút "Đã hoàn thành" của giao diện mới dùng để đặt lại bài. Endpoint chỉ đổi tiến độ của chính người gọi về chưa hoàn thành, nằm trong router legacy nên chịu `require_legacy_allowed`. Sinh viên lớp pilot không dùng được, và endpoint không mở khoá thêm bài nào.
+- Mở rộng "các phần giống thế": `LabFigView` dựng được mọi loại mục (video, tài liệu, 3D, thực hành, câu hỏi, tổng hợp, Lab Test, lắp ráp, bài đang khoá). Giao diện này dùng cho Lab 0–8 ở đường cũ và cho trang học theo lớp (`ClassLearningPage`). Header kiểu mới bật ở mọi trang học.
+- Trang học theo lớp giữ nguyên nghiệp vụ: % tiến độ lấy từ backend, hoàn thành gửi sự kiện có idempotency key và chờ đủ 60 giây, không có nút đặt lại tiến độ.
+- Tiến độ trên trang và sidebar chỉ đếm bài tuần tự (không tính câu hỏi/Lab Test), theo `isSequentialLesson`.
+- Bổ sung responsive cho màn hình hẹp (≤720px), vì giao diện Lab 0 gốc chỉ thiết kế cho desktop.
+
 ## 18/11/2026 — Gộp nhánh cấu trúc lab (Xuân) với quiz theo bài (Trung, PR #4)
 
 - Lab 0 và Lab 1 theo mô hình quiz theo bài của Trung: `quiz-0-1`…`quiz-0-3`, `quiz-1-1`…`quiz-1-13` là bài `quiz` thật trong course model, có ngân hàng câu hỏi riêng và chấm ở server. Các trang checkpoint tự ôn cũ của Lab 0/1 (`quiz-doc-*`, `quiz-practice-*`) bị bỏ. Hai nhánh này chưa từng phát hành nên không có tiến độ nào trỏ vào chúng.

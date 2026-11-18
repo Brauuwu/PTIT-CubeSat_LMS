@@ -1,6 +1,7 @@
 import { cloneElement, isValidElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import CourseSidebar from './CourseSidebar';
+import LabFigView from './LabFigView';
 import VideoPlayer from '../common/VideoPlayer';
 import DocViewer from '../common/DocViewer';
 import { authorizedFetch, useAuth } from '../../contexts/auth-api';
@@ -12,16 +13,6 @@ import { useLmsResource } from '../classes/use-lms-resource';
 import { getLabQuestionSet } from '../../data/lab-questions';
 import { CheckpointCard } from '../lessons/LabCheckpoint';
 import { isSequentialLesson } from '../lessons/lesson-sequence';
-
-const LESSON_TYPE_LABELS = { video: 'Video', document: 'Tài liệu', practice: 'Thực hành', summary: 'Tổng hợp', components: 'Thành phần', assembly: 'Thực hành', quiz: 'Câu hỏi', labtest: 'Lab Test' };
-
-function LabStateTitle({ lab, lesson, position }) {
-  return <header className="lab-state-title lab-state-title--compact">
-    <div className="lab-state-meta"><span className="lab-state-number">Lab {lab.id} · Phần {position}</span><span className="lab-state-section">{lesson.label}</span></div>
-    <h1 className="lab-state-copy">{lesson.title}</h1>
-    {lesson.exerciseCode && <code className="lesson-exercise-code">{lesson.exerciseCode}</code>}
-  </header>;
-}
 
 export default function LabLayout(props) {
   const { data, error, loading } = useLmsResource('/api/curriculum/legacy');
@@ -75,6 +66,18 @@ function LoadedLabLayout({ lab, catalog, editorPanel, visualizationPanel = null,
       ? current.map(item => item.lab_id === lab.id ? body : item)
       : [...current, body]);
   };
+  const resetLesson = async () => {
+    setCompleteError('');
+    const response = await authorizedFetch(`/api/progress/${lab.id}/lessons/${encodeURIComponent(lesson.id)}/reset`, { method: 'POST' });
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      setCompleteError(body.message || 'Không đặt lại được trạng thái bài học.');
+      return;
+    }
+    setProgress(current => current.some(item => item.lab_id === lab.id)
+      ? current.map(item => item.lab_id === lab.id ? body : item)
+      : [...current, body]);
+  };
   const downloadExample = async () => {
     const token = getAuthToken();
     setDownloading(true); setDownloadError('');
@@ -117,100 +120,82 @@ function LoadedLabLayout({ lab, catalog, editorPanel, visualizationPanel = null,
     key: lesson.id, exerciseId: lesson.type === 'practice' ? lesson.id : '', legacyFallback: lesson.id === firstPractice?.id,
   }) : editorPanel;
 
+  const lessonBody = lesson.type === 'practice' ? <>
+    <section className="lesson-practice-brief" aria-label="Yêu cầu bài thực hành">
+      <div><h2>Yêu cầu thực hành</h2><p>{lesson.title}.</p></div>
+      <div className="lesson-example-links"><a href={lesson.repositoryUrl} target="_blank" rel="noreferrer">Hướng dẫn trên PTITCube ↗</a><button type="button" className="btn btn-sm btn-outline" disabled={downloading} onClick={downloadExample}>{downloading ? 'Đang tải mã mẫu…' : 'Tải mã mẫu ESP32 (.ino)'}</button>{downloadError && <small role="alert">{downloadError}</small>}</div>
+    </section>
+    <section className={`lab-workspace lab-practice-workspace lab-practice-workspace--${practiceVariant}`} aria-label={`Không gian thực hành ${lesson.exerciseCode}`}>
+      <div className={`lab-practice-panels lab-practice-panels--${practiceVariant}`}>
+        <div className="lab-practice-editor">
+          <div className="lab-practice-editor-frame">{scopedEditor}</div>
+          {practiceVariant !== 'split' && <div className="lab-practice-actions lab-practice-actions--inline" aria-label="Thao tác thực hành" key={lesson.id}>{practiceActions}</div>}
+        </div>
+        <div className="lab-practice-visualization"><PracticeVisualization /></div>
+      </div>
+      {practiceVariant === 'split' && <div className="lab-practice-actions" aria-label="Thao tác thực hành" key={lesson.id}>{practiceActions}</div>}
+    </section>
+  </> : lesson.type === 'quiz' ? (lesson.checkpointId ? <div className="lesson-quiz">
+    {checkpoint ? <CheckpointCard as="div" checkpoint={checkpoint}
+      renderExercise={id => <button type="button" className="lesson-quiz-exercise" onClick={() => selectLesson(id)}><code>{id}</code></button>} />
+      : <p>Chưa có nội dung cho phần câu hỏi này.</p>}
+    <p className="lesson-quiz-note">Phần câu hỏi dùng để ôn tập, không tính vào tiến độ và không khóa bài tiếp theo.</p>
+  </div> : <div className="fig-body-text">
+    <h2>{lesson.title}</h2>
+    <p>Câu hỏi kiểm tra của mục này đang được biên soạn. Đáp án chỉ lưu trên máy chủ và sẽ mở khi ngân hàng câu hỏi được duyệt.</p>
+  </div>) : lesson.type === 'summary' ? <div className="fig-body-text">
+    <h2>Kết quả cần đạt</h2><p>{lesson.description}</p>
+    <h2>Đối chiếu các bài thực hành</h2><p>Kiểm tra mã biên dịch, lưu lại kết quả quan sát và giải thích cách chương trình đáp ứng yêu cầu của từng bài.</p>
+    <ul className="lesson-summary-list">{lessons.filter(item => item.type === 'practice').map(item => <li key={item.id}><button type="button" onClick={() => selectLesson(item.id)}><code>{item.exerciseCode}</code><span>{item.title}</span></button></li>)}</ul>
+    <p>Lưu mã .ino, file Blockly và kết quả kiểm thử để đưa vào báo cáo Lab {lab.id}.</p>
+    <h2>Câu hỏi kiểm tra</h2>
+    <p>Ôn lại kiến thức sau mỗi phần Doc và mỗi nhóm bài thực hành của Lab {lab.id}, sau đó làm Lab Test cuối Lab.</p>
+    <div className="lesson-example-links">
+      {labTestLesson && <button type="button" className="btn btn-sm btn-primary" onClick={() => selectLesson(labTestLesson.id)}>Làm Lab Test cuối Lab {lab.id} →</button>}
+      <Link className="btn btn-sm btn-outline lesson-questions-link" to={`/lab${lab.id}/questions`}>Xem tất cả câu hỏi của Lab {lab.id}</Link>
+    </div>
+  </div> : lesson.type === 'labtest' ? <div className="fig-body-text lesson-labtest">
+    <h2>Lab Test cuối Lab {lab.id}</h2>
+    <p>Mỗi lượt làm bài gồm các câu hỏi do giảng viên soạn và duyệt trong ngân hàng của Lab {lab.id}. Bài làm được chấm ở máy chủ; đáp án không hiển thị trong lúc làm bài.</p>
+    <p className="lab-questions-notice" role="status">Ngân hàng câu hỏi của Lab {lab.id} đang được soạn. Lab Test sẽ mở khi giảng viên xuất bản.</p>
+  </div> : lesson.type === 'assembly' ? <div className="fig-body-text">
+    <h2>Yêu cầu thực hành</h2>
+    <p>{lesson.title}.</p>
+    <ul>
+      <li>Xem Video 6.2 và chuẩn bị đủ khung, bu lông, bo mạch theo danh mục của bộ kit; lắp khi đã ngắt nguồn.</li>
+      <li>Siết bu lông theo đường chéo, không siết chặt hết một cạnh trước.</li>
+      <li>Kiểm tra kích thước hoàn thiện theo chuẩn 1U (100 × 100 × 113.5 mm) và độ chắc chắn của ngăn xếp bo.</li>
+      <li>Chụp ảnh sản phẩm hoàn thiện từ nhiều góc làm minh chứng nộp cho giảng viên.</li>
+    </ul>
+  </div> : null;
+
   return <div className="player-layout">
     <CourseSidebar labs={catalog} currentLabId={lab.id} activeLesson={lesson.id} onSelectLesson={selectLesson} progress={progress} userRole={user?.role} />
     <div className="player-main" ref={mainRef}>
-      <TelemetryControls />
-      <div className="lab-mobile-lessons lab-mobile-lessons--curriculum">
+      {lab.id !== 0 && <TelemetryControls />}
+      {lab.id === 0 ? <nav className="lab-mobile-lessons" aria-label="Nội dung Lab 0">
+        {lessons.map(item => <button key={item.id} type="button" className={lesson.id === item.id ? 'active' : ''} aria-current={lesson.id === item.id ? 'page' : undefined} onClick={() => selectLesson(item.id)}>{item.title}</button>)}
+      </nav> : <div className="lab-mobile-lessons lab-mobile-lessons--curriculum">
         <label htmlFor={`lab-${lab.id}-lesson`}>Nội dung Lab {lab.id} · {lessons.length} phần</label>
         <select id={`lab-${lab.id}-lesson`} value={lesson.id} onChange={event => selectLesson(event.target.value)}>
           {lessons.map((item, index) => <option key={item.id} value={item.id}>{index + 1}. {item.label} · {item.exerciseCode || item.title}</option>)}
         </select>
-      </div>
+      </div>}
 
-      <div className="lab-course-view animate-fadeInUp" key={`${lab.id}:${lesson.id}`}>
-        <LabStateTitle lab={lab} lesson={lesson} position={lessonIndex + 1} />
-        <section className="lesson-progress-panel" aria-label="Tiến độ Lab">
-          <div className="lesson-progress-heading"><div><strong>Tiến độ Lab {lab.id}</strong><small>{completedCount}/{sequentialLessons.length} bài học đã hoàn thành (không tính phần câu hỏi)</small></div><b>{completionPercent}%</b></div>
-          <div className="lesson-progress-track"><span style={{ width: `${completionPercent}%` }} /></div>
-        </section>
-        {lesson.type === 'video' && <>
-          <section className="lab-workspace lab-video-workspace" aria-label={`${lesson.label}: ${lesson.title}`}>
-            <span className="lab-workspace-badge lab-play-badge" aria-hidden="true">▶</span>
-            <div className="lab-video-surface"><VideoPlayer url={videoUrl} /></div>
-          </section>
-          <section className="lesson-reading-card"><h2>Mục tiêu Lab {lab.id}</h2><p>{lab.description}</p><p>Nội dung phần này: {lesson.title}.</p></section>
-        </>}
-        {lesson.type === 'document' && <section className="lab-workspace lab-doc-workspace" aria-label={`${lesson.label}: ${lesson.title}`}>
-          <span className="lab-workspace-badge" aria-hidden="true">▤</span>
-          <div className="lab-doc-surface"><DocViewer key={lesson.id} docPath={lab.id === 0 && lesson.id === 'document' ? lab.docPath : undefined} content={lesson.reading} /></div>
-        </section>}
-        {lesson.type === 'quiz' && !lesson.checkpointId && <section className="lesson-reading-card" aria-label={`${lesson.label}: ${lesson.title}`}>
-          <h2>{lesson.title}</h2>
-          <p>Câu hỏi kiểm tra của mục này đang được biên soạn. Đáp án chỉ lưu trên máy chủ và sẽ mở khi ngân hàng câu hỏi được duyệt.</p>
-        </section>}
-        {lesson.type === 'components' && <section className="lab-workspace lab-components-workspace" aria-label="Khám phá các phân hệ CubeSat">{visualizationPanel}</section>}
-        {lesson.type === 'practice' && <>
-          <section className="lesson-practice-brief" aria-label="Yêu cầu bài thực hành">
-            <div><h2>Yêu cầu thực hành</h2><p>{lesson.title}.</p></div>
-            <div className="lesson-example-links"><a href={lesson.repositoryUrl} target="_blank" rel="noreferrer">Hướng dẫn trên PTITCube ↗</a><button type="button" className="btn btn-sm btn-outline" disabled={downloading} onClick={downloadExample}>{downloading ? 'Đang tải mã mẫu…' : 'Tải mã mẫu ESP32 (.ino)'}</button>{downloadError && <small role="alert">{downloadError}</small>}</div>
-          </section>
-          <section className={`lab-workspace lab-practice-workspace lab-practice-workspace--${practiceVariant}`} aria-label={`Không gian thực hành ${lesson.exerciseCode}`}>
-            <div className={`lab-practice-panels lab-practice-panels--${practiceVariant}`}>
-              <div className="lab-practice-editor">
-                <div className="lab-practice-editor-frame">{scopedEditor}</div>
-                {practiceVariant !== 'split' && <div className="lab-practice-actions lab-practice-actions--inline" aria-label="Thao tác thực hành" key={lesson.id}>{practiceActions}</div>}
-              </div>
-              <div className="lab-practice-visualization"><PracticeVisualization /></div>
-            </div>
-            {practiceVariant === 'split' && <div className="lab-practice-actions" aria-label="Thao tác thực hành" key={lesson.id}>{practiceActions}</div>}
-          </section>
-        </>}
-        {lesson.type === 'summary' && <section className="lesson-reading-card">
-          <h2>Kết quả cần đạt</h2><p>{lesson.description}</p>
-          <h2>Đối chiếu các bài thực hành</h2><p>Kiểm tra mã biên dịch, lưu lại kết quả quan sát và giải thích cách chương trình đáp ứng yêu cầu của từng bài.</p>
-          <ul className="lesson-summary-list">{lessons.filter(item => item.type === 'practice').map(item => <li key={item.id}><button type="button" onClick={() => selectLesson(item.id)}><code>{item.exerciseCode}</code><span>{item.title}</span></button></li>)}</ul>
-          <p>Lưu mã .ino, file Blockly và kết quả kiểm thử để đưa vào báo cáo Lab {lab.id}.</p>
-          <h2>Câu hỏi kiểm tra</h2>
-          <p>Ôn lại kiến thức sau mỗi phần Doc và mỗi nhóm bài thực hành của Lab {lab.id}, sau đó làm Lab Test cuối Lab.</p>
-          <div className="lesson-example-links">
-            {labTestLesson && <button type="button" className="btn btn-sm btn-primary" onClick={() => selectLesson(labTestLesson.id)}>Làm Lab Test cuối Lab {lab.id} →</button>}
-            <Link className="btn btn-sm btn-outline lesson-questions-link" to={`/lab${lab.id}/questions`}>Xem tất cả câu hỏi của Lab {lab.id}</Link>
-          </div>
-        </section>}
-        {lesson.type === 'quiz' && lesson.checkpointId && <section className="lesson-reading-card lesson-quiz" aria-label={lesson.title}>
-          {checkpoint ? <CheckpointCard as="div" checkpoint={checkpoint}
-            renderExercise={id => <button type="button" className="lesson-quiz-exercise" onClick={() => selectLesson(id)}><code>{id}</code></button>} />
-            : <p>Chưa có nội dung cho phần câu hỏi này.</p>}
-          <p className="lesson-quiz-note">Phần câu hỏi dùng để ôn tập, không tính vào tiến độ và không khóa bài tiếp theo.</p>
-        </section>}
-        {lesson.type === 'labtest' && <section className="lesson-reading-card lesson-labtest" aria-label={lesson.title}>
-          <h2>Lab Test cuối Lab {lab.id}</h2>
-          <p>Mỗi lượt làm bài gồm 5 câu chọn ngẫu nhiên từ ngân hàng 20 câu của Lab {lab.id} do giảng viên soạn và duyệt. Bài làm được chấm ở máy chủ; đáp án không hiển thị trong lúc làm bài.</p>
-          <p className="lab-questions-notice" role="status">Ngân hàng câu hỏi của Lab {lab.id} đang được soạn. Lab Test sẽ mở khi giảng viên xuất bản.</p>
-        </section>}
-        {lesson.type === 'assembly' && <section className="lesson-reading-card" aria-label={lesson.title}>
-          <h2>Yêu cầu thực hành</h2>
-          <p>{lesson.title}.</p>
-          <ul>
-            <li>Xem Video 6.2 và chuẩn bị đủ khung, bu lông, bo mạch theo danh mục của bộ kit; lắp khi đã ngắt nguồn.</li>
-            <li>Siết bu lông theo đường chéo, không siết chặt hết một cạnh trước.</li>
-            <li>Kiểm tra kích thước hoàn thiện theo chuẩn 1U (100 × 100 × 113.5 mm) và độ chắc chắn của ngăn xếp bo.</li>
-            <li>Chụp ảnh sản phẩm hoàn thiện từ nhiều góc làm minh chứng nộp cho giảng viên.</li>
-          </ul>
-        </section>}
-        <nav className="lesson-pagination" aria-label="Chuyển phần học">
-          <button type="button" disabled={lessonIndex === 0} onClick={() => selectLesson(lessons[lessonIndex - 1].id)}>← Phần trước</button>
-          <span>{lessonIndex + 1} / {lessons.length} · {LESSON_TYPE_LABELS[lesson.type]}</span>
-          <button type="button" disabled={lessonIndex === lessons.length - 1} onClick={() => selectLesson(lessons[lessonIndex + 1].id)}>Phần tiếp theo →</button>
-        </nav>
-        {isSequentialLesson(lesson) && <section className="lesson-completion">
-          <button type="button" className="btn btn-primary" disabled={!canComplete || lessonStates[lesson.id]?.completed} onClick={completeLesson}>
-            {lessonStates[lesson.id]?.completed ? '✓ Đã hoàn thành bài học' : canComplete ? 'Hoàn thành bài học' : `Đã học ${Math.floor(elapsedSeconds / 60)}:${String(elapsedSeconds % 60).padStart(2, '0')} · còn ${Math.floor(remainingSeconds / 60)}:${String(remainingSeconds % 60).padStart(2, '0')}`}
-          </button>
-          {completeError && <p role="alert">{completeError}</p>}
-        </section>}
-      </div>
+      <LabFigView
+        lab={lab} lesson={lesson} lessons={lessons} lessonIndex={lessonIndex}
+        completedCount={completedCount} totalCount={sequentialLessons.length} completionPercent={completionPercent}
+        progressNote={lessons.some(item => item.type === 'quiz') ? 'không tính phần câu hỏi' : ''}
+        videoNode={<VideoPlayer url={videoUrl} />}
+        docNode={<DocViewer key={lesson.id} docPath={lab.id === 0 && lesson.id === 'document' ? lab.docPath : undefined} content={lesson.reading} />}
+        componentsNode={visualizationPanel}
+        bodyNode={lessonBody}
+        selectLesson={selectLesson}
+        showComplete={isSequentialLesson(lesson)}
+        canComplete={canComplete} completed={Boolean(lessonStates[lesson.id]?.completed)}
+        completeLesson={completeLesson} resetLesson={resetLesson} completeError={completeError}
+        remainingSeconds={remainingSeconds}
+      />
     </div>
   </div>;
 }

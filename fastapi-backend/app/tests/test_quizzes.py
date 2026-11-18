@@ -368,7 +368,7 @@ class QuizAPITests(unittest.IsolatedAsyncioTestCase):
 
         headers = (
             (Path(__file__).resolve().parents[3] / "public/templates/question-bank.csv")
-            .read_text()
+            .read_text(encoding="utf-8-sig")
             .splitlines()[0]
             .split(",")
         )

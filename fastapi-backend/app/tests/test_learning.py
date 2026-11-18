@@ -304,6 +304,33 @@ class LegacyProgressTests(unittest.IsolatedAsyncioTestCase):
         self.assertIsNotNone(result.completed_at)
         self.db.commit.assert_awaited_once()
 
+    async def test_reset_lesson_returns_to_incomplete_and_clears_lab_completion(self):
+        old = (datetime.now(timezone.utc) - timedelta(minutes=2)).isoformat()
+        self.progress.completed_at = datetime.now(timezone.utc)
+        self.progress.lesson_progress = {
+            "first": {"started_at": old, "completed": True, "completed_at": old},
+            "second": {"started_at": old, "completed": True, "completed_at": old},
+        }
+
+        result = await self.service.reset_lesson(self.user, 0, "first")
+
+        self.assertFalse(result.lessons["first"]["completed"])
+        self.assertNotIn("completed_at", result.lessons["first"])
+        self.assertEqual(result.lessons["first"]["started_at"], old)
+        self.assertTrue(result.lessons["second"]["completed"])
+        self.assertIsNone(result.completed_at)
+        self.db.commit.assert_awaited_once()
+
+    async def test_reset_incomplete_lesson_is_noop(self):
+        self.progress.lesson_progress = {
+            "first": {"started_at": datetime.now(timezone.utc).isoformat(), "completed": False},
+        }
+
+        result = await self.service.reset_lesson(self.user, 0, "first")
+
+        self.assertFalse(result.lessons["first"]["completed"])
+        self.db.commit.assert_not_awaited()
+
     async def test_teacher_can_complete_without_waiting(self):
         self.user.role = UserRole.teacher
         self.progress.lesson_progress = {
