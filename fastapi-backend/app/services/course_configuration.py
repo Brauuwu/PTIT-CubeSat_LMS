@@ -263,7 +263,7 @@ def validate_params(lesson, params):
             valid = value in ("native", "confirmation")
         elif key in {"estimated_minutes", "time_limit_minutes", "max_attempts", "pass_score"}:
             valid = type(value) is int and 0 < value <= {
-                "pass_score": 5 if lesson.type == "labtest" else 20,
+                "pass_score": 200,
                 "time_limit_minutes": 180,
                 "max_attempts": 100,
             }.get(key, 10000)

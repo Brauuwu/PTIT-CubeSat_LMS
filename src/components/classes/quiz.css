@@ -177,6 +177,39 @@
   box-shadow: 0 0 0 1px var(--cubesat-navy), 0 4px 12px rgba(14, 165, 233, 0.12);
 }
 
+.bank-row {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.bank-list .bank-row > button:first-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.bank-list .bank-delete {
+  flex: none;
+  width: 44px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  color: #b42318;
+  border-color: #f1c9c5;
+  background: #fff;
+  cursor: pointer;
+}
+
+.bank-list .bank-delete:hover:not(:disabled) {
+  background: #fdecea;
+  border-color: #b42318;
+}
+
+.bank-list .bank-delete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .bank-list small {
   display: block;
   color: var(--text-muted);

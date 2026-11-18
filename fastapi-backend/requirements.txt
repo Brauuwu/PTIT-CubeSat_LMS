@@ -27,6 +27,7 @@ loguru==0.7.3
 
 # Utils
 httpx==0.28.1
+pypdf==5.1.0  # teacher document import (PDF to Markdown)
 pydantic[email]
 platformio==6.1.18
 filelock==3.16.1

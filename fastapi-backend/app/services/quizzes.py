@@ -36,10 +36,8 @@ from app.services.learning_progress import (
 )
 from app.services.learning_rules import lesson_version, satisfies
 from app.services.question_banks import (
-    LABTEST_QUESTIONS,
     conflict,
     invalid,
-    is_labtest,
     lesson_key,
     policy_json,
     questions,
@@ -287,7 +285,6 @@ async def start(db, access, target, request):
                     if k in lesson["params"]
                 }
             )
-            snapshot["pass_score"] = min(snapshot["pass_score"], snapshot["num_questions"])
             limit = await allowance(db, member.id, version, snapshot["max_attempts"])
             if len(rows) >= limit or any(a.revealed_at for a in rows):
                 raise LMSError(
@@ -299,15 +296,12 @@ async def start(db, access, target, request):
                 if deadline <= now():
                     raise LMSError(409, "ATTEMPT_EXPIRED", "Bài test đã đóng.")
             pool = [q for q in await questions(db, bank.id) if q.status == "approved"]
-            draw = snapshot["num_questions"]
-            if (len(pool) != LABTEST_QUESTIONS) if is_labtest(lesson["id"]) else (len(pool) < draw):
-                raise LMSError(
-                    409,
-                    "BANK_NOT_READY",
-                    f"Ngân hàng cần đúng {LABTEST_QUESTIONS} câu đã duyệt."
-                    if is_labtest(lesson["id"])
-                    else f"Ngân hàng cần ít nhất {draw} câu đã duyệt.",
-                )
+            if not pool:
+                raise LMSError(409, "BANK_NOT_READY", "Ngân hàng chưa có câu hỏi đã duyệt.")
+            # Every approved question is on the paper: the teacher decides the size by what they add.
+            draw = len(pool)
+            snapshot["num_questions"] = draw
+            snapshot["pass_score"] = min(snapshot["pass_score"], draw)
             attempt = QuizAttempt(
                 id=uid(),
                 class_id=access.classroom.id,

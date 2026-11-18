@@ -131,7 +131,7 @@ export default function App() {
         <Route path="/classes" element={<ClassesPage />} />
         <Route path="/classes/lab:labId" element={<LegacyLabAliasRedirect />} />
         <Route path="/classes/:classId" element={<ClassDetailPage />} />
-        <Route element={<LmsLayout roles={['admin', 'teacher']} />}>
+        <Route element={<LmsLayout nested roles={['admin', 'teacher']} />}>
           <Route path="/classes/:classId/curriculum" element={<ClassCurriculumPage />} />
           <Route path="/classes/:classId/labs/:labId/questions" element={<QuestionBankPage />} />
           <Route path="/classes/:classId/lessons/:lessonId/questions" element={<QuestionBankPage />} />

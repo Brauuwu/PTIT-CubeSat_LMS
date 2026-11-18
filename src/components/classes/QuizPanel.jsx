@@ -20,7 +20,6 @@ export default function QuizPanel({ classId, labId, lessonId = null, title = '',
   const base = lessonId
     ? `/api/classes/${classId}/lessons/${encodeURIComponent(lessonId)}/attempts`
     : `/api/classes/${classId}/labs/${labId}/attempts`;
-  const draw = policySummary.num_questions || 5;
   const cacheKey = useCallback(id => quizCacheKey(user.id, classId, id, tabId), [user.id, classId, tabId]);
   const persist = useCallback(() => {
     const current = state.current;
@@ -147,11 +146,11 @@ export default function QuizPanel({ classId, labId, lessonId = null, title = '',
   const selections = { ...attempt?.answers, ...dirty };
   return <section className="quiz-panel" aria-label={lessonId ? `Câu hỏi ${title || lessonId}` : `Bài kiểm tra Lab ${labId}`}>
     <Notice {...notice} />
-    {!attempt && <><h3>{lessonId ? (title || 'Câu hỏi kiểm tra') : `Kiểm tra cuối Lab ${labId}`}</h3><p>Đề gồm {draw} câu, thời gian {policySummary.time_limit_minutes} phút, đạt từ {policySummary.pass_score}/{draw} điểm. Số lượt tiêu chuẩn: {policySummary.max_attempts}.</p><p>Thời gian bắt đầu tính ngay khi bạn mở đề; tải lại trang sẽ giữ nguyên lượt thi.</p><button className="lms-primary" onClick={start} disabled={busy}>Bắt đầu làm bài</button></>}
+    {!attempt && <><h3>{lessonId ? (title || 'Câu hỏi kiểm tra') : `Kiểm tra cuối Lab ${labId}`}</h3><p>Đề gồm toàn bộ câu hỏi giáo viên đã duyệt, thời gian {policySummary.time_limit_minutes} phút, đạt từ {policySummary.pass_score} câu đúng. Số lượt tiêu chuẩn: {policySummary.max_attempts}.</p><p>Thời gian bắt đầu tính ngay khi bạn mở đề; tải lại trang sẽ giữ nguyên lượt thi.</p><button className="lms-primary" onClick={start} disabled={busy}>Bắt đầu làm bài</button></>}
     {attempt && <>
-      <div className="quiz-status"><div><strong>Lượt {attempt.number}</strong><p>Đạt từ {attempt.policy.pass_score}/5 · Còn {attempt.remaining_attempts} lượt sau lượt này</p></div>
+      <div className="quiz-status"><div><strong>Lượt {attempt.number}</strong><p>Đạt từ {attempt.policy.pass_score}/{attempt.items.length} · Còn {attempt.remaining_attempts} lượt sau lượt này</p></div>
         {active ? <div><strong className="quiz-clock" aria-label="Thời gian còn lại">{Math.floor(seconds / 60)}:{String(seconds % 60).padStart(2, '0')}</strong><p role="status">{Object.keys(dirty).length ? 'Đang chờ lưu…' : 'Đã lưu trên server'}</p></div>
-          : <div><strong className="quiz-score">{attempt.score}/5</strong><p>{attempt.passed ? 'Đã đạt' : 'Chưa đạt'} · Cao nhất {attempt.highest_score}/5</p></div>}
+          : <div><strong className="quiz-score">{attempt.score}/{attempt.items.length}</strong><p>{attempt.passed ? 'Đã đạt' : 'Chưa đạt'} · Cao nhất {attempt.highest_score}/{attempt.items.length}</p></div>}
       </div>
       {conflict && <div className="lms-confirm"><p>Giữ lựa chọn vừa sửa trên thiết bị này hay tải lựa chọn đã lưu từ tab khác?</p><div className="lms-actions"><button disabled={busy} onClick={() => resolve(true)}>Giữ lựa chọn trên thiết bị</button><button disabled={busy} onClick={() => resolve(false)}>Dùng bản đã lưu trên server</button></div></div>}
       {!active && <p>{attempt.status === 'expired' ? 'Hết thời gian làm bài. ' : ''}{attempt.revealed ? 'Đáp án được công bố theo cấu hình của giảng viên.' : 'Đáp án và giải thích chưa được công bố.'}</p>}
@@ -254,7 +253,7 @@ export default function QuizPanel({ classId, labId, lessonId = null, title = '',
           {item.explanation && <div className="quiz-explanation"><p>{item.explanation}</p><small>Nguồn: {item.source_reference}</small></div>}
         </fieldset>;
       })}
-      {active ? <div className="quiz-footer"><p>Đã chọn {Object.keys(selections).length}/5 câu. Hết giờ, server chấm phần đã lưu.</p><button className="lms-primary" disabled={busy || conflict || seconds === 0} onClick={submit}>{busy ? 'Đang nộp…' : 'Nộp bài'}</button></div>
+      {active ? <div className="quiz-footer"><p>Đã chọn {Object.keys(selections).length}/{attempt.items.length} câu. Hết giờ, server chấm phần đã lưu.</p><button className="lms-primary" disabled={busy || conflict || seconds === 0} onClick={submit}>{busy ? 'Đang nộp…' : 'Nộp bài'}</button></div>
         : <div className="lms-actions"><button disabled={busy} onClick={() => resolve(false)}>Cập nhật kết quả</button>{attempt.remaining_attempts > 0 && !attempt.revealed && <button onClick={start} disabled={busy}>Làm lượt tiếp theo</button>}</div>}
     </>}
   </section>;

@@ -17,8 +17,8 @@ const QUESTION_TYPE_LABELS = {
 const bankBase = (classId, labId, lessonId) => lessonId
   ? `/api/classes/${classId}/lessons/${encodeURIComponent(lessonId)}`
   : `/api/classes/${classId}/labs/${labId}`;
-const bankNeed = bank => bank.required_questions || 20;
-const bankReady = bank => (bank.kind === 'quiz' ? bank.approved_count >= bankNeed(bank) : bank.approved_count === bankNeed(bank));
+const bankNeed = bank => bank.required_questions || 1;
+const bankReady = bank => bank.approved_count >= bankNeed(bank);
 const bankTitle = (bank, labId) => (bank.kind === 'quiz' ? `Câu hỏi ${bank.lesson_id}` : `Ngân hàng Lab ${labId}`);
 const bankPage = (classId, labId, lessonId) => `/classes/${classId}/${lessonId ? `lessons/${encodeURIComponent(lessonId)}` : `labs/${labId}`}/questions`;
 
@@ -123,7 +123,6 @@ export function BankEditor({ initial, classId, labId, lessonId = null, reload, i
   const [reason, setReason] = useState('');
   const [retire, setRetire] = useState('');
   const [questionFile, setQuestionFile] = useState(null);
-  const [answerFile, setAnswerFile] = useState(null);
   const guard = useRef(false);
   const base = bankBase(classId, labId, lessonId);
   const url = base + '/question-bank';
@@ -181,6 +180,12 @@ export function BankEditor({ initial, classId, labId, lessonId = null, reload, i
     if (result) select(null);
   }
 
+  async function removeQuestion(q, index) {
+    if (!window.confirm(`Xóa câu ${index + 1}? Hành động này không thể hoàn tác.`)) return;
+    const result = await mutate(`${url}/questions/${q.id}`, { expected_revision: bank.revision }, 'DELETE');
+    if (result && selected === q.id) select(null);
+  }
+
   async function review(status) {
     if (edited) { setNotice({ error: 'Lưu nội dung đang sửa trước khi duyệt.' }); return; }
     const result = await mutate(`${url}/questions/${selected}/review`, { expected_revision: bank.revision, status });
@@ -211,15 +216,7 @@ export function BankEditor({ initial, classId, labId, lessonId = null, reload, i
   async function importFile(event) {
     event.preventDefault();
     if (!questionFile || questionFile.size > 1000000) {
-      setNotice({ error: 'Chọn File câu hỏi tối đa 1 MB (.csv hoặc .xlsx).' });
-      return;
-    }
-    if (!answerFile) {
-      setNotice({ error: 'Cần chọn File đáp án (.csv hoặc .xlsx).' });
-      return;
-    }
-    if (answerFile.size > 1000000) {
-      setNotice({ error: 'Chọn File đáp án tối đa 1 MB (.csv hoặc .xlsx).' });
+      setNotice({ error: 'Chọn file câu hỏi tối đa 1 MB (.csv hoặc .xlsx).' });
       return;
     }
     const qPayload = await readImportFile(questionFile);
@@ -228,13 +225,9 @@ export function BankEditor({ initial, classId, labId, lessonId = null, reload, i
       format: qPayload.format,
       content: qPayload.content,
     };
-    const aPayload = await readImportFile(answerFile);
-    body.answer_format = aPayload.format;
-    body.answer_content = aPayload.content;
     const result = await mutate(url + '/import', body);
     if (result) {
       setQuestionFile(null);
-      setAnswerFile(null);
     }
   }
 
@@ -243,13 +236,13 @@ export function BankEditor({ initial, classId, labId, lessonId = null, reload, i
 
   return <div className={inline ? 'lms-inline-bank' : ''}>
     {!inline && <>
-      <header className="lms-heading"><div><h1>{bankTitle(bank, labId)}</h1><p>Phiên bản {bank.version} · {labels[bank.status]} · {bank.approved_count}/{bankNeed(bank)} câu đã duyệt</p></div><Link to={`/classes/${classId}/curriculum`}>Cấu hình chương trình</Link></header>
+      <header className="lms-heading"><div><h1>{bankTitle(bank, labId)}</h1><p>Phiên bản {bank.version} · {labels[bank.status]} · {bank.approved_count} câu đã duyệt</p></div><Link to={`/classes/${classId}/curriculum`}>Cấu hình chương trình</Link></header>
       {!lessonId && <nav className="lms-actions" aria-label="Ngân hàng theo lab">{Array.from({ length: 9 }, (_, id) => <Link key={id} aria-current={id === Number(labId) ? 'page' : undefined} to={`/classes/${classId}/labs/${id}/questions`}>Lab {id}</Link>)}</nav>}
     </>}
     {inline && <div className="lms-heading" style={{ margin: '12px 0' }}>
       <div>
         <strong>{bank.kind === 'quiz' ? bankTitle(bank, labId) : `Ngân hàng câu hỏi Lab ${labId}`}</strong>
-        <span className="lms-secondary">Phiên bản {bank.version} · {labels[bank.status]} · <strong>{bank.approved_count}/{bankNeed(bank)}</strong> câu đã duyệt (tổng {bank.questions.length} câu)</span>
+        <span className="lms-secondary">Phiên bản {bank.version} · {labels[bank.status]} · <strong>{bank.approved_count}</strong> câu đã duyệt (tổng {bank.questions.length} câu)</span>
       </div>
       <Link to={bankPage(classId, labId, lessonId)}>Mở trang ngân hàng đầy đủ</Link>
     </div>}
@@ -263,11 +256,11 @@ export function BankEditor({ initial, classId, labId, lessonId = null, reload, i
       )}
       {draft && (
         <button type="button" className="lms-primary" disabled={busy || !bankReady(bank)} onClick={() => mutate(url + '/publish', { expected_revision: bank.revision })}>
-          Xuất bản các câu đã duyệt ({bank.approved_count}/{bankNeed(bank)})
+          Xuất bản {bank.approved_count} câu đã duyệt
         </button>
       )}
     </div>
-    <p>{bank.kind === 'quiz' ? `Mỗi lượt rút ngẫu nhiên ${bank.policy.num_questions} câu từ các câu đã duyệt (cần ít nhất ${bankNeed(bank)} câu).` : 'Mỗi đề thi rút ngẫu nhiên 5 câu từ 20 câu đã duyệt.'} Hỗ trợ 4 dạng câu hỏi theo đề mẫu (1 đáp án, nhiều đáp án, Đúng/Sai 4 ý a-b-c-d, trả lời ngắn).</p>
+    <p>Mỗi lượt làm bài gồm toàn bộ các câu đã duyệt (xáo trộn thứ tự), giảng viên thêm bao nhiêu câu thì sinh viên làm bấy nhiêu câu; cần ít nhất 1 câu đã duyệt. Hỗ trợ 4 dạng câu hỏi theo đề mẫu (1 đáp án, nhiều đáp án, Đúng/Sai 4 ý a-b-c-d, trả lời ngắn).</p>
     {!draft && <form className="lms-panel" onSubmit={async event => { event.preventDefault(); const result = await mutate(url + '/fork', { expected_revision: bank.revision, reason, retire_question_id: retire || null }); if (result) select(null); }}>
       <h2>Tạo phiên bản sửa</h2><p>Lượt đang làm và kết quả cũ giữ nguyên. Thu hồi câu sẽ tạm ngừng cấp đề mới cho đến khi xuất bản bản sửa.</p>
       <div className="lms-form-grid"><label>Câu cần thu hồi (nếu có)<select value={retire} onChange={event => setRetire(event.target.value)}><option value="">Chỉ tạo phiên bản mới</option>{bank.questions.map(q => <option key={q.id} value={q.question_id}>{q.prompt.slice(0, 100)}</option>)}</select></label><label>Lý do<textarea required minLength={5} maxLength={1000} value={reason} onChange={event => setReason(event.target.value)} /></label></div><button disabled={busy}>Tạo bản sửa</button>
@@ -278,10 +271,15 @@ export function BankEditor({ initial, classId, labId, lessonId = null, reload, i
         {draft && <button type="button" disabled={busy} onClick={() => select(null)}>+ Thêm câu hỏi mới</button>}
         <div className="bank-list">
           {bank.questions.map((q, index) => (
-            <button type="button" key={q.id} aria-current={selected === q.id ? 'true' : undefined} onClick={() => select(q)}>
-              <small>Câu {index + 1} · {QUESTION_TYPE_LABELS[q.question_type || 'single_choice']} · {labels[q.status]}</small>
-              {q.prompt}
-            </button>
+            <div className="bank-row" key={q.id}>
+              <button type="button" aria-current={selected === q.id ? 'true' : undefined} onClick={() => select(q)}>
+                <small>Câu {index + 1} · {QUESTION_TYPE_LABELS[q.question_type || 'single_choice']} · {labels[q.status]}</small>
+                {q.prompt}
+              </button>
+              {draft && <button type="button" className="bank-delete" disabled={busy} title="Xóa câu hỏi" aria-label={`Xóa câu ${index + 1}`} onClick={() => removeQuestion(q, index)}>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 6h18" /><path d="M8 6V4h8v2" /><path d="M19 6l-1 14H6L5 6" /><path d="M10 11v6M14 11v6" /></svg>
+              </button>}
+            </div>
           ))}
         </div>
         {!bank.questions.length && <p>Ngân hàng trống. Thêm câu hỏi trực tiếp bên phải hoặc nhập từ tệp đề mẫu bên dưới.</p>}
@@ -409,43 +407,36 @@ export function BankEditor({ initial, classId, labId, lessonId = null, reload, i
     </div>
 
     {draft && <section className="lms-panel">
-      <h2>Nhập từ File câu hỏi & File đáp án tách riêng</h2>
+      <h2>Nhập từ file câu hỏi (đã gồm đáp án và giải thích)</h2>
       <p className="lms-import-head">
-        <strong>Mẫu File câu hỏi:</strong>{' '}
+        <strong>Mẫu file (đã gồm đáp án đúng và giải thích từng đáp án):</strong>{' '}
         <a href="/templates/question-bank.csv" download>File câu hỏi mẫu (.csv)</a>
         {' · '}
         <a href="/templates/question-bank.xlsx" download>File câu hỏi mẫu (.xlsx)</a>
-        {' | '}
-        <strong>Mẫu File đáp án (tách riêng):</strong>{' '}
-        <a href="/templates/answer-template.xlsx" download>File đáp án mẫu (.xlsx)</a> ·{' '}
-        <a href="/templates/answer-template.csv" download>File đáp án mẫu (.csv)</a>
+        
       </p>
       <form className="lms-filters" onSubmit={importFile}>
         <label>
-          1. File câu hỏi (.csv hoặc .xlsx)
+          File câu hỏi gộp đáp án và giải thích (.csv hoặc .xlsx)
           <input type="file" accept=".xlsx,.csv" onChange={event => setQuestionFile(event.target.files?.[0] || null)} required />
-        </label>
-        <label>
-          2. File đáp án (.csv hoặc .xlsx, bắt buộc)
-          <input type="file" accept=".xlsx,.csv" onChange={event => setAnswerFile(event.target.files?.[0] || null)} required />
         </label>
         <button className="lms-primary" disabled={busy || !questionFile}>Kiểm tra và nhập câu hỏi</button>
       </form>
     </section>}
     {!inline && <>
-      <PolicyForm key={bank.policy.revision} initial={bank.policy} kind={bank.kind} busy={busy} onSave={value => mutate(base + '/quiz-policy', value, 'PUT')} />
+      <PolicyForm key={bank.policy.revision} initial={bank.policy} busy={busy} onSave={value => mutate(base + '/quiz-policy', value, 'PUT')} />
       {bank.ai_available && draft && <GenerationForm classId={classId} labId={labNo} revision={bank.revision} url={url} busy={busy} mutate={mutate} onReload={reload} />}
       <TeacherResults base={base} />
     </>}
   </div>;
 }
 
-function PolicyForm({ initial, busy, onSave, kind = 'labtest' }) {
+function PolicyForm({ initial, busy, onSave }) {
   const [value, setValue] = useState(initial);
   const [close, setClose] = useState(initial.closes_at ? new Date(Date.parse(initial.closes_at) - new Date(initial.closes_at).getTimezoneOffset() * 60000).toISOString().slice(0, 16) : '');
   return <details className="lms-panel"><summary><h2>Chính sách bài test</h2></summary><p>Áp dụng cho lượt mới. Tham số riêng trong cấu hình chương trình đã xuất bản được ưu tiên. Các lượt đang thi giữ chính sách ban đầu.</p>
     <form onSubmit={event => { event.preventDefault(); const { revision, ...fields } = value; onSave({ ...fields, expected_revision: revision, closes_at: close ? new Date(close).toISOString() : null }); }}><div className="lms-form-grid">
-      {[['time_limit_minutes', 'Thời gian (phút)', 180], ...(kind === 'quiz' ? [['num_questions', 'Số câu mỗi lượt', 20]] : []), ['pass_score', `Điểm đạt / ${kind === 'quiz' ? value.num_questions : 5}`, kind === 'quiz' ? value.num_questions : 5], ['max_attempts', 'Số lượt tối đa', 100]].map(([key, label, max]) => <label key={key}>{label}<input type="number" min={1} max={max} required value={value[key]} onChange={event => setValue(current => ({ ...current, [key]: Number(event.target.value) }))} /></label>)}
+      {[['time_limit_minutes', 'Thời gian (phút)', 180], ['pass_score', 'Số câu đúng tối thiểu để đạt', 200], ['max_attempts', 'Số lượt tối đa', 100]].map(([key, label, max]) => <label key={key}>{label}<input type="number" min={1} max={max} required value={value[key]} onChange={event => setValue(current => ({ ...current, [key]: Number(event.target.value) }))} /></label>)}
       <label>Công bố đáp án<select value={value.reveal_policy} onChange={event => setValue(current => ({ ...current, reveal_policy: event.target.value }))}><option value="after_attempts">Sau khi hết lượt</option><option value="after_close">Sau khi đóng bài test</option><option value="immediate">Ngay sau nộp (không thi lại sau khi xem)</option><option value="never">Không công bố</option></select></label>
       <label>Đóng bài test (giờ địa phương)<input type="datetime-local" value={close} required={value.reveal_policy === 'after_close'} onChange={event => setClose(event.target.value)} /></label>
     </div><button disabled={busy}>Lưu chính sách</button></form></details>;
@@ -491,7 +482,6 @@ export function InlineQuestionBank({ classId, labId, lessonId = null, onPublishe
   const url = bankBase(classId, labId, lessonId) + '/question-bank';
   const { data: bank, loading, error, reload } = useLmsResource(url);
   const [questionFile, setQuestionFile] = useState(null);
-  const [answerFile, setAnswerFile] = useState(null);
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState({});
 
@@ -504,15 +494,7 @@ export function InlineQuestionBank({ classId, labId, lessonId = null, onPublishe
   async function handleImport(event) {
     event.preventDefault();
     if (!questionFile || questionFile.size > 1000000) {
-      setNotice({ error: 'Chọn File câu hỏi tối đa 1 MB (.csv hoặc .xlsx).' });
-      return;
-    }
-    if (!answerFile) {
-      setNotice({ error: 'Cần chọn File đáp án (.csv hoặc .xlsx).' });
-      return;
-    }
-    if (answerFile.size > 1000000) {
-      setNotice({ error: 'Chọn File đáp án tối đa 1 MB (.csv hoặc .xlsx).' });
+      setNotice({ error: 'Chọn file câu hỏi tối đa 1 MB (.csv hoặc .xlsx).' });
       return;
     }
     setBusy(true);
@@ -524,12 +506,8 @@ export function InlineQuestionBank({ classId, labId, lessonId = null, onPublishe
         format: qPayload.format,
         content: qPayload.content,
       };
-      const aPayload = await readImportFile(answerFile);
-      body.answer_format = aPayload.format;
-      body.answer_content = aPayload.content;
       await request(url + '/import', { method: 'POST', body: JSON.stringify(body) });
       setQuestionFile(null);
-      setAnswerFile(null);
       setNotice({ message: 'Đã thêm câu hỏi từ file vào ngân hàng.' });
       reload();
     } catch (err) {
@@ -586,16 +564,13 @@ export function InlineQuestionBank({ classId, labId, lessonId = null, onPublishe
         <div>
           <strong>Thêm file câu hỏi & đáp án ({lessonId ? lessonId : `Lab Test ${labId}`})</strong>
           <span className="lms-secondary">
-            Phiên bản {bank.version} · {labels[bank.status]} · Đã duyệt <strong>{bank.approved_count}/{bankNeed(bank)}</strong> câu (tổng {bank.questions.length} câu)
+            Phiên bản {bank.version} · {labels[bank.status]} · Đã duyệt <strong>{bank.approved_count}</strong> câu (tổng {bank.questions.length} câu)
           </span>
           <span className="lms-secondary">
-            <strong>Mẫu File câu hỏi:</strong>{' '}
+            <strong>Mẫu file (đã gồm đáp án đúng và giải thích từng đáp án):</strong>{' '}
             <a href="/templates/question-bank.csv" download>File câu hỏi (.csv)</a> ·{' '}
             <a href="/templates/question-bank.xlsx" download>File câu hỏi (.xlsx)</a>
-            {' | '}
-            <strong>Mẫu File đáp án:</strong>{' '}
-            <a href="/templates/answer-template.xlsx" download>File đáp án (.xlsx)</a> ·{' '}
-            <a href="/templates/answer-template.csv" download>File đáp án (.csv)</a>
+            
           </span>
         </div>
         <div className="lms-actions">
@@ -609,12 +584,8 @@ export function InlineQuestionBank({ classId, labId, lessonId = null, onPublishe
         <>
           <form className="lms-filters" onSubmit={handleImport} style={{ marginTop: '12px' }}>
             <label>
-              1. File câu hỏi (.csv hoặc .xlsx)
+              File câu hỏi gộp đáp án và giải thích (.csv hoặc .xlsx)
               <input type="file" accept=".xlsx,.csv" onChange={event => setQuestionFile(event.target.files?.[0] || null)} required />
-            </label>
-            <label>
-              2. File đáp án tách riêng (.csv hoặc .xlsx, bắt buộc)
-              <input type="file" accept=".xlsx,.csv" onChange={event => setAnswerFile(event.target.files?.[0] || null)} required />
             </label>
             <button className="lms-primary" disabled={busy || !questionFile}>Thêm file câu hỏi</button>
           </form>
@@ -631,7 +602,7 @@ export function InlineQuestionBank({ classId, labId, lessonId = null, onPublishe
                 disabled={busy || !bankReady(bank)}
                 onClick={publishBank}
               >
-                Xuất bản các câu đã duyệt ({bank.approved_count}/{bankNeed(bank)})
+                Xuất bản {bank.approved_count} câu đã duyệt
               </button>
             </div>
           )}

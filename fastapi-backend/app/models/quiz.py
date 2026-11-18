@@ -67,9 +67,8 @@ class QuizPolicy(Base):
     __tablename__ = "quiz_policies"
     __table_args__ = (
         CheckConstraint(
-            "num_questions BETWEEN 1 AND 20 AND pass_score BETWEEN 1 AND num_questions"
-            " AND time_limit_minutes BETWEEN 1 AND 180 AND max_attempts BETWEEN 1 AND 100"
-            " AND (lesson_id NOT LIKE 'labtest-%' OR num_questions = 5)",
+            "num_questions BETWEEN 1 AND 200 AND pass_score BETWEEN 1 AND 200"
+            " AND time_limit_minutes BETWEEN 1 AND 180 AND max_attempts BETWEEN 1 AND 100",
             name="ck_quiz_policy",
         ),
     )

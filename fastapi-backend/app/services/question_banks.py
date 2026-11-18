@@ -27,9 +27,6 @@ def uid():
     return str(uuid4())
 
 
-LABTEST_QUESTIONS = 20  # bank size a Lab Test needs; each attempt draws 5 of them
-
-
 def lesson_key(target):
     """Bank key: an int lab id means that lab's Lab Test, a string is a lesson id."""
     return f"labtest-{target}" if isinstance(target, int) else target
@@ -40,8 +37,8 @@ def is_labtest(key):
 
 
 def required_questions(key, policy):
-    """Approved questions a bank must hold before it can be published."""
-    return LABTEST_QUESTIONS if is_labtest(key) else policy.num_questions
+    """Approved questions a bank must hold before it can be published (every attempt uses them all)."""
+    return 1
 
 
 def conflict():
@@ -310,15 +307,11 @@ async def publish(db, access, target, request):
     policy = await db.get(QuizPolicy, (access.classroom.id, bank.lesson_id))
     approved = [q for q in await questions(db, bank.id) if q.status == "approved"]
     need = required_questions(bank.lesson_id, policy)
-    exact = is_labtest(bank.lesson_id)
-    # Lab Test needs exactly 20 approved questions; a lesson quiz needs at least one per draw.
-    if len(approved) != need if exact else len(approved) < need:
+    if len(approved) < need:
         raise LMSError(
             409,
             "BANK_NOT_READY",
-            f"Cần đúng {need} câu đã được giảng viên duyệt."
-            if exact
-            else f"Cần ít nhất {need} câu đã được giảng viên duyệt.",
+            "Cần ít nhất 1 câu hỏi đã được giảng viên duyệt.",
             {"approved_count": len(approved), "required": need},
         )
     validate_distinct([], [q.content for q in approved])
@@ -401,8 +394,6 @@ async def update_policy(db, access, target, request):
     policy = await db.get(QuizPolicy, (access.classroom.id, key))
     if not policy or policy.revision != request.expected_revision:
         conflict()
-    if is_labtest(key) and request.num_questions != 5:
-        invalid("Lab Test luôn rút đúng 5 câu mỗi lượt.")
     for field, value in request.model_dump(exclude={"expected_revision"}).items():
         setattr(policy, field, value)
     policy.revision += 1

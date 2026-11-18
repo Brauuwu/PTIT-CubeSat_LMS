@@ -35,12 +35,12 @@ function NativeVideo({ url, initialPosition, onSegment }) {
     onPlaying={() => { last.current = { position: player.current.currentTime, clock: performance.now() }; }}
     onTimeUpdate={sample} onSeeking={() => { flush(); last.current = null; }}
     onPause={() => { flush(); last.current = null; }} onEnded={flush}
-    style={{ width: '100%', maxHeight: 520, background: '#0f172a' }} />;
+    style={{ width: '100%', aspectRatio: '16 / 9', objectFit: 'contain', background: '#0f172a' }} />;
 }
 
 export default function VideoPlayer({ url, initialPosition = 0, onSegment = undefined, trackingMode = 'native' }) {
   if (!url) return <div className="video-player"><div className="video-placeholder"><span>Video bài giảng sẽ được cập nhật</span></div></div>;
   const native = /\.(mp4|webm|ogg|ogv)(?:\?|#|$)/i.test(url);
-  if (native) return <NativeVideo url={url} initialPosition={initialPosition} onSegment={trackingMode === 'native' ? onSegment : undefined} />;
+  if (native) return <div className="video-player"><NativeVideo url={url} initialPosition={initialPosition} onSegment={trackingMode === 'native' ? onSegment : undefined} /></div>;
   return <div className="video-player"><iframe src={url} title="Video bài giảng" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen /></div>;
 }

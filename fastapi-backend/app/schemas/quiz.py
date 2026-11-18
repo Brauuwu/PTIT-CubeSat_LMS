@@ -165,10 +165,10 @@ class ImportInput(RevisionInput):
 
 
 class PolicyInput(RevisionInput):
-    # Lab Test policies are pinned to 5 by the service; per-lesson quizzes may use 1..20.
-    num_questions: int = Field(default=5, ge=1, le=20)
+    # Kept for compatibility; attempts always use every approved question.
+    num_questions: int = Field(default=5, ge=1, le=200)
     time_limit_minutes: int = Field(default=10, ge=1, le=180)
-    pass_score: int = Field(default=4, ge=1, le=20)
+    pass_score: int = Field(default=4, ge=1, le=200)
     max_attempts: int = Field(default=3, ge=1, le=100)
     score_rule: Literal["highest"] = "highest"
     reveal_policy: Literal["after_attempts", "after_close", "immediate", "never"] = "after_attempts"
@@ -180,8 +180,6 @@ class PolicyInput(RevisionInput):
             raise ValueError("Thời điểm đóng cần múi giờ.")
         if self.reveal_policy == "after_close" and self.closes_at is None:
             raise ValueError("Cần thời điểm đóng đợt kiểm tra.")
-        if self.pass_score > self.num_questions:
-            raise ValueError("Số câu đúng để đạt không được vượt quá số câu mỗi lượt.")
         return self
 
 
@@ -191,7 +189,7 @@ class StartInput(InputModel):
 
 class AnswersInput(StartInput):
     expected_revision: int = Field(ge=0)
-    answers: dict[str, str] = Field(max_length=20)
+    answers: dict[str, str] = Field(max_length=200)
 
 
 class GrantInput(StartInput):

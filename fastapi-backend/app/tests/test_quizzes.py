@@ -51,7 +51,7 @@ class QuizAPITests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(response.status_code, 200, response.text)
         return response.json()
 
-    async def prepare(self, count=20):
+    async def prepare(self, count=5):
         bank = await self.bank()
         async with self.sessions() as db:
             for index in range(count):
@@ -70,7 +70,7 @@ class QuizAPITests(unittest.IsolatedAsyncioTestCase):
         response = await self.call(
             2, "POST", self.bank_url + "/publish", {"expected_revision": bank["revision"]}
         )
-        if count != 20:
+        if response.status_code != 200:
             return response
         self.assertEqual(response.status_code, 200, response.text)
         body = deepcopy(self.learning.body)
@@ -108,7 +108,7 @@ class QuizAPITests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(result.status_code, 200, result.text)
         return result.json()
 
-    async def test_seed_empty_and_publish_requires_exact_20(self):
+    async def test_seed_empty_and_publish_requires_an_approved_question(self):
         async with self.sessions() as db:
             self.assertEqual(
                 (await db.execute(select(func.count()).select_from(QuestionBank))).scalar_one(), 12
@@ -117,7 +117,7 @@ class QuizAPITests(unittest.IsolatedAsyncioTestCase):
                 (await db.execute(select(func.count()).select_from(QuestionVersion))).scalar_one(),
                 0,
             )
-        for count in (0, 19, 21):
+        for count in (0,):
             async with self.sessions() as db:
                 from sqlalchemy import delete
 
@@ -486,7 +486,9 @@ class QuizAPITests(unittest.IsolatedAsyncioTestCase):
         await self.correct(attempt)
         submitted = await self.call(4, "POST", f"/api/attempts/{attempt['id']}/submit")
         self.assertEqual(submitted.status_code, 200, submitted.text)
-        self.assertEqual(submitted.json()["score"], 5)
+        # Every approved question is on the paper: 20 were approved, so 20 are answered.
+        self.assertEqual(len(attempt["items"]), 20)
+        self.assertEqual(submitted.json()["score"], 20)
 
 
 class QuizValidationTests(unittest.TestCase):

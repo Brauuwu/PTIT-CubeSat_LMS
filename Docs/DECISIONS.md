@@ -7,6 +7,7 @@
 - Lớp đã xuất bản bị ghim vào một phiên bản giáo trình; không có đường nâng cấp trên giao diện. Thêm `fastapi-backend/scripts/upgrade_class_course_version.py`: một giao dịch tạo cấu hình lớp mới, trỏ lại tiến độ, lượt thi, ngân hàng câu hỏi sang phiên bản mới và xuất bản. Mặc định chỉ thay Lab 0 (tạo phiên bản giáo trình lai: Lab 1-8 của lớp giữ nguyên, Lab 0 lấy từ bản mới nhất), vì lớp 1 đang dùng bản giáo trình trước khi cấu trúc lại Lab 1-8 và nhiều ID bài đã đổi tên.
 - Bài mới của Lab 0 được chép vào lớp ở trạng thái TẮT để sinh viên đã hoàn thành Lab 0 không mất hoàn thành và Lab 1+ không bị khoá; giảng viên bật sau khi thêm nội dung. Lớp 1 đã được nâng cấp ngày 18/11/2026 trên cơ sở dữ liệu dev (40 dòng tiến độ giữ nguyên), có sao lưu `pg_dump` trước đó.
 - Xem trước công khai cho khách vẫn chỉ gồm `components`; không mở thêm bài nào.
+- Cập nhật cùng ngày (migration `0017_quiz_all_approved`): bỏ ràng buộc "đúng 20 câu, rút 5" của Lab Test và "số câu mỗi lượt" của quiz. Mỗi lượt làm bài gồm toàn bộ câu đã duyệt (xáo trộn); giảng viên thêm bao nhiêu câu thì sinh viên làm bấy nhiêu. Xuất bản cần ít nhất 1 câu đã duyệt. Điểm đạt được giới hạn không vượt số câu của lượt khi bắt đầu.
 
 ## 17/11/2026 — Khung rỗng Lab 0 và loại bài mới `quiz` (LAB0-01)
 
