@@ -130,6 +130,12 @@ export function BankEditor({ initial, classId, labId, lessonId = null, reload, i
   const draft = bank.status === 'draft';
   const edited = selected && JSON.stringify(question) !== JSON.stringify(editableQuestion(bank.questions.find(q => q.id === selected)));
   const field = key => ({ value: question[key], onChange: event => setQuestion(current => ({ ...current, [key]: event.target.value })) });
+  // One short, dimmed explanation box under each choice; stored by choice id like before.
+  const choiceNote = (choice, letter) => <textarea className="bank-choice-note" rows={1} maxLength={5000}
+    aria-label={`Giải thích phương án ${letter}`}
+    placeholder={`Giải thích phương án ${letter}: vì sao đúng hoặc sai (không bắt buộc)`}
+    value={question.choice_explanations?.[choice.id] || ''}
+    onChange={event => setQuestion(current => ({ ...current, choice_explanations: { ...current.choice_explanations, [choice.id]: event.target.value } }))} />;
 
   function updateBankState(result) {
     setBank(result);
@@ -305,6 +311,7 @@ export function BankEditor({ initial, classId, labId, lessonId = null, reload, i
               return <div className="bank-choice" key={choice.id}>
                 <input type="radio" name={`correct-${labId}`} aria-label={`Đáp án đúng là lựa chọn ${letter}`} required checked={question.correct_choice_id === choice.id} onChange={() => setQuestion(current => ({ ...current, correct_choice_id: choice.id }))} />
                 <label>Phương án {letter}<input required maxLength={2000} value={choice.text} placeholder={`Nội dung phương án ${letter}`} onChange={event => setQuestion(current => ({ ...current, choices: current.choices.map(c => c.id === choice.id ? { ...c, text: event.target.value } : c) }))} /></label>
+                {choiceNote(choice, letter)}
               </div>;
             })}
           </>}
@@ -328,6 +335,7 @@ export function BankEditor({ initial, classId, labId, lessonId = null, reload, i
                   }}
                 />
                 <label>Phương án {letter}<input required maxLength={2000} value={choice.text} placeholder={`Nội dung phương án ${letter}`} onChange={event => setQuestion(current => ({ ...current, choices: current.choices.map(c => c.id === choice.id ? { ...c, text: event.target.value } : c) }))} /></label>
+                {choiceNote(choice, letter)}
               </div>;
             })}
           </>}
@@ -354,6 +362,7 @@ export function BankEditor({ initial, classId, labId, lessonId = null, reload, i
                   <option value="S">Sai (S)</option>
                 </select>
                 <label>Ý {letter})<input required maxLength={2000} value={choice.text} placeholder={`VD: [1, NB] Nội dung mệnh đề ${letter}...`} onChange={event => setQuestion(current => ({ ...current, choices: current.choices.map(c => c.id === choice.id ? { ...c, text: event.target.value } : c) }))} /></label>
+                {choiceNote(choice, letter)}
               </div>;
             })}
           </>}
@@ -372,22 +381,6 @@ export function BankEditor({ initial, classId, labId, lessonId = null, reload, i
           )}
 
           <label>Lời giải chung<textarea {...field('explanation')} required minLength={5} maxLength={5000} rows={2} placeholder="Tóm tắt cách giải..." /></label>
-          {question.question_type !== 'short_answer' && <div className="lms-wide">
-            <p>Giải thích riêng từng phương án (học sinh sẽ thấy vì sao phương án đã chọn đúng/sai sau khi được công bố):</p>
-            {question.choices.map(choice => <label key={choice.id}>
-              Giải thích phương án {choice.id.toUpperCase()}
-              <textarea
-                maxLength={5000}
-                rows={2}
-                value={question.choice_explanations?.[choice.id] || ''}
-                placeholder={`Vì sao phương án ${choice.id.toUpperCase()} đúng hoặc sai?`}
-                onChange={event => setQuestion(current => ({
-                  ...current,
-                  choice_explanations: { ...current.choice_explanations, [choice.id]: event.target.value },
-                }))}
-              />
-            </label>)}
-          </div>}
           <div className="lms-form-grid">
             <label>Mục tiêu kiến thức<input {...field('objective')} required minLength={3} maxLength={500} /></label>
             <label>Độ khó<select {...field('difficulty')}><option value="easy">Nhận biết (Dễ)</option><option value="medium">Thông hiểu (Trung bình)</option><option value="hard">Vận dụng (Khó)</option></select></label>

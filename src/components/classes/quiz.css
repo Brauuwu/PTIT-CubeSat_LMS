@@ -309,6 +309,29 @@
   height: 1.2rem;
 }
 
+/* Short explanation under a choice: one dimmed line that grows with its content. */
+.bank-choice > .bank-choice-note {
+  grid-column: 2;
+  width: 100%;
+  min-height: 2.2rem;
+  max-height: 9rem;
+  margin: 0;
+  padding: 6px 12px;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--text-body);
+  background: #ffffff;
+  border: 1px solid #dce8f2;
+  border-radius: 10px;
+  resize: vertical;
+  field-sizing: content;
+}
+
+.bank-choice > .bank-choice-note::placeholder {
+  color: #8aa0b4;
+  font-style: italic;
+}
+
 .bank-choice-tf > select {
   margin-top: 1.65rem;
   min-width: 120px;
