@@ -16,9 +16,10 @@ const PANELS = {
   radio: lazy(() => import('./RadioPanel')), anomaly: lazy(() => import('./AnomalyPanel')),
   lab1Connection: lazy(() => import('./Lab1ConnectionNotice')),
   shell: lazy(() => import('./ShellResultsPanel')),
+  groundStation: lazy(() => import('./GroundStationLink')),
 };
 // Compact panels sit side by side when an exercise shows two or more of them.
-const GRID = ['attitude', 'gps', 'camera', 'voltage', 'radio', 'shell', 'commands'];
+const GRID = ['attitude', 'gps', 'camera', 'voltage', 'radio', 'shell', 'commands', 'groundStation'];
 // Evidence groups that already have a dedicated panel are not repeated in "Kết quả thực hành".
 const DEDICATED = { radio: ['radio'], anomaly: ['alert'], shell: ['shell', 'storage'] };
 
@@ -33,7 +34,7 @@ export default function PracticeVisualization() {
     if (name === 'system') return <SystemCheck key={name} rows={plan.systemRows} />;
     const Panel = PANELS[name];
     return <section key={name} className="practice-panel" aria-label={PANEL_LABELS[name]}>
-      {name === 'commands' ? <CommandPanel commands={profile.commands} labId={profile.lab} exerciseId={exerciseId} /> : <Panel {...(['attitude', 'gps'].includes(name) ? { height: 320 } : {})} />}
+      {name === 'commands' ? <CommandPanel commands={profile.commands} /> : <Panel {...(['attitude', 'gps'].includes(name) ? { height: 320 } : {})} />}
     </section>;
   };
   return <div className="lab-visual-stack" data-exercise-id={exerciseId}>

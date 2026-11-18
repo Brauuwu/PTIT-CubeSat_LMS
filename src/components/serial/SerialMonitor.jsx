@@ -14,8 +14,8 @@ function SerialLine({ line, showTimestamp }) {
 // Rows are memoized so a burst of new lines does not re-render the hundreds already on screen.
 const Line = memo(SerialLine);
 
-/** @param {{height?: number|string, variant?: string}} props */
-export default function SerialMonitor({ height = 350, variant = 'default' }) {
+/** @param {{height?: number|string, variant?: string, baudRate?: number}} props */
+export default function SerialMonitor({ height = 350, variant = 'default', baudRate = 115200 }) {
   const { isConnected, lines, send, clearLines, connect, serialSupport } = useSerial();
   const [input, setInput] = useState('');
   const [autoScroll, setAutoScroll] = useState(true);
@@ -79,7 +79,7 @@ export default function SerialMonitor({ height = 350, variant = 'default' }) {
               {variant !== 'workspace' && <button
                 className="btn btn-sm btn-primary"
                 style={{ marginTop: '8px' }}
-                onClick={() => connect()}
+                onClick={() => connect(baudRate)}
               >
                 🔗 Kết nối
               </button>}

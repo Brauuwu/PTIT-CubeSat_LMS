@@ -745,10 +745,10 @@
       "notes": [
         "Commands arrive via LoRa, not OBC USB. GPS without a fresh fix returns no-fix/null rather than 0,0."
       ],
-      "source_sha256": "ff54d39624128d19d9b3c5cf569fe86c29bda8ed1a61306a5ead1e7c82ab7d00",
+      "source_sha256": "c7f5f9de3050b0cc8924774a7f6545fb5dcef0769498b27d58ca074f242c7ece",
       "verified_build": {
         "board": "esp32",
-        "source_sha256": "ff54d39624128d19d9b3c5cf569fe86c29bda8ed1a61306a5ead1e7c82ab7d00",
+        "source_sha256": "c7f5f9de3050b0cc8924774a7f6545fb5dcef0769498b27d58ca074f242c7ece",
         "compiler_image": "sha256:cbda6d96b1aad025f677e98e37e7c96827d0426d8110742888402f8a68c62008",
         "result": "passed"
       }

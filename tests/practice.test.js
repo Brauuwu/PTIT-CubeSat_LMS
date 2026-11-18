@@ -221,7 +221,7 @@ test('each exercise shows only the panels its reference sketch has data for', ()
     'Lab4-04a': ['camera', 'commands'], 'Lab4-04b': ['camera', 'commands'],
     'Lab4-05': ['environment', 'attitude', 'gps'], 'Lab4-06': ['gps', 'camera'],
     'Lab5-01a': ['radio'], 'Lab5-01b': ['radio'],
-    'Lab5-02a': ['radio', 'commands'], 'Lab5-02b': ['radio', 'commands'], 'Lab5-03': ['radio', 'commands'],
+    'Lab5-02a': ['radio', 'groundStation'], 'Lab5-02b': ['radio', 'groundStation'], 'Lab5-03': ['radio', 'groundStation'],
     'Lab7-01': ['attitude', 'gps', 'voltage', 'environment', 'storage', 'system'],
     'Lab7-02': ['attitude', 'gps', 'voltage', 'camera', 'environment', 'storage', 'network', 'system', 'commands'],
     'Lab8-01': ['dashboard'],
@@ -241,6 +241,10 @@ test('LoRa logs from the raw UART and the COM library become TX/RX/error radio e
   assert.equal(phase('Đang phát xuống mặt đất: PACKET #1 - CUBESAT TELEMETRY DATA'), 'sent');
   assert.equal(phase('[COM] Đã gửi tin nhắn: PACKET #1'), 'sent');
   assert.equal(phase('[COM] Nhận được tin nhắn LoRa: ping'), 'received');
+  // "tin nhắn" (message) must not be mistaken for "nhận" (received): a TX log is never an RX.
+  const radioPhases = line => decode(entry(line)).events.filter(event => event.group === 'radio').map(event => event.phase);
+  assert.deepEqual(radioPhases('[COM] Đã gửi tin nhắn: PACKET #1'), ['sent']);
+  assert.deepEqual(radioPhases('[COM] Nhận được tin nhắn LoRa: ping'), ['received']);
   assert.equal(phase('[RX] Nhận được bản tin thô: hello'), 'received');
   assert.equal(phase('[WARNING] LoRa AUX busy; TX skipped, no reception confirmed.'), 'error');
 });
@@ -338,4 +342,13 @@ test('Lab4-04b chunked Serial image becomes one validated JPEG frame; corrupt or
   assert.equal(run(oversized).at(-1).frame, null);
   assert.equal(run(['IMG_CHUNK:AAAA', 'IMG_END'])[1].frame, null);
   assert.equal(run(['IMG_BEGIN:10', 'ERROR:IMG_READ', 'IMG_END'])[2].frame, null);
+});
+
+test('radio totals keep counting after the 120-event window is full', () => {
+  let activity = emptyActivity();
+  for (let i = 0; i < 300; i++) activity = reduceActivity(activity, { group: 'radio', phase: 'sent', at: 1000 + i, text: `PACKET #${i}` });
+  assert.equal(activity.events.length, 120);
+  assert.equal(activity.radio.sent, 300);
+  assert.equal(activity.radio.received, 0);
+  assert.equal(activity.radio.lastAt.sent, 1299);
 });

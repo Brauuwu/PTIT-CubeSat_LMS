@@ -30,6 +30,7 @@ const SignUpPage = lazy(() => import('./pages/SignUpPage'));
 const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'));
 const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const GroundStationPage = lazy(() => import('./pages/GroundStationPage'));
 const LabQuestionsPage = lazy(() => import('./pages/LabQuestionsPage'));
 const labLoaders = [0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => () => import(`./pages/Lab${i}.jsx`));
 const labComponents = labLoaders.map((load) => lazy(load));
@@ -56,6 +57,15 @@ function ProtectedServices() {
   if (loading) return <LoadingScreen />;
   if (!user && location.pathname !== '/lab0') return <Navigate to="/login" replace state={{ from: `${location.pathname}${location.search}${location.hash}` }} />;
   return <SerialProvider key={user?.id || 'guest'}><TelemetryProvider><ServiceLayout /></TelemetryProvider></SerialProvider>;
+}
+
+// Standalone window for Lab 5: owns its own Serial port (ground-station USB-TTL), separate from the lab's OBC port.
+function GroundStationShell() {
+  const { loading, user } = useAuth();
+  const location = useLocation();
+  if (loading) return <LoadingScreen />;
+  if (!user) return <Navigate to="/login" replace state={{ from: location.pathname }} />;
+  return <SerialProvider key={user.id}><main id="main-content" className="main-content"><Outlet /></main></SerialProvider>;
 }
 
 function PublicLayout() {
@@ -129,6 +139,9 @@ export default function App() {
       <Route element={<LmsLayout publicPreview />}>
         <Route path="/preview" element={<ClassLearningPage experience />} />
       </Route>
+    </Route>
+    <Route element={<GroundStationShell />}>
+      <Route path="/groundstation" element={<GroundStationPage />} />
     </Route>
     <Route element={<ProtectedServices />}>
       <Route path="/profile" element={<ProfilePage />} />

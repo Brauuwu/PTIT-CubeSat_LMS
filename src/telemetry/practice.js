@@ -16,7 +16,8 @@ const EXERCISE_PANELS = [
   [/^Lab4-04/, ['camera']],
   [/^Lab4-05/, ['environment', 'attitude', 'gps']],
   [/^Lab5-01/, ['radio']],
-  [/^Lab5-0[23]/, ['radio', 'commands']],
+  // Uplink commands are sent from the separate ground-station window, not from the OBC's USB port.
+  [/^Lab5-0[23]/, ['radio', 'groundStation']],
   // Lab3-04 (watchdog) and Lab3-05 (event queue) report events, not measurements: activity log only.
   [/^Lab3-0[45]/, []],
   [/^Lab4-06/, ['gps', 'camera']],
@@ -42,7 +43,7 @@ export function practiceProfile(id = '') {
     ? 'Lab3-03 sinh gói viễn trắc giả lập (điện áp, nhiệt độ ngẫu nhiên) và tác vụ tự chẩn đoán trên Core 0. Các số liệu [HK-TELEM] là minh họa, không phải phép đo; LED nhịp tim không có log.'
     : id.startsWith('Lab3-04') ? 'Gửi h (hoặc nhấn nút GPIO 4) để mô phỏng treo: tác vụ ngừng nạp Watchdog, TWDT reset bo sau khoảng 3 giây và log khởi động báo nguyên nhân TASK WATCHDOG RESET.'
       : id.startsWith('Lab3-05') ? 'Mọi sự kiện (nút nhấn GPIO 4, cảnh báo nhiệt độ giả lập > 30°C, ký tự gửi qua Serial) đi qua FreeRTOS Queue tới tác vụ Dispatcher. Nhiệt độ là số giả lập, không phải phép đo.'
-      : lab === 5 ? 'Log phát LoRa chỉ xác nhận yêu cầu gửi tại OBC. Cần phản hồi từ trạm mặt đất để xác nhận nhận thành công; USB Serial không thay thế đường lệnh LoRa.'
+      : lab === 5 ? 'Log phát LoRa chỉ xác nhận yêu cầu gửi tại OBC. Cần phản hồi từ trạm mặt đất để xác nhận nhận thành công; Lệnh uplink gửi từ cửa sổ Trạm mặt đất (USB-TTL + LoRa), không gửi qua USB Serial của OBC.'
       : lab === 8 ? 'Mẫu Lab8 là khung chương trình. Hãy bổ sung nhiệm vụ và xuất JSON telemetry để dashboard có dữ liệu.'
         : /^Lab4-02a/.test(id) ? 'Bản mẫu đọc burst 14 byte và quy đổi theo dải mặc định ±2g / ±250°/s. Nếu cấu hình thanh ghi khác dải này, giá trị m/s² và rad/s sẽ sai tỷ lệ.'
           : /^Lab4-04|^Lab4-06/.test(id) ? 'Ảnh lưu trên thẻ SD chỉ hiện ở đây khi firmware gửi lại ảnh về trình duyệt (IMG_BEGIN/IMG_CHUNK/IMG_END — Lab4-04a, Lab4-04b) hoặc imageData.'
@@ -50,10 +51,15 @@ export function practiceProfile(id = '') {
   return { id, lab, scheduler, serialOnly, panels, commands, note };
 }
 
-export const emptyActivity = () => ({ events: [], tasks: {}, subsystems: {}, lineCount: 0, lastLineAt: null });
+// `radio` holds running totals: `events` is a bounded window (120), so counts must not be derived from it.
+export const emptyActivity = () => ({ events: [], tasks: {}, subsystems: {}, radio: { sent: 0, received: 0, error: 0, lastAt: {} }, lineCount: 0, lastLineAt: null });
 
 export function reduceActivity(state, event) {
   const next = { ...state, events: [...state.events, event].slice(-120) };
+  if (event.group === 'radio' && ['sent', 'received', 'error'].includes(event.phase)) {
+    const radio = state.radio ?? emptyActivity().radio;
+    next.radio = { ...radio, [event.phase]: radio[event.phase] + 1, lastAt: { ...radio.lastAt, [event.phase]: event.at } };
+  }
   if (event.group === 'task') {
     const previous = state.tasks[event.name] ?? { count: 0, startedAt: null, durationMs: null };
     const durationMs = event.phase === 'done' && previous.startedAt !== null ? (event.at >= previous.startedAt ? event.at - previous.startedAt : null) : previous.durationMs;
@@ -196,7 +202,8 @@ export function createPracticeDecoder(exerciseId = '') {
     if (/uu tien (camera|gps)/.test(lower)) event('mux', 'sample');
     if (/lora aux busy|\[com\] lora config failed/.test(lower)) event('radio', 'error');
     else if (/\[tx\]|\[lora tx\]|dang phat xuong mat dat|send requested|dang gui qua lora|^\[com\] da gui/.test(lower)) event('radio', 'sent');
-    if (/\[rx\]|\[lora rx\]|\[com\].*(received|nhan)/.test(lower)) event('radio', 'received');
+    // RX needs "nhận" (received) or "received": "nhắn" in "[COM] Đã gửi tin nhắn" folds to "nhan" and is a TX log, not a reception.
+    else if (/\[rx\]|\[lora rx\]|\[com\].*(received|nhận)/.test(line.normalize('NFC').toLowerCase())) event('radio', 'received');
     if (/mqtt connected|wifi connected|http server started|ap ip address|ip address:|^\d{1,3}(?:\.\d{1,3}){3}$|so luong thiet bi dang ket noi/.test(lower)) event('network', 'reported');
     if (/^\[mqtt\] connected$/.test(lower)) event('network', 'reported');
     if (/^\[mqtt\].*(?:not configured|remains offline)/.test(lower)) event('network', 'waiting');

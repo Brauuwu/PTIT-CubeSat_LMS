@@ -39,6 +39,9 @@ void setup() {
     // Khởi tạo các module
     cdh.println("[INIT] Đang khởi tạo LoRa...");
     lora.init();
+    // E32 mặc định (init) ở chế độ Fixed-point: 3 byte đầu bản tin bị hiểu là địa chỉ đích nên phản hồi không tới trạm mặt đất.
+    // Chuyển sang Transparent để phản hồi gửi về cùng kênh/địa chỉ với trạm mặt đất.
+    lora.setTransmissionMode(0);
     
     cdh.println("[INIT] Đang khởi tạo Cảm biến và Nguồn...");
     eps.init();
