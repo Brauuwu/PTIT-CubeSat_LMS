@@ -9,9 +9,7 @@ depends_on = None
 
 
 def upgrade():
-    op.execute(
-        "ALTER TABLE lesson_progress ADD COLUMN IF NOT EXISTS started_at TIMESTAMPTZ"
-    )
+    op.execute("ALTER TABLE lesson_progress ADD COLUMN IF NOT EXISTS started_at TIMESTAMPTZ")
 
 
 def downgrade():

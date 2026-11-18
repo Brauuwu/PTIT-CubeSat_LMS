@@ -59,7 +59,6 @@ const labs = LABS.map(lab => {
   const source = getLessonsForLab(lab.id).filter(item => !legacyOnly(item));
   const lessons = source.map((item, index) => {
     const type = item.type === 'summary' ? 'document' : item.type === 'components' || item.type === 'assembly' ? 'practice' : item.type;
-    const lab0 = !!LAB_FILES[lab.id];
     const content = { group: groupFor(lab.id, item, index, source.length), estimated_minutes: null, todos: [] };
     if (type === 'video') {
       if (hasLabFile(lab.id, item.id)) Object.assign(content, labJson(lab.id, item.id));

@@ -340,16 +340,12 @@ class PasswordResetToken(Base):
     id: Mapped[int] = mapped_column(
         BigInteger().with_variant(Integer(), "sqlite"), primary_key=True
     )
-    user_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"), nullable=False
-    )
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     token_hash: Mapped[str | None] = mapped_column(String(64), unique=True, nullable=True)
     status: Mapped[str] = mapped_column(
         String(20), nullable=False, server_default=text("'pending'")
     )
-    source: Mapped[str] = mapped_column(
-        String(20), nullable=False, server_default=text("'email'")
-    )
+    source: Mapped[str] = mapped_column(String(20), nullable=False, server_default=text("'email'"))
     requested_ip: Mapped[str | None] = mapped_column(String(64), nullable=True)
     issued_by: Mapped[int | None] = mapped_column(
         ForeignKey("users.id", ondelete="SET NULL"), nullable=True

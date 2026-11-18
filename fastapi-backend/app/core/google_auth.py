@@ -31,7 +31,9 @@ async def verify_google_credential(credential: str) -> dict:
             clock_skew_in_seconds=_GOOGLE_CLOCK_SKEW_SECONDS,
         )
     except ValueError as exc:
-        logger.warning("[GoogleAuth] ID token rejected ({}): {}", type(exc).__name__, str(exc)[:200])
+        logger.warning(
+            "[GoogleAuth] ID token rejected ({}): {}", type(exc).__name__, str(exc)[:200]
+        )
         raise HTTPException(
             401, "Thông tin đăng nhập Google không hợp lệ hoặc đã hết hạn."
         ) from exc

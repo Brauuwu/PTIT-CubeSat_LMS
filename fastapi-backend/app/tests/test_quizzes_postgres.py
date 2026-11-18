@@ -24,6 +24,7 @@ class QuizPostgresTests(unittest.IsolatedAsyncioTestCase):
     admin_connection = learning.LearningPostgresTests.admin_connection
     assert_schema_matches = learning.LearningPostgresTests.assert_schema_matches
     cli = learning.LearningPostgresTests.cli
+    cli_refused = learning.LearningPostgresTests.cli_refused
     call = learning.LearningPostgresTests.call
     draft = learning.LearningPostgresTests.draft
     save = learning.LearningPostgresTests.save
@@ -120,8 +121,9 @@ class QuizPostgresTests(unittest.IsolatedAsyncioTestCase):
                     with self.assertRaises(DBAPIError):
                         await db.execute(text(statement))
                     await nested.rollback()
-            # Head is an Alembic merge point, so "-1" is ambiguous; roll back past 0010 explicitly.
-            await self.cli("downgrade", "0009_quizzes")
+            # 0015/0016 refuse to drop quiz lessons or per-lesson banks, so a rollback past them is rejected
+            # as a whole and the database stays at head with its data unchanged.
+            await self.cli_refused("downgrade", "0009_quizzes")
             async with self.engine.connect() as db:
                 self.assertEqual(
                     (
@@ -132,7 +134,6 @@ class QuizPostgresTests(unittest.IsolatedAsyncioTestCase):
                 self.assertEqual(
                     (await db.execute(text("SELECT score FROM quiz_attempts"))).scalar_one(), 5
                 )
-            await self.cli("upgrade", "head")
             await self.assert_schema_matches()
         finally:
             await learning.LearningPostgresTests.close_client(self)

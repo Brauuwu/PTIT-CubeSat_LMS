@@ -37,4 +37,3 @@ def upgrade():
 def downgrade():
     # Retain password_reset_tokens to preserve pending requests and single-use revocation records.
     pass
-

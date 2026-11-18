@@ -17,7 +17,7 @@
 - Lab 1 giữ bài `Lab1-03_PWM_LED` (đứng sau `Lab1-02`, nhóm "LED") và trang Lab Test của Xuân. Thứ tự và ID doc/video lấy theo Trung (`doc-1-3`…`doc-1-8`, `video-1-5`). Phần đọc theo chủ đề trong `lesson-reading.js` được chuyển sang ID mới.
 - Exporter chỉ dùng file nội dung phía server (`firmware/curriculum/lab0|lab1/*.md`) khi file đó có nội dung. Khi file còn rỗng thì dùng phần đọc sẵn có, để tài liệu Lab 0/1 hiện tại không bị trống. Seed có 135 bài: 119 bài cũ cộng 16 bài quiz.
 - Migration `0019_merge_reset_and_quiz` gộp hai head `0015_password_reset_tokens` và chuỗi `0015_lesson_type_quiz`…`0018_quiz_reveal_after_pass`, không thay đổi schema. Điểm merge không dùng được `downgrade -1`; muốn lùi thì lùi về từng parent.
-- Còn lại: các test PostgreSQL opt-in (`PSCUBESAT_TEST_POSTGRES=1`) vẫn seed giáo trình rồi `downgrade 0009_quizzes`. Việc này nay bị 0015/0016 cố ý từ chối khi đã có bài hoặc ngân hàng quiz, nên 4 test thất bại (đã thất bại sẵn trên PR #4). Cần quyết định cách rollback cho các test này.
+- Rollback theo hướng của Trung (19/11/2026): khi đã có bài quiz hoặc ngân hàng quiz theo bài, `0015`/`0016` từ chối downgrade. Alembic chạy toàn bộ lệnh trong một transaction, nên lệnh bị từ chối không thay đổi gì và DB ở nguyên head. Các test PostgreSQL opt-in kiểm tra đúng hành vi này qua `cli_refused`: lệnh lùi phải thất bại, `alembic_version` và dữ liệu không đổi. Riêng `test_backfill_keeps_old_published_path` mô phỏng DB cũ bằng seed không có bài quiz, nên vẫn lùi về `0009_quizzes` được. Muốn lùi một DB thật qua 0015 thì phải xoá các phiên bản giáo trình có bài quiz và ngân hàng quiz theo bài trước.
 
 ## 13/11/2026 — Cấp lại mật khẩu khi người dùng quên
 

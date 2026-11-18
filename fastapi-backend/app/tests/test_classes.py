@@ -401,7 +401,9 @@ class ClassAPITests(unittest.IsolatedAsyncioTestCase):
         )
         async with self.sessions() as db:
             log = (
-                await db.execute(select(AuditLog).where(AuditLog.action == "user.password_reset_link"))
+                await db.execute(
+                    select(AuditLog).where(AuditLog.action == "user.password_reset_link")
+                )
             ).scalar_one()
             self.assertEqual((log.actor, log.target), (1, "user:4"))
             self.assertNotIn(raw_token, f"{log.before}{log.after}")
@@ -528,7 +530,9 @@ class ClassAPITests(unittest.IsolatedAsyncioTestCase):
                 )
             await db.commit()
         await self.add_student()  # user4 already active
-        await self.call(2, "POST", f"/api/classes/{self.class_a}/members", {"email": "user6@example.com"})
+        await self.call(
+            2, "POST", f"/api/classes/{self.class_a}/members", {"email": "user6@example.com"}
+        )
         await self.call(2, "DELETE", f"/api/classes/{self.class_a}/members", {"user_id": 6})
 
         # Unauthorized teacher or student cannot import
@@ -646,4 +650,3 @@ class ClassAPITests(unittest.IsolatedAsyncioTestCase):
         )
         self.assertEqual(bad_xlsx.status_code, 422)
         self.assertEqual(bad_xlsx.json()["code"], "CONFIG_INVALID")
-

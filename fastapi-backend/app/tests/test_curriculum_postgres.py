@@ -21,6 +21,7 @@ class CurriculumPostgresTests(unittest.IsolatedAsyncioTestCase):
     admin_connection = fixtures.MigrationTests.admin_connection
     assert_schema_matches = fixtures.MigrationTests.assert_schema_matches
     cli = class_pg.ClassPostgresTests.cli
+    cli_refused = class_pg.ClassPostgresTests.cli_refused
     call = classes.ClassAPITests.call
     draft = course_api.CurriculumAPITests.draft
     save = course_api.CurriculumAPITests.save
@@ -39,18 +40,15 @@ class CurriculumPostgresTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(first, await seed_curriculum(db))
             await db.commit()
             self.assertEqual(
-                (await db.execute(select(func.count()).select_from(Lesson))).scalar_one(), 107
+                (await db.execute(select(func.count()).select_from(Lesson))).scalar_one(), 135
             )
-        await self.cli("downgrade", "0009_quizzes")
+        # 0015/0016 refuse to drop quiz lessons or per-lesson banks, so a rollback past them is rejected
+        # as a whole and the database stays at head with its data unchanged.
+        await self.cli_refused("downgrade", "0009_quizzes")
         async with self.engine.connect() as db:
             self.assertEqual(
-                (await db.execute(text("SELECT version_num FROM alembic_version"))).scalar_one(),
-                "0009_quizzes",
+                (await db.execute(text("SELECT count(*) FROM lessons"))).scalar_one(), 135
             )
-            self.assertEqual(
-                (await db.execute(text("SELECT count(*) FROM lessons"))).scalar_one(), 107
-            )
-        await self.cli("upgrade", "head")
         await self.assert_schema_matches()
         async with sessions() as db:
             self.assertEqual(await seed_curriculum(db), first)

@@ -14,6 +14,11 @@ import { getLabQuestionSet } from '../../data/lab-questions';
 import { CheckpointCard } from '../lessons/LabCheckpoint';
 import { isSequentialLesson } from '../lessons/lesson-sequence';
 
+// Replace (or add) one lab's entry in the /api/progress list with the server's response.
+const withLabProgress = (list, body) => (list.some(item => item.lab_id === body.lab_id)
+  ? list.map(item => item.lab_id === body.lab_id ? body : item)
+  : [...list, body]);
+
 export default function LabLayout(props) {
   const { data, error, loading } = useLmsResource('/api/curriculum/legacy');
   if (loading) return <p role="status">Đang tải giáo trình…</p>;
@@ -54,30 +59,15 @@ function LoadedLabLayout({ lab, catalog, editorPanel, visualizationPanel = null,
   const canComplete = isPrivileged
     || isSummaryLesson
     || Boolean(lessonStates[lesson.id]?.started_at && elapsedSeconds >= 60);
-  const completeLesson = async () => {
+  const sendLessonAction = async (action, fallback) => {
     setCompleteError('');
-    const response = await authorizedFetch(`/api/progress/${lab.id}/lessons/${encodeURIComponent(lesson.id)}/complete`, { method: 'POST' });
+    const response = await authorizedFetch(`/api/progress/${lab.id}/lessons/${encodeURIComponent(lesson.id)}/${action}`, { method: 'POST' });
     const body = await response.json().catch(() => ({}));
-    if (!response.ok) {
-      setCompleteError(body.message || 'Chưa đủ thời gian học tối thiểu 1 phút.');
-      return;
-    }
-    setProgress(current => current.some(item => item.lab_id === lab.id)
-      ? current.map(item => item.lab_id === lab.id ? body : item)
-      : [...current, body]);
+    if (!response.ok) { setCompleteError(body.message || fallback); return; }
+    setProgress(current => withLabProgress(current, body));
   };
-  const resetLesson = async () => {
-    setCompleteError('');
-    const response = await authorizedFetch(`/api/progress/${lab.id}/lessons/${encodeURIComponent(lesson.id)}/reset`, { method: 'POST' });
-    const body = await response.json().catch(() => ({}));
-    if (!response.ok) {
-      setCompleteError(body.message || 'Không đặt lại được trạng thái bài học.');
-      return;
-    }
-    setProgress(current => current.some(item => item.lab_id === lab.id)
-      ? current.map(item => item.lab_id === lab.id ? body : item)
-      : [...current, body]);
-  };
+  const completeLesson = () => sendLessonAction('complete', 'Chưa đủ thời gian học tối thiểu 1 phút.');
+  const resetLesson = () => sendLessonAction('reset', 'Không đặt lại được trạng thái bài học.');
   const downloadExample = async () => {
     const token = getAuthToken();
     setDownloading(true); setDownloadError('');
@@ -107,9 +97,7 @@ function LoadedLabLayout({ lab, catalog, editorPanel, visualizationPanel = null,
   useEffect(() => {
     if (!isAuthenticated || !lab || lessonStates[lesson.id]?.started_at) return;
     authorizedFetch(`/api/progress/${lab.id}/lessons/${encodeURIComponent(lesson.id)}/start`, { method: 'POST' })
-      .then(response => response.json()).then(body => setProgress(current => current.some(item => item.lab_id === lab.id)
-        ? current.map(item => item.lab_id === lab.id ? body : item)
-        : [...current, body]));
+      .then(response => response.json()).then(body => setProgress(current => withLabProgress(current, body)));
   }, [isAuthenticated, lab, lesson.id, lessonStates]);
   useEffect(() => {
     if (!isPrivileged && firstIncomplete >= 0 && lessonIndex > firstIncomplete) selectLesson(lessons[firstIncomplete].id);

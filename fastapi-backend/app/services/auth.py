@@ -215,9 +215,7 @@ class AuthService:
                 full_name=created_admin.full_name,
                 role=created_admin.role,
                 created_at=(
-                    created_admin.created_at.isoformat()
-                    if created_admin.created_at
-                    else None
+                    created_admin.created_at.isoformat() if created_admin.created_at else None
                 ),
             ),
         )
@@ -261,7 +259,9 @@ class AuthService:
         if require_role is None and user.role == UserRole.admin:
             raise ValueError("Tài khoản quản trị chỉ được đăng nhập từ trang quản trị.")
 
-        logger.info(f"[AuthService] 🔑 User logged in: {mask_email(user.email)} ({user.role.value})")
+        logger.info(
+            f"[AuthService] 🔑 User logged in: {mask_email(user.email)} ({user.role.value})"
+        )
 
         token = create_access_token(
             {

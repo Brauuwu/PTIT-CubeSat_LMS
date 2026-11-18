@@ -1,7 +1,7 @@
 {
   "course_id": "cubesat",
   "course_title": "CubeSAT Learning Platform",
-  "source_hash": "c336e0df02234d782662cb677a1442884017aa329a0ccf47eb0d46cf48e496f6",
+  "source_hash": "5275c5df3e965a31523b3e517dd869da0fde3e00933a593af98bea7a38974b4f",
   "labs": [
     {
       "id": 0,
@@ -3130,7 +3130,7 @@
         "document",
         "componentViewer"
       ],
-      "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "videoUrl": "",
       "docPath": "lab0-intro",
       "lessons": [
         {

@@ -37,6 +37,27 @@ class ClassPostgresTests(unittest.IsolatedAsyncioTestCase):
         )
         self.assertEqual(result.returncode, 0, "Alembic command failed: " + " ".join(args))
 
+    async def cli_refused(self, *args):
+        """Run an Alembic command a migration guard must reject; the database must not move."""
+        async with self.engine.connect() as db:
+            before = (await db.execute(text("SELECT version_num FROM alembic_version"))).all()
+        env = {**os.environ, "DATABASE_URL": self.url}
+        result = await asyncio.to_thread(
+            subprocess.run,
+            [sys.executable, "-m", "alembic", *args],
+            env=env,
+            cwd=Path(__file__).resolve().parents[2],
+            capture_output=True,
+            text=True,
+        )
+        self.assertNotEqual(
+            result.returncode, 0, "Alembic command should be refused: " + " ".join(args)
+        )
+        self.assertIn("Cannot downgrade", result.stderr)
+        async with self.engine.connect() as db:
+            after = (await db.execute(text("SELECT version_num FROM alembic_version"))).all()
+        self.assertEqual(after, before)
+
     async def test_cli_upgrade_legacy_preservation_and_retained_downgrade(self):
         # Truly empty DB first; seed legacy data at the old head before adding LMS.
         await self.cli("upgrade", "0005_emqx_postgres")

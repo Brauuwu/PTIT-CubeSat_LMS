@@ -5,17 +5,27 @@ import json
 import os
 import unittest
 from copy import deepcopy
+from unittest.mock import patch
 
 from sqlalchemy import func, select, text
 from sqlalchemy.exc import DBAPIError
 
 from app.models.learning import LessonProgress, PracticeSubmission, ProgressEvent
+from app.services import curriculum_seed
 from app.services.curriculum_seed import seed_curriculum
 from app.tests import test_classes as classes
 from app.tests import test_classes_postgres as class_pg
 from app.tests import test_course_configuration as course
 from app.tests import test_learning as learning
 from app.tests import test_migrations as migrations
+
+
+def pre_quiz_seed(read=curriculum_seed.read_seed):
+    """The curriculum seed without quiz lessons, as exported before 0015_lesson_type_quiz."""
+    data = read()
+    for lab in data["labs"]:
+        lab["lessons"] = [lesson for lesson in lab["lessons"] if lesson["type"] != "quiz"]
+    return data
 
 
 @unittest.skipUnless(
@@ -27,6 +37,7 @@ class LearningPostgresTests(unittest.IsolatedAsyncioTestCase):
     admin_connection = migrations.MigrationTests.admin_connection
     assert_schema_matches = migrations.MigrationTests.assert_schema_matches
     cli = class_pg.ClassPostgresTests.cli
+    cli_refused = class_pg.ClassPostgresTests.cli_refused
     call = classes.ClassAPITests.call
     draft = course.CurriculumAPITests.draft
     save = course.CurriculumAPITests.save
@@ -145,8 +156,9 @@ class LearningPostgresTests(unittest.IsolatedAsyncioTestCase):
                         )
                     )
                 ).all()
-            await self.cli("downgrade", "0009_quizzes")
-            await self.cli("upgrade", "head")
+            # 0015/0016 refuse to drop quiz lessons or per-lesson banks, so a rollback past them is rejected
+            # as a whole and the database stays at head with its data unchanged.
+            await self.cli_refused("downgrade", "0009_quizzes")
             await self.assert_schema_matches()
             async with self.engine.connect() as db:
                 self.assertEqual(
@@ -174,9 +186,11 @@ class LearningPostgresTests(unittest.IsolatedAsyncioTestCase):
         from sqlalchemy.ext.asyncio import async_sessionmaker
 
         sessions = async_sessionmaker(self.engine, expire_on_commit=False)
-        async with sessions() as db:
-            await seed_curriculum(db)
-            await db.commit()
+        # A database this old holds a snapshot from before 0015_lesson_type_quiz: no quiz lessons.
+        with patch.object(curriculum_seed, "read_seed", pre_quiz_seed):
+            async with sessions() as db:
+                await seed_curriculum(db)
+                await db.commit()
         async with self.engine.begin() as db:
             await db.execute(
                 text(

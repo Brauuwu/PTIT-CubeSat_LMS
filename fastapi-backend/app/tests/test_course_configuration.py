@@ -145,7 +145,10 @@ class CurriculumAPITests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(
                 {item.id for item in lessons}, original | {f"labtest-{i}" for i in range(9)}
             )
-            self.assertEqual({item.type for item in lessons}, {"video", "document", "practice", "quiz", "labtest"})
+            self.assertEqual(
+                {item.type for item in lessons},
+                {"video", "document", "practice", "quiz", "labtest"},
+            )
             self.assertEqual(
                 len([item for item in lessons if item.type == "practice" and item.lab_id >= 2]), 29
             )

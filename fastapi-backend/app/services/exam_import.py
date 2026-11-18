@@ -302,7 +302,11 @@ def parse_separate_answers(answer_format: str, answer_content: str) -> dict:
     header_row = [str(c or "").strip().lstrip("\ufeff").casefold() for c in raw_rows[0]]
     part_col = next((i for i, h in enumerate(header_row) if h in ("phần", "phan", "part")), None)
     q_col = next(
-        (i for i, h in enumerate(header_row) if h in ("câu", "cau", "câu hỏi", "cau hoi", "question", "stt")),
+        (
+            i
+            for i, h in enumerate(header_row)
+            if h in ("câu", "cau", "câu hỏi", "cau hoi", "question", "stt")
+        ),
         0,
     )
     ans_col = next(
@@ -334,7 +338,8 @@ def parse_separate_answers(answer_format: str, answer_content: str) -> dict:
             (
                 i
                 for i, h in enumerate(header_row)
-                if h in (
+                if h
+                in (
                     f"giải thích {letter}",
                     f"giai thich {letter}",
                     f"explanation_{letter}",
@@ -370,7 +375,9 @@ def parse_separate_answers(answer_format: str, answer_content: str) -> dict:
             if index is not None and index < len(row) and str(row[index] or "").strip()
         }
         if part_col is not None and part_col < len(row) and str(row[part_col]).strip():
-            part_val = re.sub(r"^phần\s*", "", str(row[part_col]).strip(), flags=re.IGNORECASE).upper()
+            part_val = re.sub(
+                r"^phần\s*", "", str(row[part_col]).strip(), flags=re.IGNORECASE
+            ).upper()
             by_part[(part_val, q_num)] = (ans_raw, expl_raw, choice_explanations)
             seq_idx += 1
             by_index[seq_idx] = (ans_raw, expl_raw, choice_explanations)
@@ -732,7 +739,7 @@ def sample_question_bank_xlsx() -> bytes:
     sheet_xml = (
         '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
         '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
-        f'<sheetData>{"".join(row_xml)}</sheetData>'
+        f"<sheetData>{''.join(row_xml)}</sheetData>"
         "</worksheet>"
     )
     content_types = (
@@ -779,7 +786,9 @@ def sample_question_bank_xlsx() -> bytes:
     return buffer.getvalue()
 
 
-SAMPLE_QUESTION_ONLY_TEXT = SAMPLE_EXAM_TEXT.split("---------------------------HẾT------------------------")[0].strip()
+SAMPLE_QUESTION_ONLY_TEXT = SAMPLE_EXAM_TEXT.split(
+    "---------------------------HẾT------------------------"
+)[0].strip()
 
 
 def sample_question_docx() -> bytes:
@@ -792,7 +801,7 @@ def sample_question_docx() -> bytes:
     doc_xml = (
         '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
         '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'
-        f'<w:body>{"".join(p_xml)}</w:body>'
+        f"<w:body>{''.join(p_xml)}</w:body>"
         "</w:document>"
     )
     content_types = (
@@ -824,13 +833,48 @@ def sample_answer_xlsx() -> bytes:
     """Generate a separate Excel (.xlsx) Answer File matching SAMPLE_QUESTION_ONLY_TEXT."""
     rows = [
         ("Câu hỏi", "0001", "Phần", "Câu trong phần", "Lời giải", "Ghi chú định dạng"),
-        ("1", "D", "I", "1", "Số 2 là số nguyên tố chẵn duy nhất nên D là mệnh đề sai.", "Trắc nghiệm 1 đáp án: A, B, C hoặc D"),
-        ("2", "A|B|D", "II", "1", "3/4, -5 và 0,25 đều là số hữu tỉ.", "Nhiều đáp án: ngăn cách bởi dấu | (VD: A|B|D)"),
-        ("3", "A|B|D", "II", "2", "Hai góc so le trong bằng nhau, đồng vị bằng nhau, trong cùng phía bù nhau.", ""),
+        (
+            "1",
+            "D",
+            "I",
+            "1",
+            "Số 2 là số nguyên tố chẵn duy nhất nên D là mệnh đề sai.",
+            "Trắc nghiệm 1 đáp án: A, B, C hoặc D",
+        ),
+        (
+            "2",
+            "A|B|D",
+            "II",
+            "1",
+            "3/4, -5 và 0,25 đều là số hữu tỉ.",
+            "Nhiều đáp án: ngăn cách bởi dấu | (VD: A|B|D)",
+        ),
+        (
+            "3",
+            "A|B|D",
+            "II",
+            "2",
+            "Hai góc so le trong bằng nhau, đồng vị bằng nhau, trong cùng phía bù nhau.",
+            "",
+        ),
         ("4", "A|C", "II", "3", "Hai đại lượng tỉ lệ nghịch có tích không đổi.", ""),
-        ("5", "ĐSSĐ", "III", "1", "Lần 1 trượt 2 (Đ), lần 2 trượt 5 (S), tổng trượt <=7 (S), cả 3 lần trúng >=3 (Đ).", "Đúng/Sai 4 ý: nhập 4 ký tự Đ/S (VD: ĐSSĐ)"),
+        (
+            "5",
+            "ĐSSĐ",
+            "III",
+            "1",
+            "Lần 1 trượt 2 (Đ), lần 2 trượt 5 (S), tổng trượt <=7 (S), cả 3 lần trúng >=3 (Đ).",
+            "Đúng/Sai 4 ý: nhập 4 ký tự Đ/S (VD: ĐSSĐ)",
+        ),
         ("6", "ĐSSS", "III", "2", "Ý a đúng theo quy tắc hình bình hành.", ""),
-        ("7", "10", "IV", "1", "Độ dài vectơ tổng bằng đường chéo AC = sqrt(6^2 + 8^2) = 10.", "Trả lời ngắn: nhập số hoặc chuỗi ngắn"),
+        (
+            "7",
+            "10",
+            "IV",
+            "1",
+            "Độ dài vectơ tổng bằng đường chéo AC = sqrt(6^2 + 8^2) = 10.",
+            "Trả lời ngắn: nhập số hoặc chuỗi ngắn",
+        ),
         ("8", "31", "IV", "2", "Áp dụng định lý sin trong tam giác ABC được AB xấp xỉ 31m.", ""),
     ]
     col_letters = [chr(ord("A") + idx) for idx in range(len(rows[0]))]
@@ -845,7 +889,7 @@ def sample_answer_xlsx() -> bytes:
     sheet_xml = (
         '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
         '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
-        f'<sheetData>{"".join(row_xml)}</sheetData>'
+        f"<sheetData>{''.join(row_xml)}</sheetData>"
         "</worksheet>"
     )
     content_types = (

@@ -24,10 +24,16 @@ def hash_reset_token(raw_token: str) -> str:
 
 
 def _as_utc(value: datetime) -> datetime:
-    return value.replace(tzinfo=timezone.utc) if value.tzinfo is None else value.astimezone(timezone.utc)
+    return (
+        value.replace(tzinfo=timezone.utc)
+        if value.tzinfo is None
+        else value.astimezone(timezone.utc)
+    )
 
 
-async def revoke_open_resets(db: AsyncSession, user_id: int, *, exclude_id: int | None = None) -> None:
+async def revoke_open_resets(
+    db: AsyncSession, user_id: int, *, exclude_id: int | None = None
+) -> None:
     stmt = update(PasswordResetToken).where(
         PasswordResetToken.user_id == user_id,
         PasswordResetToken.status.in_(("pending", "issued")),

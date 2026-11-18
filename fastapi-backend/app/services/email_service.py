@@ -56,16 +56,15 @@ async def send_password_reset_email(to_email: str, reset_url: str, ttl_minutes: 
         "Nếu bạn không yêu cầu thao tác này, hãy bỏ qua email này."
     )
     html_body = (
-        "<div style=\"font-family:Arial,sans-serif;color:#0f172a;line-height:1.6\">"
-        "<h2 style=\"color:#0a4174\">Đặt lại mật khẩu PTIT CubeSAT</h2>"
+        '<div style="font-family:Arial,sans-serif;color:#0f172a;line-height:1.6">'
+        '<h2 style="color:#0a4174">Đặt lại mật khẩu PTIT CubeSAT</h2>'
         "<p>Bạn vừa yêu cầu đặt lại mật khẩu cho tài khoản học tập của mình.</p>"
-        f"<p><a href=\"{safe_url}\" style=\"display:inline-block;padding:10px 18px;"
-        "background:#0a4174;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:bold\">"
+        f'<p><a href="{safe_url}" style="display:inline-block;padding:10px 18px;'
+        'background:#0a4174;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:bold">'
         "Đặt lại mật khẩu</a></p>"
         f"<p>Liên kết có hiệu lực trong <strong>{ttl_minutes} phút</strong> và chỉ sử dụng được một lần.</p>"
-        f"<p style=\"font-size:12px;color:#475569\">Hoặc dán liên kết sau vào trình duyệt: {safe_url}</p>"
-        "<p style=\"font-size:12px;color:#64748b\">Nếu bạn không thực hiện yêu cầu này, hãy bỏ qua email này.</p>"
+        f'<p style="font-size:12px;color:#475569">Hoặc dán liên kết sau vào trình duyệt: {safe_url}</p>'
+        '<p style="font-size:12px;color:#64748b">Nếu bạn không thực hiện yêu cầu này, hãy bỏ qua email này.</p>'
         "</div>"
     )
     await run_in_threadpool(_send_smtp_sync, to_email, subject, text_body, html_body)
-

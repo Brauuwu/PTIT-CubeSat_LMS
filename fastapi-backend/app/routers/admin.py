@@ -48,7 +48,9 @@ async def admin_signup(req: RegisterRequest, db: AsyncSession = Depends(get_db))
 @router.post("/login", response_model=AuthTokenResponse)
 async def admin_login(req: LoginRequest, request: Request, db: AsyncSession = Depends(get_db)):
     try:
-        return await AuthService(db).login_user(req, client_ip(request.scope), require_role=UserRole.admin)
+        return await AuthService(db).login_user(
+            req, client_ip(request.scope), require_role=UserRole.admin
+        )
     except ValueError as exc:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=str(exc)) from exc
 

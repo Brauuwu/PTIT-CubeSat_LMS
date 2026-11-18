@@ -76,12 +76,13 @@ async def update_user(db, actor, user_id, changes):
     if target is None:
         raise LMSError(404, "CONFIG_INVALID", "Không tìm thấy tài khoản.")
     if target.id == actor.id:
-        raise LMSError(403, "FORBIDDEN_ROLE", "Không thể tự thay đổi quyền hoặc trạng thái tài khoản.")
+        raise LMSError(
+            403, "FORBIDDEN_ROLE", "Không thể tự thay đổi quyền hoặc trạng thái tài khoản."
+        )
     requested_role = changes.get("role", target.role)
     requested_status = changes.get("status", target.status)
-    if (
-        target.role == UserRole.admin
-        and (requested_role != UserRole.admin or requested_status == AccountStatus.locked)
+    if target.role == UserRole.admin and (
+        requested_role != UserRole.admin or requested_status == AccountStatus.locked
     ):
         active_admins = await db.scalar(
             select(func.count(User.id)).where(
@@ -119,9 +120,7 @@ async def reset_user_password(db, actor, user_id):
         raise LMSError(404, "CONFIG_INVALID", "Không tìm thấy tài khoản.")
     # Admins change their own password in the profile page and never take over another admin.
     if target.id == actor.id or target.role == UserRole.admin:
-        raise LMSError(
-            403, "FORBIDDEN_ROLE", "Không thể cấp lại mật khẩu cho tài khoản quản trị."
-        )
+        raise LMSError(403, "FORBIDDEN_ROLE", "Không thể cấp lại mật khẩu cho tài khoản quản trị.")
     temporary_password = secrets.token_urlsafe(9)
     target.password_hash = await run_in_threadpool(hash_password, temporary_password)
     target.updated_at = datetime.now(timezone.utc)

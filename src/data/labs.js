@@ -11,7 +11,7 @@ export const LABS = [
     bgColor: 'var(--accent-blue-glow)',
     description: 'Tổng quan CubeSat, các thành phần cốt lõi và kiến trúc hệ thống.',
     features: ['video', 'document', 'componentViewer'],
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    videoUrl: '', // Video demo: chưa có nội dung thật, trang hiện "Video bài giảng sẽ được cập nhật".
     docPath: 'lab0-intro',
   },
   {

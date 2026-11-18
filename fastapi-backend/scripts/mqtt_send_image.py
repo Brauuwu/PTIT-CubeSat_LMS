@@ -14,14 +14,15 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+# The imports below need the backend root on sys.path when run as a script.
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-import aiomqtt
+import aiomqtt  # noqa: E402
 
-from app.core.config import get_settings
-from app.core.mqtt_transport import mqtt_error_detail, mqtt_tls_context
-from app.services.device_images import MAX_IMAGE_BYTES, is_jpeg
+from app.core.config import get_settings  # noqa: E402
+from app.core.mqtt_transport import mqtt_error_detail, mqtt_tls_context  # noqa: E402
+from app.services.device_images import MAX_IMAGE_BYTES, is_jpeg  # noqa: E402
 
 
 async def send(device_uid: str, photo: Path) -> int:

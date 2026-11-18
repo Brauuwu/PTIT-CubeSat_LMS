@@ -20,6 +20,7 @@ class E2EPostgresTests(unittest.IsolatedAsyncioTestCase):
     admin_connection = learning.LearningPostgresTests.admin_connection
     assert_schema_matches = learning.LearningPostgresTests.assert_schema_matches
     cli = learning.LearningPostgresTests.cli
+    cli_refused = learning.LearningPostgresTests.cli_refused
     call = classes.ClassAPITests.call
 
     async def test_cross_role_flow_and_class_mode_migration(self):
@@ -53,8 +54,9 @@ class E2EPostgresTests(unittest.IsolatedAsyncioTestCase):
                 with self.assertRaises(Exception):
                     await db.execute(text("UPDATE classes SET lms_mode='paused'"))
                 await nested.rollback()
-            # Head is an Alembic merge point, so "-1" is ambiguous; roll back past 0010 explicitly.
-            await self.cli("downgrade", "0009_quizzes")
+            # 0015/0016 refuse to drop quiz lessons or per-lesson banks, so a rollback past them is rejected
+            # as a whole and the database stays at head with its data unchanged.
+            await self.cli_refused("downgrade", "0009_quizzes")
             async with self.engine.connect() as db:
                 self.assertEqual(
                     (
@@ -68,7 +70,6 @@ class E2EPostgresTests(unittest.IsolatedAsyncioTestCase):
                 self.assertEqual(
                     (await db.execute(text("SELECT count(*) FROM quiz_attempts"))).scalar_one(), 1
                 )
-            await self.cli("upgrade", "head")
             await self.assert_schema_matches()
             report = await self.call(5, "GET", f"/api/classes/{classroom['id']}/reports")
             self.assertEqual(report.status_code, 200, report.text)

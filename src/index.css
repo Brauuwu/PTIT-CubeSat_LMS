@@ -981,7 +981,7 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
   display: flex; align-items: flex-start; justify-content: space-between; gap: 24px;
   margin-bottom: 24px;
 }
-.class-learning-heading small, .class-learning-content > small {
+.class-learning-heading small {
   color: var(--text-link); font-size: 0.78rem; font-weight: 700;
 }
 .class-learning-heading h1 {
@@ -991,30 +991,7 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
   color: var(--cubesat-navy); font-size: 0.86rem; font-weight: 600;
 }
 .class-learning-path-link { display: inline-block; margin-bottom: 18px; }
-.class-learning-content {
-  min-width: 0; padding: 0; border: 0; border-radius: 0;
-  background: transparent; box-shadow: none; color: var(--cubesat-ink);
-}
-.class-learning-content > small { display: block; margin-bottom: 10px; }
-.class-learning-content .video-player,
-.class-learning-content .doc-viewer { margin-top: 18px; }
 /* Full HD (1920x1080) frame: 16:9 whatever the page width, never collapsed to a strip. */
-.class-learning-content .video-player {
-  height: auto; aspect-ratio: 16 / 9; max-width: 1920px;
-  overflow: hidden; border-radius: 12px; background: #0f172a;
-}
-.class-learning-content .video-player iframe,
-.class-learning-content .video-player video { position: absolute; inset: 0; width: 100%; height: 100%; }
-.class-learning-content .lms-panel {
-  width: 100%; margin: 18px 0 0; color: var(--cubesat-ink);
-  background: rgba(255, 255, 255, 0.9); border-color: #c9deeb;
-}
-.class-learning-content .lms-panel h2,
-.class-learning-content .lms-panel h3,
-.class-learning-content .submission-panel h3 { color: var(--cubesat-ink); }
-.class-learning-content .lms-panel p,
-.class-learning-content .submission-panel p { color: var(--text-body); }
-.class-learning-content > .lms-notice { color: var(--status-info-text); background: rgba(255, 255, 255, 0.82); }
 .is-learning-shell .player-sidebar button.accordion-header,
 .is-learning-shell .player-sidebar button.sub-lesson-item {
   min-height: 0; padding: 8px 12px; border: 0; border-radius: 10px;
@@ -1038,19 +1015,6 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
   border: 1px solid var(--border-subtle); border-radius: 12px; background: var(--bg-surface);
   box-shadow: var(--shadow-sm);
 }
-.lab-workspace-badge {
-  position: absolute; z-index: 10; top: -14px; left: 24px; width: 32px; height: 32px;
-  display: grid; place-items: center; border-radius: 8px; background: var(--cubesat-navy);
-  color: #fff; font-size: 0.9rem; font-weight: 700; box-shadow: var(--shadow-sm);
-}
-.lab-play-badge { padding-left: 2px; }
-.lab-video-workspace { height: auto; min-height: 0; }
-.lab-video-surface, .lab-doc-surface {
-  height: 100%; min-height: 370px; overflow: hidden; border-radius: 8px; background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-}
-.lab-video-surface { height: auto; min-height: 0; aspect-ratio: 16 / 9; }
-.lab-video-surface .video-player { min-height: 0; }
 /* ===== Lesson heading: context, title, supporting description ===== */
 .lab-state-title {
   width: min(100%, 1320px); margin: 4px auto 46px;
@@ -1083,10 +1047,6 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
 .lab-objectives-title span { font-size: 1.45rem; }
 .lab-objectives-body { min-height: 215px; padding: 30px 40px; display: grid; place-items: center; border-radius: 18px; background: rgba(255,255,255,0.85); }
 .lab-objectives-body p { color: var(--text-muted); font-size: 0.88rem; font-style: italic; }
-.lab-doc-workspace { height: clamp(460px, calc(100vh - 280px), 600px); }
-.lab-doc-surface { min-height: 390px; padding: clamp(24px, 4vw, 56px); overflow: auto; }
-.lab-doc-surface .doc-content { max-width: 100%; min-height: 100%; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
-.lab-components-workspace { height: clamp(480px, calc(100vh - 250px), 650px); min-height: 480px; padding-top: 40px; overflow: hidden; }
 .lab-practice-workspace {
   height: clamp(500px, calc(100vh - 240px), 680px); min-height: 500px; padding: 38px 34px 76px;
   display: flex; flex-direction: column;
@@ -1384,7 +1344,6 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
 .sub-lesson-copy small { color: #a8d4ec; font-size: 10px; font-weight: 700; opacity: 1; }
 .sub-lesson-copy code { color: #d4e6f2; font-size: 9px; overflow-wrap: anywhere; opacity: 1; }
 .sub-lesson-item.active .sub-lesson-copy code { color: var(--text-muted); }
-.lesson-exercise-code { color: var(--text-muted); font-size: 12px; overflow-wrap: anywhere; }
 .lesson-reading-card, .lesson-practice-brief { padding: 22px 26px; margin: 24px 0; border: 1px solid var(--border-subtle); border-radius: 16px; background: #fff; color: var(--text-body); line-height: 1.75; }
 .lesson-reading-card h2, .lesson-practice-brief h2 { margin: 0 0 10px; font-size: 17px; color: var(--cubesat-ink); }
 .lesson-reading-card p, .lesson-practice-brief p { margin: 8px 0; }
@@ -1396,55 +1355,6 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
 .lesson-summary-list code { overflow-wrap: anywhere; }
 .lesson-questions-link { display: inline-flex; margin-top: 4px; font-weight: 600; text-decoration: none; }
 .lesson-source { font-size: 12px; line-height: 1.6; color: var(--text-muted); margin-top: 28px; }
-.lesson-pagination {
-  display: flex; align-items: center; justify-content: space-between; gap: 14px;
-  margin-top: 28px; padding: 14px 18px;
-  background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(8px);
-  border: 1px solid var(--border-subtle); border-radius: 14px;
-  font-size: 0.85rem; font-weight: 600; color: var(--text-muted);
-  box-shadow: 0 4px 14px rgba(10, 65, 116, 0.05);
-}
-.lesson-pagination button {
-  border: 1px solid var(--border-strong); background: #fff; color: var(--cubesat-navy);
-  border-radius: 10px; padding: 9px 16px; font-weight: 600; cursor: pointer;
-  transition: all var(--transition-fast);
-}
-.lesson-pagination button:hover:not(:disabled) {
-  background: var(--bg-surface-hover); border-color: var(--brand-primary); transform: translateY(-1px);
-}
-.lesson-pagination button:disabled { opacity: .45; cursor: not-allowed; }
-.lesson-progress-panel {
-  margin: 20px 0 24px; padding: 18px 22px;
-  border: 1px solid var(--border-subtle); border-radius: 12px;
-  background: var(--bg-surface);
-  box-shadow: var(--shadow-sm);
-}
-.lesson-progress-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; color: var(--cubesat-ink); }
-.lesson-progress-heading div { display: flex; flex-direction: column; gap: 4px; }
-.lesson-progress-heading small { color: var(--text-muted); font-size: 0.8rem; font-weight: 500; }
-.lesson-progress-heading b { color: var(--cubesat-navy); font-family: var(--font-mono); font-size: 1.35rem; font-weight: 800; font-variant-numeric: tabular-nums; }
-.lesson-progress-track { height: 8px; margin-top: 12px; overflow: hidden; border-radius: 99px; background: var(--bg-app); border: 1px solid var(--border-subtle); }
-.lesson-progress-track span { display: block; height: 100%; border-radius: inherit; background: var(--cubesat-navy); transition: width 420ms ease; }
-.lesson-completion {
-  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
-  margin: 20px 0 14px; padding: 16px 20px;
-  border: 1px solid var(--border-subtle); border-radius: 12px;
-  background: var(--bg-surface);
-  box-shadow: var(--shadow-sm);
-}
-.lesson-completion .btn {
-  min-width: 240px; font-variant-numeric: tabular-nums;
-  background: var(--cubesat-navy);
-  border-color: var(--cubesat-navy); color: #ffffff;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
-}
-.lesson-completion .btn:hover:not(:disabled) {
-  background: #072d52; border-color: #072d52;
-}
-.lesson-completion .btn:disabled {
-  background: var(--bg-app); color: var(--text-muted); border-color: var(--border-strong); box-shadow: none; opacity: 1;
-}
-.lesson-completion p { margin: 0; color: var(--status-danger-text); font-size: 13px; }
 @media (max-width: 1100px) {
   .lesson-practice-brief { flex-direction: column; gap: 10px; }
 }
@@ -1565,7 +1475,6 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
   box-shadow: 0 12px 32px rgba(10, 65, 116, 0.06), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
   border: 1px solid rgba(10, 65, 116, 0.12);
 }
-.class-learning-content .doc-content { max-width: 100%; }
 .doc-content h2, .doc-content h3 {
   margin-top: 1.75em;
   margin-bottom: 0.7em;
@@ -1773,12 +1682,7 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
   .lab-course-view { padding: 28px 22px 64px; }
   .class-learning-heading { align-items: flex-start; gap: 14px; }
   .class-learning-heading h1 { font-size: clamp(1.35rem, 5vw, 2rem); }
-  .class-learning-content { padding: 22px; }
   .lab-workspace { min-height: 410px; padding: 26px; }
-  .lab-video-workspace { min-height: 0; }
-  .lab-doc-surface { min-height: 380px; }
-  .lab-doc-workspace { height: clamp(450px, calc(100vh - 240px), 540px); min-height: 450px; }
-  .lab-doc-surface { min-height: 450px; }
   .component-explorer { grid-template-columns: minmax(190px, 230px) minmax(0, 1fr); gap: 18px; }
   .component-detail { padding: 22px; }
   .lab-practice-workspace { height: auto; min-height: 760px; padding: 34px 24px 82px; overflow: visible; }
@@ -1808,11 +1712,7 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
   .lab-mobile-lessons button span { display: none; }
   .lab-course-view { padding: 22px 12px 48px; }
   .class-learning-heading { flex-direction: column; gap: 8px; }
-  .class-learning-content { padding: 16px; border-radius: 14px; }
   .lab-workspace { min-height: 360px; margin-top: 22px; padding: 18px 12px 12px; border-radius: 20px; }
-  .lab-workspace-badge { top: -20px; left: 18px; width: 44px; height: 44px; border-radius: 13px; font-size: 1.15rem; }
-  .lab-video-surface, .lab-doc-surface { border-radius: 14px; }
-  .lab-doc-surface { min-height: 310px; }
   .lab-state-title { margin-top: 0; margin-bottom: 36px; gap: 9px; }
   .lab-state-title--compact { margin-bottom: 24px; }
   .lab-state-copy { font-size: 22px; }
@@ -1820,11 +1720,6 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
   .lab-objectives { min-height: 250px; margin-top: 42px; padding: 42px 12px 12px; border-radius: 20px; }
   .lab-objectives-title { left: 18px; padding: 9px 16px; font-size: 0.85rem; }
   .lab-objectives-body { min-height: 190px; padding: 24px 14px; text-align: center; }
-  .lab-doc-workspace { min-height: 440px; }
-  .lab-doc-surface { min-height: 400px; padding: 28px 16px; }
-  .lab-video-workspace { min-height: 0; }
-  .lab-doc-workspace { height: 440px; min-height: 440px; }
-  .lab-components-workspace { height: auto; min-height: 720px; padding-top: 34px; overflow: visible; }
   .component-explorer { height: auto; min-height: 660px; grid-template-columns: 1fr; grid-template-rows: auto minmax(360px, 1fr); gap: 14px; }
   .component-explorer-list { padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); overflow: visible; }
   .component-detail { min-height: 360px; padding: 18px; }

@@ -6,9 +6,9 @@ from app.models.tables import (
     ClassMembership,
     Classroom,
     ClassStatus,
+    LabProgress,
     MembershipRole,
     MembershipStatus,
-    LabProgress,
     UserRole,
 )
 from app.services.course_configuration import configuration, preview_curriculum
