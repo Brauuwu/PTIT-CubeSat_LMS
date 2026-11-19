@@ -17,9 +17,8 @@ const PracticeVisualization = lazy(() => import('../components/visualization/Pra
 const ComponentViewer = lazy(() => import('../components/interactive/ComponentViewer'));
 const types = { video: 'Video', document: 'Tài liệu', practice: 'Thực hành', quiz: 'Câu hỏi', labtest: 'Lab test' };
 
-function Practice({ lesson, labId, classId, preview, staffView, onRefresh }) {
-  const { user } = useAuth();
-  const [code, setCode] = useState('');
+// Requirement, evidence, rubric and the sample download: shown in "Mục tiêu bài học" at the top of the page.
+function PracticeBrief({ lesson, classId }) {
   const [error, setError] = useState('');
   const content = lesson.content;
   async function download() {
@@ -28,23 +27,44 @@ function Practice({ lesson, labId, classId, preview, staffView, onRefresh }) {
       downloadFile(`${lesson.id}.ino`, response, 'text/plain');
     } catch (failure) { setError(failure.message); }
   }
-  return <section className="lms-panel"><h2>Thực hành</h2>
-    {content.instructions ? <DocViewer content={content.instructions} docPath={undefined} /> : <p>Giảng viên chưa bổ sung hướng dẫn chi tiết cho bài này.</p>}
-    {content.evidence && <p><strong>Minh chứng:</strong> {content.evidence}</p>}
-    {content.rubric && <><h3>Tiêu chí chấm</h3><DocViewer content={content.rubric} docPath={undefined} /></>}
-    {content.mode === 'exploration' ? <Suspense fallback={<p>Đang tải mô hình…</p>}><ComponentViewer /></Suspense>
-      : content.mode === 'assembly' ? <p>Bài lắp ráp cơ khí không cần viết mã: làm theo video hướng dẫn và nộp ảnh sản phẩm hoàn thiện cho giảng viên theo hướng dẫn của lớp.</p>
-      : (!preview || staffView) && <>
-      {content.exercise_id && <button onClick={download}>Tải mã mẫu .ino</button>}<Notice error={error} />
-      <Suspense fallback={<p>Đang tải không gian thực hành…</p>}>
-        <IDEPanel labId={labId} exerciseId={lesson.id} storageScope={`user:${user?.id || 'staff'}:class:${classId}`} setCode={setCode} showToolbar={false} />
-        <div className="lms-actions"><LabPracticeActions code={code} labId={labId} classId={Number(classId)} lessonId={lesson.id} configuredBoard={content.board || ''} /></div>
-        {!staffView && <SubmissionPanel classId={classId} lessonId={lesson.id} code={code} rubric={content.rubric} onRefresh={onRefresh} />}
-        <PracticeVisualization />
-      </Suspense>
-    </>}
-    {preview && !staffView && content.mode !== 'exploration' && content.mode !== 'assembly' && <p>Chế độ xem thử chỉ hiển thị yêu cầu và tiêu chí; không biên dịch hoặc ghi tiến độ.</p>}
-  </section>;
+  return <div className="fig-goal-practice">
+    <div>
+      {content.instructions ? <DocViewer content={content.instructions} docPath={undefined} /> : <p>Giảng viên chưa bổ sung hướng dẫn chi tiết cho bài này.</p>}
+      {content.evidence && <p><strong>Minh chứng:</strong> {content.evidence}</p>}
+      {content.rubric && <details className="fig-goal-rubric"><summary>Tiêu chí chấm</summary><DocViewer content={content.rubric} docPath={undefined} /></details>}
+    </div>
+    {content.mode === 'hardware' && content.exercise_id && <div className="lesson-example-links">
+      <button type="button" className="btn btn-sm btn-outline" onClick={download}>Tải mã mẫu ESP32 (.ino)</button><Notice error={error} />
+    </div>}
+  </div>;
+}
+
+// Device bar + two-column workspace (code and actions | live visualization), as on the lab pages.
+function Practice({ lesson, labId, classId, preview, staffView, onRefresh }) {
+  const { user } = useAuth();
+  const [code, setCode] = useState('');
+  const content = lesson.content;
+  const variant = labId === 8 ? 'dashboard' : 'rich';
+  if (content.mode === 'exploration') return <Suspense fallback={<p>Đang tải mô hình…</p>}><ComponentViewer /></Suspense>;
+  if (content.mode === 'assembly') return <p>Bài lắp ráp cơ khí không cần viết mã: làm theo video hướng dẫn và nộp ảnh sản phẩm hoàn thiện cho giảng viên theo hướng dẫn của lớp.</p>;
+  if (preview && !staffView) return <p>Chế độ xem thử chỉ hiển thị yêu cầu và tiêu chí; không biên dịch hoặc ghi tiến độ.</p>;
+  return <Suspense fallback={<p>Đang tải không gian thực hành…</p>}>
+    <TelemetryControls />
+    <section className={`lab-workspace lab-practice-workspace lab-practice-workspace--${variant}`} aria-label={`Không gian thực hành ${lesson.id}`}>
+      <div className={`lab-practice-panels lab-practice-panels--${variant}`}>
+        <div className="lab-practice-editor">
+          <div className="lab-practice-editor-frame">
+            <IDEPanel labId={labId} exerciseId={lesson.id} storageScope={`user:${user?.id || 'staff'}:class:${classId}`} setCode={setCode} variant="workspace" showToolbar={false} />
+          </div>
+          <div className="lab-practice-actions lab-practice-actions--inline" aria-label="Thao tác thực hành">
+            <LabPracticeActions code={code} labId={labId} classId={Number(classId)} lessonId={lesson.id} configuredBoard={content.board || ''} />
+          </div>
+          {!staffView && <SubmissionPanel classId={classId} lessonId={lesson.id} code={code} rubric={content.rubric} onRefresh={onRefresh} />}
+        </div>
+        <div className="lab-practice-visualization"><PracticeVisualization /></div>
+      </div>
+    </section>
+  </Suspense>;
 }
 
 function SubmissionPanel({ classId, lessonId, code, rubric, onRefresh }) {
@@ -137,7 +157,7 @@ function LessonContent({ lesson, labId, classId, preview, staffView = false, onR
       {unmeasuredVideo && <p className="lesson-achieved" role="status">Nguồn video này chưa hỗ trợ đo đoạn xem. Giảng viên cần bật chế độ xác nhận hoặc cung cấp video đo được.</p>}</>}
     videoNode={lesson.type === 'video' ? <VideoPlayer url={lesson.content.url} initialPosition={lesson.progress?.last_position || 0} onSegment={preview ? undefined : segment} trackingMode={lesson.content.tracking_mode || 'native'} /> : null}
     docNode={lesson.type === 'document' ? <DocViewer content={lesson.content.markdown || '# Tài liệu đang được cập nhật'} docPath={undefined} /> : null}
-    bodyNode={bodyNode}
+    bodyNode={bodyNode} goalNode={lesson.type === 'practice' ? <PracticeBrief lesson={lesson} classId={classId} /> : null}
     showComplete={!preview && !staffView && lesson.type !== 'quiz'}
     canComplete={!completionLocked} completed={completed} completeLesson={() => confirm('complete')}
     completeLabel={completed ? '' : completionLabel} completeError="" remainingSeconds={remainingSeconds}
@@ -197,7 +217,6 @@ export default function ClassLearningPage({ experience = false }) {
   return <div className="player-layout class-player-layout">
     <ClassCourseSidebar labs={data?.labs || []} classId={classId} homePath={experience ? '/' : `/classes/${classId}`} activeLesson={selected?.lesson.id} onSelectLesson={selectLesson} unlockedView={isPrivileged} />
     <div className="player-main">
-      <TelemetryControls />
       {selected && <div className="lab-mobile-lessons lab-mobile-lessons--curriculum">
         <label htmlFor={`class-${classId}-lesson`}>Nội dung Lab {selected.lab.id} · {activeLessons.length} phần</label>
         <select id={`class-${classId}-lesson`} value={selected.lesson.id} onChange={event => selectLesson(event.target.value)}>

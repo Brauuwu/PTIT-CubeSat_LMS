@@ -108,11 +108,13 @@ function LoadedLabLayout({ lab, catalog, editorPanel, visualizationPanel = null,
     key: lesson.id, exerciseId: lesson.type === 'practice' ? lesson.id : '', legacyFallback: lesson.id === firstPractice?.id,
   }) : editorPanel;
 
+  // Practice: the requirement and its links sit in "Mục tiêu bài học" at the top; the device bar only appears here.
+  const practiceGoal = lesson.type === 'practice' ? <div className="fig-goal-practice">
+    <div><h2>Yêu cầu thực hành</h2><p>{lesson.title}.</p><p className="fig-goal-lab">{lab.description}</p></div>
+    <div className="lesson-example-links"><a href={lesson.repositoryUrl} target="_blank" rel="noreferrer">Hướng dẫn trên PTITCube ↗</a><button type="button" className="btn btn-sm btn-outline" disabled={downloading} onClick={downloadExample}>{downloading ? 'Đang tải mã mẫu…' : 'Tải mã mẫu ESP32 (.ino)'}</button>{downloadError && <small role="alert">{downloadError}</small>}</div>
+  </div> : null;
   const lessonBody = lesson.type === 'practice' ? <>
-    <section className="lesson-practice-brief" aria-label="Yêu cầu bài thực hành">
-      <div><h2>Yêu cầu thực hành</h2><p>{lesson.title}.</p></div>
-      <div className="lesson-example-links"><a href={lesson.repositoryUrl} target="_blank" rel="noreferrer">Hướng dẫn trên PTITCube ↗</a><button type="button" className="btn btn-sm btn-outline" disabled={downloading} onClick={downloadExample}>{downloading ? 'Đang tải mã mẫu…' : 'Tải mã mẫu ESP32 (.ino)'}</button>{downloadError && <small role="alert">{downloadError}</small>}</div>
-    </section>
+    <TelemetryControls />
     <section className={`lab-workspace lab-practice-workspace lab-practice-workspace--${practiceVariant}`} aria-label={`Không gian thực hành ${lesson.exerciseCode}`}>
       <div className={`lab-practice-panels lab-practice-panels--${practiceVariant}`}>
         <div className="lab-practice-editor">
@@ -160,7 +162,6 @@ function LoadedLabLayout({ lab, catalog, editorPanel, visualizationPanel = null,
   return <div className="player-layout">
     <CourseSidebar labs={catalog} currentLabId={lab.id} activeLesson={lesson.id} onSelectLesson={selectLesson} progress={progress} userRole={user?.role} />
     <div className="player-main" ref={mainRef}>
-      {lab.id !== 0 && <TelemetryControls />}
       {lab.id === 0 ? <nav className="lab-mobile-lessons" aria-label="Nội dung Lab 0">
         {lessons.map(item => <button key={item.id} type="button" className={lesson.id === item.id ? 'active' : ''} aria-current={lesson.id === item.id ? 'page' : undefined} onClick={() => selectLesson(item.id)}>{item.title}</button>)}
       </nav> : <div className="lab-mobile-lessons lab-mobile-lessons--curriculum">
@@ -177,7 +178,7 @@ function LoadedLabLayout({ lab, catalog, editorPanel, visualizationPanel = null,
         videoNode={<VideoPlayer url={videoUrl} />}
         docNode={<DocViewer key={lesson.id} docPath={lab.id === 0 && lesson.id === 'document' ? lab.docPath : undefined} content={lesson.reading} />}
         componentsNode={visualizationPanel}
-        bodyNode={lessonBody}
+        bodyNode={lessonBody} goalNode={practiceGoal}
         selectLesson={selectLesson}
         showComplete={isSequentialLesson(lesson)}
         canComplete={canComplete} completed={Boolean(lessonStates[lesson.id]?.completed)}

@@ -2336,14 +2336,53 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
 .fig-title-code { display: block; margin-top: 6px; font: 600 0.8rem/1.4 var(--font-mono); color: #1a619b; overflow-wrap: anywhere; }
 .lab-fig .lesson-achieved { margin: 16px 0 0; }
 .lab-fig > .lms-notice, .lab-fig > [role="alert"] { margin-top: 16px; }
-/* Thanh nguồn telemetry (Lab 1-8) căn theo lề và kiểu thẻ của khung Lab */
-.player-main:has(.lab-fig) > .telemetry-controls {
-  margin: 14px calc(200 * var(--u)) 0; padding: 12px calc(145 * var(--u));
-  border: 0; border-radius: calc(45 * var(--u)); background: rgba(221, 232, 243, 0.7);
-  box-shadow: 0 16px 32px -4px rgba(12, 12, 13, 0.1), 0 4px 4px -4px rgba(12, 12, 13, 0.05);
+/* Đầu trang: tiêu đề bài, rồi "Mục tiêu bài học" gọn, rồi tiến độ */
+.lab-fig > .fig-title:first-child { margin-top: 0; }
+.fig-card--goal { margin-top: calc(170 * var(--u)); padding: calc(150 * var(--u)) calc(145 * var(--u)) calc(70 * var(--u)); }
+.fig-card--goal .fig-surface--note { min-height: 0; padding: 18px 26px; align-items: stretch; text-align: left; }
+.fig-card--goal + .fig-progress, .fig-title + .fig-progress { margin-top: calc(110 * var(--u)); }
+.fig-goal-practice { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; line-height: 1.6; }
+.fig-goal-practice > div:first-child { min-width: 0; flex: 1; }
+.lab-fig .fig-goal-practice h2 { margin: 0 0 6px; color: #094174; font-size: 1rem; font-weight: 700; letter-spacing: normal; }
+.fig-goal-practice p { margin: 0 0 6px; }
+.fig-goal-practice .fig-goal-lab { color: #5a6273; font-size: 0.85rem; }
+.fig-goal-practice .lesson-example-links { flex: 0 0 auto; align-items: flex-end; }
+.fig-goal-practice .doc-content { padding: 0; border: 0; background: transparent; box-shadow: none; max-width: none; }
+.fig-goal-rubric summary { cursor: pointer; color: #094174; font-weight: 700; }
+
+/* Khung thực hành: dùng hết bề ngang thẻ, thanh thiết bị gọn ngay phía trên editor */
+.fig-card--practice { padding-left: calc(60 * var(--u)); padding-right: calc(60 * var(--u)); }
+.fig-card--practice .fig-surface--body { padding: 14px; }
+.lab-fig .lab-workspace { width: 100%; margin: 0; }
+.lab-fig .lab-practice-workspace { padding: 18px 18px 22px; border: 0; border-radius: 16px; box-shadow: none; }
+.fig-card--practice .telemetry-controls {
+  margin: 0 0 12px; padding: 10px 16px; gap: 12px; border: 1px solid rgba(9, 65, 116, 0.12);
+  border-radius: 14px; background: #fff; box-shadow: none; backdrop-filter: none;
 }
-.player-main:has(.lab-fig) > .telemetry-controls label { color: #094174; }
-.player-main:has(> .telemetry-controls) .lab-course-view.lab-fig { padding-top: calc(100 * var(--u)); }
+.fig-card--practice .telemetry-controls label { color: #094174; }
+.lab-fig .lab-practice-panels--rich { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
+.lab-fig .lab-practice-panels--rich .lab-practice-editor-frame { height: clamp(560px, 74vh, 860px); }
+/* Lab 8: editor | Serial Monitor ở hàng trên, thư viện widget + canvas và nhật ký trải ngang bên dưới */
+.lab-fig .lab-practice-panels--dashboard { grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); grid-template-rows: none; gap: 20px; align-items: stretch; }
+.lab-fig .lab-practice-panels--dashboard .lab-practice-editor-frame { height: clamp(480px, 62vh, 680px); }
+.lab-fig .lab-practice-panels--dashboard .lab-practice-visualization,
+.lab-fig .lab-practice-panels--dashboard .lab-visual-stack { display: contents; }
+.lab-fig .lab-practice-panels--dashboard .lab-visual-stack > :not(:first-child) { grid-column: 1 / -1; }
+.lab-fig .submission-panel { margin-top: 16px; }
+/* Serial Monitor trong cột hẹp: tiêu đề một dòng, nút gọn và xuống hàng khi thiếu chỗ */
+.lab-fig .serial-card > .card-header { flex-wrap: wrap; gap: 8px 12px; padding: 12px 16px; }
+.lab-fig .serial-card > .card-header h3 { margin: 0; white-space: nowrap; }
+.lab-fig .serial-card > .card-header .btn { min-height: 30px; height: 30px; padding: 0 10px; font-size: 0.75rem; }
+/* Trang học theo lớp (.lms-shell): giữ ô chọn/nút của khung thực hành ở kích thước gọn */
+.lab-fig .lab-practice-actions { flex-wrap: wrap; justify-content: center; }
+.lab-fig .lab-practice-actions select, .fig-card--practice .telemetry-controls select { width: auto; min-height: 36px; padding: 6px 10px; font-size: 0.8rem; }
+.lab-fig .lab-practice-actions button, .fig-card--practice .telemetry-controls button { min-height: 36px; padding: 0 14px; font-size: 0.78rem; }
+/* Dưới ~1400px (sidebar chiếm ~280px) hai cột quá hẹp cho editor: xếp dọc */
+@media (max-width: 1400px) {
+  .lab-fig .lab-practice-panels--rich, .lab-fig .lab-practice-panels--dashboard { grid-template-columns: minmax(0, 1fr); }
+  .lab-fig .lab-practice-panels--rich .lab-practice-editor { position: static; }
+  .lab-fig .lab-practice-panels--rich .lab-practice-editor-frame, .lab-fig .lab-practice-panels--dashboard .lab-practice-editor-frame { height: 520px; }
+}
 
 /* Trang học theo lớp nằm trong .lms-shell: giữ kiểu chữ của khung Lab trước quy tắc h1/h2 chung của LMS */
 .lms-shell.is-learning-shell:has(.lab-fig) { height: 100dvh; }
@@ -2366,8 +2405,11 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); font-weight: 700; line-heig
 
 /* Màn hình hẹp: lề cố định thay cho tỉ lệ thiết kế desktop, tab nổi thu gọn, thẻ không tràn ngang */
 @media (max-width: 720px) {
-  .lab-course-view.lab-fig, .player-main:has(> .telemetry-controls) .lab-course-view.lab-fig { padding: 12px 12px 32px; }
-  .player-main:has(.lab-fig) > .telemetry-controls { margin: 12px 12px 0; padding: 12px; border-radius: 16px; }
+  .lab-course-view.lab-fig { padding: 12px 12px 32px; }
+  .fig-card--practice { padding-left: 8px; padding-right: 8px; }
+  .fig-card--practice .fig-surface--body, .lab-fig .lab-practice-workspace { padding: 8px; }
+  .fig-goal-practice { flex-direction: column; gap: 12px; }
+  .fig-goal-practice .lesson-example-links { align-items: stretch; }
   .player-main:has(.lab-fig) > .lab-mobile-lessons { margin: 8px 12px 0; }
   .fig-progress { padding: 14px 16px; border-radius: 16px; }
   .lab-fig .fig-progress-title, .fig-progress-percent { font-size: 1.1rem; }

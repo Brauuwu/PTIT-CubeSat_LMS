@@ -42,7 +42,24 @@ export default function LabFigView({
   const cardLabel = lesson.label ? `${lesson.label}: ${lesson.title}` : lesson.title;
   const canReset = completed && typeof resetLesson === 'function';
 
+  const goal = content === 'video'
+    ? goalNode ?? (lab.description
+      ? <><p>{lab.description}</p><p>Nội dung phần này: {lesson.title}.</p></>
+      : <p className="fig-placeholder">Tài liệu đang được cập nhật...</p>)
+    : goalNode;
+
   return <div className="lab-course-view lab-fig animate-fadeInUp" key={`${lab.id}:${lesson.id}`}>
+    <header className="fig-title">
+      <img src={labWordmark} alt="" className="fig-title-lab" draggable="false" />
+      <span className="fig-title-number" aria-hidden="true">{number}</span>
+      <h1 className="fig-title-text"><span className="sr-only">Lab {number}: </span>{title}{lesson.exerciseCode && <code className="fig-title-code">{lesson.exerciseCode}</code>}</h1>
+    </header>
+
+    {goal && <section className="fig-card fig-card--soft fig-card--goal" aria-label="Mục tiêu bài học">
+      <Tab icon={iconGoal} label="Mục tiêu bài học" small />
+      <div className="fig-surface fig-surface--note">{goal}</div>
+    </section>}
+
     {showProgress && <section className="fig-progress" aria-label="Tiến độ Lab">
       <div className="fig-progress-head">
         <div>
@@ -77,21 +94,6 @@ export default function LabFigView({
     {bodyTab && <section className={`fig-card fig-card--body fig-card--${lesson.type}`} aria-label={cardLabel}>
       <Tab icon={bodyTab.icon} label={bodyTab.label} />
       <div className="fig-surface fig-surface--body">{bodyNode}</div>
-    </section>}
-
-    <header className="fig-title">
-      <img src={labWordmark} alt="" className="fig-title-lab" draggable="false" />
-      <span className="fig-title-number" aria-hidden="true">{number}</span>
-      <h1 className="fig-title-text"><span className="sr-only">Lab {number}: </span>{title}{lesson.exerciseCode && <code className="fig-title-code">{lesson.exerciseCode}</code>}</h1>
-    </header>
-
-    {content === 'video' && <section className="fig-card fig-card--soft">
-      <Tab icon={iconGoal} label="Mục tiêu bài học" small />
-      <div className="fig-surface fig-surface--note">
-        {goalNode ?? (lab.description
-          ? <><p>{lab.description}</p><p>Nội dung phần này: {lesson.title}.</p></>
-          : <p className="fig-placeholder">Tài liệu đang được cập nhật...</p>)}
-      </div>
     </section>}
 
     <nav className="fig-pagination" aria-label="Điều hướng bài học">
