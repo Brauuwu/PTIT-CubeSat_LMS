@@ -251,7 +251,7 @@ void sendBeacon() {
 - `Lab5-01b_Send_Telemetry_Library`: Đóng gói cấu trúc bản tin Telemetry chuẩn kèm mã tính CRC-16 tự động.
 - `Lab5-02a_Receive_Command_UART`: Lắng nghe chuỗi dữ liệu thô từ cổng không gian và kiểm tra chuỗi đồng bộ Sync Word.
 - `Lab5-02b_Receive_Command_Library`: Giải mã mệnh lệnh điều khiển từ mặt đất và kích hoạt chân chấp hành tương ứng.
-- `Lab5-03_Satellite_Comm_System`: Xây dựng kịch bản truyền thông hai chiều hoàn chỉnh giữa mô hình vệ tinh và mô hình trạm mặt đất.
+- `Lab5-03_Ground_Station_Demo`: Xây dựng kịch bản truyền thông hai chiều hoàn chỉnh giữa mô hình vệ tinh và mô hình trạm mặt đất.
 
 ### ❓ Câu Hỏi Đánh Giá Kỹ Năng Thực Hành (Lab 5)
 1. **Thiết bị thu sóng vô tuyến định nghĩa bằng phần mềm (SDR) tại trạm mặt đất có ưu điểm vượt trội nào?**
