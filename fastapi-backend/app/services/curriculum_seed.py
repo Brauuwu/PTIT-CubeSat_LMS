@@ -83,6 +83,7 @@ async def seed_curriculum(db):
 async def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--report", type=Path)
+    parser.add_argument("--quiet", action="store_true", help="Print one summary line only.")
     args = parser.parse_args()
     async with get_session_maker()() as db:
         report = await seed_curriculum(db)
@@ -90,7 +91,11 @@ async def main():
     output = json.dumps(report, ensure_ascii=False, indent=2)
     if args.report:
         args.report.write_text(output + "\n", encoding="utf-8")
-    print(output)
+    if args.quiet:
+        lessons = sum(lab["total"] for lab in report["labs"])
+        print(f"Curriculum seed ready: {report['course_version_id']} ({lessons} lessons)")
+    else:
+        print(output)
 
 
 if __name__ == "__main__":
