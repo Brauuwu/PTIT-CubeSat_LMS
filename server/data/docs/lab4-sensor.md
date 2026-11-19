@@ -93,6 +93,17 @@ sequenceDiagram
   - `0x41 - 0x42`: Nhiệt độ nội bộ của chip silicon.
   - `0x43 - 0x48`: Vận tốc góc 3 trục $G_x, G_y, G_z$ (độ nhạy cấu hình $\pm 250, \pm 500, \pm 1000, \pm 2000^\circ\text{/s}$).
 
+### 2. Cảm biến Từ trường & La bàn số GY-271 (QMC5883L / HMC5883L)
+- **Nhà sản xuất & Địa chỉ I2C:** QST / Honeywell. Địa chỉ I2C chuẩn là `0x0D` (QMC5883L / QMC5883P) hoặc `0x1E` (HMC5883L).
+- **Cấu trúc Phần cứng:** Tích hợp 3 cảm biến từ điện trở dị hướng (Anisotropic Magnetoresistive - AMR) độ nhạy cao đo cường độ từ trường Trái Đất theo 3 trục trực giao $M_x, M_y, M_z$ (đơn vị Gauss hoặc $\mu\text{T}$).
+- **Thuật toán Tính Góc Hướng La bàn (Heading):**
+  Góc hướng la bàn so với cực Bắc từ được tính bằng hàm lượng giác:
+  $$\text{Heading} = \text{atan2}(M_y, M_x) \cdot \frac{180}{\pi}$$
+  Nếu $\text{Heading} < 0^\circ$, hiệu chỉnh: $\text{Heading} = \text{Heading} + 360^\circ$.
+- **Hợp nhất Dữ liệu Quán tính 9 Bậc Tự do (9-DOF):** 
+  Kết hợp gia tốc kế 3 trục (đo véc-tơ trọng trường), con quay hồi chuyển 3 trục (đo vận tốc góc) từ MPU6500 và từ kế 3 trục (đo véc-tơ từ trường Trái Đất) từ GY-271 cho phép phân hệ ADCS của vệ tinh xác định đầy đủ và ổn định cả 3 góc Euler trong không gian 3 chiều: Roll $\phi$, Pitch $\theta$ và Yaw / Heading $\psi$.
+- **Chuẩn hóa Định dạng Log Serial:** Dữ liệu cảm biến được in theo từng cụm 3 trục trên một dòng (`ACCEL: ...`, `GYRO: ...`, `MAG: ...`), loại bỏ hoàn toàn các tiền tố ngoặc vuông `[...]` rườm rà.
+
 ### 3. Thuật toán Lọc Bù (Complementary Filter) Ước lượng Tư thế
 Để tính toán góc nghiêng (Roll $\phi$, Pitch $\theta$) của vệ tinh, mỗi cảm biến đơn lẻ đều có nhược điểm chí mạng:
 - **Gia tốc kế:** Đo véc-tơ gia tốc trọng trường $g$. Cho góc nghiêng chính xác tuyệt vời khi ở trạng thái tĩnh dài hạn, nhưng lại cực kỳ nhạy cảm với các rung động cơ học ngắn hạn và lực quán tính lúc chuyển động (Nhiễu tần số cao).
@@ -272,7 +283,7 @@ void loop() {
                           myGPS.getLat(), myGPS.getLng(), 
                           myGPS.getAltitude(), myGPS.getSatellites(), myGPS.getHDOP());
         } else {
-            Serial.println("[GPS] Dang tim tin hieu ve tinh ngoai troi...");
+            Serial.println("GPS: Dang tim tin hieu ve tinh ngoai troi...");
         }
     }
 }
@@ -295,11 +306,19 @@ void loop() {
 
 ---
 
-## 📖 Doc 4.5: Tải Trọng Camera Viễn Thám OV2640 & Nén JPEG Phần Cứng
+## 📖 Doc 4.5: Tải Trọng Camera Viễn Thám OV2640, Nén JPEG Phần Cứng & Giao Thức Lệnh UART
 
 ### 1. Tải trọng Camera OV2640
 - **Đặc tính Tải trọng:** Cảm biến ảnh màu CMOS Omnivision **OV2640** độ phân giải 2 Megapixel ($1600 \times 1200\text{ UXGA}$), tích hợp bộ mã hóa nén phần cứng JPEG giúp giảm dung lượng tệp ảnh từ hàng Megabytes xuống còn $30 - 60\text{ KB}$, rất phù hợp với băng thông hạn chế của kênh truyền sóng không gian.
 - **Yêu cầu Xung nhịp Ngoài XCLK:** Để mạch xử lý tín hiệu hình ảnh (ISP) bên trong OV2640 hoạt động, nó đòi hỏi vi điều khiển OBC phải phát ra một đường xung nhịp tần số cao ổn định từ $10\text{ MHz}$ đến $20\text{ MHz}$ tại chân `XCLK`.
+
+### 2. Giao thức Bắt tay Điều khiển Chụp ảnh qua UART (Chuẩn Lệnh Chuỗi Text)
+Khác với giao thức ký tự đơn sơ khởi (`'p'`), giao thức chuẩn của hệ thống CubeSat sử dụng chuỗi ký tự rõ ràng để tăng tính an toàn và khả năng tự kiểm lỗi:
+1. **Gửi lệnh chụp:** OBC gửi lệnh chuỗi text `"capture\n"` đến ESP32-CAM qua cổng nối tiếp UART2 (tốc độ baud 115200, chân RX 16, TX 17).
+2. **Phản hồi kích thước:** ESP32-CAM chụp ảnh, nén phần cứng JPEG và phản hồi chuỗi `SIZE:<bytes>\n` thông báo kích thước tệp ảnh (ví dụ: `SIZE:38420`).
+3. **Bắt tay đồng bộ:** OBC kiểm tra tính sẵn sàng của thẻ nhớ MicroSD (khởi tạo qua thư viện `PTIT_Storage`), mở tệp tin `/photos/uart_img_X.jpg` để ghi, sau đó gửi lại chuỗi `"OK\n"` báo hiệu sẵn sàng nhận luồng dữ liệu.
+4. **Truyền nhận dữ liệu nhị phân:** ESP32-CAM truyền luồng byte nhị phân của ảnh JPEG (bắt đầu bằng byte `0xFFD8` và kết thúc bằng `0xFFD9`). OBC đọc theo khối buffer 256 byte và ghi trực tiếp vào thẻ nhớ.
+5. **Hoàn tất phiên chụp:** Sau khi nhận đủ số byte đã cam kết, OBC gửi chuỗi `"DONE\n"` để ESP32-CAM giải phóng bộ nhớ đệm, sau đó đóng tệp thẻ nhớ và tự động trả quyền ưu tiên bus UART2 cho module định vị GPS thông qua IC chuyển mạch 74HC4066.
 
 ---
 
@@ -322,15 +341,15 @@ void loop() {
 ## 💻 Hướng Dẫn Thực Hành: Danh Mục Các Bài Thực Hành Lab 4
 - `Lab4-01a_Environment_I2C`: Khởi tạo bus I2C, đọc trực tiếp 24 byte hằng số hiệu chuẩn và các thanh ghi áp suất thô của BMP280.
 - `Lab4-01b_Environment_Library`: Đọc và tính toán áp suất khí quyển, nhiệt độ môi trường và độ cao ước lượng thông qua thư viện PTITCube.
-- `Lab4-02a_IMU_I2C`: Đọc dữ liệu gia tốc và vận tốc góc 6 trục thô từ thanh ghi `0x3B` của chip MPU6500.
-- `Lab4-02b_IMU_Library`: Cài đặt thuật toán bộ lọc bù (Complementary Filter) tính toán góc nghiêng Roll và Pitch ổn định.
+- `Lab4-02a_IMU_I2C`: Đọc dữ liệu gia tốc (ACCEL), vận tốc góc (GYRO) từ MPU6500 và từ trường (MAG), góc la bàn (Heading) từ GY-271 qua I2C; xuất log Serial gọn gàng 3 trục mỗi dòng, không chứa tiền tố ngoặc vuông `[...]`.
+- `Lab4-02b_IMU_Library`: Cài đặt thuật toán bộ lọc bù (Complementary Filter) kết hợp dữ liệu 9 trục tính toán góc nghiêng vệ tinh Roll, Pitch và Heading La bàn số ổn định.
 - `Lab4-03a_GPS_UART`: Đọc trực tiếp luồng ký tự ASCII bản tin NMEA thô từ module GNSS L76X qua cổng UART2 thuần.
 - `Lab4-03b_GPS_Library`: Thu nhận, phân loại câu tin NMEA thô và kiểm tra mã Checksum XOR (*hh) bằng bộ đệm dòng.
 - `Lab4-03c_GPS_PTITCube`: Sử dụng thư viện PTITCube chuyển đổi luồng dữ liệu NMEA thô thành các trường số thực có ý nghĩa mà người dùng có thể hiểu được (Kinh độ, Vĩ độ, Cao độ m, Vận tốc km/h, Hướng đi, Số vệ tinh, HDOP, Thời gian UTC).
-- `Lab4-04a_Camera_UART`: Giao tiếp UART thuần bắt tay (`p` -> `SIZE` -> `OK` -> stream -> `DONE`) với module ESP32-CAM và ghi trực tiếp luồng byte ảnh JPEG vào thẻ nhớ MicroSD qua bus SPI.
-- `Lab4-04b_Camera_Library`: Sử dụng thư viện `PTITCube` (`PTIT_Camera`) để chụp ảnh và tự động quản lý lưu trữ vào thẻ nhớ MicroSD qua hàm tiện ích cấp cao.
+- `Lab4-04a_Camera_UART`: Giao tiếp UART thuần bắt tay bằng chuỗi văn bản (`"capture"` -> `SIZE` -> `OK` -> stream -> `DONE`) với module ESP32-CAM và ghi trực tiếp luồng byte ảnh JPEG vào thẻ nhớ MicroSD qua thư viện `PTIT_Storage` (tự định nghĩa chân Camera RX 16, TX 17 và chân điều khiển IC chuyển mạch 74HC4066).
+- `Lab4-04b_Camera_Library`: Sử dụng thư viện `PTITCube` (`PTIT_Camera`) để chụp ảnh và tự động quản lý lưu trữ vào thẻ nhớ MicroSD qua lệnh chuỗi văn bản (`"capture"`, `"photo"`).
 - `Lab4-05_Read_All_Sensors`: Tổng hợp đọc đồng thời tất cả các cảm biến môi trường (BMP280), quán tính (MPU6500, QMC5883) và định vị (GPS L76X) trong một chu trình khép kín.
-- `Lab4-06_Camera_Multiplexer`: Lập trình điều khiển IC chuyển mạch 74HC4066 luân phiên giữa Camera và GNSS, giải quyết xung đột cổng UART.
+- `Lab4-06_Camera_Multiplexer`: Lập trình điều khiển IC chuyển mạch 74HC4066 luân phiên giữa Camera và GNSS theo nguyên tắc Break-Before-Make, giải quyết triệt để xung đột cổng UART.
 
 ### ❓ Câu Hỏi Đánh Giá Kỹ Năng Thực Hành (Lab 4)
 1. **Cặp byte đánh dấu bắt đầu (SOI) và kết thúc (EOI) của một tệp ảnh nén JPEG nhận được từ Camera OV2640 là:**

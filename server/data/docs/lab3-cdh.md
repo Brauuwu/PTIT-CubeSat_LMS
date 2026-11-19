@@ -74,12 +74,22 @@ Chuẩn giao tiếp **SPI** là một bus truyền thông nối tiếp đồng b
 ## 📖 Doc 3.2: Kiến trúc Hệ thống Lệnh Shell CLI & Tổng quan Hệ Điều Hành trong Vệ Tinh
 
 ### 1. Kiến trúc Giao diện Dòng lệnh Shell CLI (Command Line Interface)
-Để phục vụ việc kiểm thử, vận hành và trút dữ liệu từ trạm mặt đất, phân hệ C&DH cài đặt một bộ phân tích cú pháp dòng lệnh tương tự hệ điều hành Linux thông qua cổng nối tiếp UART:
-- **`ls` (List Directory):** Duyệt cây thư mục trên thẻ MicroSD, liệt kê tên tệp, ngày giờ tạo và dung lượng tệp tin (bytes).
-- **`cat <filename>` (Concatenate / Read):** Mở tệp tin nhật ký và in toàn bộ nội dung dạng chuỗi ASCII ra màn hình Serial Monitor.
-- **`rm <filename>` (Remove):** Xóa bỏ một tệp tin dữ liệu cũ trên thẻ nhớ để giải phóng không gian lưu trữ.
-- **`df` (Disk Free):** Tính toán và in ra tổng dung lượng của thẻ nhớ, dung lượng đã sử dụng và dung lượng còn trống.
-- **`reboot`:** Kích hoạt phần mềm khởi động lại toàn bộ hệ thống bằng lệnh `ESP.restart()`.
+Để phục vụ việc kiểm thử, vận hành và trút dữ liệu từ trạm mặt đất, phân hệ C&DH cài đặt một bộ phân tích cú pháp dòng lệnh tương tự hệ điều hành Linux thông qua cổng nối tiếp UART (`PTIT_Storage::handleCommand`):
+- **`pwd`:** In đường dẫn thư mục làm việc hiện tại (ví dụ: `/`, `/photos`, `/hieu`).
+- **`cd <path>`:** Đổi thư mục làm việc hiện tại (hỗ trợ thư mục cha `..`, thư mục gốc `/`, thư mục home `~`, đường dẫn tương đối và tuyệt đối).
+- **`ls [path]`:** Duyệt cây thư mục trên thẻ MicroSD, phân loại `DIR:` và `FILE:` kèm dung lượng byte.
+- **`cat <path>`:** Mở tệp tin nhật ký văn bản và in toàn bộ nội dung ra màn hình.
+- **`touch <path>`:** Tạo một tệp tin mới rỗng nếu tệp chưa tồn tại.
+- **`echo <text> [> | >> <file>]`:** In chuỗi văn bản hoặc chuyển hướng ghi đè (`>`) / ghi nối tiếp (`>>`) vào tệp tin.
+- **`mkdir <path>`:** Tạo thư mục mới trên thẻ nhớ.
+- **`rmdir <path>`:** Xóa thư mục rỗng (bảo vệ không xóa thư mục gốc `/`).
+- **`rm <path>`:** Xóa bỏ tệp tin dữ liệu cũ trên thẻ nhớ (từ chối xóa nếu đường dẫn là thư mục).
+- **`df` (Disk Free):** Tính toán và in ra tổng dung lượng thẻ nhớ, dung lượng đã sử dụng và dung lượng còn trống (MB).
+- **`help`:** Hiển thị danh sách các lệnh được hệ thống hỗ trợ.
+
+**Nguyên lý Thiết kế Chuẩn Unix Shell:**
+- **Silent Success (Thành công Im lặng):** Các lệnh điều hướng và thay đổi trạng thái (`cd`, `mkdir`, `rmdir`, `rm`, `touch`, `echo >`) khi thực thi thành công sẽ hoàn toàn im lặng, không trả về các tiền tố `OK:` rườm rà. Chỉ lệnh có dữ liệu xuất ra (`pwd`, `ls`, `cat`, `df`, `help`) hoặc khi xảy ra lỗi (`ERR: ...`) mới in thông tin ra màn hình.
+- **An toàn Hạt nhân VFS ESP-IDF:** Trước khi truy xuất tệp/thư mục, hệ thống sử dụng hàm `SD.exists()` để kiểm tra sự tồn tại (sử dụng hàm gọi hệ thống `stat()`), tuyệt đối không gọi `SD.open()` khi tệp chưa chắc chắn tồn tại nhằm triệt tiêu hoàn toàn các thông báo lỗi kernel VFS `[E][vfs_api.cpp:105] open(): ... does not exist`.
 
 ### 2. Tổng quan Hệ Điều Hành: Tuần Tự (Super-Loop) vs Đa Nhiệm Thời Gian Thực (RTOS)
 Trong các dự án nhúng đơn giản, kỹ sư thường sử dụng kiến trúc vòng lặp tuần tự (Bare-metal Super-Loop). Tuy nhiên, trên một vệ tinh không gian hiện đại, khối lượng công việc đòi hỏi phải chuyển sang sử dụng Hệ điều hành Thời gian thực (**Real-Time Operating System - RTOS**):
@@ -219,7 +229,7 @@ stateDiagram-v2
 #include <SPI.h>
 #include <SD.h>
 
-#define SD_CS_PIN 5
+#define SD_CS_PIN 13
 
 void logTelemetryData(float vbat, float temp, float pressure) {
     File dataFile = SD.open("/telemetry.csv", FILE_APPEND);
@@ -235,12 +245,12 @@ void logTelemetryData(float vbat, float temp, float pressure) {
 ```
 
 ### 2. Danh mục Bài Thực hành Lab 3
-- `Lab3-01a_MicroSD_SPI`: Thực hành khởi tạo bus SPI phần cứng ở tốc độ cao, nhận diện thẻ nhớ MicroSD và đọc thông tin dung lượng.
-- `Lab3-01b_MicroSD_Library`: Ghi log dữ liệu tự động định dạng CSV thông qua thư viện PTITCube.
-- `Lab3-02_Linux_FS_Commands`: Lập trình bộ phân tích cú pháp dòng lệnh CLI nhận các lệnh `ls`, `cat`, `rm`, `df`, `reboot` từ máy tính.
-- `Lab3-03_Multitasking_Scheduler`: Thiết lập 3 tác vụ FreeRTOS chạy song song (Nháy LED nhịp tim GPIO 2, Sinh dữ liệu viễn trắc giả lập, Tự chẩn đoán hệ thống trên Core 0) được đồng bộ an toàn bằng khóa Mutex.
-- `Lab3-04_Watchdog_Timer`: Kích hoạt Task Watchdog Timer (TWDT), nạp lại định kỳ trong tác vụ nhịp tim, mô phỏng lỗi treo vi xử lý qua Nút nhấn GPIO 4 / Serial và kiểm chứng cơ chế tự động reset phục hồi (FDIR).
-- `Lab3-05_Event_Driven_Queue`: Xây dựng kiến trúc hướng sự kiện (Event-Driven) với hàng đợi FreeRTOS Queue, tiếp nhận sự kiện ngắt nút nhấn, cảnh báo viễn trắc vượt ngưỡng và lệnh điều khiển Serial mà không cần vòng lặp thăm dò (Polling).
+- `Lab3-01a_MicroSD_SPI`: Thực hành khởi tạo bus SPI phần cứng ở tốc độ cao (VSPI: CS 13, SCK 18, MISO 19, MOSI 23), nhận diện thẻ nhớ MicroSD và đọc thông tin dung lượng.
+- `Lab3-01b_MicroSD_Library`: Ghi log dữ liệu tự động định dạng CSV thông qua đối tượng thư viện `PTIT_Storage` (`storage.init()`).
+- `Lab3-02_Linux_FS_Commands`: Lập trình bộ phân tích cú pháp dòng lệnh CLI nhận 11 lệnh Linux chuẩn (`pwd`, `cd`, `ls`, `cat`, `touch`, `echo`, `mkdir`, `rmdir`, `rm`, `df`, `help`) tuân thủ nguyên tắc Silent Success, không in tiền tố `OK:` rườm rà.
+- `Lab3-03_Multitasking_Scheduler`: Thiết lập 3 tác vụ FreeRTOS chạy song song (Nháy LED nhịp tim GPIO 2, Sinh dữ liệu viễn trắc giả lập có Mutex bảo vệ, Tự chẩn đoán bộ nhớ Heap và xung nhịp CPU) được đồng bộ an toàn qua `PTIT_Scheduler`.
+- `Lab3-04_Watchdog_Timer`: Kích hoạt Task Watchdog Timer (TWDT), nạp lại định kỳ, mô phỏng lỗi treo vi xử lý qua Nút nhấn GPIO 4 hoặc chuỗi lệnh Serial (`fault`/`freeze`), ghi nhận nguyên nhân khởi động lại bằng `esp_reset_reason()`.
+- `Lab3-05_Event_Driven_Queue`: Xây dựng kiến trúc hướng sự kiện (Event-Driven) với hàng đợi FreeRTOS Queue không khóa, tiếp nhận sự kiện ngắt nút nhấn GPIO 4, cảnh báo viễn trắc nhiệt độ vượt ngưỡng và lệnh điều khiển chuỗi Serial mà không cần vòng lặp thăm dò (Polling).
 
 ### ❓ Câu Hỏi Đánh Giá Kỹ Năng Thực Hành (Lab 3)
 1. **Kể từ Lab 3, mọi thao tác xuất log debug ra màn hình Console được chuẩn hóa qua đối tượng nào?**
