@@ -348,8 +348,8 @@ Khác với giao thức ký tự đơn sơ khởi (`'p'`), giao thức chuẩn c
 - `Lab4-03c_GPS_PTITCube`: Sử dụng thư viện PTITCube chuyển đổi luồng dữ liệu NMEA thô thành các trường số thực có ý nghĩa mà người dùng có thể hiểu được (Kinh độ, Vĩ độ, Cao độ m, Vận tốc km/h, Hướng đi, Số vệ tinh, HDOP, Thời gian UTC).
 - `Lab4-04a_Camera_UART`: Giao tiếp UART thuần bắt tay bằng chuỗi văn bản (`"capture"` -> `SIZE` -> `OK` -> stream -> `DONE`) với module ESP32-CAM và ghi trực tiếp luồng byte ảnh JPEG vào thẻ nhớ MicroSD qua thư viện `PTIT_Storage` (tự định nghĩa chân Camera RX 16, TX 17 và chân điều khiển IC chuyển mạch 74HC4066).
 - `Lab4-04b_Camera_Library`: Sử dụng thư viện `PTITCube` (`PTIT_Camera`) để chụp ảnh và tự động quản lý lưu trữ vào thẻ nhớ MicroSD qua lệnh chuỗi văn bản (`"capture"`, `"photo"`).
-- `Lab4-05_Read_All_Sensors`: Tổng hợp đọc đồng thời tất cả các cảm biến môi trường (BMP280), quán tính (MPU6500, QMC5883) và định vị (GPS L76X) trong một chu trình khép kín.
-- `Lab4-06_Camera_Multiplexer`: Lập trình điều khiển IC chuyển mạch 74HC4066 luân phiên giữa Camera và GNSS theo nguyên tắc Break-Before-Make, giải quyết triệt để xung đột cổng UART.
+- `Lab4-05_Camera_Multiplexer`: Lập trình điều khiển IC chuyển mạch 74HC4066 luân phiên giữa Camera và GNSS theo nguyên tắc Break-Before-Make, giải quyết triệt để xung đột cổng UART.
+- `Lab4-06_Read_All_Sensors`: Tổng hợp đọc đồng thời tất cả các cảm biến môi trường (BMP280), quán tính (MPU6500, QMC5883) và định vị (GPS L76X) trong một chu trình khép kín.
 
 ### ❓ Câu Hỏi Đánh Giá Kỹ Năng Thực Hành (Lab 4)
 1. **Cặp byte đánh dấu bắt đầu (SOI) và kết thúc (EOI) của một tệp ảnh nén JPEG nhận được từ Camera OV2640 là:**
