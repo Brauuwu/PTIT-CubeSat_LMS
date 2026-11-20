@@ -3252,16 +3252,16 @@
       "Dùng vòng lặp while với hàm delay(10) gây chặn toàn bộ hệ thống trong 30 phút",
       "Dùng vòng lặp for với độ trễ micro-giây lặp lại hàng triệu lần",
       "Đưa chip vào giấc ngủ sâu sleep(1) không thể duy trì đếm thời gian thực",
-      "Dùng vòng lặp kiểm tra millis() đủ 30 phút (1800000 ms) và liên tục đá chó Watchdog"
+      "Dùng vòng lặp kiểm tra millis() đủ 30 phút (1800000 ms) và liên tục làm tươi Watchdog Timer"
     ],
     "Option_A": "Dùng vòng lặp while với hàm delay(10) gây chặn toàn bộ hệ thống trong 30 phút",
     "Option_B": "Dùng vòng lặp for với độ trễ micro-giây lặp lại hàng triệu lần",
     "Option_C": "Đưa chip vào giấc ngủ sâu sleep(1) không thể duy trì đếm thời gian thực",
-    "Option_D": "Dùng vòng lặp kiểm tra millis() đủ 30 phút (1800000 ms) và liên tục đá chó Watchdog",
+    "Option_D": "Dùng vòng lặp kiểm tra millis() đủ 30 phút (1800000 ms) và liên tục làm tươi Watchdog Timer",
     "answer": "D",
     "Answer": "D",
-    "explanation": "Vòng lặp chờ 1800 giây kết hợp lệnh đá chó canh Watchdog định kỳ để vi điều khiển không bị reset trong thời gian giữ im lặng.",
-    "Explanation": "Vòng lặp chờ 1800 giây kết hợp lệnh đá chó canh Watchdog định kỳ để vi điều khiển không bị reset trong thời gian giữ im lặng."
+    "explanation": "Vòng lặp chờ 1800 giây kết hợp lệnh đá Watchdog Timer định kỳ để vi điều khiển không bị reset trong thời gian giữ im lặng.",
+    "Explanation": "Vòng lặp chờ 1800 giây kết hợp lệnh đá Watchdog Timer định kỳ để vi điều khiển không bị reset trong thời gian giữ im lặng."
   },
   {
     "id": 137,

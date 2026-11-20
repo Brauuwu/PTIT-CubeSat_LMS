@@ -149,7 +149,7 @@ Treo toàn bộ CPU, bus đóng băng hoặc reset bất ngờ."]
 
 - **Giải pháp Giảm nhẹ trên CubeSat:**
   - Sử dụng mạch giám sát dòng điện tức thời trên chip EPS để phát hiện SEL và ngắt nguồn cưỡng bức (Power Cycling) trong vài mili-giây trước khi chip bị phá hủy vì nhiệt.
-  - Sử dụng bộ định thời chó canh phần cứng độc lập (**Hardware Watchdog Timer**) để tự động khởi động lại OBC khi gặp lỗi treo phần mềm hoặc SEFI.
+  - Sử dụng bộ định thời Watchdog Timer phần cứng độc lập (**Hardware Watchdog Timer**) để tự động khởi động lại OBC khi gặp lỗi treo phần mềm hoặc SEFI.
   - Sử dụng mã sửa sai Hamming / ECC (Error-Correcting Code) và thuật toán lưu trữ dự phòng ba lần (**TMR - Triple Modular Redundancy**) trong bộ nhớ để sửa lỗi lật bit SEU.
 
 #### C. Khí Oxy Nguyên tử (Atomic Oxygen - AO)
