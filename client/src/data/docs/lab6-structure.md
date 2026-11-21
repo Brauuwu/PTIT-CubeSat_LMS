@@ -6,7 +6,7 @@
 
 ### 1. Vai trò Cốt lõi của Phân hệ Cấu trúc Cơ khí (Structure Subsystem)
 Trong kỹ thuật vệ tinh CubeSat, Phân hệ Cấu trúc thường bị nhầm lẫn là một "chiếc hộp thụ động" chỉ đơn thuần làm nhiệm vụ chứa linh kiện. Thực tế trong môi trường hàng không vũ trụ, khung cấu trúc là một hệ thống cơ điện tử - nhiệt phức tạp, đảm nhận các chức năng sống còn:
-- **Chịu Tải Trọng Phóng Cực Đại (Launch Load Withstanding):** Trong giai đoạn tên lửa cất cánh, khung vệ tinh phải chịu gia tốc tĩnh liên tục lên tới $10 - 15\text{g}$, tải trọng dao động âm thanh (Acoustic Loads) và các rung động ngẫu nhiên (Random Vibration) với gia tốc hiệu dụng lên tới $14\text{ g}_\text{rms}$. Khung phải giữ vững độ bền cơ học, không được biến dạng vĩnh viễn hoặc gãy nứt làm tổn hại khoang hàng tên lửa.
+- **Chịu Tải Trọng Phóng Cực Đại (Launch Load Withstanding):** Trong giai đoạn tên lửa cất cánh, khung vệ tinh phải chịu gia tốc tĩnh liên tục lên tới $10 - 15\text{g}$, tải trọng dao động âm thanh (Acoustic Loads) và các rung động ngẫu nhiên (Random Vibration) với gia tốc hiệu dụng lên tới 14 g_rms. Khung phải giữ vững độ bền cơ học, không được biến dạng vĩnh viễn hoặc gãy nứt làm tổn hại khoang hàng tên lửa.
 - **Duy trì Giao diện Cơ học Tiêu chuẩn với Ống Phóng P-POD:** Định hình chính xác bao hình kích thước bên ngoài, dẫn hướng vệ tinh trượt êm ái ra khỏi ống phóng mà không bị kẹt dính.
 - **Khối Tản Nhiệt Thụ Động Chủ Đạo (Primary Thermal Heat Sink):** Dẫn nhiệt lượng tỏa ra từ các chip công suất bên trong truyền ra các bề mặt ngoài để bức xạ vào vũ trụ.
 
@@ -25,14 +25,14 @@ flowchart TD
 ```
 
 1. **Tác động lên Phân hệ Năng lượng (EPS):**
-   - *Tản nhiệt cho Khối Pin:* Pin Li-Po chỉ hoạt động an toàn trong dải nhiệt độ hẹp ($0^\circ\text{C} - 45^\circ\text{C}$). Khung cơ khí phải cung cấp các cầu nhiệt kim loại dẫn nhiệt sinh ra khi sạc/xả pin ra vỏ ngoài.
-   - *Vách Nén Tế bào Pin (Pouch Cell Containment):* Pin Li-Po dạng túi có xu hướng giãn nở cơ học khi sạc xả trong chân không. Khung cơ khí phải cung cấp một lực nén đồng đều ($10 - 20\text{ kPa}$) lên bề mặt cell pin để chống hiện tượng tách lớp điện cực (Delamination).
-   - *Tích hợp Công tắc Tách tầng:* Chân đế của thanh ray cơ khí là vị trí lắp đặt công tắc hành trình (Deployment Switch). Độ nhô và hành trình đàn hồi của công tắc phụ thuộc $100\%$ vào dung sai gia công cơ khí của khung.
+   - *Tản nhiệt cho Khối Pin:* Pin Li-Po chỉ hoạt động an toàn trong dải nhiệt độ hẹp (0°C - 45°C). Khung cơ khí phải cung cấp các cầu nhiệt kim loại dẫn nhiệt sinh ra khi sạc/xả pin ra vỏ ngoài.
+   - *Vách Nén Tế bào Pin (Pouch Cell Containment):* Pin Li-Po dạng túi có xu hướng giãn nở cơ học khi sạc xả trong chân không. Khung cơ khí phải cung cấp một lực nén đồng đều (10 - 20 kPa) lên bề mặt cell pin để chống hiện tượng tách lớp điện cực (Delamination).
+   - *Tích hợp Công tắc Tách tầng:* Chân đế của thanh ray cơ khí là vị trí lắp đặt công tắc hành trình (Deployment Switch). Độ nhô và hành trình đàn hồi của công tắc phụ thuộc 100% vào dung sai gia công cơ khí của khung.
 2. **Tác động lên Phân hệ Xử lý Trung tâm (OBC):**
-   - *Che chắn Bức xạ & Lồng Faraday (EMI/Radiation Shielding):* Vách nhôm của khung dày $1.5 - 2.0\text{ mm}$ đóng vai trò là một lồng Faraday triệt tiêu các xung nhiễu điện từ bên ngoài và làm suy giảm đáng kể liều bức xạ ion hóa tích lũy (TID) tác động vào chip vi xử lý.
-   - *Liên kết Mass Khung Vỏ (Chassis Ground Bonding):* Toàn bộ các tấm khung nhôm phải được nối thông điện liên tục về đường mass GND của bo mạch OBC với điện trở cực nhỏ ($R < 0.1\Omega$) để tiêu tán toàn bộ điện tích tĩnh điện vũ trụ (Spacecraft Plasma Charging), ngăn chặn hiện tượng phóng tia hồ quang tĩnh điện phá hủy vi mạch.
+   - *Che chắn Bức xạ & Lồng Faraday (EMI/Radiation Shielding):* Vách nhôm của khung dày 1.5 - 2.0 mm đóng vai trò là một lồng Faraday triệt tiêu các xung nhiễu điện từ bên ngoài và làm suy giảm đáng kể liều bức xạ ion hóa tích lũy (TID) tác động vào chip vi xử lý.
+   - *Liên kết Mass Khung Vỏ (Chassis Ground Bonding):* Toàn bộ các tấm khung nhôm phải được nối thông điện liên tục về đường mass GND của bo mạch OBC với điện trở cực nhỏ (R < 0.1 Ω) để tiêu tán toàn bộ điện tích tĩnh điện vũ trụ (Spacecraft Plasma Charging), ngăn chặn hiện tượng phóng tia hồ quang tĩnh điện phá hủy vi mạch.
 3. **Tác động lên Phân hệ Truyền thông (COM):**
-   - *Mặt Đất Phản Xạ Nhân Tạo (Artificial Ground Plane):* Ăng-ten phát sóng LoRa trên CubeSat thường là loại ăng-ten đơn cực một phần tư bước sóng ($\lambda/4$ Monopole Antenna). Loại ăng-ten này bắt buộc phải có một mặt phẳng kim loại dẫn điện bên dưới chân ăng-ten để tạo thành một "hình ảnh gương" của cực còn lại, giúp phối hợp trở kháng chuẩn $50\Omega$. Bản thân bề mặt khung nhôm chính là mặt phẳng đất phản xạ này; nếu khung tiếp xúc điện kém, sóng phản xạ ngược sẽ làm cháy tầng khuếch đại công suất PA của module LoRa.
+   - *Mặt Đất Phản Xạ Nhân Tạo (Artificial Ground Plane):* Ăng-ten phát sóng LoRa trên CubeSat thường là loại ăng-ten đơn cực một phần tư bước sóng (λ/4 Monopole Antenna). Loại ăng-ten này bắt buộc phải có một mặt phẳng kim loại dẫn điện bên dưới chân ăng-ten để tạo thành một "hình ảnh gương" của cực còn lại, giúp phối hợp trở kháng chuẩn 50 Ω. Bản thân bề mặt khung nhôm chính là mặt phẳng đất phản xạ này; nếu khung tiếp xúc điện kém, sóng phản xạ ngược sẽ làm cháy tầng khuếch đại công suất PA của module LoRa.
 4. **Tác động lên Phân hệ Cảm biến & Tải trọng (Sensors & Payload):**
    - *Độ Cứng Vững và Căn Chỉnh Cơ học (Rigidity & Boresight Alignment):* Thấu kính Camera và cảm biến quán tính IMU đòi hỏi một mặt phẳng tham chiếu cơ học siêu cứng. Nếu khung bị uốn cong hoặc vặn xoắn dưới biến thiên nhiệt độ quỹ đạo, trục quang học của Camera sẽ bị lệch góc và cảm biến gia tốc kế/con quay hồi chuyển sẽ đo sai tư thế không gian.
 
@@ -58,13 +58,13 @@ flowchart TD
 ### 1. Lựa chọn Hợp kim Nhôm Hàng không Al 6061-T6 và Al 7075-T6
 Vật liệu sử dụng cho khung CubeSat phải đáp ứng đồng thời 4 tiêu chí khắt khe: Tỷ số độ bền trên khối lượng cao, tính dẫn nhiệt tốt, khả năng gia công cắt gọt CNC chính xác và không có từ tính:
 - **Nhôm Hợp kim Al 6061-T6:**
-  - Thành phần hợp kim chính: Nhôm, Magie ($1.0\%$) và Silic ($0.6\%$).
+  - Thành phần hợp kim chính: Nhôm, Magie (1.0%) và Silic (0.6%).
   - Trạng thái nhiệt luyện `-T6`: Được tôi dung dịch và hóa già nhân tạo (Artificially Aged) để tạo mạng kết tủa pha liên kim phân tán mịn.
-  - Giới hạn chảy (Yield Strength): $276\text{ MPa}$; Giới hạn bền kéo (Tensile Strength): $310\text{ MPa}$.
-  - Đặc tính: Dễ gia công phay CNC, hàn được, chống ăn mòn xuất sắc trong môi trường biển, là vật liệu kinh điển chiếm hơn $80\%$ khối lượng khung CubeSat.
+  - Giới hạn chảy (Yield Strength): 276 MPa; Giới hạn bền kéo (Tensile Strength): 310 MPa.
+  - Đặc tính: Dễ gia công phay CNC, hàn được, chống ăn mòn xuất sắc trong môi trường biển, là vật liệu kinh điển chiếm hơn 80% khối lượng khung CubeSat.
 - **Nhôm Hợp kim Al 7075-T6:**
-  - Thành phần hợp kim chính: Nhôm và Kẽm ($5.6\%$).
-  - Giới hạn chảy: $503\text{ MPa}$; Giới hạn bền kéo: $572\text{ MPa}$ (tương đương với một số loại thép kết cấu nhưng nhẹ hơn thép gần 3 lần).
+  - Thành phần hợp kim chính: Nhôm và Kẽm (5.6%).
+  - Giới hạn chảy: 503 MPa; Giới hạn bền kéo: 572 MPa (tương đương với một số loại thép kết cấu nhưng nhẹ hơn thép gần 3 lần).
   - Ứng dụng: Dành riêng cho 4 thanh ray dẫn hướng góc hoặc các chi tiết chịu lực cắt và tải trọng va đập lớn nhất.
 
 ### 2. Quy trình Xử lý Bề mặt Chọn lọc: Anodize Cứng Type III vs Lớp Phủ Alodine
@@ -87,17 +87,17 @@ flowchart LR
 
 1. **Anodize Hóa Cứng Type III (Hard Anodizing - Tiêu chuẩn MIL-A-8625):**
    - Áp dụng trên: **4 thanh ray dẫn hướng ở 4 góc** tiếp xúc trực tiếp với lòng ống phóng P-POD.
-   - Nguyên lý: Điện phân trong dung dịch axit sulfuric ở nhiệt độ thấp ($0^\circ\text{C}$), tạo ra lớp màng gốm nhôm oxit $Al_2O_3$ dày $25 - 50\mu\text{m}$ ăn sâu vào bề mặt kim loại.
-   - Đặc tính: Độ cứng bề mặt cực cao ($60 - 70\text{ HRC}$, cứng như đá sapphire), chống cào xước cơ học khi trượt trong ống phóng và **cách điện tuyệt đối**, triệt tiêu hoàn toàn nguy cơ **Hàn nguội (Cold Welding)** giữa thanh ray vệ tinh và lòng ống phóng trong môi trường chân không nhiệt.
+   - Nguyên lý: Điện phân trong dung dịch axit sulfuric ở nhiệt độ thấp (0°C), tạo ra lớp màng gốm nhôm oxit Al₂O₃ dày 25 - 50 µm ăn sâu vào bề mặt kim loại.
+   - Đặc tính: Độ cứng bề mặt cực cao (60 - 70 HRC, cứng như đá sapphire), chống cào xước cơ học khi trượt trong ống phóng và **cách điện tuyệt đối**, triệt tiêu hoàn toàn nguy cơ **Hàn nguội (Cold Welding)** giữa thanh ray vệ tinh và lòng ống phóng trong môi trường chân không nhiệt.
 2. **Lớp Phủ Chuyển Đổi Hóa Học Alodine (Chromate Conversion Coating - Tiêu chuẩn MIL-DTL-5541 Class 3):**
    - Áp dụng trên: **Toàn bộ lòng trong của khung và các bề mặt lắp ghép bo mạch**.
-   - Nguyên lý: Nhúng trong dung dịch muối cromat tạo màng thụ động hóa cực mỏng ($< 1\mu\text{m}$).
-   - Đặc tính cốt lõi: Khác với Anodize là chất cách điện, **lớp phủ Alodine Class 3 vẫn duy trì tính dẫn điện tiếp xúc tuyệt hảo**. Cho phép bu lông và các cọc tiếp địa nối thông điện các tấm khung về mass chung của hệ thống với điện trở tiếp xúc $< 0.1\Omega$.
+   - Nguyên lý: Nhúng trong dung dịch muối cromat tạo màng thụ động hóa cực mỏng (< 1 µm).
+   - Đặc tính cốt lõi: Khác với Anodize là chất cách điện, **lớp phủ Alodine Class 3 vẫn duy trì tính dẫn điện tiếp xúc tuyệt hảo**. Cho phép bu lông và các cọc tiếp địa nối thông điện các tấm khung về mass chung của hệ thống với điện trở tiếp xúc < 0.1 Ω.
 
 ### 3. Tiêu chuẩn Quốc tế Thoát Khí Chân Không ASTM E595
-Trong môi trường chân không sâu ($< 10^{-5}\text{ Torr}$) và nhiệt độ cao, các vật liệu polyme hữu cơ (keo dán, băng dính, lớp phủ dây điện) bị bốc hơi giải phóng các phân tử khí (hiện tượng Outgassing). Tiêu chuẩn **ASTM E595** của NASA/ESA quy định 2 chỉ số kiểm định nghiêm ngặt:
-- **TML (Total Mass Loss - Tổng Khối Lượng Hao Hụt):** Phải $\le \mathbf{1.0\%}$ sau 24 giờ sấy nhiệt ở $125^\circ\text{C}$ trong buồng chân không.
-- **CVCM (Collected Volatile Condensable Material - Vật Chất Bay Hơi Ngưng Tụ):** Phải $\le \mathbf{0.10\%}$ khi ngưng tụ lên một tấm gương lạnh ở $25^\circ\text{C}$. Chỉ số này bảo vệ các thấu kính quang học của Camera và bề mặt pin mặt trời không bị màng dầu polyme bám đục làm hỏng sứ mệnh.
+Trong môi trường chân không sâu (< 10⁻⁵ Torr) và nhiệt độ cao, các vật liệu polyme hữu cơ (keo dán, băng dính, lớp phủ dây điện) bị bốc hơi giải phóng các phân tử khí (hiện tượng Outgassing). Tiêu chuẩn **ASTM E595** của NASA/ESA quy định 2 chỉ số kiểm định nghiêm ngặt:
+- **TML (Total Mass Loss - Tổng Khối Lượng Hao Hụt):** Phải ≤ 1.0% sau 24 giờ sấy nhiệt ở 125°C trong buồng chân không.
+- **CVCM (Collected Volatile Condensable Material - Vật Chất Bay Hơi Ngưng Tụ):** Phải ≤ 0.10% khi ngưng tụ lên một tấm gương lạnh ở 25°C. Chỉ số này bảo vệ các thấu kính quang học của Camera và bề mặt pin mặt trời không bị màng dầu polyme bám đục làm hỏng sứ mệnh.
 
 ---
 
@@ -120,12 +120,12 @@ Trong môi trường chân không sâu ($< 10^{-5}\text{ Torr}$) và nhiệt đ�
 
 ### 1. Kiến trúc Ngăn xếp Bo Mạch Chuẩn PC/104
 Bên trong lòng khối lập phương 1U, các tầng bo mạch điện tử (OBC, EPS, Cảm biến, COM) được xếp chồng lên nhau theo chuẩn kết cấu công nghiệp **PC/104**:
-- **Kích thước Bo mạch Chuẩn:** $90.17 \times 95.89\text{ mm}$ với 4 lỗ bắt bu lông ở 4 góc đối xứng.
-- **Trụ Ren Cách Tầng (Standoffs):** Các tầng bo mạch được cách ly khoảng cách bằng các trụ lục giác kim loại bằng đồng hoặc nhôm (chiều cao tiêu chuẩn $15.0\text{ mm}$).
+- **Kích thước Bo mạch Chuẩn:** 90.17 × 95.89 mm với 4 lỗ bắt bu lông ở 4 góc đối xứng.
+- **Trụ Ren Cách Tầng (Standoffs):** Các tầng bo mạch được cách ly khoảng cách bằng các trụ lục giác kim loại bằng đồng hoặc nhôm (chiều cao tiêu chuẩn 15.0 mm).
 - **Thanh Ren Chịu Lực Xâu Suốt (Threaded Rods):** Sử dụng 4 thanh ren bằng thép không gỉ Inox M3 xâu xuyên suốt từ tấm đáy lên tấm nóc của khung, kẹp chặt toàn bộ khối bo mạch thành một khối vững chắc nguyên khối (Monolithic Block), phân tán đều ứng suất rung động của tên lửa đẩy.
 
 ### 2. Bu lông Inox A2-70, Keo Khóa Ren Loctite 222 & Bu lông Thông Hơi
-- **Cấp bền Bu lông Inox A2-70:** Chế tạo bằng thép không gỉ austenit AISI 304, giới hạn bền kéo tối thiểu $700\text{ MPa}$.
+- **Cấp bền Bu lông Inox A2-70:** Chế tạo bằng thép không gỉ austenit AISI 304, giới hạn bền kéo tối thiểu 700 MPa.
 - **Keo Khóa Ren Chuyên dụng Không gian Loctite 222 (Tím / Low Strength):** Rung động tần số cao của tên lửa dễ làm nới lỏng các vòng ren cơ khí. Tất cả các mối ghép ren bắt buộc phải được tra keo khóa kỵ khí Loctite 222. Keo tự đông cứng khi không có không khí giữa các khe ren kim loại, khóa chặt bu lông không bị xoay lỏng nhưng vẫn cho phép kỹ sư tháo mở bằng dụng cụ cầm tay khi cần sửa chữa trong phòng lab.
 - **Bu lông Thông Hơi (Drilled-core Vented Screws):**
   - Khi vặn một bu lông thông thường vào một lỗ ren kín đáy (Blind Hole), một lượng không khí khí quyển bị nén chặt ở đáy lỗ ren.
@@ -143,10 +143,10 @@ flowchart LR
 ```
 
 ### 3. Bảng Cân Đối Khối Lượng (Mass Budget) & Cân Bằng Trọng Tâm (Center of Mass - CoM)
-- **Bảng Cân đối Khối lượng (Mass Budget):** Tổng khối lượng của một CubeSat 1U bị khống chế nghiêm ngặt không được vượt quá $1.330\text{ kg}$ (hoặc $2.000\text{ kg}$). Trong giai đoạn thiết kế, kỹ sư phải duy trì một biên độ khối lượng dự phòng (**Mass Margin** $\ge 15 - 20\%$) để bù đắp cho sự tăng khối lượng thực tế của dây dẫn, màng bọc và keo dán trong quá trình lắp ráp.
+- **Bảng Cân đối Khối lượng (Mass Budget):** Tổng khối lượng của một CubeSat 1U bị khống chế nghiêm ngặt không được vượt quá 1.330 kg (hoặc 2.000 kg). Trong giai đoạn thiết kế, kỹ sư phải duy trì một biên độ khối lượng dự phòng (**Mass Margin** ≥ 15 - 20%) để bù đắp cho sự tăng khối lượng thực tế của dây dẫn, màng bọc và keo dán trong quá trình lắp ráp.
 - **Quy chuẩn Trọng tâm CoM Khắt khe:**
-  - Tiêu chuẩn CalPoly quy định: Vị trí trọng tâm thực tế của CubeSat 1U không được phép lệch quá **$\pm 2.0\text{ cm}$ ($\pm 20\text{ mm}$)** so với tâm hình học lý thuyết của khối lập phương trên cả 3 trục $X, Y, Z$:
-    $$|X_\text{cm}| \le 20\text{ mm}, \quad |Y_\text{cm}| \le 20\text{ mm}, \quad |Z_\text{cm}| \le 20\text{ mm}$$
+  - Tiêu chuẩn CalPoly quy định: Vị trí trọng tâm thực tế của CubeSat 1U không được phép lệch quá **±2.0 cm (±20 mm)** so với tâm hình học lý thuyết của khối lập phương trên cả 3 trục $X, Y, Z$:
+$$|X_\text{cm}| \le 20\text{ mm}, \quad |Y_\text{cm}| \le 20\text{ mm}, \quad |Z_\text{cm}| \le 20\text{ mm}$$
   - Nếu trọng tâm bị lệch quá giới hạn, khi lò xo P-POD đẩy vào mặt đáy vệ tinh, lực đẩy không đi qua trọng tâm sẽ tạo ra một mô-men ngẫu lực (Tip-off Torque) cực lớn, khiến vệ tinh bị quay lộn vòng hỗn loạn với vận tốc góc hàng trăm độ trên giây ngay khi vừa rời ống phóng, gây tê liệt hệ thống ăng-ten và pin mặt trời.
 
 ---

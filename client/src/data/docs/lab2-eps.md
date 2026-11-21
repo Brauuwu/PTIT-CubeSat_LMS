@@ -8,7 +8,7 @@
 Phân hệ Năng lượng được ví như "Trái tim" của vệ tinh CubeSat. Trong không gian vũ trụ, nếu hệ thống năng lượng bị gián đoạn dù chỉ vài mili-giây, toàn bộ máy tính và tải trọng sẽ sập nguồn tức thì. EPS gánh vác các trọng trách cốt lõi:
 - **Tích trữ Năng lượng Sơ cấp (Energy Storage):** Lưu trữ điện năng trong các cell pin hóa học để duy trì sự sống cho vệ tinh khi đi qua vùng tối của Trái Đất (Eclipse).
 - **Quản lý Nạp Năng lượng Thông minh (Battery Charging):** Điều phối dòng sạc từ các tấm pin quang điện (Solar Panels) vào khối pin theo thuật toán an toàn, bảo vệ chống quá nạp hoặc quá nhiệt.
-- **Biến đổi & Ổn định Điện áp (Power Conversion & Conditioning):** Chuyển đổi điện áp không ổn định của pin thành các đường bus điện áp sạch ($3.3\text{V}$ và $5.0\text{V}$) cung cấp cho các tải tiêu thụ.
+- **Biến đổi & Ổn định Điện áp (Power Conversion & Conditioning):** Chuyển đổi điện áp không ổn định của pin thành các đường bus điện áp sạch (3.3V và 5.0V) cung cấp cho các tải tiêu thụ.
 - **Giám sát Năng lượng Thời gian thực (Fuel Gauging):** Đo đạc liên tục điện áp, dòng điện tiêu thụ và phần trăm dung lượng còn lại (State of Charge - SOC) để OBC ra quyết định sa thải phụ tải khi pin yếu.
 - **Cơ chế Cách ly An toàn Phóng (Launch Safety Inhibit):** Đảm bảo vệ tinh hoàn toàn "chết điện" trong suốt quá trình phóng tên lửa cho tới khi được đẩy ra ngoài vũ trụ.
 
@@ -43,26 +43,26 @@ Nâng áp lên 5.0V (Hiệu suất 88%)"]
 
 ### 2. Đặc tính Hóa học và Vận hành của Pin Lithium Polymer (Li-Po)
 Kit vệ tinh PTITCube sử dụng pin sạc **Lithium-ion Polymer (Li-Po)** dạng túi phẳng (Pouch Cell) với các đặc tính kỹ thuật quan trọng:
-- **Điện áp Danh định (Nominal Voltage):** $3.7\text{V}$ trên mỗi cell.
-- **Điện áp Sạc Đầy (Fully Charged Cut-off):** $4.20\text{V} \pm 0.05\text{V}$. Không bao giờ được sạc vượt quá $4.25\text{V}$ vì sẽ gây phân hủy chất điện phân, sinh khí áp suất cao làm phồng nổ pin.
-- **Điện áp Xả Kiệt Nguy hiểm (Cut-off Threshold):** $3.00\text{V}$. Nếu xả dưới $2.7\text{V}$, cấu trúc tinh thể của các điện cực sẽ bị phá hủy vĩnh viễn (Dead Cell), pin không thể hồi phục dung lượng.
+- **Điện áp Danh định (Nominal Voltage):** 3.7V trên mỗi cell.
+- **Điện áp Sạc Đầy (Fully Charged Cut-off):** 4.20V ± 0.05V. Không bao giờ được sạc vượt quá 4.25V vì sẽ gây phân hủy chất điện phân, sinh khí áp suất cao làm phồng nổ pin.
+- **Điện áp Xả Kiệt Nguy hiểm (Cut-off Threshold):** 3.00V. Nếu xả dưới 2.7V, cấu trúc tinh thể của các điện cực sẽ bị phá hủy vĩnh viễn (Dead Cell), pin không thể hồi phục dung lượng.
 - **Đồ thị Phóng điện (Discharge Curve):** Đường cong điện áp xả của pin Li-Po rất dốc ở vùng 10% đầu ($4.2\text{V} \to 3.8\text{V}$), cực kỳ phẳng ở vùng 80% dung lượng trung tâm ($3.8\text{V} \to 3.65\text{V}$), và rơi tự do cắm đầu ở 10% cuối ($3.65\text{V} \to 3.0\text{V}$). Do đó, không thể ước lượng chính xác phần trăm dung lượng pin chỉ bằng cách đo điện áp tĩnh đơn thuần!
 
 ### 3. Thuật toán Sạc Chuẩn CC/CV với IC Sạc Chuyên Dụng TP4056
 Khối nạp nguồn sử dụng vi mạch điều khiển sạc tuyến tính chuyên dụng **TP4056** thực hiện chu trình sạc hai giai đoạn hoàn hảo:
 1. **Giai đoạn Dòng không đổi (Constant Current - CC):**
-   - Khi pin có điện áp từ $3.0\text{V}$ đến dưới $4.2\text{V}$, mạch bơm một dòng điện sạc không đổi tối đa $I_\text{chg}$ vào pin.
+   - Khi pin có điện áp từ 3.0V đến dưới 4.2V, mạch bơm một dòng điện sạc không đổi tối đa $I_\text{chg}$ vào pin.
    - Dòng sạc được thiết lập thông qua điện trở gắn ở chân `PROG` ($R_\text{prog}$) theo công thức của nhà sản xuất:
-     $$I_\text{chg} = \frac{1200\text{ V}}{R_\text{prog}}$$
+$$I_\text{chg} = \frac{1200\text{ V}}{R_\text{prog}}$$
      Ví dụ: Với điện trở $R_\text{prog} = 1.2\text{ k}\Omega$, dòng nạp tối đa là $I_\text{chg} = 1000\text{ mA} = 1.0\text{ A}$.
 2. **Giai đoạn Áp không đổi (Constant Voltage - CV):**
-   - Khi điện áp pin đạt chính xác ngưỡng $4.20\text{V}$, mạch tự động chuyển sang chế độ áp không đổi, giữ điện áp ở mức $4.20\text{V}$ và để dòng điện giảm dần theo hàm mũ.
+   - Khi điện áp pin đạt chính xác ngưỡng 4.20V, mạch tự động chuyển sang chế độ áp không đổi, giữ điện áp ở mức 4.20V và để dòng điện giảm dần theo hàm mũ.
    - Khi dòng điện giảm xuống dưới $1/10$ dòng sạc định mức ($C/10 \approx 100\text{ mA}$), chip TP4056 ngắt sạc hoàn toàn, chân trạng thái `CHRG` tắt và chân `STDBY` bật sáng báo pin đầy.
 
 ### 4. Mạch Chuyển đổi Nguồn Chuyển mạch DC-DC Buck và Boost
 Để cấp nguồn cho các phân hệ, bo mạch EPS tích hợp hai mạch ổn áp chuyển mạch (Switching Regulators) với hiệu suất vượt trội so với ổn áp tuyến tính LDO:
-- **DC-DC Buck Converter (Hạ áp $V_\text{bat} \to 3.3\text{V}$):** Cung cấp dòng điện liên tục lên tới $2\text{A}$ cho OBC, bộ nhớ Flash và các cảm biến. Hiệu suất chuyển đổi đạt $\sim 92\%$, giảm thiểu tối đa tổn hao nhiệt sinh ra bên trong lòng vệ tinh.
-- **DC-DC Boost Converter (Nâng áp $V_\text{bat} \to 5.0\text{V}$):** Khi điện áp pin xả xuống $3.4\text{V}$, mạch Boost vẫn duy trì điện áp $5.0\text{V}$ ổn định cấp nguồn cho tầng khuếch đại công suất phát sóng của module LoRa và module Camera.
+- **DC-DC Buck Converter (Hạ áp $V_\text{bat} \to 3.3\text{V}$):** Cung cấp dòng điện liên tục lên tới 2 A cho OBC, bộ nhớ Flash và các cảm biến. Hiệu suất chuyển đổi đạt $\sim 92\%$, giảm thiểu tối đa tổn hao nhiệt sinh ra bên trong lòng vệ tinh.
+- **DC-DC Boost Converter (Nâng áp $V_\text{bat} \to 5.0\text{V}$):** Khi điện áp pin xả xuống 3.4V, mạch Boost vẫn duy trì điện áp 5.0V ổn định cấp nguồn cho tầng khuếch đại công suất phát sóng của module LoRa và module Camera.
 
 ### 5. IC Giám Sát Nhiên Liệu Pin MAX17048 qua Giao thức I2C
 Trên bo EPS, chip **MAX17048** của hãng Maxim Integrated đo đạc liên tục dung lượng pin với độ chính xác cao:
@@ -70,8 +70,8 @@ Trên bo EPS, chip **MAX17048** của hãng Maxim Integrated đo đạc liên t�
 - **Thuật toán Độc quyền ModelGauge:** Theo dõi hành vi động học của cell pin, liên tục bù trừ theo nhiệt độ và tốc độ xả để tính toán chính xác tỷ lệ phần trăm dung lượng pin còn lại (State of Charge - SOC) mà **không cần mắc điện trở Shunt nối tiếp gây suy hao dòng điện**.
 - **Các Thanh ghi Trọng yếu:**
   - Thanh ghi Điện áp Cell (`VCELL` - Địa chỉ `0x02` và `0x03`): Giá trị 16-bit. Độ phân giải là $78.125\text{ }\mu\text{V}$ trên mỗi bit (tương đương $1.25\text{ mV} / 16\text{ LSB}$).
-    $$V_\text{cell}\text{ (V)} = \text{RegValue} \times 0.000078125\text{ V}$$
-  - Thanh ghi Tỷ lệ Dung lượng (`SOC` - Địa chỉ `0x04` và `0x05`): Giá trị 16-bit. Byte cao thể hiện phần nguyên phần trăm ($0 - 100\%$), byte thấp thể hiện phần thập phân với độ phân giải $1/256\% \approx 0.0039\%$.
+$$V_\text{cell}\text{ (V)} = \text{RegValue} \times 0.000078125\text{ V}$$
+  - Thanh ghi Tỷ lệ Dung lượng (`SOC` - Địa chỉ `0x04` và `0x05`): Giá trị 16-bit. Byte cao thể hiện phần nguyên phần trăm (0 - 100%), byte thấp thể hiện phần thập phân với độ phân giải $1/256\% \approx 0.0039\%$.
 
 ---
 
@@ -104,29 +104,29 @@ Trên bo EPS, chip **MAX17048** của hãng Maxim Integrated đo đạc liên t�
 
 ### 2. Hiện tượng Sụt áp Nguồn (Brownout) & Cơ chế Bảo vệ Của ESP32
 Khi tải tiêu thụ đột ngột đòi hỏi dòng điện lớn (như khi module LoRa bắt đầu phát sóng công suất cao hoặc module Camera nạp tụ), nội trở của pin và điện cảm đường mạch sẽ gây ra hiện tượng sụt áp tức thời (Voltage Sag):
-- Nếu điện áp cấp cho vi điều khiển sụt xuống dưới ngưỡng an toàn tối thiểu (thường là $2.7\text{V}$), CPU sẽ thực thi sai tập lệnh, bộ nhớ Flash có thể bị ghi đè dữ liệu rác làm hỏng hệ điều hành.
+- Nếu điện áp cấp cho vi điều khiển sụt xuống dưới ngưỡng an toàn tối thiểu (thường là 2.7V), CPU sẽ thực thi sai tập lệnh, bộ nhớ Flash có thể bị ghi đè dữ liệu rác làm hỏng hệ điều hành.
 - **Mạch Phát hiện Sụt áp Phần cứng (Brownout Detector - BOD):** Tích hợp bên trong ESP32, liên tục so sánh điện áp nguồn $V_{\text{dd}}$ với các mức ngưỡng tham chiếu. Khi phát hiện điện áp tụt dưới ngưỡng định sẵn, BOD kích hoạt tín hiệu Reset khẩn cấp bằng phần cứng để bảo vệ vi xử lý khỏi trạng thái bất định.
 - **Biện pháp Khắc phục Phần cứng:** Bố trí các tụ điện hóa Tantalum dung lượng lớn ($100\mu\text{F} - 470\mu\text{F}$) có nội trở ESR cực thấp ngay sát chân nguồn của module phát sóng và camera để xả năng lượng bù đắp cho các đỉnh dòng tức thời.
 
 ### 3. Nguyên Lý Điều Khiển Mạch Hạ Áp (Buck Converter) & Kỹ Thuật Power Gating Tiết Kiệm Năng Lượng
 Trong một vệ tinh CubeSat, việc duy trì cấp nguồn liên tục cho toàn bộ các mạch tải ngoại vi là nguyên nhân hàng đầu gây hao tổn dung lượng pin do dòng tĩnh (Quiescent Current) và dòng rò vi mạch.
-- **Đầu ra Mạch Hạ Áp Cấp Nguồn Cho Tải Ngoại Vi:** Trên bo mạch EPS, đầu ra của mạch hạ áp DC-DC Buck Converter chịu trách nhiệm cung cấp đường nguồn $3.3\text{V}$ sạch riêng biệt cho toàn bộ cụm tải tiêu thụ ngoại vi.
+- **Đầu ra Mạch Hạ Áp Cấp Nguồn Cho Tải Ngoại Vi:** Trên bo mạch EPS, đầu ra của mạch hạ áp DC-DC Buck Converter chịu trách nhiệm cung cấp đường nguồn 3.3V sạch riêng biệt cho toàn bộ cụm tải tiêu thụ ngoại vi.
 - **Kỹ thuật Cắt Nguồn Phân Hệ (Power Gating):** Trên bo mạch phân hệ nguồn EPS, đường tín hiệu điều khiển dòng điện đi vào mạch hạ áp hoạt động theo logic phần cứng:
-  - **Mức 1 (`HIGH`):** Ngắt dòng điện đi vào mạch hạ áp $\rightarrow$ Cắt toàn bộ nguồn cấp cho tải ngoại vi, đưa dòng tiêu thụ của khối tải về $0\text{ mA}$ trong thời gian nghỉ.
-  - **Mức 0 (`LOW`):** Cho phép dòng điện đi vào mạch hạ áp $\rightarrow$ Kích hoạt mạch hạ áp cấp nguồn $3.3\text{V}$ ổn định cho tải tiêu thụ.
+  - **Mức 1 (`HIGH`):** Ngắt dòng điện đi vào mạch hạ áp $\rightarrow$ Cắt toàn bộ nguồn cấp cho tải ngoại vi, đưa dòng tiêu thụ của khối tải về 0 mA trong thời gian nghỉ.
+  - **Mức 0 (`LOW`):** Cho phép dòng điện đi vào mạch hạ áp $\rightarrow$ Kích hoạt mạch hạ áp cấp nguồn 3.3V ổn định cho tải tiêu thụ.
   - **Đóng gói Thư viện Cấp cao:** Thao tác cấu hình chân GPIO và xuất xung mức logic được đóng gói hoàn toàn bên trong thư viện `PTIT_EPS` thông qua phương thức `eps.setBuckState(true)` (BẬT nguồn tải) và `eps.setBuckState(false)` (TẮT nguồn tải), che giấu sự phụ thuộc vào chân phần cứng cụ thể.
   - **Cơ chế Kích hoạt Power Saving Mode dựa trên Ngưỡng Pin:**
     Hệ thống giám sát liên tục điện áp pin $V_\text{cell}$ và phần trăm dung lượng $\text{SOC}$. Chế độ tiết kiệm điện (Power Saving Mode) được tự động kích hoạt khi:
-    $$V_\text{cell} < 3.70\text{ V} \quad \text{hoặc} \quad \text{SOC} < 25.0\%$$
+$$V_\text{cell} < 3.70\text{ V} \quad \text{or} \quad \text{SOC} < 25.0\%$$
     - *Khi pin yếu:* OBC lập tức gọi `eps.setBuckState(false)` để ngắt mạch hạ áp, sa thải toàn bộ phụ tải tiêu thụ và kéo dài chu kỳ ngủ ($5000\text{ ms}$) nhằm bảo toàn năng lượng cho máy tính sinh tồn và nạp lại pin.
     - *Khi pin khỏe ($V_\text{cell} \ge 3.70\text{ V}$ và $\text{SOC} \ge 25.0\%$):* OBC duy trì `eps.setBuckState(true)` ở chế độ bình thường (Normal Mode) với chu kỳ làm việc tích cực ($1500\text{ ms}$).
 - **Hiệu quả Tiết kiệm Năng lượng (Duty Cycling):**
-  - Giả sử tổng dòng tiêu thụ của khối tải ngoại vi khi hoạt động là $25\text{ mA}$.
+  - Giả sử tổng dòng tiêu thụ của khối tải ngoại vi khi hoạt động là 25 mA.
   - Nếu bật liên tục trong 1 chu kỳ quỹ đạo 95 phút, năng lượng tiêu thụ là:
-    $$E_{\text{continuous}} = 3.3\text{ V} \times 25\text{ mA} \times 1.583\text{ h} \approx 130.6\text{ mWh}$$
+$$E_{\text{continuous}} = 3.3\text{ V} \times 25\text{ mA} \times 1.583\text{ h} \approx 130.6\text{ mWh}$$
   - Nếu chỉ bật 1.5 giây mỗi 6.5 giây (chu kỳ hoạt động với Duty Cycle $\approx 23\%$):
-    $$E_{\text{gating}} \approx 130.6\text{ mWh} \times 0.23 \approx 30.0\text{ mWh}$$
-  - Kỹ thuật điều khiển dòng mạch hạ áp giúp giảm thiểu tới **$77\%$** lượng điện năng tiêu hao của tải ngoại vi, kéo dài tuổi thọ của pin trong pha bóng tối Trái Đất (Eclipse).
+$$E_{\text{gating}} \approx 130.6\text{ mWh} \times 0.23 \approx 30.0\text{ mWh}$$
+  - Kỹ thuật điều khiển dòng mạch hạ áp giúp giảm thiểu tới **77%** lượng điện năng tiêu hao của tải ngoại vi, kéo dài tuổi thọ của pin trong pha bóng tối Trái Đất (Eclipse).
 
 ---
 

@@ -1436,8 +1436,8 @@
     "Option_D": "17.3 cm",
     "answer": "D",
     "Answer": "D",
-    "explanation": "Bước sóng $\\lambda = c / f = 300.000 / 433 \\approx 69.2\\text{ cm}$; anten 1/4 bước sóng có chiều dài $69.2 / 4 \\approx 17.3\\text{ cm}$.",
-    "Explanation": "Bước sóng $\\lambda = c / f = 300.000 / 433 \\approx 69.2\\text{ cm}$; anten 1/4 bước sóng có chiều dài $69.2 / 4 \\approx 17.3\\text{ cm}$."
+    "explanation": "Bước sóng $\\lambda = c / f = 300.000 / 433 \\\\approx 69.2\\text{ cm}$; anten 1/4 bước sóng có chiều dài $69.2 / 4 \\\\approx 17.3\\text{ cm}$.",
+    "Explanation": "Bước sóng $\\lambda = c / f = 300.000 / 433 \\\\approx 69.2\\text{ cm}$; anten 1/4 bước sóng có chiều dài $69.2 / 4 \\\\approx 17.3\\text{ cm}$."
   },
   {
     "id": 61,
@@ -3966,8 +3966,8 @@
     "Lab": "Lab 0: Giới thiệu Tổng quan",
     "section": "Phần E: Kiến trúc Cơ điện tử Bộ Kit CubeSat Giáo dục & Tiếp cận Hệ thống",
     "Section": "Phần E: Kiến trúc Cơ điện tử Bộ Kit CubeSat Giáo dục & Tiếp cận Hệ thống",
-    "question": "Hệ thống anten dạng Monopole 1/4 bước sóng ($lambda/4$) cho tần số 433 MHz cần có chiều dài vật lý danh định xấp xỉ khoảng:",
-    "Question": "Hệ thống anten dạng Monopole 1/4 bước sóng ($lambda/4$) cho tần số 433 MHz cần có chiều dài vật lý danh định xấp xỉ khoảng:",
+    "question": "Hệ thống anten dạng Monopole 1/4 bước sóng ($\\lambda/4$) cho tần số 433 MHz cần có chiều dài vật lý danh định xấp xỉ khoảng:",
+    "Question": "Hệ thống anten dạng Monopole 1/4 bước sóng ($\\lambda/4$) cho tần số 433 MHz cần có chiều dài vật lý danh định xấp xỉ khoảng:",
     "options": [
       "100.0 cm",
       "17.3 cm",
@@ -3980,8 +3980,8 @@
     "Option_D": "50.0 cm",
     "answer": "B",
     "Answer": "B",
-    "explanation": "Bước sóng $lambda = c / f = 3\times 10^8 / 433\times 10^6 approx 0.693\text{ m}$. Chiều dài anten $lambda/4 approx 0.693 / 4 approx 0.173\text{ m} = 17.3\text{ cm}$.",
-    "Explanation": "Bước sóng $lambda = c / f = 3\times 10^8 / 433\times 10^6 approx 0.693\text{ m}$. Chiều dài anten $lambda/4 approx 0.693 / 4 approx 0.173\text{ m} = 17.3\text{ cm}$."
+    "explanation": "Bước sóng $\\lambda = c / f = 3\\times 10^8 / 433\\times 10^6 \\approx 0.693\\text{ m}$. Chiều dài anten $\\lambda/4 \\approx 0.693 / 4 \\approx 0.173\\text{ m} = 17.3\\text{ cm}$.",
+    "Explanation": "Bước sóng $\\lambda = c / f = 3\\times 10^8 / 433\\times 10^6 \\approx 0.693\\text{ m}$. Chiều dài anten $\\lambda/4 \\approx 0.693 / 4 \\approx 0.173\\text{ m} = 17.3\\text{ cm}$."
   },
   {
     "id": 167,

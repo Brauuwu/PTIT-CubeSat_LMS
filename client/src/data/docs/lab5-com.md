@@ -9,23 +9,23 @@ Phân hệ Truyền thông được xem như "Giọng nói và Đôi tai" của 
 - **Tuyến truyền Đường xuống (Downlink):** Định kỳ phát sóng các gói tin tín hiệu định vị (Beacon) thông báo trạng thái sinh tồn của vệ tinh ($V_\text{bat}$, SOC, nhiệt độ) và truyền dữ liệu khoa học, hình ảnh về mặt đất.
 - **Tuyến truyền Đường lên (Uplink):** Lắng nghe các mệnh lệnh viễn lệnh (Telecommands) từ Trạm mặt đất để điều khiển vệ tinh, nạp cấu hình mới hoặc kích hoạt chế độ an toàn.
 
-### 2. Đặc tính Lan truyền Sóng Điện từ Băng tần UHF ($433\text{ MHz}$)
-Băng tần sóng cực ngắn UHF (Ultra High Frequency, $300\text{ MHz} - 3\text{ GHz}$) là băng tần kinh điển cho các vệ tinh CubeSat giáo dục và nghiên cứu:
-- **Khả năng Xuyên qua Tầng Điện ly (Ionospheric Penetration):** Khác với sóng ngắn HF bị phản xạ ngược lại Trái Đất, sóng vô tuyến tần số $433\text{ MHz}$ có khả năng xuyên thủng tầng điện ly của khí quyển để đi vào không gian sâu với độ suy hao tối thiểu.
-- **Kích thước Ăng-ten Hợp lý:** Bước sóng $\lambda$ ở tần số $433\text{ MHz}$ là:
-  $$\lambda = \frac{c}{f} = \frac{3 \times 10^8\text{ m/s}}{433 \times 10^6\text{ Hz}} \approx 0.693\text{ m} = 69.3\text{ cm}$$
-  Một ăng-ten đơn cực một phần tư bước sóng ($\lambda/4$) chỉ có chiều dài xấp xỉ $17.3\text{ cm}$, rất lý tưởng để cuộn gọn gàng bên trong khung 1U trước khi bung mở ngoài không gian.
+### 2. Đặc tính Lan truyền Sóng Điện từ Băng tần UHF (433 MHz)
+Băng tần sóng cực ngắn UHF (Ultra High Frequency, 300 MHz - 3 GHz) là băng tần kinh điển cho các vệ tinh CubeSat giáo dục và nghiên cứu:
+- **Khả năng Xuyên qua Tầng Điện ly (Ionospheric Penetration):** Khác với sóng ngắn HF bị phản xạ ngược lại Trái Đất, sóng vô tuyến tần số 433 MHz có khả năng xuyên thủng tầng điện ly của khí quyển để đi vào không gian sâu với độ suy hao tối thiểu.
+- **Kích thước Ăng-ten Hợp lý:** Bước sóng $\lambda$ ở tần số 433 MHz là:
+$$\lambda = \frac{c}{f} = \frac{3 \times 10^8\text{ m/s}}{433 \times 10^6\text{ Hz}} \approx 0.693\text{ m} = 69.3\text{ cm}$$
+  Một ăng-ten đơn cực một phần tư bước sóng (λ/4) chỉ có chiều dài xấp xỉ 17.3 cm, rất lý tưởng để cuộn gọn gàng bên trong khung 1U trước khi bung mở ngoài không gian.
 
 ### 3. Phương trình Suy hao Truyền sóng trong Không gian Tự do (Friis FSPL)
 Khi sóng điện từ lan truyền từ ăng-ten phát hình cầu ra không gian vô tận, mật độ công suất sóng bị suy giảm theo bình phương khoảng cách. Công thức suy hao truyền sóng trong không gian tự do (**Free-Space Path Loss - FSPL**) của Harald T. Friis:
-$$\text{FSPL} = \left(\frac{4\pi d}{\lambda}ight)^2 = \left(\frac{4\pi d f}{c}ight)^2$$
+$$\text{FSPL} = \left(\frac{4\pi d}{\lambda}\right)^2 = \left(\frac{4\pi d f}{c}\right)^2$$
 Chuyển đổi sang đơn vị logarit Decibel (dB):
 $$\text{FSPL (dB)} = 20 \log_{10}(d\text{ [km]}) + 20 \log_{10}(f\text{ [MHz]}) + 32.44$$
 - **Tính toán Thực tế cho CubeSat Quỹ đạo LEO:**
-  - Tần số phát sóng: $f = 433\text{ MHz}$.
-  - Khoảng cách đường truyền xiên khi vệ tinh vừa mọc ở góc tà thấp ($10^\circ$ trên đường chân trời): $d \approx 800\text{ km}$.
-  $$\text{FSPL (dB)} = 20 \log_{10}(800) + 20 \log_{10}(433) + 32.44 \approx 58.06 + 52.73 + 32.44 \approx \mathbf{143.23\text{ dB}}$$
-- Nhận xét: Sóng vô tuyến bị suy yếu tới $143\text{ dB}$ (tương đương năng lượng bị suy giảm hơn $10^{14}$ lần) trên hành trình xuyên qua bầu khí quyển xuống mặt đất!
+  - Tần số phát sóng: f = 433 MHz.
+  - Khoảng cách đường truyền xiên khi vệ tinh vừa mọc ở góc tà thấp (10° trên đường chân trời): $d \approx 800\text{ km}$.
+$$\text{FSPL (dB)} = 20 \log_{10}(800) + 20 \log_{10}(433) + 32.44 \approx 58.06 + 52.73 + 32.44 \approx \mathbf{143.23\text{ dB}}$$
+- Nhận xét: Sóng vô tuyến bị suy yếu tới 143 dB (tương đương năng lượng bị suy giảm hơn 10¹⁴ lần) trên hành trình xuyên qua bầu khí quyển xuống mặt đất!
 
 ```mermaid
 flowchart LR
@@ -43,28 +43,28 @@ Khí quyển L_atm = -1.5 dB"]
 Bảng cân đối tuyến truyền thông tổng hợp toàn bộ các nguồn tăng ích và suy hao trên toàn bộ chuỗi thu phát:
 $$P_\text{rx (dBm)} = P_\text{tx} + G_\text{tx} - L_\text{tx} - \text{FSPL} - L_\text{atm} + G_\text{rx} - L_\text{rx}$$
 Trong đó:
-- $P_\text{tx}$: Công suất máy phát vệ tinh ($+20\text{ dBm} = 100\text{ mW}$).
-- $G_\text{tx}$: Độ tăng ích ăng-ten phát trên vệ tinh ($+2.15\text{ dBi}$ cho ăng-ten lưỡng cực Dipole).
-- $L_\text{tx}, L_\text{rx}$: Tổn hao trên cáp nối và đầu nối Connector ($\approx 1.0\text{ dB}$).
-- $\text{FSPL}$: Suy hao không gian tự do ($\approx 143.2\text{ dB}$).
-- $L_\text{atm}$: Tổn hao hấp thụ do khí quyển và tầng điện ly ($\approx 1.5\text{ dB}$).
-- $G_\text{rx}$: Độ tăng ích ăng-ten thu trạm mặt đất (ví dụ ăng-ten định hướng Yagi 9 phần tử đạt $+12.0\text{ dBi}$).
+- $P_\text{tx}$: Công suất máy phát vệ tinh (+20 dBm = 100 mW).
+- $G_\text{tx}$: Độ tăng ích ăng-ten phát trên vệ tinh (+2.15 dBi cho ăng-ten lưỡng cực Dipole).
+- $L_\text{tx}, L_\text{rx}$: Tổn hao trên cáp nối và đầu nối Connector (≈ 1.0 dB).
+- $\text{FSPL}$: Suy hao không gian tự do (≈ 143.2 dB).
+- $L_\text{atm}$: Tổn hao hấp thụ do khí quyển và tầng điện ly (≈ 1.5 dB).
+- $G_\text{rx}$: Độ tăng ích ăng-ten thu trạm mặt đất (ví dụ ăng-ten định hướng Yagi 9 phần tử đạt +12.0 dBi).
 - **Công suất Thu Dự kiến ($P_\text{rx}$):**
-  $$P_\text{rx} = 20 + 2.15 - 1.0 - 143.2 - 1.5 + 12.0 - 1.0 \approx \mathbf{-112.55\text{ dBm}}$$
+$$P_\text{rx} = 20 + 2.15 - 1.0 - 143.2 - 1.5 + 12.0 - 1.0 \approx \mathbf{-112.55\text{ dBm}}$$
 - **Độ Dự trữ Tuyến (Link Margin):**
   Nếu bộ thu LoRa mặt đất có độ nhạy thu đạt $S_\text{rx} = -140\text{ dBm}$, thì độ dự trữ tuyến truyền thông là:
-  $$\text{Margin} = P_\text{rx} - S_\text{rx} = (-112.55\text{ dBm}) - (-140\text{ dBm}) = \mathbf{+27.45\text{ dB}}$$
-  Quy chuẩn không gian yêu cầu độ dự trữ tuyến truyền thông tối thiểu phải $\ge +6\text{ dB}$. Với mức dự trữ $+27.45\text{ dB}$, tuyến truyền tin của PTITCube hoạt động cực kỳ tin cậy ngay cả khi trời mưa bão.
+$$\text{Margin} = P_\text{rx} - S_\text{rx} = (-112.55\text{ dBm}) - (-140\text{ dBm}) = \mathbf{+27.45\text{ dB}}$$
+  Quy chuẩn không gian yêu cầu độ dự trữ tuyến truyền thông tối thiểu phải ≥ +6 dB. Với mức dự trữ +27.45 dB, tuyến truyền tin của PTITCube hoạt động cực kỳ tin cậy ngay cả khi trời mưa bão.
 
 ### 5. Hiệu ứng Dịch Tần Doppler trên Quỹ đạo LEO
-Do vệ tinh bay với vận tốc quỹ đạo cực lớn ($v \approx 7.6\text{ km/s}$), tần số sóng vô tuyến thu được tại trạm mặt đất bị dịch chuyển theo hiệu ứng Doppler:
-$$f_\text{rx} = f_0 \left(1 + \frac{v_\text{los}}{c}ight)$$
+Do vệ tinh bay với vận tốc quỹ đạo cực lớn (v ≈ 7.6 km/s), tần số sóng vô tuyến thu được tại trạm mặt đất bị dịch chuyển theo hiệu ứng Doppler:
+$$f_\text{rx} = f_0 \left(1 + \frac{v_\text{los}}{c}\right)$$
 Trong đó: $v_\text{los}$ là vận tốc dọc theo đường ngắm (Line-of-Sight Velocity).
 - Khi vệ tinh vừa mọc ở phía chân trời và bay lại gần trạm: $v_\text{los} > 0$, tần số thu được dịch lên cao nhất ($+\Delta f$).
 - Khi vệ tinh bay ngang qua đỉnh đầu (CPA - Closest Point of Approach): $v_\text{los} = 0$, tần số thu được đúng bằng tần số danh định $f_0$.
 - Khi vệ tinh bay ra xa về phía chân trời lặn: $v_\text{los} < 0$, tần số thu được dịch xuống thấp nhất ($-\Delta f$).
-- Ở băng tần $433\text{ MHz}$, độ lệch tần Doppler cực đại có thể lên tới:
-  $$\Delta f_\text{max} \approx 433\text{ MHz} \times \frac{7.6\text{ km/s}}{300.000\text{ km/s}} \approx \pm \mathbf{10.97\text{ kHz}}$$
+- Ở băng tần 433 MHz, độ lệch tần Doppler cực đại có thể lên tới:
+$$\Delta f_\text{max} \approx 433\text{ MHz} \times \frac{7.6\text{ km/s}}{300.000\text{ km/s}} \approx \pm \mathbf{10.97\text{ kHz}}$$
   Trạm mặt đất bắt buộc phải có thuật toán điều chỉnh tần số thu tự động (Doppler Tracking) bám theo độ dịch chuyển này để không bị mất tín hiệu.
 
 ---
@@ -102,13 +102,13 @@ Trong đó: $v_\text{los}$ là vận tốc dọc theo đường ngắm (Line-of-
 ### 2. Thuật toán Kiểm tra Lỗi Chu kỳ CRC-16-CCITT
 Trong không gian, nhiễu nền vũ trụ có thể làm biến dạng ngẫu nhiên một vài bit dữ liệu. Phương pháp tính tổng cộng (Checksum đơn giản) rất dễ bị lọt lưới khi hai lỗi bit triệt tiêu nhau.
 - **Thuật toán CRC-16-CCITT:** Sử dụng đa thức sinh chuẩn quốc tế:
-  $$G(x) = x^{16} + x^{12} + x^5 + 1 \quad (\text{Mã Hex: } \mathbf{0x1021})$$
+$$G(x) = x^{16} + x^{12} + x^5 + 1 \quad (\text{Hex: } \mathbf{0x1021})$$
   Giá trị khởi tạo thanh ghi: `0xFFFF`.
-- Khi trạm mặt đất nhận được gói tin, nó thực hiện tính toán lại mã CRC trên toàn bộ chuỗi byte nhận được. Nếu mã CRC tính toán trùng khớp hoàn toàn với 2 byte CRC đính kèm ở cuối gói tin, gói tin được xác nhận là vẹn toàn $100\%$. Nếu sai khác dù chỉ một bit, gói tin bị loại bỏ ngay lập tức.
+- Khi trạm mặt đất nhận được gói tin, nó thực hiện tính toán lại mã CRC trên toàn bộ chuỗi byte nhận được. Nếu mã CRC tính toán trùng khớp hoàn toàn với 2 byte CRC đính kèm ở cuối gói tin, gói tin được xác nhận là vẹn toàn 100%. Nếu sai khác dù chỉ một bit, gói tin bị loại bỏ ngay lập tức.
 
 ### 3. Giao thức Kiểm soát Luồng & Phân mảnh Gói tin
 - **Cơ chế Dừng và Chờ (Stop-and-Wait ARQ - Automatic Repeat reQuest):**
-  - Trạm mặt đất gửi một lệnh viễn lệnh $\to$ Vệ tinh tiếp nhận, kiểm tra CRC $\to$ Nếu hợp lệ, vệ tinh phát bản tin phản hồi `ACK` (Acknowledge) $\to$ Trạm mặt đất nhận `ACK` mới tiếp tục gửi lệnh tiếp theo. Nếu hết thời gian chờ (Time-out) mà chưa nhận được `ACK`, trạm phát lại gói tin tối đa 3 lần.
+  - Trạm mặt đất gửi một lệnh viễn lệnh → Vệ tinh tiếp nhận, kiểm tra CRC → Nếu hợp lệ, vệ tinh phát bản tin phản hồi `ACK` (Acknowledge) → Trạm mặt đất nhận `ACK` mới tiếp tục gửi lệnh tiếp theo. Nếu hết thời gian chờ (Time-out) mà chưa nhận được `ACK`, trạm phát lại gói tin tối đa 3 lần.
 - **Kỹ thuật Phân mảnh Tệp ảnh (Packet Fragmentation):**
   - Một bức ảnh JPEG có dung lượng $30\text{ KB}$ không thể phát trong một gói tin duy nhất vì xác suất xảy ra lỗi trên gói tin lớn là rất cao.
   - Tệp ảnh được cắt nhỏ thành hàng trăm mảnh nhỏ (**Chunks**), mỗi mảnh có kích thước $64\text{ bytes}$.
@@ -140,10 +140,10 @@ Trong không gian, nhiễu nền vũ trụ có thể làm biến dạng ngẫu n
 ### 1. Công nghệ Trải phổ LoRa (Long Range Chirp Spread Spectrum - CSS)
 Module **Ebyte E32-433T20D** sử dụng chip thu phát bán dẫn SX1278 của hãng Semtech ứng dụng kỹ thuật điều chế trải phổ CSS:
 - Thay vì truyền tín hiệu trên một tần số cố định, năng lượng sóng được quét biến thiên liên tục theo tần số (xung Chirp).
-- Khả năng giải mã tín hiệu nằm sâu dưới mức nhiễu nền (dưới Noise Floor tới $-20\text{ dB}$), mang lại độ nhạy thu vô song (lên tới $-148\text{ dBm}$) với công suất phát chỉ $100\text{ mW}$ ($+20\text{ dBm}$).
+- Khả năng giải mã tín hiệu nằm sâu dưới mức nhiễu nền (dưới Noise Floor tới -20 dB), mang lại độ nhạy thu vô song (lên tới -148 dBm) với công suất phát chỉ 100 mW (+20 dBm).
 - **Các Tham số Cấu hình:**
   - **Hệ số Trải phổ (Spreading Factor - SF7 đến SF12):** SF càng lớn, tầm xa càng tăng nhưng tốc độ truyền dữ liệu (Data Rate) càng giảm.
-  - **Băng thông (Bandwidth - BW):** Thường chọn $125\text{ kHz}$ cho kênh UHF.
+  - **Băng thông (Bandwidth - BW):** Thường chọn 125 kHz cho kênh UHF.
 
 ### 2. Sơ đồ Chân & Các Chế độ Hoạt động của Module Ebyte E32
 Module E32 giao tiếp với vi điều khiển OBC thông qua cổng UART1 chuẩn và hai chân điều khiển chế độ `M0`, `M1`:
@@ -185,12 +185,12 @@ Nhằm tối ưu hóa quy trình cấu hình trên mọi nền tảng hệ đi�
 
 #### b. Yêu Cầu Kết Nối Phần Cứng Khi Cấu Hình
 - **Chân Chọn Chế Độ:** Module LoRa bắt buộc phải được chuyển sang **Mode 3 (Sleep / Config Mode)**:
-  - Chân `M0` nối lên mức **HIGH** ($3.3\text{V}$).
-  - Chân `M1` nối lên mức **HIGH** ($3.3\text{V}$).
+  - Chân `M0` nối lên mức **HIGH** (3.3V).
+  - Chân `M1` nối lên mức **HIGH** (3.3V).
 - **Đường Truyền UART:**
   - `TXD` của module LoRa nối vào chân `RXD` của mạch nạp USB-to-UART.
   - `RXD` của module LoRa nối vào chân `TXD` của mạch nạp USB-to-UART.
-  - Cấp nguồn $3.3\text{V}$ hoặc $5\text{V}$ và nối chung Mass (`GND`).
+  - Cấp nguồn 3.3V hoặc 5V và nối chung Mass (`GND`).
 
 #### c. Cấu Trúc Khung Lệnh Cấu Hình 6-Byte
 Giao thức giao tiếp cấu hình của module E32 và AS32 sử dụng khung chuẩn 6 byte (`HEAD, ADDH, ADDL, SPED, CHAN, OPTION`):
@@ -208,11 +208,11 @@ Giao thức giao tiếp cấu hình của module E32 và AS32 sử dụng khung 
 - **Byte 4 (CHAN - Kênh Tần Số Hoạt Động):**
   - Đối với dòng module 433 MHz, dải kênh CHAN từ `0x00` đến `0x1F` (0 đến 31).
   - Tần số thực tế được tính theo công thức:
-    $$f_\text{RF} = 410\text{ MHz} + \text{CHAN} \times 1\text{ MHz}$$
+$$f_\text{RF} = 410\text{ MHz} + \text{CHAN} \times 1\text{ MHz}$$
     *(Ví dụ: $\text{CHAN} = 23 \implies f_\text{RF} = 433.0\text{ MHz}$)*.
 - **Byte 5 (OPTION - Tùy Chọn Hoạt Động):**
   - Chọn chế độ truyền: Truyền trong suốt (Transparent Transmission) hoặc Truyền cố định có định tuyến địa chỉ (Fixed Transmission).
-  - Cấu hình công suất phát tối đa (lên tới $20\text{ dBm} = 100\text{ mW}$) và kích hoạt mã sửa lỗi tiến truyền trước (FEC - Forward Error Correction).
+  - Cấu hình công suất phát tối đa (lên tới 20 dBm = 100 mW) và kích hoạt mã sửa lỗi tiến truyền trước (FEC - Forward Error Correction).
 
 #### d. Các Tính Năng Nổi Bật Trên Trang Web Cấu Hình
 1. **Quick Presets (Cấu Hình Mẫu Nhanh):** Cung cấp sẵn các bộ thông số tối ưu cho từng kịch bản vệ tinh chỉ với một cú nhấp chuột:

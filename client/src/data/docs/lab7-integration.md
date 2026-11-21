@@ -7,7 +7,7 @@
 ### 1. Tổng quan Bài toán Tích hợp Hệ thống (System Integration)
 Giai đoạn Tích hợp Hệ thống là thời điểm quyết định của toàn bộ dự án vệ tinh, chuyển hóa các phân hệ phần cứng và phần mềm hoạt động riêng rẽ (OBC, EPS, C&DH, Sensors, COM, Khung cơ khí) thành một **thực thể vệ tinh duy nhất, tự chủ, bền bỉ và đồng bộ** có khả năng hoàn thành xuất sắc sứ mệnh trong môi trường khắc nghiệt ngoài không gian.
 
-Khi nhồi nhét tất cả các phân hệ vào không gian chật hẹp của khối lập phương 1U ($10 \times 10 \times 11.35\text{ cm}$), kỹ sư tích hợp phải đối mặt và giải quyết đồng thời 5 thách thức kỹ thuật lớn:
+Khi nhồi nhét tất cả các phân hệ vào không gian chật hẹp của khối lập phương 1U (10 × 10 × 11.35 cm), kỹ sư tích hợp phải đối mặt và giải quyết đồng thời 5 thách thức kỹ thuật lớn:
 
 ```mermaid
 flowchart TD
@@ -35,14 +35,14 @@ Tránh bế tắc tài nguyên (Deadlock) giữa các luồng"]
    - *Vấn đề:* Bus I2C là tài nguyên dùng chung nối tiếp; nếu hai tác vụ phần mềm cùng truy cập đồng thời sẽ làm vỡ khung truyền tin và treo cứng cảm biến.
    - *Giải pháp:* Sử dụng khóa tương hỗ **Mutex (`xI2CMutex`)** trong FreeRTOS với cơ chế Thừa kế Ưu tiên (Priority Inheritance). Tác vụ nào muốn đọc cảm biến bắt buộc phải lấy Mutex (`xSemaphoreTake`), hoàn thành giao tiếp xong phải nhả khóa (`xSemaphoreGive`) mới cho tác vụ khác truy cập.
 2. **Khắc phục Nhiễu Tương thích Điện từ (EMI Nội bộ):**
-   - *Vấn đề:* Bộ phát sóng LoRa công suất cao ($100\text{ mW}$) và xung nhịp camera $20\text{ MHz}$ phát xạ điện từ làm giảm độ nhạy máy thu GPS.
+   - *Vấn đề:* Bộ phát sóng LoRa công suất cao (100 mW) và xung nhịp camera 20 MHz phát xạ điện từ làm giảm độ nhạy máy thu GPS.
    - *Giải pháp:* Bố trí mạch đất hình sao (**Star Grounding**), bọc màng đồng shield cách ly các đường tín hiệu RF và áp dụng cơ chế bật tắt On-Demand ngắt xung nhịp camera khi định vị GPS bằng IC chuyển mạch 74HC4066.
 3. **Chống Sụt áp Nguồn (Brownout Mitigation):**
-   - *Vấn đề:* Nếu camera nạp điện ($250\text{ mA}$), thẻ nhớ ghi khối ($100\text{ mA}$) và LoRa phát sóng ($120\text{ mA}$) cùng xảy ra trong 1 mili-giây, tổng dòng đỉnh vượt quá $500\text{ mA}$ sẽ làm sụt áp pin xuống dưới $2.7\text{V}$ gây sập nguồn OBC.
+   - *Vấn đề:* Nếu camera nạp điện (250 mA), thẻ nhớ ghi khối (100 mA) và LoRa phát sóng (120 mA) cùng xảy ra trong 1 mili-giây, tổng dòng đỉnh vượt quá 500 mA sẽ làm sụt áp pin xuống dưới 2.7V gây sập nguồn OBC.
    - *Giải pháp:* Lập trình giãn cách thời gian kích hoạt các phụ tải công suất cao (Time-staggered execution) kết hợp mảng tụ lọc Tantalum dung lượng lớn.
 4. **Quản lý Cân bằng Nhiệt Toàn diện:**
    - *Vấn đề:* Trong chân không, nhiệt lượng sinh ra từ OBC và mạch phát sóng bị giữ lại bên trong khung.
-   - *Giải pháp:* Thiết kế lớp Anodize đen bên trong để hấp thụ nhiệt bức xạ, cầu nhiệt kim loại dẫn nhiệt trực tiếp ra khung nhôm ngoài để tản nhiệt vào vũ trụ, duy trì nhiệt độ pin luôn trong dải an toàn từ $0^\circ\text{C}$ đến $+45^\circ\text{C}$.
+   - *Giải pháp:* Thiết kế lớp Anodize đen bên trong để hấp thụ nhiệt bức xạ, cầu nhiệt kim loại dẫn nhiệt trực tiếp ra khung nhôm ngoài để tản nhiệt vào vũ trụ, duy trì nhiệt độ pin luôn trong dải an toàn từ 0°C đến +45°C.
 5. **Tính Tất định Thời gian thực & Ngăn ngừa Deadlock:**
    - *Vấn đề:* Phần mềm điều hành bay phải xử lý đồng thời nhiều luồng tín hiệu (chu kỳ đọc cảm biến 10Hz, ghi thẻ nhớ 1Hz, phát beacon 30s, ngắt nhận viễn lệnh vô tuyến bất kỳ lúc nào). Nếu thiết kế khóa không cẩn thận sẽ xảy ra hiện tượng kẹt bế tắc Deadlock.
    - *Giải pháp:* Thiết kế cấu trúc phân cấp khóa tài nguyên cố định và áp dụng kỹ thuật FreeRTOS Queue truyền dữ liệu bất đồng bộ.
@@ -100,13 +100,13 @@ stateDiagram-v2
   - Khởi động hệ thống, kiểm tra ngoại vi, khôi phục tham số từ NVS.
   - Đếm ngược thời gian **30 phút im lặng vô tuyến (30-Minute Radio Silence)** theo luật quốc tế của Liên minh Viễn thông Quốc tế (ITU) trước khi được phép bung ăng-ten và phát sóng RF đầu tiên.
 - **`STATE_DETUMBLE`:**
-  - Giảm tốc độ xoay hỗn loạn sinh ra khi rời ống phóng xuống dưới $5^\circ\text{/s}$ bằng thuật toán điều khiển từ tính B-dot và thanh giảm chấn trễ từ.
+  - Giảm tốc độ xoay hỗn loạn sinh ra khi rời ống phóng xuống dưới 5°/s bằng thuật toán điều khiển từ tính B-dot và thanh giảm chấn trễ từ.
 - **`STATE_NORMAL_OPS`:**
   - Vận hành quỹ đạo tiêu chuẩn: Định kỳ thu thập dữ liệu cảm biến (10Hz), ghi nhật ký thẻ nhớ SD (1Hz), phát gói tin Beacon (mỗi 30-60s) và lắng nghe lệnh viễn lệnh từ trạm mặt đất.
 - **`STATE_PAYLOAD_EXEC`:**
   - Kích hoạt tải trọng camera chụp ảnh viễn thám Trái Đất, nén JPEG và phân mảnh tệp dữ liệu. Chỉ cho phép kích hoạt khi dung lượng pin $\text{SOC} > 60\%$ và nhiệt độ nằm trong dải an toàn.
 - **`STATE_POWER_SAVE`:**
-  - Khi pin yếu ($V_\text{bat} < 3.55\text{V}$, $\text{SOC} < 25\%$), hệ thống tự động sa thải phụ tải (Load Shedding): Tắt camera, tắt GPS, giãn chu kỳ phát Beacon lên $120\text{ giây}$, giảm xung nhịp CPU xuống $80\text{ MHz}$.
+  - Khi pin yếu ($V_\text{bat} < 3.55\text{V}$, $\text{SOC} < 25\%$), hệ thống tự động sa thải phụ tải (Load Shedding): Tắt camera, tắt GPS, giãn chu kỳ phát Beacon lên 120 giây, giảm xung nhịp CPU xuống 80 MHz.
 - **`STATE_SAFE_MODE`:**
   - Chế độ phòng thủ sống còn khi xảy ra sự cố nghiêm trọng (pin chạm đáy $< 3.4\text{V}$ hoặc cảm biến báo lỗi liên tục), chỉ duy trì nguồn tối thiểu cho bộ thu lệnh vô tuyến để chờ lệnh giải cứu từ mặt đất.
 
@@ -140,8 +140,8 @@ Sổ tay FOM là tài liệu quy chuẩn tác chiến dành cho kíp trực đi�
 
 ### 2. Mô phỏng Chu kỳ Quỹ đạo LEO 95 Phút
 Bộ kit PTITCube hỗ trợ chế độ mô phỏng quỹ đạo thực tế để rèn luyện kỹ năng vận hành:
-- **Pha Ban ngày Đón nắng (Sunlight - 60 phút):** Tấm pin mặt trời nhận ánh sáng, dòng nạp TP4056 đạt $+500\text{ mA}$, pin sạc tăng dần từ $3.7\text{V} \to 4.15\text{V}$, vệ tinh thoải mái thực hiện các tác vụ chụp ảnh và truyền thông công suất cao.
-- **Pha Vùng tối Trái Đất (Eclipse - 35 phút):** Vệ tinh chìm vào bóng tối Trái Đất, dòng sạc mặt trời về $0\text{ mA}$. Toàn bộ năng lượng vận hành được rút từ khối pin Li-Po, điện áp pin xả dần. Học viên phải lập trình quản lý năng lượng thông minh để vệ tinh không bị cạn pin trước khi chu kỳ ban ngày tiếp theo bắt đầu.
+- **Pha Ban ngày Đón nắng (Sunlight - 60 phút):** Tấm pin mặt trời nhận ánh sáng, dòng nạp TP4056 đạt +500 mA, pin sạc tăng dần từ 3.7V → 4.15V, vệ tinh thoải mái thực hiện các tác vụ chụp ảnh và truyền thông công suất cao.
+- **Pha Vùng tối Trái Đất (Eclipse - 35 phút):** Vệ tinh chìm vào bóng tối Trái Đất, dòng sạc mặt trời về 0 mA. Toàn bộ năng lượng vận hành được rút từ khối pin Li-Po, điện áp pin xả dần. Học viên phải lập trình quản lý năng lượng thông minh để vệ tinh không bị cạn pin trước khi chu kỳ ban ngày tiếp theo bắt đầu.
 
 ---
 

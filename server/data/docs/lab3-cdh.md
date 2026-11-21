@@ -35,7 +35,7 @@ flowchart LR
 ### 2. Giao thức Truyền thông Đồng bộ SPI (Serial Peripheral Interface)
 Chuẩn giao tiếp **SPI** là một bus truyền thông nối tiếp đồng bộ 4 dây, hoạt động theo mô hình Master-Slave ở chế độ song công toàn phần (Full-duplex):
 - **4 Đường tín hiệu Vật lý:**
-  - **SCLK / SCK (Serial Clock):** Do Master tạo ra để đồng bộ hóa việc dịch từng bit dữ liệu. Tần số xung nhịp có thể lên tới $20\text{ MHz} - 40\text{ MHz}$, mang lại tốc độ truyền dữ liệu vượt trội so với I2C.
+  - **SCLK / SCK (Serial Clock):** Do Master tạo ra để đồng bộ hóa việc dịch từng bit dữ liệu. Tần số xung nhịp có thể lên tới 20 MHz - 40 MHz, mang lại tốc độ truyền dữ liệu vượt trội so với I2C.
   - **MOSI (Master Out Slave In):** Đường dữ liệu từ vi điều khiển Master gửi sang thiết bị Slave.
   - **MISO (Master In Slave Out):** Đường dữ liệu từ thiết bị Slave trả về Master.
   - **CS / SS (Chip Select / Slave Select):** Đường tín hiệu chọn chip tích cực ở mức logic `LOW`. Mỗi thiết bị Slave trên cùng đường bus cần một chân CS riêng biệt.

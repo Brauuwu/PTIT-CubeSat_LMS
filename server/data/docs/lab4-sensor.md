@@ -18,7 +18,7 @@ Bus **I2C** do hãng Philips (nay là NXP) phát triển là một bus truyền 
   - **SCL (Serial Clock):** Đường truyền xung nhịp đồng bộ do Master phát ra.
 - **Cấu trúc Phần cứng Cực thu Hở (Open-Drain) & Điện trở Kéo lên (Pull-up Resistors):**
   - Cả Master và tất cả các thiết bị Slave đều không có tầng đệm kéo lên nguồn tích cực bên trong chân chip mà sử dụng bóng bán dẫn cực máng/cực thu hở (Open-Drain / Open-Collector). Chân chip chỉ có thể chủ động kéo đường dây xuống mức `LOW` (nối mass GND) hoặc thả nổi.
-  - Một cặp điện trở kéo lên ngoài ($R_p$, thông thường từ $2.2\text{ k}\Omega$ đến $4.7\text{ k}\Omega$) bắt buộc phải được mắc từ đường SDA và SCL lên nguồn $3.3\text{V}$.
+  - Một cặp điện trở kéo lên ngoài ($R_p$, thông thường từ 2.2 kΩ đến 4.7 kΩ) bắt buộc phải được mắc từ đường SDA và SCL lên nguồn 3.3V.
   - Khi không có thiết bị nào truyền tin, điện trở kéo lên giữ cho đường bus luôn ở mức logic `HIGH`.
   - Thiết kế này tạo ra cổng logic "HOẶC có dây" (Wired-AND), triệt tiêu hoàn toàn nguy cơ đoản mạch làm cháy chip khi hai thiết bị vô tình phát xung đối nghịch cùng lúc.
 
@@ -44,7 +44,7 @@ sequenceDiagram
    - **START Condition:** SDA chuyển trạng thái từ `HIGH` xuống `LOW` trong khi SCL đang ở mức `HIGH`. Báo hiệu đường bus bắt đầu bận.
    - **STOP Condition:** SDA chuyển trạng thái từ `LOW` lên `HIGH` trong khi SCL đang ở mức `HIGH`. Báo hiệu kết thúc phiên truyền tin, trả bus về trạng thái rảnh rỗi.
 2. **Địa chỉ Thiết bị 7-bit & Bit R/W:**
-   - Byte đầu tiên sau điều kiện START bao gồm 7 bit địa chỉ thiết bị Slave ($2^7 = 128$ địa chỉ khả dĩ) và bit thứ 8 là bit chọn chiều dữ liệu:
+   - Byte đầu tiên sau điều kiện START bao gồm 7 bit địa chỉ thiết bị Slave (2⁷ = 128 địa chỉ khả dĩ) và bit thứ 8 là bit chọn chiều dữ liệu:
      - Bit 8 = `0`: Thao tác Ghi dữ liệu từ Master sang Slave.
      - Bit 8 = `1`: Thao tác Đọc dữ liệu từ Slave về Master.
 3. **Bit Xác nhận ACK và Phản hồi NACK:**
@@ -60,13 +60,13 @@ sequenceDiagram
 
 ### 4. Cảm biến Môi trường Khí áp & Nhiệt độ BMP280
 - **Nhà sản xuất & Địa chỉ I2C:** Bosch Sensortec. Địa chỉ I2C cấu hình bằng chân SDO: `0x76` (SDO nối GND) hoặc `0x77` (SDO nối VDD).
-- **Dải Đo & Độ phân giải:** Đo áp suất khí quyển từ $300\text{ hPa}$ đến $1100\text{ hPa}$ (tương đương độ cao từ $-500\text{m}$ dưới mực nước biển đến $+9000\text{m}$ trên đỉnh Everest) với độ phân giải siêu cao $0.16\text{ Pa}$ và độ phân giải nhiệt độ $0.01^\circ\text{C}$.
+- **Dải Đo & Độ phân giải:** Đo áp suất khí quyển từ 300 hPa đến 1100 hPa (tương đương độ cao từ $-500\text{m}$ dưới mực nước biển đến $+9000\text{m}$ trên đỉnh Everest) với độ phân giải siêu cao 0.16 Pa và độ phân giải nhiệt độ 0.01°C.
 - **Bảng Hệ số Hiệu chuẩn Nội bộ (Trimming Parameters):**
   - Màng cảm biến áp suất gốm áp điện (Piezoresistive) có đặc tính phi tuyến tính cao theo nhiệt độ. Trong quá trình sản xuất tại nhà máy, mỗi chip BMP280 được đo kiểm riêng lẻ và nạp sẵn 24 byte hằng số hiệu chuẩn vào bộ nhớ ROM không khả biến (từ thanh ghi `0x88` đến `0xA1`: `dig_T1` đến `dig_T3` cho nhiệt độ, `dig_P1` đến `dig_P9` cho áp suất).
   - Thuật toán giải mã bắt buộc phải đọc toàn bộ mảng 24 byte hằng số này và áp dụng công thức bù trừ nhiệt độ bậc cao theo tài liệu chuẩn của Bosch để quy đổi giá trị ADC thô thành giá trị áp suất thực tế.
 - **Công thức Tính Độ cao Khí quyển (Barometric Hypsometric Formula):**
-  $$h = 44330 \times \left[ 1 - \left(\frac{P}{P_0}\right)^{\frac{1}{5.255}} \right]$$
-  Trong đó: $h$ là độ cao tính bằng mét, $P$ là áp suất khí quyển đo được, $P_0$ là áp suất chuẩn tại mực nước biển ($1013.25\text{ hPa}$).
+$$h = 44330 \times \left[ 1 - \left(\frac{P}{P_0}\right)^{\frac{1}{5.255}} \right]$$
+  Trong đó: $h$ là độ cao tính bằng mét, $P$ là áp suất khí quyển đo được, $P_0$ là áp suất chuẩn tại mực nước biển (1013.25 hPa).
 
 ### ❓ Câu Hỏi Củng Cố Kiến Thức (Doc 4.1)
 1. **Bus I2C chuẩn công nghiệp yêu cầu cấu hình phần cứng đặc thù nào trên hai đường tín hiệu SDA và SCL?**
@@ -89,16 +89,16 @@ sequenceDiagram
 - **Nhà sản xuất & Địa chỉ I2C:** InvenSense / TDK. Địa chỉ I2C là `0x68` (AD0 = GND) hoặc `0x69` (AD0 = VCC).
 - **Cấu trúc Phần cứng:** Tích hợp một vi cơ điện tử gia tốc kế 3 trục (MEMS 3-axis Accelerometer) và con quay hồi chuyển 3 trục (MEMS 3-axis Gyroscope) trên cùng một đế silicon.
 - **Thanh ghi Dữ liệu Thô:** 14 thanh ghi liên tiếp từ `0x3B` đến `0x48` chứa các giá trị số nguyên có dấu 16-bit (`int16_t`):
-  - `0x3B - 0x40`: Gia tốc 3 trục $A_x, A_y, A_z$ (độ nhạy cấu hình $\pm 2\text{g}, \pm 4\text{g}, \pm 8\text{g}, \pm 16\text{g}$).
+  - `0x3B - 0x40`: Gia tốc 3 trục $A_x, A_y, A_z$ (độ nhạy cấu hình ±2g, ±4g, ±8g, ±16g).
   - `0x41 - 0x42`: Nhiệt độ nội bộ của chip silicon.
-  - `0x43 - 0x48`: Vận tốc góc 3 trục $G_x, G_y, G_z$ (độ nhạy cấu hình $\pm 250, \pm 500, \pm 1000, \pm 2000^\circ\text{/s}$).
+  - `0x43 - 0x48`: Vận tốc góc 3 trục $G_x, G_y, G_z$ (độ nhạy cấu hình ±250, ±500, ±1000, ±2000°/s).
 
 ### 2. Cảm biến Từ trường & La bàn số GY-271 (QMC5883L / HMC5883L)
 - **Nhà sản xuất & Địa chỉ I2C:** QST / Honeywell. Địa chỉ I2C chuẩn là `0x0D` (QMC5883L / QMC5883P) hoặc `0x1E` (HMC5883L).
 - **Cấu trúc Phần cứng:** Tích hợp 3 cảm biến từ điện trở dị hướng (Anisotropic Magnetoresistive - AMR) độ nhạy cao đo cường độ từ trường Trái Đất theo 3 trục trực giao $M_x, M_y, M_z$ (đơn vị Gauss hoặc $\mu\text{T}$).
 - **Thuật toán Tính Góc Hướng La bàn (Heading):**
   Góc hướng la bàn so với cực Bắc từ được tính bằng hàm lượng giác:
-  $$\text{Heading} = \text{atan2}(M_y, M_x) \cdot \frac{180}{\pi}$$
+$$\text{Heading} = \text{atan2}(M_y, M_x) \cdot \frac{180}{\pi}$$
   Nếu $\text{Heading} < 0^\circ$, hiệu chỉnh: $\text{Heading} = \text{Heading} + 360^\circ$.
 - **Hợp nhất Dữ liệu Quán tính 9 Bậc Tự do (9-DOF):** 
   Kết hợp gia tốc kế 3 trục (đo véc-tơ trọng trường), con quay hồi chuyển 3 trục (đo vận tốc góc) từ MPU6500 và từ kế 3 trục (đo véc-tơ từ trường Trái Đất) từ GY-271 cho phép phân hệ ADCS của vệ tinh xác định đầy đủ và ổn định cả 3 góc Euler trong không gian 3 chiều: Roll $\phi$, Pitch $\theta$ và Yaw / Heading $\psi$.
@@ -109,7 +109,7 @@ sequenceDiagram
 - **Gia tốc kế:** Đo véc-tơ gia tốc trọng trường $g$. Cho góc nghiêng chính xác tuyệt vời khi ở trạng thái tĩnh dài hạn, nhưng lại cực kỳ nhạy cảm với các rung động cơ học ngắn hạn và lực quán tính lúc chuyển động (Nhiễu tần số cao).
 - **Con quay hồi chuyển:** Đo vận tốc góc quay tức thời $\omega$. Tích phân góc quay $\theta = \int \omega \, dt$ đáp ứng cực nhanh và không bị ảnh hưởng bởi rung lắc cơ học, nhưng lại bị hiện tượng trôi dạt điểm không (Gyro Drift / DC Bias) khiến góc tính toán bị sai lệch tích lũy tăng dần theo thời gian (Nhiễu tần số thấp).
 - **Bộ Lọc Bù (Complementary Filter):** Kết hợp một bộ lọc thông cao (High-pass Filter) cho con quay và một bộ lọc thông thấp (Low-pass Filter) cho gia tốc kế theo công thức hợp nhất:
-  $$\theta_t = \alpha \cdot (\theta_{t-1} + \omega \cdot \Delta t) + (1 - \alpha) \cdot \theta_\text{accel}$$
+$$\theta_t = \alpha \cdot (\theta_{t-1} + \omega \cdot \Delta t) + (1 - \alpha) \cdot \theta_\text{accel}$$
   Trong đó: $\Delta t$ là chu kỳ lấy mẫu, $\alpha$ là trọng số lọc (thường chọn $\alpha = 0.96 - 0.98$). Thuật toán chạy siêu nhanh trên vi điều khiển, triệt tiêu hoàn toàn độ trôi của con quay và lọc sạch nhiễu rung lắc của gia tốc kế.
 
 ```mermaid
@@ -155,16 +155,16 @@ Nhân hệ số (1 - alpha) = 0.02"]
 ## 📖 Doc 4.3: Nguyên lý Phần Cứng Module Định Vị GNSS L76X & Giao Tiếp UART Đọc Dữ Liệu Thô
 
 ### 1. Kiến trúc Phần cứng Module Định vị Toàn cầu GNSS L76X
-Module Quectel **L76X** là khí tài định vị không gian tích hợp đồng thời hai hệ thống vệ tinh: **GPS** (Hoa Kỳ - tần số L1 $1575.42\text{ MHz}$) và **GLONASS** (Nga - tần số L1 $1602\text{ MHz}$):
+Module Quectel **L76X** là khí tài định vị không gian tích hợp đồng thời hai hệ thống vệ tinh: **GPS** (Hoa Kỳ - tần số L1 1575.42 MHz) và **GLONASS** (Nga - tần số L1 1602 MHz):
 - **Ăng-ten Gốm Tích hợp (Ceramic Patch Antenna):** Thu sóng vô tuyến phân cực tròn thuận (RHCP) từ các chòm vệ tinh trên quỹ đạo.
-- **Tầng Tiền Khuếch đại Nhiễu Thấp (LNA):** Khuếch đại tín hiệu vệ tinh cực kỳ yếu ớt (mức thu chỉ từ $-130\text{ dBm}$ đến $-165\text{ dBm}$) trước khi đưa vào bộ giải mã RF.
+- **Tầng Tiền Khuếch đại Nhiễu Thấp (LNA):** Khuếch đại tín hiệu vệ tinh cực kỳ yếu ớt (mức thu chỉ từ -130 dBm đến -165 dBm) trước khi đưa vào bộ giải mã RF.
 - **Các Chế độ Khởi động Định vị:**
   - *Cold Start (~35 giây):* Khi module vừa cấp nguồn và chưa có dữ liệu lịch thiên văn (Almanac/Ephemeris), nó phải quét toàn bộ các kênh tần số để tìm vệ tinh.
   - *Hot Start (~1 giây):* Khi module đã có sẵn dữ liệu quỹ đạo và đồng hồ UTC chính xác trong bộ nhớ tạm RTC, thời gian chốt vị trí diễn ra gần như tức thời.
 - **Giao tiếp Nối tiếp UART Phần cứng:**
   - Kết nối với cổng nối tiếp phần cứng `UART2` (`Serial2`) của OBC.
-  - Tốc độ baud tiêu chuẩn: $9600\text{ bps}$, cấu hình khung truyền `8-N-1`.
-  - **Đặc tính phát dữ liệu tự động:** Ngay khi được cấp nguồn $3.3\text{V}$, module tự động phát ra luồng ký tự ASCII chứa các dòng bản tin NMEA định kỳ mỗi giây ($1\text{ Hz}$) qua chân TX mà không cần OBC phải gửi bất kỳ lệnh kích hoạt nào.
+  - Tốc độ baud tiêu chuẩn: 9600 bps, cấu hình khung truyền `8-N-1`.
+  - **Đặc tính phát dữ liệu tự động:** Ngay khi được cấp nguồn 3.3V, module tự động phát ra luồng ký tự ASCII chứa các dòng bản tin NMEA định kỳ mỗi giây (1 Hz) qua chân TX mà không cần OBC phải gửi bất kỳ lệnh kích hoạt nào.
 
 ### 2. Kỹ thuật Lập trình: Đọc Luồng Ký Tự NMEA Thô qua UART
 Trong bài thực hành đọc dữ liệu thô, mục tiêu là kiểm tra thông mạch phần cứng và quan sát trực tiếp luồng ký tự thô đổ về từ không gian:
@@ -215,24 +215,24 @@ Mỗi câu tin NMEA bắt đầu bằng ký tự `$`, theo sau là mã định d
 ```
 $GPRMC,083559.00,A,2102.1234,N,10547.5678,E,0.05,84.4,121126,,,A*76
 ```
-- **Trường 1 (`083559.00`):** Thời gian chuẩn quốc tế UTC theo định dạng `hhmmss.ss` ($08\text{ giờ } 35\text{ phút } 59.00\text{ giây}$).
+- **Trường 1 (`083559.00`):** Thời gian chuẩn quốc tế UTC theo định dạng `hhmmss.ss` (08 giờ 35 phút 59.00 giây).
 - **Trường 2 (`A`):** Trạng thái định vị (`Status`):
   - `A` = Active: Tín hiệu vệ tinh hợp lệ, tọa độ tin cậy.
   - `V` = Void: Chưa khóa được vệ tinh, tọa độ không hợp lệ.
 - **Trường 3 & 4 (`2102.1234,N`):** Vĩ độ định dạng Độ - Phút thập phân `ddmm.mmmm` và bán cầu (`N` = Bắc, `S` = Nam).
 - **Trường 5 & 6 (`10547.5678,E`):** Kinh độ định dạng Độ - Phút thập phân `dddmm.mmmm` và bán cầu (`E` = Đông, `W` = Tây).
 - **Trường 7 (`0.05`):** Vận tốc di chuyển mặt đất tính bằng Hải lý trên giờ (Knots).
-- **Trường 8 (`84.4`):** Góc hướng di chuyển (Course over ground) tính bằng độ ($0^\circ - 360^\circ$).
+- **Trường 8 (`84.4`):** Góc hướng di chuyển (Course over ground) tính bằng độ (0° - 360°).
 - **Trường 9 (`121126`):** Ngày tháng năm UTC định dạng `ddmmyy` (Ngày 12 tháng 11 năm 2026).
 
 #### B. Công Thức Chuyển Đổi Tọa Độ NMEA sang Độ Thập Phân (Decimal Degrees)
 Định dạng NMEA biểu diễn theo Độ và Phút (`ddmm.mmmm`). Để đưa lên bản đồ số (Google Maps, Leaflet, Dashboard), bắt buộc phải đổi sang Độ Thập Phân:
 $$\text{Decimal Degrees} = \text{Degrees} + \frac{\text{Minutes}}{60.0}$$
 *Ví dụ cụ thể:*
-- Vĩ độ thô: `2102.1234, N` $\implies$ Số độ nguyên là $21^\circ$, số phút là $02.1234'$.
-  $$\text{Latitude} = 21 + \frac{2.1234}{60.0} = \mathbf{21.03539^\circ\text{ N}}$$
-- Kinh độ thô: `10547.5678, E` $\implies$ Số độ nguyên là $105^\circ$, số phút là $47.5678'$.
-  $$\text{Longitude} = 105 + \frac{47.5678}{60.0} = \mathbf{105.79279^\circ\text{ E}}$$
+- Vĩ độ thô: `2102.1234, N` ⇒ Số độ nguyên là 21°, số phút là 02.1234'.
+$$\text{Latitude} = 21 + \frac{2.1234}{60.0} = \mathbf{21.03539^\circ\text{ N}}$$
+- Kinh độ thô: `10547.5678, E` ⇒ Số độ nguyên là 105°, số phút là 47.5678'.
+$$\text{Longitude} = 105 + \frac{47.5678}{60.0} = \mathbf{105.79279^\circ\text{ E}}$$
 *(Quy ước: Nếu là bán cầu Nam `S` hoặc bán cầu Tây `W`, giá trị tọa độ mang dấu âm)*.
 
 #### C. Câu tin `$GPGGA` (Global Positioning System Fix Data)
@@ -256,7 +256,7 @@ $GPGGA,083559.00,2102.1234,N,10547.5678,E,1,08,1.05,45.2,M,-28.9,M,,*5A
 Để bảo đảm đường truyền UART không bị suy hao biến dạng bit làm sai lệch tọa độ:
 - Hai ký tự Hex sau dấu `*` ở cuối câu tin chính là mã Checksum 8-bit.
 - **Giải thuật:** Duyệt qua tất cả các byte nằm giữa ký tự `$` và ký tự `*`, thực hiện phép toán logic `XOR (^)` liên tục:
-  $$\text{Checksum} = \bigoplus_{i=1}^{N} \text{byte}[i]$$
+$$\text{Checksum} = \bigoplus_{i=1}^{N} \text{byte}[i]$$
 - Nếu mã tính toán khớp với 2 ký tự Hex cuối dòng, câu tin được xác nhận hợp lệ.
 
 ### 4. Kỹ thuật Lập trình: Bộ Giải Mã Stream Parser (TinyGPS++ / PTIT_GPS)
@@ -309,8 +309,8 @@ void loop() {
 ## 📖 Doc 4.5: Tải Trọng Camera Viễn Thám OV2640, Nén JPEG Phần Cứng & Giao Thức Lệnh UART
 
 ### 1. Tải trọng Camera OV2640
-- **Đặc tính Tải trọng:** Cảm biến ảnh màu CMOS Omnivision **OV2640** độ phân giải 2 Megapixel ($1600 \times 1200\text{ UXGA}$), tích hợp bộ mã hóa nén phần cứng JPEG giúp giảm dung lượng tệp ảnh từ hàng Megabytes xuống còn $30 - 60\text{ KB}$, rất phù hợp với băng thông hạn chế của kênh truyền sóng không gian.
-- **Yêu cầu Xung nhịp Ngoài XCLK:** Để mạch xử lý tín hiệu hình ảnh (ISP) bên trong OV2640 hoạt động, nó đòi hỏi vi điều khiển OBC phải phát ra một đường xung nhịp tần số cao ổn định từ $10\text{ MHz}$ đến $20\text{ MHz}$ tại chân `XCLK`.
+- **Đặc tính Tải trọng:** Cảm biến ảnh màu CMOS Omnivision **OV2640** độ phân giải 2 Megapixel (1600 × 1200 pixel), tích hợp bộ mã hóa nén phần cứng JPEG giúp giảm dung lượng tệp ảnh từ hàng Megabytes xuống còn $30 - 60\text{ KB}$, rất phù hợp với băng thông hạn chế của kênh truyền sóng không gian.
+- **Yêu cầu Xung nhịp Ngoài XCLK:** Để mạch xử lý tín hiệu hình ảnh (ISP) bên trong OV2640 hoạt động, nó đòi hỏi vi điều khiển OBC phải phát ra một đường xung nhịp tần số cao ổn định từ 10 MHz đến 20 MHz tại chân `XCLK`.
 
 ### 2. Giao thức Bắt tay Điều khiển Chụp ảnh qua UART (Chuẩn Lệnh Chuỗi Text)
 Khác với giao thức ký tự đơn sơ khởi (`'p'`), giao thức chuẩn của hệ thống CubeSat sử dụng chuỗi ký tự rõ ràng để tăng tính an toàn và khả năng tự kiểm lỗi:

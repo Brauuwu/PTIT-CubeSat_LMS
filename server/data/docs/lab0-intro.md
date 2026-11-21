@@ -37,7 +37,7 @@ Trong thang phân loại quốc tế của Liên đoàn Hàng không Vũ trụ Q
 | **Minisatellite (Vệ tinh nhỏ)** | $100\text{ kg} \le M < 500\text{ kg}$ | Vệ tinh viễn thám cao cấp, chòm vệ tinh Starlink v1 |
 | **Microsatellite (Vệ tinh siêu nhỏ)** | $10\text{ kg} \le M < 100\text{ kg}$ | Vệ tinh VNREDSat-1 (115 kg), CubeSat 12U - 27U |
 | **Nanosatellite (Vệ tinh nano)** | $1\text{ kg} \le M < 10\text{ kg}$ | **Chuẩn CubeSat tiêu chuẩn: 1U (1.33 kg), 2U, 3U, 6U** |
-| **Picosatellite (Vệ tinh pico)** | $0.1\text{ kg} \le M < 1\text{ kg}$ | Vệ tinh dạng bản mạch PocketQube ($5 \times 5 \times 5\text{ cm}$), Chipsat |
+| **Picosatellite (Vệ tinh pico)** | $0.1\text{ kg} \le M < 1\text{ kg}$ | Vệ tinh dạng bản mạch PocketQube (5 × 5 × 5 cm), Chipsat |
 | **Femtosatellite (Vệ tinh femto)** | $M < 0.1\text{ kg}$ ($< 100\text{ g}$) | Vệ tinh vi mạch đơn màng mỏng (Sprite, KickSat) |
 
 ---
@@ -62,14 +62,14 @@ Nằm trong bán kính 20 mm tính từ tâm hình học"]
 
 | Thông số Kỹ thuật | Tiêu chuẩn Quy định | Ý nghĩa Kỹ thuật & Dung sai Kiểm định |
 | :--- | :--- | :--- |
-| **Kích thước Thân cơ sở ($X \times Y$)** | $100.0 \times 100.0\text{ mm}$ | Dung sai cực kỳ nghiêm ngặt $\pm 0.1\text{ mm}$; kiểm tra bằng dưỡng đo cơ khí (Go/No-Go Gauge). |
-| **Chiều dài Dọc trục Ray ($Z$)** | $113.5\text{ mm}$ | Tính từ mặt phẳng đáy ray đến đỉnh ray. Các thanh ray nhô ra $6.5\text{ mm}$ ở mỗi đầu để ngăn các mặt bên chạm đáy. |
-| **Bề rộng Thanh ray (Rails)** | Tối thiểu $8.5\text{ mm}$ | Tiếp xúc trực tiếp với rãnh dẫn hướng của ống phóng POD để chịu tải trọng rung động. |
-| **Bán kính Bo viền Ray** | Tối thiểu $1.0\text{ mm}$ | Bán kính lượn góc nhẵn bóng nhằm loại bỏ hoàn toàn các gờ sắc nhọn gây cào xước ống phóng. |
+| **Kích thước Thân cơ sở ($X \times Y$)** | 100.0 × 100.0 mm | Dung sai cực kỳ nghiêm ngặt ±0.1 mm; kiểm tra bằng dưỡng đo cơ khí (Go/No-Go Gauge). |
+| **Chiều dài Dọc trục Ray ($Z$)** | 113.5 mm | Tính từ mặt phẳng đáy ray đến đỉnh ray. Các thanh ray nhô ra 6.5 mm ở mỗi đầu để ngăn các mặt bên chạm đáy. |
+| **Bề rộng Thanh ray (Rails)** | Tối thiểu 8.5 mm | Tiếp xúc trực tiếp với rãnh dẫn hướng của ống phóng POD để chịu tải trọng rung động. |
+| **Bán kính Bo viền Ray** | Tối thiểu 1.0 mm | Bán kính lượn góc nhẵn bóng nhằm loại bỏ hoàn toàn các gờ sắc nhọn gây cào xước ống phóng. |
 | **Độ nhám Bề mặt Ray ($R_a$)** | $R_a \le 0.8\text{ }\mu\text{m}$ | Bề mặt ray trượt phải được mài bóng kỹ thuật cao để giảm thiểu lực ma sát trượt khi bung. |
 | **Xử lý Bề mặt Ray (Hard Anodize)** | Anodize Cứng Type III | Tạo lớp gốm oxit nhôm dày ($25 - 50\text{ }\mu\text{m}$) cách điện, chống mài mòn và chống hàn nguội trong chân không. |
-| **Vùng Cấm Nhô (Keep-out Zone)** | Tối đa $6.5\text{ mm}$ | Không có bất kỳ linh kiện, đầu ốc vít hay thấu kính nào được nhô ra khỏi bề mặt ngoài vượt quá $6.5\text{ mm}$. |
-| **Vị trí Trọng tâm (CoM)** | Cách tâm hình học $\le 20\text{ mm}$ | Phân bố khối lượng lệch tâm vượt chuẩn sẽ tạo mô-men xoắn gây rung lắc ống phóng và kẹt khi đẩy. |
+| **Vùng Cấm Nhô (Keep-out Zone)** | Tối đa 6.5 mm | Không có bất kỳ linh kiện, đầu ốc vít hay thấu kính nào được nhô ra khỏi bề mặt ngoài vượt quá 6.5 mm. |
+| **Vị trí Trọng tâm (CoM)** | Cách tâm hình học ≤ 20 mm | Phân bố khối lượng lệch tâm vượt chuẩn sẽ tạo mô-men xoắn gây rung lắc ống phóng và kẹt khi đẩy. |
 
 ---
 
@@ -94,7 +94,7 @@ sequenceDiagram
     CubeSat->>CubeSat: Bắt đầu đếm ngược thời gian im lặng vô tuyến bắt buộc (30 phút)
 ```
 
-- **Lò xo đẩy chính (Ejection Spring):** Đặt tại đáy ống phóng, cung cấp lực đẩy tuyến tính ổn định để phóng vệ tinh với vận tốc tương đối từ $1.0\text{ m/s}$ đến $1.5\text{ m/s}$, tránh nguy cơ vệ tinh bay lơ lửng ngay cửa ống gây va chạm với tên lửa.
+- **Lò xo đẩy chính (Ejection Spring):** Đặt tại đáy ống phóng, cung cấp lực đẩy tuyến tính ổn định để phóng vệ tinh với vận tốc tương đối từ 1.0 m/s đến 1.5 m/s, tránh nguy cơ vệ tinh bay lơ lửng ngay cửa ống gây va chạm với tên lửa.
 - **Lò xo tách tầng (Deployment Plungers):** Lắp ở đỉnh các thanh ray trượt. Khi hai vệ tinh CubeSat xếp chồng trong cùng một ống phóng rời khỏi cửa, các lò xo plunger nhỏ sẽ lập tức đẩy hai vệ tinh dạt xa nhau để ngăn ngừa va chạm thứ cấp.
 - **Công tắc Hành trình Phóng (Deployment Switch / Inhibit Switch):** Lắp ở chân thanh ray trượt. Khi vệ tinh nằm trong ống phóng, nắp hoặc ray đè chặt công tắc ở trạng thái ngắt mạch điện (Open circuit). Khi vệ tinh vừa trượt ra ngoài không gian, công tắc bung ra, đóng mạch điện kết nối pin sạc với hệ thống phân phối nguồn EPS.
 - **Quy tắc Im lặng Vô tuyến 30 Phút (30-Minute Radio Silence Rule):** Theo yêu cầu an toàn phóng quốc tế của CalPoly, NASA và JAXA, CubeSat **bắt buộc phải giữ im lặng vô tuyến hoàn toàn trong ít nhất 30 phút đầu tiên** sau khi rời ống phóng. Trong khoảng thời gian này, vi điều khiển không được phát sóng radio, không được kích hoạt đốt nhiệt bung anten hay mở các tấm pin để tránh gây nhiễu cho các thiết bị điều khiển của tên lửa đẩy và các vệ tinh khác phóng cùng cụm.
@@ -102,16 +102,16 @@ sequenceDiagram
 ---
 
 ### 5. Môi trường Vật lý Khắc nghiệt tại Quỹ đạo Trái Đất Tầm thấp (LEO)
-Quỹ đạo LEO (Low Earth Orbit) nằm ở độ cao từ $160\text{ km}$ đến $2000\text{ km}$ so với mực nước biển (phổ biến nhất cho CubeSat là $400 - 600\text{ km}$, tương đương quỹ đạo trạm ISS $~410\text{ km}$). Môi trường không gian tại đây đặt ra những thử thách kỹ thuật cực đoan:
+Quỹ đạo LEO (Low Earth Orbit) nằm ở độ cao từ 160 km đến 2000 km so với mực nước biển (phổ biến nhất cho CubeSat là 400 - 600 km, tương đương quỹ đạo trạm ISS $~410\text{ km}$). Môi trường không gian tại đây đặt ra những thử thách kỹ thuật cực đoan:
 
 #### A. Môi trường Chân không Cực cao (Ultra-High Vacuum)
-Áp suất khí quyển tại độ cao $500\text{ km}$ suy giảm xuống chỉ còn khoảng $10^{-6}\text{ Pa}$ đến $10^{-8}\text{ Pa}$ ($10^{-8} - 10^{-10}\text{ Torr}$), so với áp suất khí quyển tiêu chuẩn tại mặt đất là $101.325\text{ kPa}$ ($760\text{ Torr}$):
+Áp suất khí quyển tại độ cao 500 km suy giảm xuống chỉ còn khoảng 10⁻⁶ Pa đến 10⁻⁸ Pa (10⁻⁸ - 10⁻¹⁰ Torr), so với áp suất khí quyển tiêu chuẩn tại mặt đất là 101.325 kPa (760 Torr):
 - **Triệt tiêu Hoàn toàn Truyền nhiệt Đối lưu:** Định luật làm mát đối lưu Fourier/Newton $\dot{Q} = h A (T_s - T_\infty)$ hoàn toàn biến mất do không có phân tử khí chuyển động tự do. Toàn bộ nhiệt lượng sinh ra từ CPU, mạch sạc pin và máy phát sóng chỉ có thể:
   1. Dẫn nhiệt (**Conduction**) qua đồng của bo mạch in PCB và khung kim loại nhôm.
   2. Bức xạ nhiệt (**Radiation**) từ bề mặt ngoài của thân vệ tinh vào không gian sâu.
 - **Hiện tượng Thoát khí Vật liệu (Outgassing):** Dưới áp suất chân không cực thấp, các hợp chất hữu cơ dễ bay hơi, dung môi tồn dư, chất hóa dẻo trong polyme, băng keo và chất cách điện sẽ thoát ra khỏi bề mặt vật liệu. Các hạt khí này bay lơ lửng và nhanh chóng ngưng tụ lạnh lên bề mặt quang học của ống kính camera làm mờ đục ảnh chụp, hoặc phủ lên tế bào quang điện làm sụt giảm công suất sạc. Tiêu chuẩn **ASTM E595** của NASA quy định vật liệu không gian phải đạt:
-  $$\text{TML (Total Mass Loss)} \le 1.0\% \quad \text{và} \quad \text{CVCM (Collected Volatile Condensable Material)} \le 0.1\%$$
-- **Hiện tượng Hàn nguội Chân không (Cold Welding):** Trong không khí mặt đất, bề mặt kim loại luôn được bao phủ bởi một màng oxit mỏng tự nhiên và lớp phân tử ẩm. Trong môi trường chân không sâu, lớp oxit này bị triệt tiêu hoặc mài mòn. Khi hai bề mặt kim loại trần cùng loại (nhất là nhôm hoặc thép không gỉ) tiếp xúc trực tiếp dưới lực siết mạnh, các mạng tinh thể kim loại sẽ liên kết tự do, dính chặt vào nhau như được hàn nóng chảy. Đây là lý do các thanh ray CubeSat bắt buộc phải mạ **Anodize cứng Type III** (lớp gốm $Al_2O_3$ siêu cứng ngăn cách tiếp xúc kim loại trực tiếp).
+$$\text{TML (Total Mass Loss)} \le 1.0\%, \quad \text{CVCM (Collected Volatile Condensable Material)} \le 0.1\%$$
+- **Hiện tượng Hàn nguội Chân không (Cold Welding):** Trong không khí mặt đất, bề mặt kim loại luôn được bao phủ bởi một màng oxit mỏng tự nhiên và lớp phân tử ẩm. Trong môi trường chân không sâu, lớp oxit này bị triệt tiêu hoặc mài mòn. Khi hai bề mặt kim loại trần cùng loại (nhất là nhôm hoặc thép không gỉ) tiếp xúc trực tiếp dưới lực siết mạnh, các mạng tinh thể kim loại sẽ liên kết tự do, dính chặt vào nhau như được hàn nóng chảy. Đây là lý do các thanh ray CubeSat bắt buộc phải mạ **Anodize cứng Type III** (lớp gốm Al₂O₃ siêu cứng ngăn cách tiếp xúc kim loại trực tiếp).
 
 #### B. Môi trường Bức xạ Vũ trụ & Hạt Mang điện Năng lượng Cao
 Không gian LEO không được tầng khí quyển dày bảo vệ hoàn toàn, vệ tinh liên tục bị bắn phá bởi các chùm hạt proton từ gió Mặt Trời, tia vũ trụ ngân hà (Galactic Cosmic Rays - GCR) và các điện tử bị bẫy trong hai vành đai bức xạ Van Allen:
@@ -153,7 +153,7 @@ Treo toàn bộ CPU, bus đóng băng hoặc reset bất ngờ."]
   - Sử dụng mã sửa sai Hamming / ECC (Error-Correcting Code) và thuật toán lưu trữ dự phòng ba lần (**TMR - Triple Modular Redundancy**) trong bộ nhớ để sửa lỗi lật bit SEU.
 
 #### C. Khí Oxy Nguyên tử (Atomic Oxygen - AO)
-Ở độ cao $200 - 600\text{ km}$, bức xạ cực tím tử ngoại (UV) năng lượng cao từ Mặt Trời bẻ gãy các liên kết phân tử oxy hai nguyên tử ($O_2$) trong tầng nhiệt khí quyển thành các gốc **oxy nguyên tử tự do ($O$)**. Khi vệ tinh bay với vận tốc quỹ đạo siêu thanh $\sim 7.7\text{ km/s}$, các nguyên tử oxy này va chạm trực diện với bề mặt đón gió của vệ tinh với động năng khoảng $5\text{ eV}$. Khí oxy nguyên tử có tính oxy hóa cực mạnh, ăn mòn nhanh chóng các bề mặt mạ bạc, ăn mòn polyme Kapton và phá hủy các lớp phủ quang học.
+Ở độ cao 200 - 600 km, bức xạ cực tím tử ngoại (UV) năng lượng cao từ Mặt Trời bẻ gãy các liên kết phân tử oxy hai nguyên tử (O₂) trong tầng nhiệt khí quyển thành các gốc **oxy nguyên tử tự do ($O$)**. Khi vệ tinh bay với vận tốc quỹ đạo siêu thanh ~7.7 km/s, các nguyên tử oxy này va chạm trực diện với bề mặt đón gió của vệ tinh với động năng khoảng 5 eV. Khí oxy nguyên tử có tính oxy hóa cực mạnh, ăn mòn nhanh chóng các bề mặt mạ bạc, ăn mòn polyme Kapton và phá hủy các lớp phủ quang học.
 
 #### D. Cân bằng Nhiệt Quỹ đạo (Thermal Equilibrium in Space)
 Nhiệt độ của CubeSat trong không gian là kết quả của sự cân bằng động học giữa tổng công suất nhiệt hấp thụ và tổng công suất nhiệt bức xạ ra vũ trụ:
@@ -163,16 +163,16 @@ $$\dot{Q}_{\text{in}} + Q_{\text{internal}} = \dot{Q}_{\text{out}}$$
 Trong đó:
 1. **Nhiệt Hấp thụ ($\dot{Q}_{\text{in}}$):**
    - **Bức xạ Mặt Trời Trực tiếp ($Q_{\text{solar}}$):** Hằng số Mặt Trời tại quỹ đạo Trái Đất $G_{sc} \approx 1361\text{ W/m}^2$. Công suất hấp thụ:
-     $$Q_{\text{solar}} = \alpha \cdot A_{\text{proj}} \cdot G_{sc}$$
+$$Q_{\text{solar}} = \alpha \cdot A_{\text{proj}} \cdot G_{sc}$$
      (với $\alpha$ là hệ số hấp thụ quang học của bề mặt vỏ, $A_{\text{proj}}$ là diện tích hình chiếu vuông góc với tia nắng).
-   - **Bức xạ Phản xạ từ Trái Đất (Earth Albedo - $Q_{\text{albedo}}$):** Trái Đất phản xạ lại không gian trung bình khoảng $30\%$ ($a \approx 0.30$) thông lượng ánh sáng Mặt Trời:
-     $$Q_{\text{albedo}} = \alpha \cdot A_{\text{earth}} \cdot G_{sc} \cdot a \cdot F_{\text{sat-earth}}$$
-   - **Bức xạ Hồng ngoại Phát ra từ Trái Đất (Earth Infrared - $Q_{\text{IR}}$):** Bản thân Trái Đất phát xạ nhiệt hồng ngoại như một vật đen ở nhiệt độ $\sim 255\text{ K}$, với thông lượng trung bình $q_{\text{IR}} \approx 237\text{ W/m}^2$:
-     $$Q_{\text{IR}} = \varepsilon \cdot A_{\text{earth}} \cdot q_{\text{IR}} \cdot F_{\text{sat-earth}}$$
+   - **Bức xạ Phản xạ từ Trái Đất (Earth Albedo - $Q_{\text{albedo}}$):** Trái Đất phản xạ lại không gian trung bình khoảng 30% ($a \approx 0.30$) thông lượng ánh sáng Mặt Trời:
+$$Q_{\text{albedo}} = \alpha \cdot A_{\text{earth}} \cdot G_{sc} \cdot a \cdot F_{\text{sat-earth}}$$
+   - **Bức xạ Hồng ngoại Phát ra từ Trái Đất (Earth Infrared - $Q_{\text{IR}}$):** Bản thân Trái Đất phát xạ nhiệt hồng ngoại như một vật đen ở nhiệt độ ~255 K, với thông lượng trung bình $q_{\text{IR}} \approx 237\text{ W/m}^2$:
+$$Q_{\text{IR}} = \varepsilon \cdot A_{\text{earth}} \cdot q_{\text{IR}} \cdot F_{\text{sat-earth}}$$
 2. **Nhiệt Nội sinh ($Q_{\text{internal}}$):** Công suất tiêu tán nhiệt từ các linh kiện điện tử đang hoạt động (CPU OBC, mạch sạc pin EPS, mạch khuếch đại công suất PA của module truyền thông LoRa).
 3. **Nhiệt Bức xạ ra Không gian Sâu ($\dot{Q}_{\text{out}}$):** Theo định luật bức xạ vật đen **Stefan-Boltzmann**:
-   $$\dot{Q}_{\text{out}} = \varepsilon \cdot \sigma \cdot A_{\text{total}} \cdot (T_{\text{sat}}^4 - T_{\text{space}}^4)$$
-   (với $\varepsilon$ là hệ số phát xạ hồng ngoại của vật liệu vỏ, hằng số Stefan-Boltzmann $\sigma = 5.67 \times 10^{-8}\text{ W/(m}^2\text{K}^4)$, $A_{\text{total}}$ là tổng diện tích bức xạ $6$ mặt của CubeSat, $T_{\text{space}} \approx 2.7\text{ K} \approx -270.45^\circ\text{C}$).
+$$\dot{Q}_{\text{out}} = \varepsilon \cdot \sigma \cdot A_{\text{total}} \cdot (T_{\text{sat}}^4 - T_{\text{space}}^4)$$
+   (với $\varepsilon$ là hệ số phát xạ hồng ngoại của vật liệu vỏ, hằng số Stefan-Boltzmann $\sigma = 5.67 \times 10^{-8}\text{ W/(m}^2\text{K}^4)$, $A_{\text{total}}$ là tổng diện tích bức xạ $6$ mặt của CubeSat, T_space ≈ 2.7 K ≈ -270.45°C).
 
 ```mermaid
 graph TD
@@ -188,27 +188,27 @@ G_sc = 1361 W/m²"] -->|Bức xạ trực tiếp Q_solar| Sat["🛰️ CUBESAT 1
 ```
 
 - **Biên độ Biến thiên Nhiệt:**
-  - **Pha Ban ngày (Sunlight):** Vệ tinh hấp thụ nhiệt mặt trời tối đa, nhiệt độ bề mặt ngoài có thể tăng vọt lên $+80^\circ\text{C}$ đến $+100^\circ\text{C}$.
-  - **Pha Vùng tối (Eclipse):** Khi vệ tinh đi vào vùng khuất bóng của Trái Đất ($\approx 35\text{ phút}$ mỗi vòng bay), $Q_{\text{solar}} = 0$ và $Q_{\text{albedo}} = 0$, vệ tinh liên tục mất nhiệt vào vũ trụ, nhiệt độ vỏ tụt dốc xuống $-40^\circ\text{C}$ đến $-50^\circ\text{C}$.
+  - **Pha Ban ngày (Sunlight):** Vệ tinh hấp thụ nhiệt mặt trời tối đa, nhiệt độ bề mặt ngoài có thể tăng vọt lên +80°C đến +100°C.
+  - **Pha Vùng tối (Eclipse):** Khi vệ tinh đi vào vùng khuất bóng của Trái Đất (≈ 35 phút mỗi vòng bay), $Q_{\text{solar}} = 0$ và $Q_{\text{albedo}} = 0$, vệ tinh liên tục mất nhiệt vào vũ trụ, nhiệt độ vỏ tụt dốc xuống -40°C đến -50°C.
   - Trung bình mỗi ngày vệ tinh trải qua $15 - 16$ chu kỳ sốc nhiệt nóng - lạnh cực đoan, đòi hỏi thiết kế nhiệt thụ động (**Passive Thermal Control**) bằng cách tính toán tỷ số $\alpha/\varepsilon$ của các lớp phủ bề mặt (như băng keo Kapton, mạ niken hoặc sơn anodize đen).
 
 #### E. Động học Quỹ đạo & Thời gian Suy thoái (Orbital Decay)
 1. **Vận tốc Quỹ đạo Cân bằng (Orbital Velocity):**
    Vệ tinh duy trì quỹ đạo tròn khi lực hấp dẫn cân bằng hoàn toàn với lực hướng tâm:
-   $$\frac{G M_E m}{(R_E + h)^2} = \frac{m v^2}{R_E + h} \implies v = \sqrt{\frac{G M_E}{R_E + h}} = \sqrt{\frac{\mu}{r}}$$
+$$\frac{G M_E m}{(R_E + h)^2} = \frac{m v^2}{R_E + h} \implies v = \sqrt{\frac{G M_E}{R_E + h}} = \sqrt{\frac{\mu}{r}}$$
    Với hằng số hấp dẫn Trái Đất $\mu = G M_E \approx 398600.44\text{ km}^3/\text{s}^2$, bán kính Trái Đất $R_E \approx 6378.14\text{ km}$. Ở độ cao $h = 500\text{ km}$:
-   $$v = \sqrt{\frac{398600.44}{6378.14 + 500}} \approx 7.613\text{ km/s} \approx 27400\text{ km/h}$$
+$$v = \sqrt{\frac{398600.44}{6378.14 + 500}} \approx 7.613\text{ km/s} \approx 27400\text{ km/h}$$
 2. **Chu kỳ Quỹ đạo (Orbital Period):**
-   $$T = 2\pi \sqrt{\frac{(R_E + h)^3}{\mu}} = 2\pi \sqrt{\frac{(6878.14)^3}{398600.44}} \approx 5677\text{ giây} \approx 94.6\text{ phút}$$
-   Trong một ngày đêm Trái Đất ($24\text{ giờ}$), vệ tinh hoàn thành:
-   $$N = \frac{24 \times 60}{94.6} \approx 15.22\text{ vòng/ngày}$$
+$$T = 2\pi \sqrt{\frac{(R_E + h)^3}{\mu}} = 2\pi \sqrt{\frac{(6878.14)^3}{398600.44}} \approx 5677\text{ s} \approx 94.6\text{ min}$$
+   Trong một ngày đêm Trái Đất (24 giờ), vệ tinh hoàn thành:
+$$N = \frac{24 \times 60}{94.6} \approx 15.22\text{ orbits/day}$$
 3. **Lực Cản Khí quyển & Quy tắc 25 Năm (IADC 25-Year Rule):**
    Mặc dù rất loãng, tầng khí quyển tàn dư vẫn tạo ra lực cản khí động học:
-   $$F_{\text{drag}} = \frac{1}{2} \rho v^2 C_d A$$
+$$F_{\text{drag}} = \frac{1}{2} \rho v^2 C_d A$$
    (với $\rho$ là mật độ không khí, $C_d \approx 2.2$ là hệ số cản của khối lập phương, $A$ là diện tích cản gió). Lực cản này liên tục tiêu hao cơ năng của vệ tinh, làm độ cao quỹ đạo giảm dần (Orbital Decay) cho đến khi vệ tinh rơi vào tầng khí quyển dày và bốc cháy hoàn toàn:
    - Độ cao $< 200\text{ km}$ : Vệ tinh rơi và bốc cháy chỉ trong vài ngày.
-   - Độ cao $300 - 400\text{ km}$ : Tuổi thọ quỹ đạo kéo dài vài tháng đến $1 - 2$ năm (quỹ đạo lý tưởng cho CubeSat giáo dục).
-   - Độ cao $500 - 600\text{ km}$ : Tuổi thọ quỹ đạo từ $5$ đến $25$ năm.
+   - Độ cao 300 - 400 km : Tuổi thọ quỹ đạo kéo dài vài tháng đến $1 - 2$ năm (quỹ đạo lý tưởng cho CubeSat giáo dục).
+   - Độ cao 500 - 600 km : Tuổi thọ quỹ đạo từ $5$ đến $25$ năm.
    - Độ cao $> 800\text{ km}$ : Tồn tại hàng trăm năm, trở thành rác vũ trụ nguy hiểm nếu không có động cơ khử quỹ đạo.
    - **Quy chuẩn IADC / Liên Hợp Quốc:** Ủy ban Điều phối Rác Vũ trụ Quốc tế (IADC) quy định mọi vệ tinh LEO sau khi kết thúc sứ mệnh phải tự động khử quỹ đạo và bốc cháy trong vòng không quá **25 năm**. Vệ tinh cũng phải thực hiện quy trình **Thụ động hóa (Passivation)**: xả kiệt dung lượng pin sạc và giải phóng toàn bộ năng lượng dư thừa để tránh nguy cơ phát nổ tạo thành các mảnh vụn không gian.
 
@@ -275,7 +275,7 @@ Cảm biến áp suất khí quyển & nhiệt độ BMP280"]
 ### 2. Chi tiết Chức năng & Thông số 6 Phân hệ Cốt lõi
 
 #### 1. Phân hệ Xử lý & Quản lý Dữ liệu Lệnh (OBC / C&DH)
-- **Hạt nhân Xử lý:** Sử dụng vi điều khiển 32-bit lõi kép **ESP32-WROOM-32** (kiến trúc Xtensa LX6) với xung nhịp danh định lên tới $240\text{ MHz}$, bộ nhớ $520\text{ KB SRAM}$ nội bộ và $4\text{ MB SPI Flash}$ lưu trữ chương trình điều khiển.
+- **Hạt nhân Xử lý:** Sử dụng vi điều khiển 32-bit lõi kép **ESP32-WROOM-32** (kiến trúc Xtensa LX6) với xung nhịp danh định lên tới 240 MHz, bộ nhớ 520 KB SRAM nội bộ và 4 MB SPI Flash lưu trữ chương trình điều khiển.
 - **Vai trò:**
   - Thực thi máy trạng thái nhiệm vụ (Mission Finite State Machine - FSM).
   - Thu thập định kỳ dữ liệu viễn trắc sinh tồn (Housekeeping Telemetry).
@@ -285,32 +285,32 @@ Cảm biến áp suất khí quyển & nhiệt độ BMP280"]
 
 #### 2. Phân hệ Năng lượng Điện (EPS - Electrical Power System)
 - **Thành phần:**
-  - **Nguồn Thu:** 4 bề mặt ngoài của CubeSat gắn các cell pin mặt trời đơn tinh thể (Monocrystalline Solar Cells) với hiệu suất chuyển đổi quang điện khoảng $19 - 22\%$.
-  - **Nguồn Lưu trữ:** 1 pack pin sạc Lithium-Polymer (Li-Po) đơn cell dung lượng $1200 - 2000\text{ mAh}$, điện áp danh định $3.7\text{V}$ (ngắt xả an toàn ở $3.0\text{V}$, sạc đầy ở $4.2\text{V}$).
-  - **Mạch Quản lý Sạc:** IC sạc chuyên dụng **TP4056** điều khiển thuật toán sạc hai giai đoạn CC/CV (Constant Current / Constant Voltage) với dòng sạc danh định $1000\text{ mA}$ kèm cảm biến nhiệt điện trở NTC giám sát quá nhiệt pin.
-  - **Mạch Chuyển đổi Nguồn DC-DC:** Bộ chuyển đổi giảm áp Buck hiệu suất cao ($> 90\%$) hạ điện áp biến thiên của pin ($3.0 - 4.2\text{V}$) xuống đường nguồn ổn định $3.3\text{V}$ (cấp cho MCU, cảm biến I2C) và bộ chuyển đổi tăng áp Boost $5.0\text{V}$ (cấp cho module LoRa, GPS).
+  - **Nguồn Thu:** 4 bề mặt ngoài của CubeSat gắn các cell pin mặt trời đơn tinh thể (Monocrystalline Solar Cells) với hiệu suất chuyển đổi quang điện khoảng 19 - 22%.
+  - **Nguồn Lưu trữ:** 1 pack pin sạc Lithium-Polymer (Li-Po) đơn cell dung lượng $1200 - 2000\text{ mAh}$, điện áp danh định 3.7V (ngắt xả an toàn ở 3.0V, sạc đầy ở 4.2V).
+  - **Mạch Quản lý Sạc:** IC sạc chuyên dụng **TP4056** điều khiển thuật toán sạc hai giai đoạn CC/CV (Constant Current / Constant Voltage) với dòng sạc danh định 1000 mA kèm cảm biến nhiệt điện trở NTC giám sát quá nhiệt pin.
+  - **Mạch Chuyển đổi Nguồn DC-DC:** Bộ chuyển đổi giảm áp Buck hiệu suất cao (> 90%) hạ điện áp biến thiên của pin (3.0 - 4.2V) xuống đường nguồn ổn định 3.3V (cấp cho MCU, cảm biến I2C) và bộ chuyển đổi tăng áp Boost 5.0V (cấp cho module LoRa, GPS).
   - **Mạch Giám sát Nhiên liệu (Fuel Gauge):** Chip giám sát **MAX17048** đo chính xác điện áp pin và tính toán phần trăm dung lượng còn lại (State of Charge - SOC) theo thuật toán ModelGauge độc quyền qua giao tiếp I2C, không cần điện trở shunt gây tổn hao năng lượng.
 
 #### 3. Phân hệ Cảm biến & Tải trọng Sứ mệnh (Sensors & Payload)
-- **Cảm biến Khí quyển BMP280:** Cảm biến áp suất vi cơ điện tử MEMS của Bosch, dải đo áp suất $300 - 1100\text{ hPa}$, dải nhiệt độ $-40^\circ\text{C}$ đến $+85^\circ\text{C}$. OBC sử dụng công thức khí áp chuẩn quốc tế (ICAO Barometric Formula) để suy ra độ cao khí quyển tương đối:
-  $$h = 44330 \cdot \left[1 - \left(\frac{P}{P_0}\right)^{0.1903}\right]$$
+- **Cảm biến Khí quyển BMP280:** Cảm biến áp suất vi cơ điện tử MEMS của Bosch, dải đo áp suất 300 - 1100 hPa, dải nhiệt độ -40°C đến +85°C. OBC sử dụng công thức khí áp chuẩn quốc tế (ICAO Barometric Formula) để suy ra độ cao khí quyển tương đối:
+$$h = 44330 \cdot \left[1 - \left(\frac{P}{P_0}\right)^{0.1903}\right]$$
 - **Cảm biến Quán tính 6-DoF MPU6500:** Tích hợp 3 trục gia tốc kế (Accelerometer) đo gia tốc thẳng và 3 trục con quay hồi chuyển (Gyroscope) đo vận tốc góc quay quanh 3 trục $X, Y, Z$. Đặt gần trọng tâm vệ tinh để giảm thiểu gia tốc quán tính ký sinh.
 - **Cảm biến Từ trường QMC5883L:** Từ kế 3 trục độ nhạy cao đo cường độ từ trường Trái Đất ($B_x, B_y, B_z$), giúp OBC tính toán góc phương vị La bàn (Heading):
-  $$\text{Heading} = \text{atan2}(B_y, B_x) \cdot \frac{180}{\pi}$$
-- **Module Định vị Toàn cầu GNSS L76X:** Bắt sóng đồng thời hệ thống định vị GPS (Mỹ) và GLONASS (Nga), xuất các câu tin chuẩn NMEA 0183 (như bản tin tọa độ phẳng GPRMC và bản tin độ cao geoid GPGGA) qua cổng UART ở tốc độ $9600\text{ bps}$.
-- **Tải trọng Viễn thám Camera OV2640:** Cảm biến ảnh CMOS độ phân giải 2 Megapixel ($1600 \times 1200\text{ pixel}$), tích hợp bộ nén ảnh phần cứng chuẩn JPEG giúp giảm dung lượng tệp ảnh xuống còn $20 - 50\text{ KB}$, phù hợp để truyền tải qua kênh vô tuyến băng thông hẹp.
+$$\text{Heading} = \text{atan2}(B_y, B_x) \cdot \frac{180}{\pi}$$
+- **Module Định vị Toàn cầu GNSS L76X:** Bắt sóng đồng thời hệ thống định vị GPS (Mỹ) và GLONASS (Nga), xuất các câu tin chuẩn NMEA 0183 (như bản tin tọa độ phẳng GPRMC và bản tin độ cao geoid GPGGA) qua cổng UART ở tốc độ 9600 bps.
+- **Tải trọng Viễn thám Camera OV2640:** Cảm biến ảnh CMOS độ phân giải 2 Megapixel (1600 × 1200 pixel), tích hợp bộ nén ảnh phần cứng chuẩn JPEG giúp giảm dung lượng tệp ảnh xuống còn $20 - 50\text{ KB}$, phù hợp để truyền tải qua kênh vô tuyến băng thông hẹp.
 
 #### 4. Phân hệ Truyền thông Viễn thông (COM - Communication Subsystem)
-- **Phần cứng Thu phát:** Module vô tuyến công nghệ trải phổ **LoRa (Long Range) Ebyte E32**, hoạt động ở băng tần UHF $433\text{ MHz}$ (công suất phát cực đại $20\text{ dBm} \approx 100\text{ mW}$ hoặc bản mở rộng $30\text{ dBm} \approx 1\text{ W}$).
-- **Công nghệ Điều chế:** Kỹ thuật trải phổ Chirp Spread Spectrum (CSS) mang lại độ nhạy thu tín hiệu cực kỳ ấn tượng (xuống tới $-138\text{ dBm}$), cho phép giải mã thành công tín hiệu yếu bị chìm sâu dưới ngưỡng sàn nhiễu nhiệt (Noise floor) mà các bộ điều chế FSK/OOK truyền thống hoàn toàn bất lực.
-- **Hệ thống Anten:** Anten đơn cực (Monopole) dài $1/4$ bước sóng ($\lambda/4$). Với tần số $f = 433\text{ MHz}$:
-  $$\lambda = \frac{c}{f} = \frac{3 \times 10^8\text{ m/s}}{433 \times 10^6\text{ Hz}} \approx 0.6928\text{ m} = 69.28\text{ cm} \implies L_{\text{anten}} = \frac{\lambda}{4} \approx 17.32\text{ cm}$$
+- **Phần cứng Thu phát:** Module vô tuyến công nghệ trải phổ **LoRa (Long Range) Ebyte E32**, hoạt động ở băng tần UHF 433 MHz (công suất phát cực đại 20 dBm ≈ 100 mW hoặc bản mở rộng 30 dBm ≈ 1 W).
+- **Công nghệ Điều chế:** Kỹ thuật trải phổ Chirp Spread Spectrum (CSS) mang lại độ nhạy thu tín hiệu cực kỳ ấn tượng (xuống tới -138 dBm), cho phép giải mã thành công tín hiệu yếu bị chìm sâu dưới ngưỡng sàn nhiễu nhiệt (Noise floor) mà các bộ điều chế FSK/OOK truyền thống hoàn toàn bất lực.
+- **Hệ thống Anten:** Anten đơn cực (Monopole) dài $1/4$ bước sóng (λ/4). Với tần số f = 433 MHz:
+$$\lambda = \frac{c}{f} = \frac{3 \times 10^8\text{ m/s}}{433 \times 10^6\text{ Hz}} \approx 0.6928\text{ m} = 69.28\text{ cm} \implies L_{\text{anten}} = \frac{\lambda}{4} \approx 17.32\text{ cm}$$
   Anten được chế tạo từ lá thước cuộn thép lò xo đàn hồi (Spring steel tape measure), có thể cuộn tròn gọn ghẽ bên trong khoang thân và tự động bật thẳng bung ra ngoài nhờ lực đàn hồi cơ học sau khi rời khỏi ống phóng.
 
 #### 5. Phân hệ Kết cấu Cơ khí (Structure Subsystem)
 - **Vật liệu Chế tạo:** Khung sườn hộp được phay CNC chính xác từ hợp kim nhôm hàng không vũ trụ **Al 6061-T6** (hoặc Al 7075-T6). Nhôm 6061-T6 có tỷ số độ bền trên khối lượng rất cao, khả năng gia công hoàn hảo và tính dẫn nhiệt tốt ($k \approx 167\text{ W/(m}\cdot\text{K)}$) giúp truyền dẫn nhiệt lượng từ các bo mạch bên trong ra vỏ ngoài.
-- **Tiêu chuẩn Ngăn xếp Bo mạch (PC/104):** Các bo mạch in phân hệ có kích thước vuông chuẩn $90 \times 96\text{ mm}$, được định vị xếp chồng song song lên nhau thông qua 4 cọc đồng lục giác (Standoffs) chiều cao tiêu chuẩn $16\text{ mm}$ và bắt chặt bằng bu-lông ren Inox không gỉ A2-70.
-- **Keo Khóa Ren (Threadlocker):** Rung động âm học khốc liệt khi phóng tên lửa (tần số $20 - 2000\text{ Hz}$, gia tốc lên tới $15\text{ g}$) dễ làm các ốc vít bị nới lỏng tự tháo. Toàn bộ các mối ghép bu-lông bắt buộc phải được nhỏ keo khóa ren kỵ khí độ thoát khí thấp (như Loctite 222 hoặc Loctite 242).
+- **Tiêu chuẩn Ngăn xếp Bo mạch (PC/104):** Các bo mạch in phân hệ có kích thước vuông chuẩn 90 × 96 mm, được định vị xếp chồng song song lên nhau thông qua 4 cọc đồng lục giác (Standoffs) chiều cao tiêu chuẩn 16 mm và bắt chặt bằng bu-lông ren Inox không gỉ A2-70.
+- **Keo Khóa Ren (Threadlocker):** Rung động âm học khốc liệt khi phóng tên lửa (tần số $20 - 2000\text{ Hz}$, gia tốc lên tới 15 g) dễ làm các ốc vít bị nới lỏng tự tháo. Toàn bộ các mối ghép bu-lông bắt buộc phải được nhỏ keo khóa ren kỵ khí độ thoát khí thấp (như Loctite 222 hoặc Loctite 242).
 
 #### 6. Phân hệ Điều khiển & Ổn định Tư thế (ADCS)
 - **Nhiệm vụ:** Sau khi tách khỏi ống phóng, vệ tinh thường bị xoay tròn tự do không kiểm soát (Tumbling) với vận tốc góc có thể lên tới vài chục độ/giây. ADCS chịu trách nhiệm dập tắt chuyển động quay (Detumbling) và định hướng thân vệ tinh về hướng mong muốn (hướng anten về trạm mặt đất hoặc hướng tấm pin về Mặt Trời).
@@ -360,7 +360,7 @@ Nhấp CHUỘT TRÁI trực tiếp lên một linh kiện 3D
 2. **Bước 2 - Khám phá Khung sườn Cơ khí & Thanh ray Trượt:**
    - Sử dụng thao tác xoay (Orbit) quan sát 4 thanh ray nhôm anodize cứng ở 4 góc dọc theo trục Z.
    - Quan sát công tắc hành trình phóng (Deployment Switch) bố trí ở mặt đáy của thanh ray.
-   - Xác định vùng cấm nhô linh kiện ($6.5\text{ mm}$) so với mặt phẳng các thanh ray.
+   - Xác định vùng cấm nhô linh kiện (6.5 mm) so với mặt phẳng các thanh ray.
 3. **Bước 3 - Khám phá Tầng Bo mạch Đáy (Tầng 1: Nguồn & Máy tính Trung tâm):**
    - Phóng to vào tầng bo mạch dưới cùng.
    - Nhấp chuột vào vi xử lý **ESP32-WROOM-32** để xem bảng thông số (2 nhân 240 MHz, 520 KB SRAM, 4 MB Flash).
@@ -371,6 +371,6 @@ Nhấp CHUỘT TRÁI trực tiếp lên một linh kiện 3D
    - Nhấp chọn module truyền thông vô tuyến dải rộng **LoRa 433 MHz** và module định vị **GNSS L76X**.
 5. **Bước 5 - Khám phá Tầng Đỉnh & Tải trọng Viễn thám (Tầng 3: Camera & Anten):**
    - Quan sát cụm camera viễn thám **OV2640 2 Megapixel** hướng qua lỗ khoét tròn trên tấm nắp đỉnh nhôm.
-   - Quan sát cơ cấu cuộn lá thép anten thước cuộn $433\text{ MHz}$ và dây cước giữ nhiệt bung anten (Burn-wire).
+   - Quan sát cơ cấu cuộn lá thép anten thước cuộn 433 MHz và dây cước giữ nhiệt bung anten (Burn-wire).
 6. **Bước 6 - Báo cáo Kết quả & Đối chiếu Bảng Thông số:**
    - Điền đầy đủ các thông số điện áp hoạt động, dòng điện tiêu thụ và giao thức truyền thông của từng linh kiện vào Báo cáo Thực hành Lab 0 theo mẫu quy định.

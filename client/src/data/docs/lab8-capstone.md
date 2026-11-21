@@ -121,7 +121,7 @@ flowchart TD
 ### Đề tài 2: Trạm Vệ tinh LEO Thu thập & Chuyển tiếp Dữ liệu Nông nghiệp Thông minh (Smart Agtech Relay)
 - **Mục tiêu:** Xây dựng hệ thống vệ tinh chuyển tiếp dữ liệu phi thời gian thực (**Store-and-Forward LEO Gateway**) thu thập thông số vi khí hậu và độ ẩm đất từ các cụm cảm biến IoT nông nghiệp cắm ngoài đồng ruộng hẻo lánh và trút dữ liệu về trung tâm điều hành.
 - **Kỹ thuật Cốt lõi:**
-  - Cơ chế mời gọi thu thập dữ liệu (Polling Beacon) giúp các nút cảm biến mặt đất ngủ sâu tiết kiệm pin $99\%$ thời gian.
+  - Cơ chế mời gọi thu thập dữ liệu (Polling Beacon) giúp các nút cảm biến mặt đất ngủ sâu tiết kiệm pin 99% thời gian.
   - Thuật toán đa truy cập ngẫu nhiên ALOHA giải quyết xung đột kênh vô tuyến.
   - Cơ sở dữ liệu nhật ký trên thẻ nhớ MicroSD với cờ trạng thái chuyển tiếp (`isForwarded`) và lệnh trút dữ liệu lớn (`CMD_DUMP_AGTECH_DATA`).
 

@@ -63,14 +63,14 @@ Bộ kit vệ tinh giáo dục **PTITCube** lựa chọn vi điều khiển hệ
 | Khối Chức năng                                    | Thông số Kỹ thuật Chi tiết                                                                                         | Ý nghĩa trong Ứng dụng Không gian & Lab                                                                                                                            |
 | :--------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Kiến trúc Lõi (CPU Architecture)**        | Dual-core Tensilica Xtensa 32-bit LX6                                                                                   | Hai lõi vật lý hoạt động độc lập; cho phép tách biệt luồng xử lý viễn thông/mạng trên Core 0 và luồng thuật toán bay trên Core 1.               |
-| **Tần số Xung nhịp (Clock Frequency)**      | Có thể cấu hình: $80\text{ MHz}$, $160\text{ MHz}$ đến tối đa $240\text{ MHz}$                            | Xung nhịp cao hỗ trợ tính toán ma trận xoay tư thế 3D và xử lý dòng dữ liệu ảnh JPEG mượt mà.                                                         |
+| **Tần số Xung nhịp (Clock Frequency)**      | Có thể cấu hình: 80 MHz, 160 MHz đến tối đa 240 MHz                            | Xung nhịp cao hỗ trợ tính toán ma trận xoay tư thế 3D và xử lý dòng dữ liệu ảnh JPEG mượt mà.                                                         |
 | **Bộ nhớ SRAM Nội bộ**                     | $520\text{ KB}$ SRAM ($512\text{ KB}$ khả dụng)                                                                   | Phân chia thành $192\text{ KB}$ IRAM (chứa mã thực thi tốc độ cao) và $328\text{ KB}$ DRAM (chứa biến dữ liệu, bộ đệm DMA và ngăn xếp tác vụ). |
-| **Bộ nhớ Flash Ngoài**                      | $4\text{ MB}$ (hoặc $16\text{ MB}$) Flash Quad-SPI                                                                 | Lưu trữ tệp thực thi nhị phân, bảng phân vùng và hệ thống tệp tin nhúng (SPIFFS/LittleFS).                                                                |
+| **Bộ nhớ Flash Ngoài**                      | 4 MB (hoặc 16 MB) Flash Quad-SPI                                                                 | Lưu trữ tệp thực thi nhị phân, bảng phân vùng và hệ thống tệp tin nhúng (SPIFFS/LittleFS).                                                                |
 | **Bộ đồng xử lý Công suất Thấp (ULP)** | Co-processor FSM siêu tiết kiệm điện                                                                               | Có thể đọc cảm biến và theo dõi mức pin khi cả hai lõi CPU chính đều ở chế độ ngủ sâu (Deep Sleep).                                                 |
-| **Chuyển đổi Tương tự - Số (ADC)**      | $2 \times 12\text{-bit}$ SAR ADC (tối đa 18 kênh)                                                                  | Đo đạc điện áp pin và tín hiệu cảm biến analog với độ phân giải $4096$ mức.                                                                          |
+| **Chuyển đổi Tương tự - Số (ADC)**      | 2 × 12-bit SAR ADC (tối đa 18 kênh)                                                                  | Đo đạc điện áp pin và tín hiệu cảm biến analog với độ phân giải $4096$ mức.                                                                          |
 | **Giao tiếp Nối tiếp (Serial Buses)**       | $3 \times\text{UART}$, $2 \times\text{I2C}$, $3 \times\text{SPI}$, $2 \times\text{I2S}$, $1 \times\text{CAN}$ | Hỗ trợ đầy đủ mọi giao thức giao tiếp công nghiệp vũ trụ.                                                                                                  |
-| **Mạng Không dây Tích hợp**               | Wi-Fi $802.11\text{ b/g/n}$ ($2.4\text{ GHz}$) & Bluetooth v4.2 BR/EDR/BLE                                          | Hỗ trợ mô phỏng truyền nhận dữ liệu tầm gần trong phòng thí nghiệm và kết nối Web LMS.                                                                  |
-| **Điện áp Hoạt động Danh định**        | $3.0\text{V} - 3.6\text{V}$ (Chuẩn tối ưu: $3.3\text{V}$)                                                        | Khớp chuẩn với đường nguồn $3.3\text{V}$ do mạch Buck chuyển đổi từ pin Lithium EPS.                                                                      |
+| **Mạng Không dây Tích hợp**               | Wi-Fi 802.11 b/g/n (2.4 GHz) & Bluetooth v4.2 BR/EDR/BLE                                          | Hỗ trợ mô phỏng truyền nhận dữ liệu tầm gần trong phòng thí nghiệm và kết nối Web LMS.                                                                  |
+| **Điện áp Hoạt động Danh định**        | 3.0V - 3.6V (Chuẩn tối ưu: 3.3V)                                                        | Khớp chuẩn với đường nguồn 3.3V do mạch Buck chuyển đổi từ pin Lithium EPS.                                                                      |
 
 ---
 
@@ -90,10 +90,10 @@ flowchart LR
 
 | Tên Chân GPIO          | Chức năng Strapping                                             | Mức Logic Boot Bình thường             | Mức Logic Nạp Firmware                   | Cảnh báo An toàn Thiết kế                                                                                                                                                                                                                                          |
 | :----------------------- | :---------------------------------------------------------------- | :----------------------------------------- | :----------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **GPIO 0**         | Quyết định Chế độ Khởi động (Boot Mode)                  | **HIGH (Kéo lên $3.3\text{V}$)** | **LOW (Nối Mass $0\text{V}$)**    | Chân này có trở kéo lên nội. Nếu vô tình gắn cảm biến kéo chân này xuống đất khi khởi động, ESP32 sẽ rơi vào chế độ nạp và không bao giờ chạy code bay!                                                                                |
-| **GPIO 2**         | Quyết định Chế độ Khởi động & Nạp Flash                 | **LOW hoặc Không kết nối**       | **LOW (Nối Mass $0\text{V}$)**    | Thường được nối với LED báo trên bo mạch. Không được kéo chân này lên mức cao bất thường khi boot.                                                                                                                                                |
-| **GPIO 12 (MTDI)** | Quyết định Điện áp Bộ điều áp Nội cho Flash (VDD_SDIO) | **LOW (Điện áp $3.3\text{V}$)** | **LOW (Điện áp $3.3\text{V}$)** | **CỰC KỲ NGUY HIỂM:** Nếu GPIO 12 bị kéo lên mức cao ($3.3\text{V}$) khi khởi động, chip sẽ cấu hình đường nguồn cấp Flash nội tụt xuống $1.8\text{V}$, khiến bộ nhớ Flash không đọc được và làm ESP32 bị brick tạm thời! |
-| **GPIO 15 (MTDO)** | Bật/Tắt Xuất Thông điệp Debug ra Cổng UART0                | **HIGH (Kéo lên $3.3\text{V}$)** | **HIGH (Kéo lên $3.3\text{V}$)** | Điều khiển việc chip có in các dòng thông báo ROM Bootloader ra cổng Serial ở tốc độ 115200 hay không.                                                                                                                                                   |
+| **GPIO 0**         | Quyết định Chế độ Khởi động (Boot Mode)                  | **HIGH (Kéo lên 3.3V)** | **LOW (Nối Mass 0V)**    | Chân này có trở kéo lên nội. Nếu vô tình gắn cảm biến kéo chân này xuống đất khi khởi động, ESP32 sẽ rơi vào chế độ nạp và không bao giờ chạy code bay!                                                                                |
+| **GPIO 2**         | Quyết định Chế độ Khởi động & Nạp Flash                 | **LOW hoặc Không kết nối**       | **LOW (Nối Mass 0V)**    | Thường được nối với LED báo trên bo mạch. Không được kéo chân này lên mức cao bất thường khi boot.                                                                                                                                                |
+| **GPIO 12 (MTDI)** | Quyết định Điện áp Bộ điều áp Nội cho Flash (VDD_SDIO) | **LOW (Điện áp 3.3V)** | **LOW (Điện áp 3.3V)** | **CỰC KỲ NGUY HIỂM:** Nếu GPIO 12 bị kéo lên mức cao (3.3V) khi khởi động, chip sẽ cấu hình đường nguồn cấp Flash nội tụt xuống 1.8V, khiến bộ nhớ Flash không đọc được và làm ESP32 bị brick tạm thời! |
+| **GPIO 15 (MTDO)** | Bật/Tắt Xuất Thông điệp Debug ra Cổng UART0                | **HIGH (Kéo lên 3.3V)** | **HIGH (Kéo lên 3.3V)** | Điều khiển việc chip có in các dòng thông báo ROM Bootloader ra cổng Serial ở tốc độ 115200 hay không.                                                                                                                                                   |
 
 > [!WARNING]
 > **Quy tắc Vàng khi Thiết kế OBC:**
@@ -128,13 +128,13 @@ Web Serial API là tiêu chuẩn web hiện đại do W3C ban hành, cho phép c
 
 1. **Khởi tạo Bắt tay Cổng (Port Handshake):** Người dùng nhấp nút "Kết nối OBC", hàm `navigator.serial.requestPort()` mở hộp thoại hệ thống cho phép học viên lựa chọn cổng COM kết nối với chip cầu USB-UART (như CP2102 hoặc CH340) trên kit vệ tinh.
 2. **Cấu hình Đường truyền Nối tiếp:** Trình duyệt mở cổng giao tiếp với các thông số vật lý chuẩn mực:
-   - Tốc độ truyền (Baud rate): $115200\text{ bps}$.
+   - Tốc độ truyền (Baud rate): 115200 bps.
    - Khung dữ liệu: 8 bit dữ liệu, không có bit kiểm tra chẵn lẻ, 1 bit dừng (Chuẩn **SERIAL_8N1**).
 3. **Mạch Tự động Reset & Vào Bootloader (Auto-Reset Circuit):**
    Trình duyệt điều khiển hai đường tín hiệu điều khiển luồng **DTR (Data Terminal Ready)** và **RTS (Request To Send)**. Trên bo mạch OBC có mạch transistor đôi NPN mắc chéo:
-   - Khi DTR ở mức HIGH và RTS ở mức LOW: Kéo chân `EN` của ESP32 về $0\text{V}$ (kích hoạt Reset).
-   - Khi DTR ở mức LOW và RTS ở mức HIGH: Kéo chân `GPIO0` về $0\text{V}$ (kích hoạt chế độ Download).
-   - Khi nhả chân `EN` lên mức $3.3\text{V}$ trong khi `GPIO0` vẫn giữ ở mức $0\text{V}$: ESP32 chính thức rơi vào ROM Bootloader, sẵn sàng ghi Flash.
+   - Khi DTR ở mức HIGH và RTS ở mức LOW: Kéo chân `EN` của ESP32 về 0V (kích hoạt Reset).
+   - Khi DTR ở mức LOW và RTS ở mức HIGH: Kéo chân `GPIO0` về 0V (kích hoạt chế độ Download).
+   - Khi nhả chân `EN` lên mức 3.3V trong khi `GPIO0` vẫn giữ ở mức 0V: ESP32 chính thức rơi vào ROM Bootloader, sẵn sàng ghi Flash.
 4. **Giao thức Ghi Bộ nhớ Flash (Flashing Protocol):** Dữ liệu từ tệp `firmware.bin` được chia nhỏ thành các khung tin mã hóa theo chuẩn SLIP (Serial Line Internet Protocol) và ghi tuần tự vào các khối sector của bộ nhớ Flash SPI. Sau khi ghi xong, một lệnh ngắt kết nối sẽ kích hoạt chân `EN` để khởi động lại ESP32 vào chương trình bay mới.
 
 ---
@@ -166,14 +166,14 @@ flowchart LR
 ```
 
 - **Thanh ghi Dịch (Shift Register):** Hoạt động theo cơ chế hàng đợi bit. Mỗi khi xuất hiện một cạnh lên ($0 \to 1$) trên chân xung nhịp **SH_CP (Shift Clock)**, bit dữ liệu hiện tại trên chân **DS (Serial Data)** sẽ được ghi vào tầng đầu tiên, đồng thời toàn bộ 7 bit trước đó sẽ bị đẩy dịch sang phải một nấc.
-- **Thanh ghi Chốt Lưu trữ (Storage / Latch Register):** Hoạt động độc lập với thanh ghi dịch. Trong suốt quá trình dịch 8 bit vào thanh ghi dịch, trạng thái của 8 chân ngõ ra $Q_0 - Q_7$ vẫn được giữ nguyên không đổi. Chỉ khi ta kích hoạt một xung cạnh lên ($0 \to 1$) trên chân **ST_CP (Latch Clock)**, toàn bộ 8 bit từ thanh ghi dịch mới được sao chép tức thì sang thanh ghi chốt và xuất ra ngoài. Cơ chế đệm hai tầng này loại bỏ hoàn toàn hiện tượng nhấp nháy đèn LED trong quá trình dịch dữ liệu.
+- **Thanh ghi Chốt Lưu trữ (Storage / Latch Register):** Hoạt động độc lập với thanh ghi dịch. Trong suốt quá trình dịch 8 bit vào thanh ghi dịch, trạng thái của 8 chân ngõ ra Q₀ - Q₇ vẫn được giữ nguyên không đổi. Chỉ khi ta kích hoạt một xung cạnh lên ($0 \to 1$) trên chân **ST_CP (Latch Clock)**, toàn bộ 8 bit từ thanh ghi dịch mới được sao chép tức thì sang thanh ghi chốt và xuất ra ngoài. Cơ chế đệm hai tầng này loại bỏ hoàn toàn hiện tượng nhấp nháy đèn LED trong quá trình dịch dữ liệu.
 
 ### 2. Kỹ thuật Điều khiển Màn hình LED 7 Đoạn
 
 Màn hình LED 7 đoạn gồm 7 thanh LED độc lập (được ký hiệu là $a, b, c, d, e, f, g$) và 1 chấm thập phân ($dp$). Trên kit PTITCube, màn hình LED 7 đoạn được sử dụng theo cấu hình **Anode Chung (Common Anode)** hoặc **Cathode Chung (Common Cathode)**:
 
 - Đối với LED 7 đoạn **Cathode Chung**: Để làm sáng một đoạn LED, ta xuất mức logic **HIGH (1)** lên đoạn đó. Để tắt, xuất mức logic **LOW (0)**.
-- Bảng mã Hex hiển thị các chữ số thập phân từ $0$ đến $9$ (với thứ tự bit $Q_7 \dots Q_0$ tương ứng $dp, g, f, e, d, c, b, a$):
+- Bảng mã Hex hiển thị các chữ số thập phân từ $0$ đến $9$ (với thứ tự bit Q₇...Q₀ tương ứng $dp, g, f, e, d, c, b, a$):
 
 | Ký tự Số |     Đoạn LED Bật     | Giá trị Nhị phân ($dp-g-f-e-d-c-b-a$) | Mã Hexadecimal |
 | :---------: | :---------------------: | :-----------------------------------------: | :-------------: |
@@ -199,7 +199,7 @@ Giao tiếp **UART (Universal Asynchronous Receiver-Transmitter)** là chuẩn t
 - **Tính chất Bất đồng bộ (Asynchronous):** Không có đường dây phát xung nhịp Clock chung giữa hai thiết bị. Hai bên truyền và nhận phải được cài đặt cùng một tốc độ truyền định trước (**Baud rate**) và tự căn chỉnh thời gian dựa trên các cạnh chuyển tiếp của tín hiệu.
 - **Cấu trúc Đường truyền:** Chỉ sử dụng đúng 2 dây tín hiệu:
   - `TX (Transmit)`: Đường xuất dữ liệu từ thiết bị phát.
-  - `RX (Receive)`: Đường nhận dữ liệu vào thiết bị thu (Nối chéo: $TX_A \to RX_B$ và $RX_A \to TX_B$).
+  - `RX (Receive)`: Đường nhận dữ liệu vào thiết bị thu (Nối chéo: TX_A → RX_B và RX_A → TX_B).
 
 ```mermaid
 sequenceDiagram
@@ -224,13 +224,11 @@ Khung truyền nối tiếp chuẩn mực nhất của ngành công nghiệp là
 - **No Parity (Không kiểm tra chẵn lẻ):** Không thêm bit kiểm tra, giúp tối ưu hóa băng thông truyền dẫn.
 - **1 Bit Stop (1 Dừng):** Duy trì mức cao tối thiểu trong thời gian 1 bit trước khi cho phép bắt đầu khung truyền tiếp theo.
 - **Thời gian truyền 1 Byte:**
-  Tổng số bit cần truyền cho 1 byte là: $1\text{ Start} + 8\text{ Data} + 1\text{ Stop} = 10\text{ bit}$.
-  Ở tốc độ baud chuẩn $115200\text{ bps}$, thời gian truyền 1 bit là:
-  $$
-  T_{\text{bit}} = \frac{1}{115200} \approx 8.68\text{ }\mu\text{s} \implies T_{\text{byte}} = 10 \times 8.68\text{ }\mu\text{s} \approx 86.8\text{ }\mu\text{s}
-  $$
+  Tổng số bit cần truyền cho 1 byte là: 1 Start + 8 Data + 1 Stop = 10 bit.
+  Ở tốc độ baud chuẩn 115200 bps, thời gian truyền 1 bit là:
+$$T_{\text{bit}} = \frac{1}{115200} \approx 8.68\,\mu\text{s} \implies T_{\text{byte}} = 10 \times 8.68\,\mu\text{s} \approx 86.8\,\mu\text{s}$$
 
-  Tốc độ truyền dữ liệu hữu ích cực đại đạt: $\approx 11520\text{ Byte/giây} \approx 11.25\text{ KB/s}$.
+  Tốc độ truyền dữ liệu hữu ích cực đại đạt: ≈ 11520 Byte/s ≈ 11.25 KB/s.
 
 ### 3. Ba Cổng UART Phần cứng trên ESP32
 
@@ -246,7 +244,7 @@ Vi điều khiển ESP32 tích hợp sẵn 3 khối phần cứng UART độc l�
 
 ### 1. Kiến trúc Wi-Fi trên ESP32 & Chế độ SoftAP (Access Point)
 
-Khối vô tuyến Wi-Fi tích hợp trên ESP32 hỗ trợ đầy đủ các chuẩn $802.11\text{ b/g/n}$ ở dải tần $2.4\text{ GHz}$. Trong đào tạo và phát triển vệ tinh, Wi-Fi đóng vai trò như một kênh kiểm thử mô phỏng không dây tầm gần (Wireless Test Harness):
+Khối vô tuyến Wi-Fi tích hợp trên ESP32 hỗ trợ đầy đủ các chuẩn 802.11 b/g/n ở dải tần 2.4 GHz. Trong đào tạo và phát triển vệ tinh, Wi-Fi đóng vai trò như một kênh kiểm thử mô phỏng không dây tầm gần (Wireless Test Harness):
 
 - **Chế độ Máy khách (Station Mode - STA):** ESP32 kết nối vào một mạng Wi-Fi có sẵn (như router phòng lab) và nhận một địa chỉ IP nội bộ từ máy chủ DHCP.
 - **Chế độ Điểm truy cập Mềm (SoftAP Mode):** ESP32 tự mình biến thành một trạm phát sóng Wi-Fi độc lập, tự cấp phát địa chỉ IP cho các thiết bị kết nối vào (mặc định là `192.168.4.1`). Học viên dùng laptop hoặc điện thoại kết nối thẳng vào mạng của vệ tinh mà không phụ thuộc vào hạ tầng mạng bên ngoài.
@@ -330,26 +328,21 @@ Biến `unsigned long` trong chuẩn C++ có độ rộng 32-bit, biểu diễn 
 
 - Sau khoảng thời gian:
 
-  $$
-  T_{\text{overflow}} = \frac{4.294.967.295\text{ ms}}{1000 \times 60 \times 60 \times 24} \approx 49.71\text{ ngày}
-  $$
+$$T_{\text{overflow}} = \frac{4294967295\text{ ms}}{1000 \times 60 \times 60 \times 24} \approx 49.71\text{ days}$$
 
   giá trị của hàm `millis()` sẽ bị tràn số và tự động quay vòng trở về giá trị $0$.
 - **Tính toán Đúng đắn Tuyệt đối (Luôn Dùng Phép Trừ):**
   Nhờ quy tắc toán học số bù 2 (Two's Complement Arithmetic) của hệ thống số nguyên không dấu trong phần cứng vi xử lý, biểu thức:
 
-  $$
-  \text{currentMillis} - \text{previousMillis} \ge \text{INTERVAL}
-  $$
+$$\text{currentMillis} - \text{previousMillis} \ge \text{INTERVAL}$$
 
   luôn luôn cho ra kết quả khoảng thời gian dương chính xác ngay cả trong khoảnh khắc chuyển tiếp qua mốc tràn số!
   *Ví dụ:* Giả sử `previousMillis = 4,294,967,200` (trước khi tràn 95 ms) và sau đó `currentMillis = 50` (đã tràn về 50 ms).
   Phép trừ số học không dấu 32-bit:
-  $$
-  50 - 4294967200 = 146\text{ ms}
-  $$
 
-  Hệ thống tính toán ra chính xác tuyệt đối $146\text{ ms}$ trôi qua mà không gặp bất kỳ lỗi logic nào!
+$$50 - 4294967200 = 146\text{ ms}$$
+
+  Hệ thống tính toán ra chính xác tuyệt đối 146 ms trôi qua mà không gặp bất kỳ lỗi logic nào!
 
 ---
 
@@ -362,7 +355,7 @@ Biến `unsigned long` trong chuẩn C++ có độ rộng 32-bit, biểu diễn 
 > - **Sơ đồ đấu nối phần cứng thực hành Lab 1 (trên PCB rời):**
 >   - **LED đơn (Chỉ thị):** Chân Anode nối qua điện trở hạn dòng về `GPIO 2`, Cathode nối GND.
 >   - **Nút nhấn (Tact Switch):** Một chân nối về `GPIO 4`, một chân nối GND (sử dụng trở kéo nội `INPUT_PULLUP`). *Lưu ý: Tín hiệu nút nhấn này nằm độc lập trên PCB rời, hoàn toàn không kết nối tới đường điều khiển hạ áp của bo nguồn EPS.*
->   - **Khối IC 74HC595 & LED 7 đoạn:** Chân dữ liệu $DS$ nối `GPIO 13`, chân chốt $ST\_CP$ nối `GPIO 14`, chân xung nhịp $SH\_CP$ nối `GPIO 15`, nguồn cấp $VCC$ nối $3.3\text{V}$ và $GND$.
+>   - **Khối IC 74HC595 & LED 7 đoạn:** Chân dữ liệu $DS$ nối `GPIO 13`, chân chốt $ST\_CP$ nối `GPIO 14`, chân xung nhịp $SH\_CP$ nối `GPIO 15`, nguồn cấp $VCC$ nối 3.3V và $GND$.
 > - Toàn bộ cấu trúc chồng bo CubeSat chuẩn công nghiệp (PC/104 Bus) sẽ được học viên tiếp cận và tích hợp từng bước trong các Lab chuyên sâu tiếp theo (từ Lab 2 đến Lab 8).
 
 Học viên lần lượt thực hành 11 bài tập lập trình nhúng từ cơ bản đến nâng cao trên Web IDE để làm chủ toàn diện phân hệ OBC:
