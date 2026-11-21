@@ -236,9 +236,9 @@ Khung truyền nối tiếp chuẩn mực nhất của ngành công nghiệp là
 
 Vi điều khiển ESP32 tích hợp sẵn 3 khối phần cứng UART độc lập:
 
-1. **UART0 (Serial):** Chân mặc định `GPIO 1 (TX0)` và `GPIO 3 (RX0)`. Được nối trực tiếp với chip nạp USB-UART trên kit, dùng cho việc nạp mã nguồn từ Web IDE và in nhật ký gỡ lỗi ra cửa sổ Serial Monitor.
-2. **UART1:** Chân mặc định `GPIO 9` và `GPIO 10`. Thường bị chiếm dụng bởi chip Flash SPI nội bộ, tuy nhiên nhờ ma trận chuyển mạch GPIO Matrix linh hoạt của ESP32, UART1 có thể được ánh xạ (remap) sang bất kỳ cặp chân GPIO rảnh nào khác.
-3. **UART2 (Serial2):** Chân mặc định `GPIO 17 (TX2)` và `GPIO 16 (RX2)`. Cổng này được dành riêng cho việc giao tiếp với module vệ tinh định vị GNSS L76X hoặc cụm cảm biến Camera Payload.
+1. **UART0 (Serial):** Cổng UART nối tiếp mặc định được nối trực tiếp với chip nạp USB-UART trên bo mạch, dùng cho việc nạp mã nguồn từ Web IDE và in nhật ký gỡ lỗi ra cửa sổ Serial Monitor.
+2. **UART1:** Cổng UART thứ hai trên chip, có thể được ánh xạ (remap) linh hoạt qua ma trận chuyển mạch GPIO Matrix sang các chân ngoại vi thích hợp (như kết nối module LoRa).
+3. **UART2 (Serial2):** Cổng nối tiếp phần cứng được dành riêng cho việc giao tiếp với module vệ tinh định vị GNSS L76X hoặc cụm cảm biến Camera Payload.
 
 ---
 

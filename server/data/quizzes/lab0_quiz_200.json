@@ -1926,8 +1926,8 @@
     "Lab": "Lab 0: Giới thiệu Tổng quan",
     "section": "Phần C (Sau Thực hành: Khám phá Mô hình 3D & Thông số Phân hệ trên Web LMS)",
     "Section": "Phần C (Sau Thực hành: Khám phá Mô hình 3D & Thông số Phân hệ trên Web LMS)",
-    "question": "Khi nhấn vào nút \"Reset View\" (Đặt lại góc nhìn) trên giao diện 3D LMS, điều gì sẽ xảy ra?",
-    "Question": "Khi nhấn vào nút \"Reset View\" (Đặt lại góc nhìn) trên giao diện 3D LMS, điều gì sẽ xảy ra?",
+    "question": "Khi nhấn vào nút Reset View (Đặt lại góc nhìn) trên giao diện 3D LMS, điều gì sẽ xảy ra?",
+    "Question": "Khi nhấn vào nút Reset View (Đặt lại góc nhìn) trên giao diện 3D LMS, điều gì sẽ xảy ra?",
     "options": [
       "Góc nhìn camera 3D tự động quay về vị trí mặc định ban đầu",
       "Xóa sạch toàn bộ tài liệu học tập của học viên",
@@ -2598,8 +2598,8 @@
     "Lab": "Lab 0: Giới thiệu Tổng quan",
     "section": "Phần D: Môi trường Không gian Nâng cao, Động lực học Quỹ đạo & Giảm thiểu Rác vũ trụ",
     "Section": "Phần D: Môi trường Không gian Nâng cao, Động lực học Quỹ đạo & Giảm thiểu Rác vũ trụ",
-    "question": "Hành động \"Passivation\" (Xả năng lượng dự trữ) theo Hướng dẫn số 5 của UN COPUOS khi vệ tinh kết thúc sứ mệnh có ý nghĩa cốt lõi là gì?",
-    "Question": "Hành động \"Passivation\" (Xả năng lượng dự trữ) theo Hướng dẫn số 5 của UN COPUOS khi vệ tinh kết thúc sứ mệnh có ý nghĩa cốt lõi là gì?",
+    "question": "Hành động Passivation (Xả năng lượng dự trữ) theo Hướng dẫn số 5 của UN COPUOS khi vệ tinh kết thúc sứ mệnh có ý nghĩa cốt lõi là gì?",
+    "Question": "Hành động Passivation (Xả năng lượng dự trữ) theo Hướng dẫn số 5 của UN COPUOS khi vệ tinh kết thúc sứ mệnh có ý nghĩa cốt lõi là gì?",
     "options": [
       "Xả kiệt pin và giải phóng áp suất tồn dư để ngừa nguy cơ phát nổ",
       "Bật đèn chiếu sáng công suất lớn để trạm mặt đất theo dõi vị trí",
@@ -2958,8 +2958,8 @@
     "Lab": "Lab 0: Giới thiệu Tổng quan",
     "section": "Phần D: Môi trường Không gian Nâng cao, Động lực học Quỹ đạo & Giảm thiểu Rác vũ trụ",
     "Section": "Phần D: Môi trường Không gian Nâng cao, Động lực học Quỹ đạo & Giảm thiểu Rác vũ trụ",
-    "question": "Hiện tượng \"Thermal Cycling\" (Dao động chu kỳ nhiệt) mà CubeSat phải gánh chịu tại quỹ đạo LEO diễn ra với tần suất như thế nào?",
-    "Question": "Hiện tượng \"Thermal Cycling\" (Dao động chu kỳ nhiệt) mà CubeSat phải gánh chịu tại quỹ đạo LEO diễn ra với tần suất như thế nào?",
+    "question": "Hiện tượng Thermal Cycling (Dao động chu kỳ nhiệt) mà CubeSat phải gánh chịu tại quỹ đạo LEO diễn ra với tần suất như thế nào?",
+    "Question": "Hiện tượng Thermal Cycling (Dao động chu kỳ nhiệt) mà CubeSat phải gánh chịu tại quỹ đạo LEO diễn ra với tần suất như thế nào?",
     "options": [
       "1 đến 2 chu kỳ mỗi năm",
       "1 đến 2 chu kỳ mỗi tháng",
@@ -3006,8 +3006,8 @@
     "Lab": "Lab 0: Giới thiệu Tổng quan",
     "section": "Phần D: Môi trường Không gian Nâng cao, Động lực học Quỹ đạo & Giảm thiểu Rác vũ trụ",
     "Section": "Phần D: Môi trường Không gian Nâng cao, Động lực học Quỹ đạo & Giảm thiểu Rác vũ trụ",
-    "question": "Vật liệu phi kim (như keo dán, màng bọc cách điện) khi đưa vào chân không vũ trụ bị \"Outgassing\" gây nguy hại lớn nhất cho phân hệ nào?",
-    "Question": "Vật liệu phi kim (như keo dán, màng bọc cách điện) khi đưa vào chân không vũ trụ bị \"Outgassing\" gây nguy hại lớn nhất cho phân hệ nào?",
+    "question": "Vật liệu phi kim (như keo dán, màng bọc cách điện) khi đưa vào chân không vũ trụ bị Outgassing gây nguy hại lớn nhất cho phân hệ nào?",
+    "Question": "Vật liệu phi kim (như keo dán, màng bọc cách điện) khi đưa vào chân không vũ trụ bị Outgassing gây nguy hại lớn nhất cho phân hệ nào?",
     "options": [
       "Phân hệ cơ khí vì làm tăng độ cứng của các thanh ray trượt nhôm",
       "Phân hệ tải trọng quang học vì các phân tử khí bám đọng làm mờ thấu kính",
@@ -3126,8 +3126,8 @@
     "Lab": "Lab 0: Giới thiệu Tổng quan",
     "section": "Phần D: Môi trường Không gian Nâng cao, Động lực học Quỹ đạo & Giảm thiểu Rác vũ trụ",
     "Section": "Phần D: Môi trường Không gian Nâng cao, Động lực học Quỹ đạo & Giảm thiểu Rác vũ trụ",
-    "question": "Hiện tượng \"Cold Welding\" (Hàn nguội chân không) giữa hai bề mặt kim loại cùng loại xảy ra do nguyên nhân cơ bản nào?",
-    "Question": "Hiện tượng \"Cold Welding\" (Hàn nguội chân không) giữa hai bề mặt kim loại cùng loại xảy ra do nguyên nhân cơ bản nào?",
+    "question": "Hiện tượng Cold Welding (Hàn nguội chân không) giữa hai bề mặt kim loại cùng loại xảy ra do nguyên nhân cơ bản nào?",
+    "Question": "Hiện tượng Cold Welding (Hàn nguội chân không) giữa hai bề mặt kim loại cùng loại xảy ra do nguyên nhân cơ bản nào?",
     "options": [
       "Do nhiệt độ của môi trường vũ trụ giảm sâu xuống mức âm hàng trăm độ C",
       "Do dòng điện cao tần phát ra từ ăng-ten vô tuyến nung nóng mối tiếp xúc",
@@ -3198,8 +3198,8 @@
     "Lab": "Lab 0: Giới thiệu Tổng quan",
     "section": "Phần D: Môi trường Không gian Nâng cao, Động lực học Quỹ đạo & Giảm thiểu Rác vũ trụ",
     "Section": "Phần D: Môi trường Không gian Nâng cao, Động lực học Quỹ đạo & Giảm thiểu Rác vũ trụ",
-    "question": "Khái niệm \"Spacecraft Bus\" và \"Payload\" trên một vệ tinh CubeSat phân biệt hai thành phần gì?",
-    "Question": "Khái niệm \"Spacecraft Bus\" và \"Payload\" trên một vệ tinh CubeSat phân biệt hai thành phần gì?",
+    "question": "Khái niệm Spacecraft Bus và Payload trên một vệ tinh CubeSat phân biệt hai thành phần gì?",
+    "Question": "Khái niệm Spacecraft Bus và Payload trên một vệ tinh CubeSat phân biệt hai thành phần gì?",
     "options": [
       "Bus là hệ thống dây dẫn đồng truyền tải điện; Payload là khối pin hóa học dự trữ",
       "Bus là hệ thống thân nền tảng duy trì hoạt động; Payload là tải trọng thực hiện nhiệm vụ",
@@ -3942,8 +3942,8 @@
     "Lab": "Lab 0: Giới thiệu Tổng quan",
     "section": "Phần E: Kiến trúc Cơ điện tử Bộ Kit CubeSat Giáo dục & Tiếp cận Hệ thống",
     "Section": "Phần E: Kiến trúc Cơ điện tử Bộ Kit CubeSat Giáo dục & Tiếp cận Hệ thống",
-    "question": "Thuật ngữ \"Link Budget\" (Bảng cân đối ngân sách tuyến truyền dẫn) trong thiết kế truyền thông CubeSat dùng để tính toán:",
-    "Question": "Thuật ngữ \"Link Budget\" (Bảng cân đối ngân sách tuyến truyền dẫn) trong thiết kế truyền thông CubeSat dùng để tính toán:",
+    "question": "Thuật ngữ Link Budget (Bảng cân đối ngân sách tuyến truyền dẫn) trong thiết kế truyền thông CubeSat dùng để tính toán:",
+    "Question": "Thuật ngữ Link Budget (Bảng cân đối ngân sách tuyến truyền dẫn) trong thiết kế truyền thông CubeSat dùng để tính toán:",
     "options": [
       "Mức suy hao và công suất tín hiệu thu được bảo đảm độ tin cậy của tuyến liên lạc",
       "Tổng chi phí bằng tiền để mua sắm các thiết bị thu phát vô tuyến",
@@ -3966,8 +3966,8 @@
     "Lab": "Lab 0: Giới thiệu Tổng quan",
     "section": "Phần E: Kiến trúc Cơ điện tử Bộ Kit CubeSat Giáo dục & Tiếp cận Hệ thống",
     "Section": "Phần E: Kiến trúc Cơ điện tử Bộ Kit CubeSat Giáo dục & Tiếp cận Hệ thống",
-    "question": "Hệ thống anten dạng Monopole 1/4 bước sóng ($\\lambda/4$) cho tần số 433 MHz cần có chiều dài vật lý danh định xấp xỉ khoảng:",
-    "Question": "Hệ thống anten dạng Monopole 1/4 bước sóng ($\\lambda/4$) cho tần số 433 MHz cần có chiều dài vật lý danh định xấp xỉ khoảng:",
+    "question": "Hệ thống anten dạng Monopole 1/4 bước sóng ($lambda/4$) cho tần số 433 MHz cần có chiều dài vật lý danh định xấp xỉ khoảng:",
+    "Question": "Hệ thống anten dạng Monopole 1/4 bước sóng ($lambda/4$) cho tần số 433 MHz cần có chiều dài vật lý danh định xấp xỉ khoảng:",
     "options": [
       "100.0 cm",
       "17.3 cm",
@@ -3980,8 +3980,8 @@
     "Option_D": "50.0 cm",
     "answer": "B",
     "Answer": "B",
-    "explanation": "Bước sóng $\\lambda = c / f = 3 \\times 10^8 / (433 \\times 10^6) \\approx 0.693\\text{ m}$. Chiều dài anten $\\lambda/4 \\approx 0.693 / 4 \\approx 0.173\\text{ m} = 17.3\\text{ cm}$.",
-    "Explanation": "Bước sóng $\\lambda = c / f = 3 \\times 10^8 / (433 \\times 10^6) \\approx 0.693\\text{ m}$. Chiều dài anten $\\lambda/4 \\approx 0.693 / 4 \\approx 0.173\\text{ m} = 17.3\\text{ cm}$."
+    "explanation": "Bước sóng $lambda = c / f = 3\times 10^8 / 433\times 10^6 approx 0.693\text{ m}$. Chiều dài anten $lambda/4 approx 0.693 / 4 approx 0.173\text{ m} = 17.3\text{ cm}$.",
+    "Explanation": "Bước sóng $lambda = c / f = 3\times 10^8 / 433\times 10^6 approx 0.693\text{ m}$. Chiều dài anten $lambda/4 approx 0.693 / 4 approx 0.173\text{ m} = 17.3\text{ cm}$."
   },
   {
     "id": 167,
@@ -4422,8 +4422,8 @@
     "Lab": "Lab 0: Giới thiệu Tổng quan",
     "section": "Phần F: Tiêu chuẩn Thử nghiệm Chuyến bay, An toàn Phòng Lab & Quy trình Tích hợp AIT",
     "Section": "Phần F: Tiêu chuẩn Thử nghiệm Chuyến bay, An toàn Phòng Lab & Quy trình Tích hợp AIT",
-    "question": "Khái niệm \"FlatSat\" trong phòng thí nghiệm phát triển vệ tinh CubeSat là gì?",
-    "Question": "Khái niệm \"FlatSat\" trong phòng thí nghiệm phát triển vệ tinh CubeSat là gì?",
+    "question": "Khái niệm FlatSat trong phòng thí nghiệm phát triển vệ tinh CubeSat là gì?",
+    "Question": "Khái niệm FlatSat trong phòng thí nghiệm phát triển vệ tinh CubeSat là gì?",
     "options": [
       "Bố trí toàn bộ các bo mạch phân hệ trải phẳng trên mặt bàn để thuận tiện đo đạc và gỡ lỗi",
       "Một loại vệ tinh siêu mỏng dạng tờ giấy được phóng hàng loạt lên quỹ đạo Mặt Trời",
@@ -4518,8 +4518,8 @@
     "Lab": "Lab 0: Giới thiệu Tổng quan",
     "section": "Phần F: Tiêu chuẩn Thử nghiệm Chuyến bay, An toàn Phòng Lab & Quy trình Tích hợp AIT",
     "Section": "Phần F: Tiêu chuẩn Thử nghiệm Chuyến bay, An toàn Phòng Lab & Quy trình Tích hợp AIT",
-    "question": "Quy trình kiểm tra \"Chassis Grounding\" (Nối mass khung sườn) trên vệ tinh CubeSat yêu cầu điện trở giữa khung nhôm và mass mạch in phải:",
-    "Question": "Quy trình kiểm tra \"Chassis Grounding\" (Nối mass khung sườn) trên vệ tinh CubeSat yêu cầu điện trở giữa khung nhôm và mass mạch in phải:",
+    "question": "Quy trình kiểm tra Chassis Grounding (Nối mass khung sườn) trên vệ tinh CubeSat yêu cầu điện trở giữa khung nhôm và mass mạch in phải:",
+    "Question": "Quy trình kiểm tra Chassis Grounding (Nối mass khung sườn) trên vệ tinh CubeSat yêu cầu điện trở giữa khung nhôm và mass mạch in phải:",
     "options": [
       "Điện trở tiếp xúc nối mass phải có giá trị cực nhỏ dưới 0.1 Ohm",
       "Phải có giá trị cực lớn lên tới hàng Mega-Ohm để cách ly hoàn toàn",
@@ -4686,8 +4686,8 @@
     "Lab": "Lab 0: Giới thiệu Tổng quan",
     "section": "Phần F: Tiêu chuẩn Thử nghiệm Chuyến bay, An toàn Phòng Lab & Quy trình Tích hợp AIT",
     "Section": "Phần F: Tiêu chuẩn Thử nghiệm Chuyến bay, An toàn Phòng Lab & Quy trình Tích hợp AIT",
-    "question": "Thuật ngữ \"Red-Tag Item\" (Vật phẩm gắn cờ đỏ) trong quy trình chuẩn bị bay của vệ tinh biểu thị điều gì?",
-    "Question": "Thuật ngữ \"Red-Tag Item\" (Vật phẩm gắn cờ đỏ) trong quy trình chuẩn bị bay của vệ tinh biểu thị điều gì?",
+    "question": "Thuật ngữ Red-Tag Item (Vật phẩm gắn cờ đỏ) trong quy trình chuẩn bị bay của vệ tinh biểu thị điều gì?",
+    "Question": "Thuật ngữ Red-Tag Item (Vật phẩm gắn cờ đỏ) trong quy trình chuẩn bị bay của vệ tinh biểu thị điều gì?",
     "options": [
       "Các nút bấm khẩn cấp để kích hoạt cơ cấu tự hủy của vệ tinh CubeSat",
       "Các linh kiện có nguy cơ hỏng hóc cao cần phải thay thế ngay lập tức",
@@ -4700,8 +4700,8 @@
     "Option_D": "Các bộ phận bắt buộc phải tháo bỏ ra khỏi vệ tinh trước khi nạp vào ống phóng",
     "answer": "D",
     "Answer": "D",
-    "explanation": "Red-Tag Items (như nắp đậy bảo vệ ống kính camera, chốt an toàn RBF Pin) gắn cờ đỏ nổi bật \"Remove Before Flight\", bắt buộc phải tháo ra trước khi bàn giao nạp vào ống phóng.",
-    "Explanation": "Red-Tag Items (như nắp đậy bảo vệ ống kính camera, chốt an toàn RBF Pin) gắn cờ đỏ nổi bật \"Remove Before Flight\", bắt buộc phải tháo ra trước khi bàn giao nạp vào ống phóng."
+    "explanation": "Red-Tag Items (như nắp đậy bảo vệ ống kính camera, chốt an toàn RBF Pin) gắn cờ đỏ nổi bật Remove Before Flight, bắt buộc phải tháo ra trước khi bàn giao nạp vào ống phóng.",
+    "Explanation": "Red-Tag Items (như nắp đậy bảo vệ ống kính camera, chốt an toàn RBF Pin) gắn cờ đỏ nổi bật Remove Before Flight, bắt buộc phải tháo ra trước khi bàn giao nạp vào ống phóng."
   },
   {
     "id": 197,
@@ -4710,8 +4710,8 @@
     "Lab": "Lab 0: Giới thiệu Tổng quan",
     "section": "Phần F: Tiêu chuẩn Thử nghiệm Chuyến bay, An toàn Phòng Lab & Quy trình Tích hợp AIT",
     "Section": "Phần F: Tiêu chuẩn Thử nghiệm Chuyến bay, An toàn Phòng Lab & Quy trình Tích hợp AIT",
-    "question": "Thuật ngữ \"Green-Tag Item\" (Vật phẩm gắn cờ xanh) trong quy chuẩn lắp ráp vệ tinh biểu thị điều gì?",
-    "Question": "Thuật ngữ \"Green-Tag Item\" (Vật phẩm gắn cờ xanh) trong quy chuẩn lắp ráp vệ tinh biểu thị điều gì?",
+    "question": "Thuật ngữ Green-Tag Item (Vật phẩm gắn cờ xanh) trong quy chuẩn lắp ráp vệ tinh biểu thị điều gì?",
+    "Question": "Thuật ngữ Green-Tag Item (Vật phẩm gắn cờ xanh) trong quy chuẩn lắp ráp vệ tinh biểu thị điều gì?",
     "options": [
       "Các thiết bị bảo vệ bắt buộc phải lắp đặt trên vệ tinh và bay cùng vào không gian",
       "Các linh kiện thân thiện với môi trường tự nhiên có thể phân hủy sinh học",
@@ -4724,8 +4724,8 @@
     "Option_D": "Các linh kiện mới mua về chưa từng trải qua bất kỳ bài kiểm tra chức năng nào",
     "answer": "A",
     "Answer": "A",
-    "explanation": "Green-Tag Items gắn nhãn \"Install Before Flight\" là các chi tiết bảo vệ hoặc chốt kích hoạt bắt buộc phải được gắn chắc chắn trên vệ tinh trước khi đưa vào ống phóng.",
-    "Explanation": "Green-Tag Items gắn nhãn \"Install Before Flight\" là các chi tiết bảo vệ hoặc chốt kích hoạt bắt buộc phải được gắn chắc chắn trên vệ tinh trước khi đưa vào ống phóng."
+    "explanation": "Green-Tag Items gắn nhãn Install Before Flight là các chi tiết bảo vệ hoặc chốt kích hoạt bắt buộc phải được gắn chắc chắn trên vệ tinh trước khi đưa vào ống phóng.",
+    "Explanation": "Green-Tag Items gắn nhãn Install Before Flight là các chi tiết bảo vệ hoặc chốt kích hoạt bắt buộc phải được gắn chắc chắn trên vệ tinh trước khi đưa vào ống phóng."
   },
   {
     "id": 198,

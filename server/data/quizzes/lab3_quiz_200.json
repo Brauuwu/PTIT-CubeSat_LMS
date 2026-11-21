@@ -654,8 +654,8 @@
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 1: Tổng quan phân hệ C&DH & Hệ điều hành trong Vệ tinh",
     "Section": "Phần 1: Tổng quan phân hệ C&DH & Hệ điều hành trong Vệ tinh",
-    "question": "Khái niệm 'Watchdog Timer phần cứng' (Hardware Watchdog Timer - WDT) đóng vai trò lá chắn sống còn nào cho vệ tinh?",
-    "Question": "Khái niệm 'Watchdog Timer phần cứng' (Hardware Watchdog Timer - WDT) đóng vai trò lá chắn sống còn nào cho vệ tinh?",
+    "question": "Khái niệm 'Chó canh phần cứng' (Hardware Watchdog Timer - WDT) đóng vai trò lá chắn sống còn nào cho vệ tinh?",
+    "Question": "Khái niệm 'Chó canh phần cứng' (Hardware Watchdog Timer - WDT) đóng vai trò lá chắn sống còn nào cho vệ tinh?",
     "options": [
       "Báo động khi phát hiện xâm nhập cơ học từ bên ngoài",
       "Tự động reset chip nếu phần mềm không xóa cờ định kỳ",
@@ -682,13 +682,13 @@
     "Question": "Hành động phần mềm định kỳ ghi tín hiệu xóa bộ đếm của Watchdog Timer được gọi bằng thuật ngữ chuyên ngành là gì?",
     "options": [
       "Bẻ gãy đồng hồ",
-      "Làm tươi Watchdog Timer (Feed/Reset WDT)",
-      "Vô hiệu hóa Watchdog Timer",
+      "Cho chó ăn / Đá chó canh",
+      "Khóa chó canh",
       "Đặt lại ngày giờ"
     ],
     "Option_A": "Bẻ gãy đồng hồ",
-    "Option_B": "Làm tươi Watchdog Timer (Feed/Reset WDT)",
-    "Option_C": "Vô hiệu hóa Watchdog Timer",
+    "Option_B": "Cho chó ăn / Đá chó canh",
+    "Option_C": "Khóa chó canh",
     "Option_D": "Đặt lại ngày giờ",
     "answer": "B",
     "Answer": "B",
@@ -702,8 +702,8 @@
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 1: Tổng quan phân hệ C&DH & Hệ điều hành trong Vệ tinh",
     "Section": "Phần 1: Tổng quan phân hệ C&DH & Hệ điều hành trong Vệ tinh",
-    "question": "Nếu một lập trình viên đặt lệnh nạp lại Watchdog Timer (Feed WDT) bên trong một chương trình ngắt định thời (Timer ISR) chạy độc lập, sai lầm nghiêm trọng là gì?",
-    "Question": "Nếu một lập trình viên đặt lệnh nạp lại Watchdog Timer (Feed WDT) bên trong một chương trình ngắt định thời (Timer ISR) chạy độc lập, sai lầm nghiêm trọng là gì?",
+    "question": "Nếu một lập trình viên đặt lệnh 'đá chó' WDT bên trong một chương trình ngắt định thời (Timer ISR) chạy độc lập, sai lầm nghiêm trọng là gì?",
+    "Question": "Nếu một lập trình viên đặt lệnh 'đá chó' WDT bên trong một chương trình ngắt định thời (Timer ISR) chạy độc lập, sai lầm nghiêm trọng là gì?",
     "options": [
       "WDT vẫn bị xóa dù các tác vụ nghiệp vụ đã bị treo",
       "Bộ tạo dao động thạch anh ngoại vi bị hỏng vĩnh viễn",
@@ -3462,8 +3462,8 @@
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 3: Lập trình C++ Thao tác Tệp & Giao diện Dòng lệnh (CLI)",
     "Section": "Phần 3: Lập trình C++ Thao tác Tệp & Giao diện Dòng lệnh (CLI)",
-    "question": "Phương thức `SD.exists(\"/data.csv\")` trong C++ thực hiện tác vụ kiểm tra nào?",
-    "Question": "Phương thức `SD.exists(\"/data.csv\")` trong C++ thực hiện tác vụ kiểm tra nào?",
+    "question": "Phương thức `SD.exists(/data.csv)` trong C++ thực hiện tác vụ kiểm tra nào?",
+    "Question": "Phương thức `SD.exists(/data.csv)` trong C++ thực hiện tác vụ kiểm tra nào?",
     "options": [
       "Xóa bỏ hoàn toàn tệp tin data.csv khỏi hệ thống thẻ",
       "Đo kích thước tổng thể và số cluster của tệp chỉ định",
@@ -3726,18 +3726,18 @@
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 3: Lập trình C++ Thao tác Tệp & Giao diện Dòng lệnh (CLI)",
     "Section": "Phần 3: Lập trình C++ Thao tác Tệp & Giao diện Dòng lệnh (CLI)",
-    "question": "Để so sánh chính xác hai chuỗi ký tự C-string `cmd` và `\"ls\"`, hàm chuẩn nào trong C++ được sử dụng?",
-    "Question": "Để so sánh chính xác hai chuỗi ký tự C-string `cmd` và `\"ls\"`, hàm chuẩn nào trong C++ được sử dụng?",
+    "question": "Để so sánh chính xác hai chuỗi ký tự C-string `cmd` và `ls`, hàm chuẩn nào trong C++ được sử dụng?",
+    "Question": "Để so sánh chính xác hai chuỗi ký tự C-string `cmd` và `ls`, hàm chuẩn nào trong C++ được sử dụng?",
     "options": [
-      "Sử dụng phương thức đối tượng cmd.equals(\"ls\")",
-      "Sử dụng hàm strcmp(cmd, \"ls\") và so sánh kết quả trả về bằng 0",
-      "So sánh trực tiếp con trỏ chuỗi cmd == \"ls\" bằng toán tử quan hệ",
-      "Sử dụng hàm strcmp(cmd, \"ls\") và so sánh kết quả trả về bằng 1"
+      "Sử dụng phương thức đối tượng cmd.equals(ls)",
+      "Sử dụng hàm strcmp(cmd, ls) và so sánh kết quả trả về bằng 0",
+      "So sánh trực tiếp con trỏ chuỗi cmd == ls bằng toán tử quan hệ",
+      "Sử dụng hàm strcmp(cmd, ls) và so sánh kết quả trả về bằng 1"
     ],
-    "Option_A": "Sử dụng phương thức đối tượng cmd.equals(\"ls\")",
-    "Option_B": "Sử dụng hàm strcmp(cmd, \"ls\") và so sánh kết quả trả về bằng 0",
-    "Option_C": "So sánh trực tiếp con trỏ chuỗi cmd == \"ls\" bằng toán tử quan hệ",
-    "Option_D": "Sử dụng hàm strcmp(cmd, \"ls\") và so sánh kết quả trả về bằng 1",
+    "Option_A": "Sử dụng phương thức đối tượng cmd.equals(ls)",
+    "Option_B": "Sử dụng hàm strcmp(cmd, ls) và so sánh kết quả trả về bằng 0",
+    "Option_C": "So sánh trực tiếp con trỏ chuỗi cmd == ls bằng toán tử quan hệ",
+    "Option_D": "Sử dụng hàm strcmp(cmd, ls) và so sánh kết quả trả về bằng 1",
     "answer": "B",
     "Answer": "B",
     "explanation": "Hàm strcmp(s1, s2) trả về số 0 khi hai chuỗi ký tự kết thúc bằng null hoàn toàn trùng khớp từng ký tự.",
@@ -3990,8 +3990,8 @@
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 3: Lập trình C++ Thao tác Tệp & Giao diện Dòng lệnh (CLI)",
     "Section": "Phần 3: Lập trình C++ Thao tác Tệp & Giao diện Dòng lệnh (CLI)",
-    "question": "Để chuyển đổi một chuỗi ký tự tham số thành số nguyên trong C++ (ví dụ chuyển chuỗi `\"100\"` thành số 100), hàm nào được dùng?",
-    "Question": "Để chuyển đổi một chuỗi ký tự tham số thành số nguyên trong C++ (ví dụ chuyển chuỗi `\"100\"` thành số 100), hàm nào được dùng?",
+    "question": "Để chuyển đổi một chuỗi ký tự tham số thành số nguyên trong C++ (ví dụ chuyển chuỗi `100` thành số 100), hàm nào được dùng?",
+    "Question": "Để chuyển đổi một chuỗi ký tự tham số thành số nguyên trong C++ (ví dụ chuyển chuỗi `100` thành số 100), hàm nào được dùng?",
     "options": [
       "sprintf()",
       "itoa",
@@ -4344,8 +4344,8 @@
     "Explanation": "Timeout = 0 (Non-blocking send) cho phép tác vụ kiểm tra kết quả ngay và chủ động ghi log cảnh báo hàng đợi bị tràn."
   },
   {
-    "id": 183,
-    "ID": "183",
+    "id": 182,
+    "ID": "182",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 3: Lập trình C++ Thao tác Tệp & Giao diện Dòng lệnh (CLI)",
@@ -4368,8 +4368,8 @@
     "Explanation": "Hàm snprintf ghép các trường dữ liệu ngăn cách bởi dấu phẩy và kết thúc bằng mã xuống dòng chuẩn `\\r\\n`."
   },
   {
-    "id": 184,
-    "ID": "184",
+    "id": 183,
+    "ID": "183",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 3: Lập trình C++ Thao tác Tệp & Giao diện Dòng lệnh (CLI)",
@@ -4392,8 +4392,8 @@
     "Explanation": "Đo lường thời gian thực thi trọn vẹn của chu trình ghi kèm ép xả bộ đệm phản ánh chính xác băng thông phần cứng."
   },
   {
-    "id": 185,
-    "ID": "185",
+    "id": 184,
+    "ID": "184",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 3: Lập trình C++ Thao tác Tệp & Giao diện Dòng lệnh (CLI)",
@@ -4416,8 +4416,8 @@
     "Explanation": "Trạng thái nội bộ của đối tượng File không phải là Thread-safe; cần cô lập thao tác tệp vào một tác vụ duy nhất hoặc dùng Mutex bảo vệ."
   },
   {
-    "id": 186,
-    "ID": "186",
+    "id": 185,
+    "ID": "185",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 3: Lập trình C++ Thao tác Tệp & Giao diện Dòng lệnh (CLI)",
@@ -4440,8 +4440,8 @@
     "Explanation": "Hàm SD.end() giải phóng bộ nhớ heap và đưa các chân ngoại vi SPI về trạng thái nhàn rỗi an toàn."
   },
   {
-    "id": 187,
-    "ID": "187",
+    "id": 186,
+    "ID": "186",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 3: Lập trình C++ Thao tác Tệp & Giao diện Dòng lệnh (CLI)",
@@ -4464,8 +4464,8 @@
     "Explanation": "Quy tắc an toàn của hệ thống tệp FAT32 chỉ cho phép xóa thư mục khi bên trong nó hoàn toàn không chứa bất kỳ mục từ nào."
   },
   {
-    "id": 189,
-    "ID": "189",
+    "id": 187,
+    "ID": "187",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 3: Lập trình C++ Thao tác Tệp & Giao diện Dòng lệnh (CLI)",
@@ -4488,8 +4488,8 @@
     "Explanation": "Duyệt qua từng ký tự và dùng hàm tolower() chuẩn hóa chuỗi lệnh, giúp người dùng gõ `LS`, `Ls` hay `ls` thì hệ thống đều hiểu đúng."
   },
   {
-    "id": 190,
-    "ID": "190",
+    "id": 188,
+    "ID": "188",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 3: Lập trình C++ Thao tác Tệp & Giao diện Dòng lệnh (CLI)",
@@ -4512,8 +4512,8 @@
     "Explanation": "Cấu trúc so sánh chuỗi tuần tự hoặc bảng băm ánh xạ chuỗi - con trỏ hàm (Function Pointer Dispatch Table) là giải pháp phân nhánh chuẩn cho CLI nhúng."
   },
   {
-    "id": 191,
-    "ID": "191",
+    "id": 189,
+    "ID": "189",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 3: Lập trình C++ Thao tác Tệp & Giao diện Dòng lệnh (CLI)",
@@ -4536,8 +4536,8 @@
     "Explanation": "Bảng con trỏ hàm giúp tổ chức mã nguồn CLI chuyên nghiệp, dễ dàng mở rộng thêm các tập lệnh mới mà không làm rối cấu trúc code."
   },
   {
-    "id": 193,
-    "ID": "193",
+    "id": 190,
+    "ID": "190",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 3: Lập trình C++ Thao tác Tệp & Giao diện Dòng lệnh (CLI)",
@@ -4560,8 +4560,8 @@
     "Explanation": "peek() giúp kiểm tra trước các ký tự điều khiển hoặc tiền tố dòng trước khi quyết định gọi read() để trích xuất dữ liệu."
   },
   {
-    "id": 194,
-    "ID": "194",
+    "id": 191,
+    "ID": "191",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 3: Lập trình C++ Thao tác Tệp & Giao diện Dòng lệnh (CLI)",
@@ -4584,8 +4584,8 @@
     "Explanation": "Hàm write trả về số byte thực tế đã ghi thành công vào bộ đệm; số byte nhỏ hơn kỳ vọng báo hiệu lỗi hết đĩa."
   },
   {
-    "id": 195,
-    "ID": "195",
+    "id": 192,
+    "ID": "192",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 3: Lập trình C++ Thao tác Tệp & Giao diện Dòng lệnh (CLI)",
@@ -4608,8 +4608,8 @@
     "Explanation": "Truyền tham số NULL vào hàm vTaskDelete() yêu cầu hệ điều hành hủy bỏ tác vụ đang chạy và thu hồi bộ nhớ stack."
   },
   {
-    "id": 196,
-    "ID": "196",
+    "id": 193,
+    "ID": "193",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 3: Lập trình C++ Thao tác Tệp & Giao diện Dòng lệnh (CLI)",
@@ -4632,8 +4632,8 @@
     "Explanation": "Con trỏ pvParameters cho phép truyền địa chỉ của cấu trúc dữ liệu tùy ý vào tác vụ mới được tạo."
   },
   {
-    "id": 197,
-    "ID": "197",
+    "id": 194,
+    "ID": "194",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 3: Lập trình C++ Thao tác Tệp & Giao diện Dòng lệnh (CLI)",
@@ -4656,8 +4656,8 @@
     "Explanation": "Hàm readStringUntil('\\n') trích xuất từng bản ghi telemetry một cách tiện lợi để phục vụ phân tích."
   },
   {
-    "id": 198,
-    "ID": "198",
+    "id": 195,
+    "ID": "195",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 3: Lập trình C++ Thao tác Tệp & Giao diện Dòng lệnh (CLI)",
@@ -4680,8 +4680,8 @@
     "Explanation": "FAT32 yêu cầu tạo thư mục cha trước rồi mới tạo thư mục con bên trong để bảo đảm liên kết cấu trúc cây thư mục."
   },
   {
-    "id": 199,
-    "ID": "199",
+    "id": 196,
+    "ID": "196",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 3: Lập trình C++ Thao tác Tệp & Giao diện Dòng lệnh (CLI)",
@@ -4704,8 +4704,8 @@
     "Explanation": "Bảng Command Table là mẫu thiết kế chuẩn công nghiệp cho các hệ thống Command Parser trên vệ tinh và thiết bị IoT nhúng."
   },
   {
-    "id": 201,
-    "ID": "201",
+    "id": 197,
+    "ID": "197",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 1: Tổng quan phân hệ C&DH & Hệ điều hành trong Vệ tinh",
@@ -4728,8 +4728,8 @@
     "Explanation": "Lệnh thời gian thực (Realtime Command) được hàng đợi lệnh của phân hệ C&DH xử lý và thực thi ngay lập tức trong phiên liên lạc để điều khiển khẩn cấp hoặc kiểm tra trạng thái."
   },
   {
-    "id": 202,
-    "ID": "202",
+    "id": 198,
+    "ID": "198",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 1: Tổng quan phân hệ C&DH & Hệ điều hành trong Vệ tinh",
@@ -4752,8 +4752,8 @@
     "Explanation": "Vì vệ tinh LEO chỉ bay qua trạm mặt đất khoảng 10-12 phút mỗi lần, các lệnh chụp ảnh hoặc thí nghiệm tại vị trí xa phải được lập lịch hẹn giờ trước."
   },
   {
-    "id": 203,
-    "ID": "203",
+    "id": 199,
+    "ID": "199",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 1: Tổng quan phân hệ C&DH & Hệ điều hành trong Vệ tinh",
@@ -4776,8 +4776,8 @@
     "Explanation": "Để bảo đảm an toàn, bộ giải mã lệnh C&DH sẽ kiểm tra mã Satellite ID, khóa xác thực và giới hạn tham số; nếu không khớp, lệnh sẽ bị hủy bỏ ngay để tránh lệnh giả hoặc nhiễu."
   },
   {
-    "id": 204,
-    "ID": "204",
+    "id": 200,
+    "ID": "200",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 1: Tổng quan phân hệ C&DH & Hệ điều hành trong Vệ tinh",
@@ -4800,8 +4800,8 @@
     "Explanation": "Dữ liệu đo xa Housekeeping (HK) phản ánh sức khỏe định kỳ của phần cứng vệ tinh: điện áp pin, dòng tiêu thụ phân hệ, nhiệt độ cảm biến và trạng thái relay bật/tắt."
   },
   {
-    "id": 205,
-    "ID": "205",
+    "id": 201,
+    "ID": "201",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 1: Tổng quan phân hệ C&DH & Hệ điều hành trong Vệ tinh",
@@ -4824,8 +4824,8 @@
     "Explanation": "Dữ liệu Stored Telemetry ghi lại thông số lịch sử theo chu kỳ (ví dụ mỗi 30 giây) vào bộ nhớ Flash/SD; khi bay qua trạm mặt đất, trạm sẽ gửi lệnh kéo toàn bộ log về phân tích."
   },
   {
-    "id": 206,
-    "ID": "206",
+    "id": 202,
+    "ID": "202",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 1: Tổng quan phân hệ C&DH & Hệ điều hành trong Vệ tinh",
@@ -4848,8 +4848,8 @@
     "Explanation": "Bộ đệm Ring Buffer (Circular FIFO) cho phép ghi và đọc dữ liệu liên tục theo con trỏ vòng tròn, tránh phân mảnh RAM và ngăn lỗi tràn bộ nhớ khi dữ liệu đến dồn dập."
   },
   {
-    "id": 207,
-    "ID": "207",
+    "id": 203,
+    "ID": "203",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 1: Tổng quan phân hệ C&DH & Hệ điều hành trong Vệ tinh",
@@ -4872,8 +4872,8 @@
     "Explanation": "Khung tin tiêu chuẩn (Header, Length, Payload, CRC Checksum) giúp phía thu dễ dàng tìm điểm bắt đầu đồng bộ, bóc tách dữ liệu và phát hiện bit lỗi truyền dẫn."
   },
   {
-    "id": 208,
-    "ID": "208",
+    "id": 204,
+    "ID": "204",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 1: Tổng quan phân hệ C&DH & Hệ điều hành trong Vệ tinh",
@@ -4896,8 +4896,8 @@
     "Explanation": "Hệ thống tệp FAT32 rất dễ bị hỏng File Allocation Table nếu nguồn bị sụt đột ngột (Brownout) trong lúc đang cập nhật metadata, dẫn đến mất khả năng đọc toàn bộ thẻ."
   },
   {
-    "id": 209,
-    "ID": "209",
+    "id": 205,
+    "ID": "205",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 1: Tổng quan phân hệ C&DH & Hệ điều hành trong Vệ tinh",
@@ -4920,8 +4920,8 @@
     "Explanation": "Sử dụng hàm `flush()` và đóng tệp (`close()`) ngay sau mỗi chu kỳ ghi dữ liệu giúp đảm bảo dữ liệu trong cache được đẩy xuống tế bào Flash, tránh mất mát khi mất nguồn."
   },
   {
-    "id": 210,
-    "ID": "210",
+    "id": 206,
+    "ID": "206",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 1: Tổng quan phân hệ C&DH & Hệ điều hành trong Vệ tinh",
@@ -4944,8 +4944,8 @@
     "Explanation": "Khi không gian lưu trữ bị đầy, Circular Log sẽ tự động xóa các log cũ nhất đã được tải xuống trạm mặt đất để lấy chỗ ghi nhật ký mới nhất, giữ hệ thống hoạt động liên tục."
   },
   {
-    "id": 211,
-    "ID": "211",
+    "id": 207,
+    "ID": "207",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 1: Tổng quan phân hệ C&DH & Hệ điều hành trong Vệ tinh",
@@ -4968,8 +4968,8 @@
     "Explanation": "CLI qua cổng UART nối tiếp là công cụ cực kỳ thuận tiện để kỹ sư gõ lệnh kiểm tra từng cảm biến, đọc nhật ký và cấu hình thông số vệ tinh trong phòng sạch trước khi phóng."
   },
   {
-    "id": 212,
-    "ID": "212",
+    "id": 208,
+    "ID": "208",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 1: Tổng quan phân hệ C&DH & Hệ điều hành trong Vệ tinh",
@@ -4992,8 +4992,8 @@
     "Explanation": "Giờ phối hợp quốc tế (UTC) là mốc chuẩn toàn cầu cho hoạt động vũ trụ, giúp khớp chính xác thời điểm chụp ảnh, thu thập dữ liệu với vị trí vệ tinh trên quỹ đạo."
   },
   {
-    "id": 213,
-    "ID": "213",
+    "id": 209,
+    "ID": "209",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 1: Tổng quan phân hệ C&DH & Hệ điều hành trong Vệ tinh",
@@ -5016,8 +5016,8 @@
     "Explanation": "Mã CRC32 được tính toán và đính kèm vào cuối gói tin; trạm mặt đất tính lại CRC và so sánh, nếu khác biệt sẽ yêu cầu phát lại (ARQ) hoặc loại bỏ gói tin hỏng."
   },
   {
-    "id": 214,
-    "ID": "214",
+    "id": 210,
+    "ID": "210",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 1: Tổng quan phân hệ C&DH & Hệ điều hành trong Vệ tinh",
@@ -5040,8 +5040,8 @@
     "Explanation": "Giao thức Selective ARQ cho phép trạm mặt đất chỉ định chính xác các số thứ tự gói (Packet Sequence Number) bị lỗi để CubeSat truyền lại, tiết kiệm băng thông."
   },
   {
-    "id": 215,
-    "ID": "215",
+    "id": 211,
+    "ID": "211",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 1: Tổng quan phân hệ C&DH & Hệ điều hành trong Vệ tinh",
@@ -5064,8 +5064,8 @@
     "Explanation": "Do băng thông đường truyền xuống (Downlink) của CubeSat rất hạn hẹp, nén ảnh giúp giảm thời gian truyền tải mà vẫn bảo toàn nguyên vẹn giá trị đo đạc khoa học."
   },
   {
-    "id": 216,
-    "ID": "216",
+    "id": 212,
+    "ID": "212",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 1: Tổng quan phân hệ C&DH & Hệ điều hành trong Vệ tinh",
@@ -5088,8 +5088,8 @@
     "Explanation": "RTOS (như FreeRTOS) cung cấp cơ chế lập lịch tiền định (Preemptive Scheduler) giúp điều phối đa nhiệm các tác vụ C&DH, đọc cảm biến và truyền thông theo mức ưu tiên."
   },
   {
-    "id": 217,
-    "ID": "217",
+    "id": 213,
+    "ID": "213",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 1: Tổng quan phân hệ C&DH & Hệ điều hành trong Vệ tinh",
@@ -5112,8 +5112,8 @@
     "Explanation": "Khi nhiều tác vụ cùng sử dụng chung một tài nguyên (như bus I2C hoặc SPI thẻ nhớ), Mutex đảm bảo chỉ một tác vụ được thao tác tại một thời điểm, tránh xung đột dữ liệu."
   },
   {
-    "id": 218,
-    "ID": "218",
+    "id": 214,
+    "ID": "214",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 1: Tổng quan phân hệ C&DH & Hệ điều hành trong Vệ tinh",
@@ -5136,8 +5136,8 @@
     "Explanation": "Message Queue là cơ chế IPC (Inter-Process Communication) an toàn luồng, cho phép một tác vụ (ví dụ nhận lệnh UART) gửi gói tin cho tác vụ thực thi xử lý tuần tự."
   },
   {
-    "id": 219,
-    "ID": "219",
+    "id": 215,
+    "ID": "215",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 1: Tổng quan phân hệ C&DH & Hệ điều hành trong Vệ tinh",
@@ -5160,8 +5160,8 @@
     "Explanation": "Liều chiếu xạ ion hóa tích lũy (TID) giữ lại các hạt mang điện trong lớp oxide cổng nổi của Flash, làm dịch chuyển điện áp ngưỡng đọc và gây lỗi dữ liệu sau một thời gian bay."
   },
   {
-    "id": 220,
-    "ID": "220",
+    "id": 216,
+    "ID": "216",
     "lab": 3,
     "Lab": "Lab 3: Phân hệ C&DH & Lưu trữ Thẻ nhớ SPI",
     "section": "Phần 1: Tổng quan phân hệ C&DH & Hệ điều hành trong Vệ tinh",

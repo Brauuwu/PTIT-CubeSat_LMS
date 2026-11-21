@@ -3198,22 +3198,22 @@
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
     "Section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
-    "question": "Đoạn mã C++ nào sau đây đọc trạng thái công tắc hành trình tại chân ray (Deployment Switch) ở chân GPIO 14:",
-    "Question": "Đoạn mã C++ nào sau đây đọc trạng thái công tắc hành trình tại chân ray (Deployment Switch) ở chân GPIO 14:",
+    "question": "Đoạn mã C++ nào sau đây cấu hình và đọc trạng thái công tắc hành trình triển khai CubeSat (Deployment Switch) hoạt động theo kiểu công tắc đóng tiếp điểm xuống Mass khi còn ở trong ống phóng P-POD:",
+    "Question": "Đoạn mã C++ nào sau đây cấu hình và đọc trạng thái công tắc hành trình triển khai CubeSat (Deployment Switch) hoạt động theo kiểu công tắc đóng tiếp điểm xuống Mass khi còn ở trong ống phóng P-POD:",
     "options": [
-      "Cấu hình chân ngõ vào INPUT và đọc điện áp tương tự bằng hàm analogRead()",
-      "Cấu hình chân INPUT_PULLUP và đọc mức logic HIGH báo hiệu tiếp điểm đã bung mở",
-      "Cấu hình chân ngõ ra OUTPUT rồi phát mức logic HIGH ra công tắc",
-      "Cấu hình chân INPUT không có trở kéo và đọc mức logic LOW cố định"
+      "pinMode(deployPin, OUTPUT); bool deployed = (digitalRead(deployPin) == LOW);",
+      "pinMode(deployPin, INPUT_PULLUP); bool deployed = (digitalRead(deployPin) == HIGH);",
+      "pinMode(deployPin, INPUT_PULLDOWN); bool deployed = (analogRead(deployPin) > 512);",
+      "pinMode(deployPin, INPUT); bool deployed = (touchRead(deployPin) == 0);"
     ],
-    "Option_A": "Cấu hình chân ngõ vào INPUT và đọc điện áp tương tự bằng hàm analogRead()",
-    "Option_B": "Cấu hình chân INPUT_PULLUP và đọc mức logic HIGH báo hiệu tiếp điểm đã bung mở",
-    "Option_C": "Cấu hình chân ngõ ra OUTPUT rồi phát mức logic HIGH ra công tắc",
-    "Option_D": "Cấu hình chân INPUT không có trở kéo và đọc mức logic LOW cố định",
+    "Option_A": "pinMode(deployPin, OUTPUT); bool deployed = (digitalRead(deployPin) == LOW);",
+    "Option_B": "pinMode(deployPin, INPUT_PULLUP); bool deployed = (digitalRead(deployPin) == HIGH);",
+    "Option_C": "pinMode(deployPin, INPUT_PULLDOWN); bool deployed = (analogRead(deployPin) > 512);",
+    "Option_D": "pinMode(deployPin, INPUT); bool deployed = (touchRead(deployPin) == 0);",
     "answer": "B",
     "Answer": "B",
-    "explanation": "Công tắc hành trình thường đóng tiếp điểm xuống mass khi bị nén trong ống phóng; khi bung ra, tiếp điểm mở và chân GPIO kéo lên HIGH.",
-    "Explanation": "Công tắc hành trình thường đóng tiếp điểm xuống mass khi bị nén trong ống phóng; khi bung ra, tiếp điểm mở và chân GPIO kéo lên HIGH."
+    "explanation": "Khi vệ tinh nằm trong ống phóng P-POD, công tắc bị đè nén nối tiếp điểm xuống mass (LOW). Khi phóng ra ngoài vũ trụ, công tắc nhả ra và điện trở kéo lên nội (INPUT_PULLUP) kéo chân tín hiệu lên mức HIGH, kích hoạt vệ tinh hoạt động.",
+    "Explanation": "Khi vệ tinh nằm trong ống phóng P-POD, công tắc bị đè nén nối tiếp điểm xuống mass (LOW). Khi phóng ra ngoài vũ trụ, công tắc nhả ra và điện trở kéo lên nội (INPUT_PULLUP) kéo chân tín hiệu lên mức HIGH, kích hoạt vệ tinh hoạt động."
   },
   {
     "id": 135,
@@ -3252,16 +3252,16 @@
       "Dùng vòng lặp while với hàm delay(10) gây chặn toàn bộ hệ thống trong 30 phút",
       "Dùng vòng lặp for với độ trễ micro-giây lặp lại hàng triệu lần",
       "Đưa chip vào giấc ngủ sâu sleep(1) không thể duy trì đếm thời gian thực",
-      "Dùng vòng lặp kiểm tra millis() đủ 30 phút (1800000 ms) và liên tục làm tươi Watchdog Timer"
+      "Dùng vòng lặp kiểm tra millis() đủ 30 phút (1800000 ms) và liên tục đá chó Watchdog"
     ],
     "Option_A": "Dùng vòng lặp while với hàm delay(10) gây chặn toàn bộ hệ thống trong 30 phút",
     "Option_B": "Dùng vòng lặp for với độ trễ micro-giây lặp lại hàng triệu lần",
     "Option_C": "Đưa chip vào giấc ngủ sâu sleep(1) không thể duy trì đếm thời gian thực",
-    "Option_D": "Dùng vòng lặp kiểm tra millis() đủ 30 phút (1800000 ms) và liên tục làm tươi Watchdog Timer",
+    "Option_D": "Dùng vòng lặp kiểm tra millis() đủ 30 phút (1800000 ms) và liên tục đá chó Watchdog",
     "answer": "D",
     "Answer": "D",
-    "explanation": "Vòng lặp chờ 1800 giây kết hợp lệnh đá Watchdog Timer định kỳ để vi điều khiển không bị reset trong thời gian giữ im lặng.",
-    "Explanation": "Vòng lặp chờ 1800 giây kết hợp lệnh đá Watchdog Timer định kỳ để vi điều khiển không bị reset trong thời gian giữ im lặng."
+    "explanation": "Vòng lặp chờ 1800 giây kết hợp lệnh đá chó canh Watchdog định kỳ để vi điều khiển không bị reset trong thời gian giữ im lặng.",
+    "Explanation": "Vòng lặp chờ 1800 giây kết hợp lệnh đá chó canh Watchdog định kỳ để vi điều khiển không bị reset trong thời gian giữ im lặng."
   },
   {
     "id": 137,
@@ -3432,8 +3432,8 @@
     "Explanation": "Thuật toán bắt đỉnh xung (Peak Hold) lưu lại mức gia tốc quán tính lớn nhất mà khung cơ khí phải hứng chịu trong quá trình thử nghiệm va đập."
   },
   {
-    "id": 145,
-    "ID": "145",
+    "id": 144,
+    "ID": "144",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -3456,8 +3456,8 @@
     "Explanation": "Lệnh chẩn đoán nhanh giúp kỹ sư cơ khí kiểm tra tức thì trạng thái điện - cơ của khối vệ tinh trên bàn lắp ráp."
   },
   {
-    "id": 146,
-    "ID": "146",
+    "id": 145,
+    "ID": "145",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -3480,8 +3480,8 @@
     "Explanation": "Cấu trúc MassElement đóng gói khối lượng và tọa độ không gian 3 chiều của từng linh kiện để phục vụ tính toán."
   },
   {
-    "id": 147,
-    "ID": "147",
+    "id": 146,
+    "ID": "146",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -3504,8 +3504,8 @@
     "Explanation": "Hàm tính toán trọng tâm 3 chiều chuẩn xác bằng cách lấy trung bình có trọng số theo khối lượng trên cả 3 trục tọa độ."
   },
   {
-    "id": 148,
-    "ID": "148",
+    "id": 147,
+    "ID": "147",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -3528,8 +3528,8 @@
     "Explanation": "Định lý mô-men quán tính: khoảng cách bình phương tới trục Z là $r^2 = x^2 + y^2$; nhân với khối lượng $m_i$ cho ra $I_{zz}$."
   },
   {
-    "id": 149,
-    "ID": "149",
+    "id": 148,
+    "ID": "148",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -3552,8 +3552,8 @@
     "Explanation": "Lấy mẫu 10 lần liên tiếp cách nhau 5ms; chỉ xác nhận bung khi có tối thiểu 8/10 lần đọc mức logic HIGH ổn định."
   },
   {
-    "id": 150,
-    "ID": "150",
+    "id": 149,
+    "ID": "149",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -3576,8 +3576,8 @@
     "Explanation": "Xuất kết quả chẩn đoán trực quan giúp kỹ sư kiểm tra nghiệm thu (Acceptance Review) nhanh chóng trên màn hình."
   },
   {
-    "id": 151,
-    "ID": "151",
+    "id": 150,
+    "ID": "150",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -3600,8 +3600,8 @@
     "Explanation": "Tính toán tỷ lệ phần trăm khối lượng dự phòng còn lại so với giới hạn trần quy định của ống phóng."
   },
   {
-    "id": 153,
-    "ID": "153",
+    "id": 151,
+    "ID": "151",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -3624,8 +3624,8 @@
     "Explanation": "Tự động ngắt dòng sạc khi nhiệt độ cell pin vượt 45°C bảo vệ khối pin khỏi nguy cơ thoát nhiệt trong không gian kín của khung."
   },
   {
-    "id": 154,
-    "ID": "154",
+    "id": 152,
+    "ID": "152",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -3648,8 +3648,8 @@
     "Explanation": "Ghi nhật ký rung động theo thời gian thực phục vụ việc phân tích phổ dao động cơ học sau các bài thử nghiệm rung xóc."
   },
   {
-    "id": 155,
-    "ID": "155",
+    "id": 153,
+    "ID": "153",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -3672,8 +3672,8 @@
     "Explanation": "Đo lường thời gian thực thi cấp micro-giây giúp đánh giá hiệu năng CPU và kiểm tra tính tiền định của các tác vụ thu thập."
   },
   {
-    "id": 156,
-    "ID": "156",
+    "id": 154,
+    "ID": "154",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -3696,8 +3696,8 @@
     "Explanation": "Quét định kỳ toàn bộ danh sách thiết bị I2C phát hiện kịp thời các sự cố lỏng chân cắm bus xuyên tầng PC/104 khi rung động."
   },
   {
-    "id": 157,
-    "ID": "157",
+    "id": 155,
+    "ID": "155",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -3720,8 +3720,8 @@
     "Explanation": "Cấu hình INPUT_PULLUP bảo đảm chân có mức điện áp 3.3V xác định khi công tắc mở ra mà không cần điện trở kéo ngoài."
   },
   {
-    "id": 158,
-    "ID": "158",
+    "id": 156,
+    "ID": "156",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -3744,8 +3744,8 @@
     "Explanation": "Đo kiểm độ sụt áp tức thời $\\Delta V$ khi đóng tải công suất kiểm tra nội trở của khối nguồn và phát hiện nguy cơ chạm chập cơ khí."
   },
   {
-    "id": 159,
-    "ID": "159",
+    "id": 157,
+    "ID": "157",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -3768,8 +3768,8 @@
     "Explanation": "Đóng gói kết quả kiểm tra thành chuỗi văn bản có cấu trúc phục vụ việc hiển thị trên giao diện giám sát hoặc truyền qua cổng Serial."
   },
   {
-    "id": 160,
-    "ID": "160",
+    "id": 158,
+    "ID": "158",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -3792,8 +3792,8 @@
     "Explanation": "Lệnh assert bắt các sai sót thiết kế cơ khí nghiêm trọng ngay trong pha thử nghiệm tích hợp trước khi bàn giao phóng."
   },
   {
-    "id": 161,
-    "ID": "161",
+    "id": 159,
+    "ID": "159",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -3816,8 +3816,8 @@
     "Explanation": "Sự kết hợp giữa công tắc hành trình bật mở và gia tốc kế chuyển về trạng thái vi trọng lực ($a \\approx 0\\text{ g}$) là bằng chứng kép khẳng định vệ tinh đã bay vào quỹ đạo."
   },
   {
-    "id": 162,
-    "ID": "162",
+    "id": 160,
+    "ID": "160",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -3840,8 +3840,8 @@
     "Explanation": "Hệ số sóng đứng SWR thấp khẳng định anten đã phối hợp trở kháng tối ưu với mặt phẳng mass khung kim loại của vệ tinh."
   },
   {
-    "id": 163,
-    "ID": "163",
+    "id": 161,
+    "ID": "161",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -3864,8 +3864,8 @@
     "Explanation": "Định thời phi phong bế thực thi định kỳ các bài kiểm tra chẩn đoán sức khỏe cơ học của vệ tinh theo thời gian thực."
   },
   {
-    "id": 164,
-    "ID": "164",
+    "id": 162,
+    "ID": "162",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -3888,8 +3888,8 @@
     "Explanation": "Ngắt phụ tải công suất cao và hạ tần số xung nhịp CPU từ 240MHz xuống 80MHz là giải pháp phần mềm tức thời để hạ nhiệt bo mạch."
   },
   {
-    "id": 166,
-    "ID": "166",
+    "id": 163,
+    "ID": "163",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -3912,8 +3912,8 @@
     "Explanation": "Định luật Joule: Năng lượng nhiệt tiêu tán bằng tích số công suất tiêu thụ $P = V \\times I$ nhân với khoảng thời gian hoạt động tính bằng giây."
   },
   {
-    "id": 167,
-    "ID": "167",
+    "id": 164,
+    "ID": "164",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -3936,8 +3936,8 @@
     "Explanation": "Sau 30 phút im lặng, hệ thống kích hoạt lệnh bung anten vô tuyến và chuyển máy trạng thái sang chế độ vận hành danh định."
   },
   {
-    "id": 168,
-    "ID": "168",
+    "id": 165,
+    "ID": "165",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -3960,8 +3960,8 @@
     "Explanation": "Dòng điện chạy qua điện trở nhiệt trong 5 giây nung nóng làm đứt dây cước polymer (dây câu cá Dyneema), giải phóng ăng-ten thước cuộn bung ra ngoài."
   },
   {
-    "id": 169,
-    "ID": "169",
+    "id": 166,
+    "ID": "166",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -3984,8 +3984,8 @@
     "Explanation": "Tiếp điểm cơ học xác nhận trạng thái mở của anten; nếu chưa bung sau 5 giây, hệ thống có thể lập trình kích hoạt đốt lại lần 2."
   },
   {
-    "id": 170,
-    "ID": "170",
+    "id": 167,
+    "ID": "167",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4008,8 +4008,8 @@
     "Explanation": "Hồ sơ dữ liệu thử nghiệm tích hợp là tài liệu pháp lý kỹ thuật bắt buộc để chứng minh vệ tinh đạt chuẩn an toàn trước khi nạp vào tên lửa mẹ."
   },
   {
-    "id": 171,
-    "ID": "171",
+    "id": 168,
+    "ID": "168",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4032,8 +4032,8 @@
     "Explanation": "Hàm temperatureRead() trên ESP32 đọc cảm biến nhiệt on-chip để bảo vệ lõi silicon không bị thoái hóa nhiệt."
   },
   {
-    "id": 172,
-    "ID": "172",
+    "id": 169,
+    "ID": "169",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4056,8 +4056,8 @@
     "Explanation": "Định thời bằng millis() cho phép hệ thống duy trì tần số ghi mẫu 2Hz đều đặn mà không làm gián đoạn các luồng khác."
   },
   {
-    "id": 173,
-    "ID": "173",
+    "id": 170,
+    "ID": "170",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4080,8 +4080,8 @@
     "Explanation": "Kiểm tra điện áp trong cửa sổ ngưỡng an toàn ngăn ngừa cả sự cố xả sâu lẫn sự cố quá nạp."
   },
   {
-    "id": 174,
-    "ID": "174",
+    "id": 171,
+    "ID": "171",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4104,8 +4104,8 @@
     "Explanation": "Vòng lặp giới hạn 3 lần thử lại bảo vệ mạch nguồn không bị cạn pin nếu dây nhiệt bị đứt hoặc chập cơ học."
   },
   {
-    "id": 175,
-    "ID": "175",
+    "id": 172,
+    "ID": "172",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4128,8 +4128,8 @@
     "Explanation": "Nhân với gia tốc trọng trường chuẩn $g_0 = 9.80665\\text{ m/s}^2$ chuyển đổi chính xác sang hệ đơn vị SI."
   },
   {
-    "id": 176,
-    "ID": "176",
+    "id": 173,
+    "ID": "173",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4152,8 +4152,8 @@
     "Explanation": "Theo dõi tốc độ thay đổi nhiệt độ $dT/dt$ phát hiện các cú sốc nhiệt đột ngột khi vệ tinh bay từ pha tối ra pha sáng."
   },
   {
-    "id": 177,
-    "ID": "177",
+    "id": 174,
+    "ID": "174",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4176,8 +4176,8 @@
     "Explanation": "Sốc nhiệt làm thay đổi tiêu cự ống kính quang học; tạm hoãn chụp ảnh giúp thấu kính ổn định kích thước hình học."
   },
   {
-    "id": 178,
-    "ID": "178",
+    "id": 175,
+    "ID": "175",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4200,8 +4200,8 @@
     "Explanation": "Khởi tạo mảng số thực lưu nhiệt độ của 6 mặt (+X, -X, +Y, -Y, +Z, -Z) để đánh giá cân bằng nhiệt tổng thể."
   },
   {
-    "id": 179,
-    "ID": "179",
+    "id": 176,
+    "ID": "176",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4224,8 +4224,8 @@
     "Explanation": "Tìm giá trị nhiệt độ đỉnh giúp xác định mặt nào đang hướng thẳng về phía Mặt Trời (Sun-facing side)."
   },
   {
-    "id": 180,
-    "ID": "180",
+    "id": 177,
+    "ID": "177",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4248,8 +4248,8 @@
     "Explanation": "Mặt có nhiệt độ thấp nhất là mặt đang hướng về khoảng không vũ trụ sâu (Deep-space facing side)."
   },
   {
-    "id": 181,
-    "ID": "181",
+    "id": 178,
+    "ID": "178",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4272,8 +4272,8 @@
     "Explanation": "Thao tác ghi và xóa một tệp tạm nhỏ xác thực rằng cả bus SPI và nguồn cấp cho thẻ nhớ đều hoạt động thông suốt."
   },
   {
-    "id": 182,
-    "ID": "182",
+    "id": 179,
+    "ID": "179",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4296,8 +4296,8 @@
     "Explanation": "Cảnh báo sớm giúp kỹ sư chủ động tải xuống hoặc dọn dẹp các tệp nhật ký cũ trước khi thẻ nhớ bị đầy hoàn toàn."
   },
   {
-    "id": 183,
-    "ID": "183",
+    "id": 180,
+    "ID": "180",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4320,8 +4320,8 @@
     "Explanation": "Lấy trung bình cộng 32 mẫu triệt tiêu tạp âm ngẫu nhiên, cho kết quả đo điện áp ổn định cao."
   },
   {
-    "id": 185,
-    "ID": "185",
+    "id": 181,
+    "ID": "181",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4344,8 +4344,8 @@
     "Explanation": "Xóa sạch cờ trạng thái để chuẩn bị cho chu trình kiểm thử nghiệm thu mới."
   },
   {
-    "id": 186,
-    "ID": "186",
+    "id": 182,
+    "ID": "182",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4368,8 +4368,8 @@
     "Explanation": "Biến RTC lưu giữ số lần vệ tinh đã vượt qua các chu kỳ thử nghiệm cơ khí mà không bị mất dữ liệu khi tắt nguồn."
   },
   {
-    "id": 187,
-    "ID": "187",
+    "id": 183,
+    "ID": "183",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4392,8 +4392,8 @@
     "Explanation": "In ra khối lượng chính xác đến gram để đối chiếu với bảng cân đối khối lượng Mass Budget."
   },
   {
-    "id": 188,
-    "ID": "188",
+    "id": 184,
+    "ID": "184",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4416,8 +4416,8 @@
     "Explanation": "Xác thực khối lượng không vượt quá giới hạn trần của ống phóng P-POD tiêu chuẩn."
   },
   {
-    "id": 189,
-    "ID": "189",
+    "id": 185,
+    "ID": "185",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4440,8 +4440,8 @@
     "Explanation": "Phát hiện mất tiếp xúc mass tức thì giúp xác định chính xác thời điểm bu-lông bị lỏng trong lúc rung."
   },
   {
-    "id": 190,
-    "ID": "190",
+    "id": 186,
+    "ID": "186",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4464,8 +4464,8 @@
     "Explanation": "Baud rate 115200 bps bảo đảm đường truyền log rung động tần số cao không bị tràn bộ đệm UART."
   },
   {
-    "id": 191,
-    "ID": "191",
+    "id": 187,
+    "ID": "187",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4488,8 +4488,8 @@
     "Explanation": "Định dạng thông điệp cảnh báo sự cố cơ khí rõ ràng kèm theo dấu thời gian xảy ra lỗi."
   },
   {
-    "id": 193,
-    "ID": "193",
+    "id": 188,
+    "ID": "188",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4512,8 +4512,8 @@
     "Explanation": "Kiểm tra dòng điện đốt: nếu dòng dưới 0.5A chứng tỏ dây điện trở bị đứt hoặc hở mạch tiếp điểm."
   },
   {
-    "id": 194,
-    "ID": "194",
+    "id": 189,
+    "ID": "189",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4536,8 +4536,8 @@
     "Explanation": "Bảo vệ ngắt dòng quá tải tức thì ngăn chặn nguy cơ cháy mạch hoặc sụt nguồn toàn bộ vệ tinh."
   },
   {
-    "id": 195,
-    "ID": "195",
+    "id": 190,
+    "ID": "190",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4560,8 +4560,8 @@
     "Explanation": "Bảo toàn trạng thái cơ khí trong RTC RAM giúp hệ thống tiếp tục chu trình logic chính xác sau khi thức dậy."
   },
   {
-    "id": 196,
-    "ID": "196",
+    "id": 191,
+    "ID": "191",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4584,8 +4584,8 @@
     "Explanation": "Xác nhận tệp cấu hình không chỉ tồn tại mà còn có kích thước dữ liệu khác 0 trước khi nạp tham số."
   },
   {
-    "id": 197,
-    "ID": "197",
+    "id": 192,
+    "ID": "192",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4608,8 +4608,8 @@
     "Explanation": "Cờ hiệu kết luận nghiệm thu là điều kiện tiên quyết trong ma trận kiểm thử trước khi bàn giao vệ tinh."
   },
   {
-    "id": 198,
-    "ID": "198",
+    "id": 193,
+    "ID": "193",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4632,8 +4632,8 @@
     "Explanation": "CubeSat 1U có 6 mặt $0.1\\text{m} \\times 0.1\\text{m}$, tổng diện tích $6 \\times 0.01 = 0.06\\text{ m}^2$; mật độ dòng nhiệt tính bằng tổng công suất chia cho 0.06."
   },
   {
-    "id": 199,
-    "ID": "199",
+    "id": 194,
+    "ID": "194",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 3: Lập trình C++ Tự kiểm tra Liên kết Khung & Quy trình Tích hợp Cơ khí",
@@ -4656,8 +4656,8 @@
     "Explanation": "Cảnh báo quá tải nhiệt bề mặt giúp kỹ sư điều chỉnh chu kỳ công tác (Duty Cycle) của các tải công suất."
   },
   {
-    "id": 201,
-    "ID": "201",
+    "id": 195,
+    "ID": "195",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 1: Tổng quan phân hệ Cấu trúc Cơ khí & Tương tác Phân hệ",
@@ -4680,8 +4680,8 @@
     "Explanation": "Mô hình BBM là bản mẫu thử nghiệm nguyên lý trên bàn thí nghiệm (Table-sat) bằng các linh kiện phát triển nhanh, nhằm xác thực sơ đồ khối chức năng và phần mềm cơ sở."
   },
   {
-    "id": 202,
-    "ID": "202",
+    "id": 196,
+    "ID": "196",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 1: Tổng quan phân hệ Cấu trúc Cơ khí & Tương tác Phân hệ",
@@ -4704,8 +4704,8 @@
     "Explanation": "Mô hình STM có cấu trúc khung và phân bố khối lượng, nhiệt dung giống hệt vệ tinh thật nhưng lắp tải nhiệt giả định (Dummy Masses/Heaters) để thử rung và sốc nhiệt an toàn."
   },
   {
-    "id": 203,
-    "ID": "203",
+    "id": 197,
+    "ID": "197",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 1: Tổng quan phân hệ Cấu trúc Cơ khí & Tương tác Phân hệ",
@@ -4728,8 +4728,8 @@
     "Explanation": "Mô hình EM có độ trung thực cao về chức năng và hình học nhưng dùng linh kiện thương mại/công nghiệp; nó chịu các bài thử Qualification khắc nghiệt và dùng làm thiết bị dự phòng mặt đất."
   },
   {
-    "id": 204,
-    "ID": "204",
+    "id": 198,
+    "ID": "198",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 1: Tổng quan phân hệ Cấu trúc Cơ khí & Tương tác Phân hệ",
@@ -4752,8 +4752,8 @@
     "Explanation": "Chiến lược PFM (Proto-Flight Model) kết hợp thử nghiệm định chuẩn và chấp nhận trên chính mẫu phần cứng sẽ bay lên quỹ đạo, rất phổ biến trong các dự án CubeSat trường đại học."
   },
   {
-    "id": 205,
-    "ID": "205",
+    "id": 199,
+    "ID": "199",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 1: Tổng quan phân hệ Cấu trúc Cơ khí & Tương tác Phân hệ",
@@ -4776,8 +4776,8 @@
     "Explanation": "Quá trình tên lửa đốt động cơ đẩy tạo ra rung động cơ học và sóng âm cực mạnh truyền qua khung giá đỡ; thử rung ngẫu nhiên đảm bảo phần cứng sống sót qua giai đoạn phóng."
   },
   {
-    "id": 206,
-    "ID": "206",
+    "id": 200,
+    "ID": "200",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 1: Tổng quan phân hệ Cấu trúc Cơ khí & Tương tác Phân hệ",
@@ -4800,8 +4800,8 @@
     "Explanation": "Tiêu chuẩn thử nghiệm tải rung phóng (như NASA-GEVS hay ISO-19683) quy định dải tần số rung ngẫu nhiên điển hình từ 20 Hz đến 2000 Hz."
   },
   {
-    "id": 207,
-    "ID": "207",
+    "id": 201,
+    "ID": "201",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 1: Tổng quan phân hệ Cấu trúc Cơ khí & Tương tác Phân hệ",
@@ -4824,8 +4824,8 @@
     "Explanation": "Bài thử Sin-burst (vài chu kỳ hình sin tần số thấp dưới tần số cộng hưởng thứ nhất) áp đặt lực quán tính tương đương tải trọng gia tốc tĩnh tối đa mà tên lửa tạo ra khi tăng tốc."
   },
   {
-    "id": 208,
-    "ID": "208",
+    "id": 202,
+    "ID": "202",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 1: Tổng quan phân hệ Cấu trúc Cơ khí & Tương tác Phân hệ",
@@ -4848,8 +4848,8 @@
     "Explanation": "Khi các tầng tên lửa tách ra hoặc nắp chụp đầu tên lửa bung mở, các cơ cấu cắt hỏa thuật (pyrotechnic) phát nổ tạo ra xung sốc tần số cao truyền vào thân vệ tinh."
   },
   {
-    "id": 209,
-    "ID": "209",
+    "id": 203,
+    "ID": "203",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 1: Tổng quan phân hệ Cấu trúc Cơ khí & Tương tác Phân hệ",
@@ -4872,8 +4872,8 @@
     "Explanation": "TVAC đặt vệ tinh vào buồng chân không cao (< 10^-4 Torr) và luân chuyển chu kỳ nhiệt nóng/lạnh cực đoan (-20°C đến +60°C) để phát hiện lỗi linh kiện và kiểm tra tản nhiệt."
   },
   {
-    "id": 210,
-    "ID": "210",
+    "id": 204,
+    "ID": "204",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 1: Tổng quan phân hệ Cấu trúc Cơ khí & Tương tác Phân hệ",
@@ -4896,8 +4896,8 @@
     "Explanation": "Trong chân không, keo dán, màng bọc và vật liệu composite thoát khí (Outgassing); sấy Bake-Out giúp giải phóng trước các khí này để không ngưng tụ làm bẩn ống kính máy ảnh và tế bào quang điện."
   },
   {
-    "id": 211,
-    "ID": "211",
+    "id": 205,
+    "ID": "205",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 1: Tổng quan phân hệ Cấu trúc Cơ khí & Tương tác Phân hệ",
@@ -4920,8 +4920,8 @@
     "Explanation": "Verification trả lời câu hỏi 'Hệ thống có được chế tạo đúng quy chuẩn kỹ thuật không?'; trong khi Validation trả lời câu hỏi 'Đây có đúng là hệ thống đáp ứng mục tiêu người dùng cần không?'."
   },
   {
-    "id": 212,
-    "ID": "212",
+    "id": 206,
+    "ID": "206",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 1: Tổng quan phân hệ Cấu trúc Cơ khí & Tương tác Phân hệ",
@@ -4944,8 +4944,8 @@
     "Explanation": "Thử nghiệm định chuẩn (QT) áp dụng mức tải khắc nghiệt hơn mức dự kiến tối đa (MPE) với biên độ an toàn (thường 1.25x hoặc +3dB) nhằm chứng minh thiết kế có đủ biên độ chịu lực."
   },
   {
-    "id": 213,
-    "ID": "213",
+    "id": 207,
+    "ID": "207",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 1: Tổng quan phân hệ Cấu trúc Cơ khí & Tương tác Phân hệ",
@@ -4968,8 +4968,8 @@
     "Explanation": "Thử nghiệm chấp nhận (AT) được thực hiện ở mức tải tối đa dự kiến (1.0x MPE không có margin) trên chính thiết bị bay FM để kiểm tra khuyết tật chế tạo mà không gây mỏi hỏng hóc linh kiện."
   },
   {
-    "id": 214,
-    "ID": "214",
+    "id": 208,
+    "ID": "208",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 1: Tổng quan phân hệ Cấu trúc Cơ khí & Tương tác Phân hệ",
@@ -4992,8 +4992,8 @@
     "Explanation": "Sau bài thử rung, kỹ sư tiến hành kiểm tra ngoại quan nghiêm ngặt: siết lại cờ lê lực kiểm tra ốc vít, soi kính hiển vi kiểm tra tế bào quang điện và kiểm tra chốt giữ anten."
   },
   {
-    "id": 215,
-    "ID": "215",
+    "id": 209,
+    "ID": "209",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 1: Tổng quan phân hệ Cấu trúc Cơ khí & Tương tác Phân hệ",
@@ -5016,8 +5016,8 @@
     "Explanation": "Các nhà cung cấp phóng yêu cầu tần số dao động riêng thứ nhất (Fundamental Natural Frequency) của CubeSat phải trên 60-100 Hz để tránh cộng hưởng phá hủy với dao động của tên lửa."
   },
   {
-    "id": 216,
-    "ID": "216",
+    "id": 210,
+    "ID": "210",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 1: Tổng quan phân hệ Cấu trúc Cơ khí & Tương tác Phân hệ",
@@ -5040,8 +5040,8 @@
     "Explanation": "Cobalt-60 là nguồn chuẩn quốc tế phát tia gamma mô phỏng liều hấp thụ bức xạ ion hóa tích lũy của linh kiện bán dẫn trong suốt nhiều năm hoạt động trên quỹ đạo không gian."
   },
   {
-    "id": 217,
-    "ID": "217",
+    "id": 211,
+    "ID": "211",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 1: Tổng quan phân hệ Cấu trúc Cơ khí & Tương tác Phân hệ",
@@ -5064,8 +5064,8 @@
     "Explanation": "Nhôm Al 7075-T6 và Al 6061-T6 có tỉ số độ bền trên trọng lượng rất cao, khả năng gia công CNC chính xác, tính dẫn nhiệt tuyệt vời và được chuẩn hóa trong tiêu chuẩn CubeSat Design Spec."
   },
   {
-    "id": 218,
-    "ID": "218",
+    "id": 212,
+    "ID": "212",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 1: Tổng quan phân hệ Cấu trúc Cơ khí & Tương tác Phân hệ",
@@ -5088,8 +5088,8 @@
     "Explanation": "Hard Anodizing tạo lớp oxit nhôm gốm cực cứng cách điện, ngăn hiện tượng dính kết phân tử kim loại trong chân không (Cold Welding) và đảm bảo thanh ray trượt mượt mà ra khỏi POD."
   },
   {
-    "id": 219,
-    "ID": "219",
+    "id": 213,
+    "ID": "213",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 1: Tổng quan phân hệ Cấu trúc Cơ khí & Tương tác Phân hệ",
@@ -5112,8 +5112,8 @@
     "Explanation": "ISO-19683 là bộ tiêu chuẩn quốc tế định nghĩa các yêu cầu thử nghiệm môi trường (vibration, shock, thermal, EMC) được tối ưu hóa riêng cho các dòng vệ tinh siêu nhỏ (CubeSat/SmallSat)."
   },
   {
-    "id": 220,
-    "ID": "220",
+    "id": 214,
+    "ID": "214",
     "lab": 6,
     "Lab": "Lab 6: Phân hệ Cấu trúc Cơ khí (Structure)",
     "section": "Phần 1: Tổng quan phân hệ Cấu trúc Cơ khí & Tương tác Phân hệ",

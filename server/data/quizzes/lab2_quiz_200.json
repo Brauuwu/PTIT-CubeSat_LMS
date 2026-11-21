@@ -2622,22 +2622,22 @@
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 2: Phần cứng EPS: Pin Li-Po, TP4056, Buck/Boost & Switch hành trình",
     "Section": "Phần 2: Phần cứng EPS: Pin Li-Po, TP4056, Buck/Boost & Switch hành trình",
-    "question": "Theo thiết kế phần cứng của kit vệ tinh, mức logic nào tại chân GPIO 4 sẽ NGẮT dòng điện đi vào mạch hạ áp để cắt nguồn cụm cảm biến?",
-    "Question": "Theo thiết kế phần cứng của kit vệ tinh, mức logic nào tại chân GPIO 4 sẽ NGẮT dòng điện đi vào mạch hạ áp để cắt nguồn cụm cảm biến?",
+    "question": "Trong phân hệ nguồn EPS của CubeSat, khi thực hiện kỹ thuật cô lập nguồn (Power Gating) bằng phương thức `eps.setBuckState()`, thao tác nào sẽ ngắt hoàn toàn nguồn cấp cho cụm tải cảm biến?",
+    "Question": "Trong phân hệ nguồn EPS của CubeSat, khi thực hiện kỹ thuật cô lập nguồn (Power Gating) bằng phương thức `eps.setBuckState()`, thao tác nào sẽ ngắt hoàn toàn nguồn cấp cho cụm tải cảm biến?",
     "options": [
-      "Mức 1",
-      "Mức 0",
-      "Trạng thái thả nổi",
-      "Xung nhịp PWM 50%"
+      "Gọi `eps.setBuckState(false)` để điều khiển công tắc bán dẫn mở mạch, ngắt dòng cấp cho cụm cảm biến",
+      "Gọi `eps.setBuckState(true)` để tăng gấp đôi dòng điện cấp cho cảm biến",
+      "Cấu hình cổng UART về trạng thái ngắt kết nối",
+      "Đặt tốc độ xung nhịp I2C về 0 Hz"
     ],
-    "Option_A": "Mức 1",
-    "Option_B": "Mức 0",
-    "Option_C": "Trạng thái thả nổi",
-    "Option_D": "Xung nhịp PWM 50%",
+    "Option_A": "Gọi `eps.setBuckState(false)` để điều khiển công tắc bán dẫn mở mạch, ngắt dòng cấp cho cụm cảm biến",
+    "Option_B": "Gọi `eps.setBuckState(true)` để tăng gấp đôi dòng điện cấp cho cảm biến",
+    "Option_C": "Cấu hình cổng UART về trạng thái ngắt kết nối",
+    "Option_D": "Đặt tốc độ xung nhịp I2C về 0 Hz",
     "answer": "A",
     "Answer": "A",
-    "explanation": "Mạch công tắc khống chế dòng vào hạ áp được thiết kế ngắt khi GPIO 4 ở mức 1 (HIGH) và thông mạch khi ở mức 0 (LOW).",
-    "Explanation": "Mạch công tắc khống chế dòng vào hạ áp được thiết kế ngắt khi GPIO 4 ở mức 1 (HIGH) và thông mạch khi ở mức 0 (LOW)."
+    "explanation": "Gọi `eps.setBuckState(false)` sẽ điều khiển khóa điện tử mở mạch, ngắt hoàn toàn dòng điện đi vào bộ hạ áp cấp nguồn cho cụm cảm biến, giúp tiết kiệm triệt để năng lượng khi cảm biến không hoạt động.",
+    "Explanation": "Gọi `eps.setBuckState(false)` sẽ điều khiển khóa điện tử mở mạch, ngắt hoàn toàn dòng điện đi vào bộ hạ áp cấp nguồn cho cụm cảm biến, giúp tiết kiệm triệt để năng lượng khi cảm biến không hoạt động."
   },
   {
     "id": 111,
@@ -2646,22 +2646,22 @@
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 2: Phần cứng EPS: Pin Li-Po, TP4056, Buck/Boost & Switch hành trình",
     "Section": "Phần 2: Phần cứng EPS: Pin Li-Po, TP4056, Buck/Boost & Switch hành trình",
-    "question": "Khi cần cấp nguồn cho cụm cảm biến đo đạc, vi điều khiển OBC phải xuất mức logic nào ra chân GPIO 4?",
-    "Question": "Khi cần cấp nguồn cho cụm cảm biến đo đạc, vi điều khiển OBC phải xuất mức logic nào ra chân GPIO 4?",
+    "question": "Khi cần cấp nguồn cho cụm cảm biến đo đạc viễn trắc thông qua thư viện EPS, vi điều khiển OBC thực hiện thao tác nào?",
+    "Question": "Khi cần cấp nguồn cho cụm cảm biến đo đạc viễn trắc thông qua thư viện EPS, vi điều khiển OBC thực hiện thao tác nào?",
     "options": [
-      "Mức 1",
-      "Mức 0",
-      "Mức xung liên tục 10 kHz",
-      "Đổi chân thành ngõ vào INPUT_PULLUP"
+      "Kích hoạt chế độ Deep Sleep của toàn hệ thống",
+      "Gọi hàm `eps.setBuckState(true)` để đóng mạch công tắc bán dẫn kích hoạt khối hạ áp cấp nguồn",
+      "Tắt toàn bộ bus I2C và SPI",
+      "Nối trực tiếp nguồn pin vào chân tín hiệu I2C"
     ],
-    "Option_A": "Mức 1",
-    "Option_B": "Mức 0",
-    "Option_C": "Mức xung liên tục 10 kHz",
-    "Option_D": "Đổi chân thành ngõ vào INPUT_PULLUP",
+    "Option_A": "Kích hoạt chế độ Deep Sleep của toàn hệ thống",
+    "Option_B": "Gọi hàm `eps.setBuckState(true)` để đóng mạch công tắc bán dẫn kích hoạt khối hạ áp cấp nguồn",
+    "Option_C": "Tắt toàn bộ bus I2C và SPI",
+    "Option_D": "Nối trực tiếp nguồn pin vào chân tín hiệu I2C",
     "answer": "B",
     "Answer": "B",
-    "explanation": "Xuất mức 0 (LOW) ra chân GPIO 4 cho phép dòng điện từ pin đi vào mạch hạ áp, sinh ra điện áp 3.3V cấp cho các cảm biến.",
-    "Explanation": "Xuất mức 0 (LOW) ra chân GPIO 4 cho phép dòng điện từ pin đi vào mạch hạ áp, sinh ra điện áp 3.3V cấp cho các cảm biến."
+    "explanation": "Gọi `eps.setBuckState(true)` kích hoạt mạch chuyển mạch nguồn để đóng điện cho bộ hạ áp 3.3V nuôi cụm cảm biến hoạt động.",
+    "Explanation": "Gọi `eps.setBuckState(true)` kích hoạt mạch chuyển mạch nguồn để đóng điện cho bộ hạ áp 3.3V nuôi cụm cảm biến hoạt động."
   },
   {
     "id": 112,
@@ -2694,22 +2694,22 @@
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 2: Phần cứng EPS: Pin Li-Po, TP4056, Buck/Boost & Switch hành trình",
     "Section": "Phần 2: Phần cứng EPS: Pin Li-Po, TP4056, Buck/Boost & Switch hành trình",
-    "question": "Sau khi xuất mức 0 (LOW) ra GPIO 4 để bật mạch hạ áp, tại sao chương trình cần chờ một khoảng trễ (delay khoảng 50 - 100 ms) trước khi đọc cảm biến?",
-    "Question": "Sau khi xuất mức 0 (LOW) ra GPIO 4 để bật mạch hạ áp, tại sao chương trình cần chờ một khoảng trễ (delay khoảng 50 - 100 ms) trước khi đọc cảm biến?",
+    "question": "Sau khi gọi lệnh đóng nguồn cấp cho cụm cảm biến (`eps.setBuckState(true)`), tại sao chương trình điều khiển cần chờ một khoảng trễ (delay khoảng 50 - 100 ms) trước khi khởi tạo hoặc đọc dữ liệu từ cảm biến?",
+    "Question": "Sau khi gọi lệnh đóng nguồn cấp cho cụm cảm biến (`eps.setBuckState(true)`), tại sao chương trình điều khiển cần chờ một khoảng trễ (delay khoảng 50 - 100 ms) trước khi khởi tạo hoặc đọc dữ liệu từ cảm biến?",
     "options": [
-      "Chờ vi điều khiển nạp lại toàn bộ các thanh ghi",
-      "Để điện áp ngõ ra ổn định và tụ lọc được nạp đầy",
-      "Chờ bộ nhớ flash giải phóng vùng đệm dữ liệu tạm",
-      "Chờ trạm mặt đất gửi tín hiệu đồng bộ vô tuyến"
+      "Để chờ vi điều khiển OBC hạ bớt nhiệt độ vận hành",
+      "Để mạch nguồn ổn định điện áp đầu ra (Soft-start) và nạp đầy các tụ lọc nguồn, tránh lỗi giao tiếp bus I2C/SPI",
+      "Để chờ sóng vô tuyến truyền về trạm mặt đất",
+      "Để xóa sạch bộ nhớ đệm Flash của vi điều khiển"
     ],
-    "Option_A": "Chờ vi điều khiển nạp lại toàn bộ các thanh ghi",
-    "Option_B": "Để điện áp ngõ ra ổn định và tụ lọc được nạp đầy",
-    "Option_C": "Chờ bộ nhớ flash giải phóng vùng đệm dữ liệu tạm",
-    "Option_D": "Chờ trạm mặt đất gửi tín hiệu đồng bộ vô tuyến",
+    "Option_A": "Để chờ vi điều khiển OBC hạ bớt nhiệt độ vận hành",
+    "Option_B": "Để mạch nguồn ổn định điện áp đầu ra (Soft-start) và nạp đầy các tụ lọc nguồn, tránh lỗi giao tiếp bus I2C/SPI",
+    "Option_C": "Để chờ sóng vô tuyến truyền về trạm mặt đất",
+    "Option_D": "Để xóa sạch bộ nhớ đệm Flash của vi điều khiển",
     "answer": "B",
     "Answer": "B",
-    "explanation": "Mạch nguồn xung cần thời gian khởi động (Soft-start) và nạp tụ lọc để điện áp 3.3V đạt mức danh định, tránh lỗi đọc I2C.",
-    "Explanation": "Mạch nguồn xung cần thời gian khởi động (Soft-start) và nạp tụ lọc để điện áp 3.3V đạt mức danh định, tránh lỗi đọc I2C."
+    "explanation": "Mạch nguồn xung cần thời gian khởi động mềm (Soft-start) và nạp điện cho các tụ lọc bypass để điện áp 3.3V đạt mức danh định ổn định, tránh hiện tượng cảm biến bị reset hoặc lỗi treo bus I2C.",
+    "Explanation": "Mạch nguồn xung cần thời gian khởi động mềm (Soft-start) và nạp điện cho các tụ lọc bypass để điện áp 3.3V đạt mức danh định ổn định, tránh hiện tượng cảm biến bị reset hoặc lỗi treo bus I2C."
   },
   {
     "id": 114,
@@ -2718,22 +2718,22 @@
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 2: Phần cứng EPS: Pin Li-Po, TP4056, Buck/Boost & Switch hành trình",
     "Section": "Phần 2: Phần cứng EPS: Pin Li-Po, TP4056, Buck/Boost & Switch hành trình",
-    "question": "Tại sao chân GPIO 25 KHÔNG được sử dụng để điều khiển mạch hạ áp trong thiết kế của bộ kit?",
-    "Question": "Tại sao chân GPIO 25 KHÔNG được sử dụng để điều khiển mạch hạ áp trong thiết kế của bộ kit?",
+    "question": "Tại sao trong kiến trúc phần cứng CubeSat, việc đóng/ngắt nguồn các phân hệ tải (Power Gating) được điều khiển tập trung thông qua các hàm thư viện EPS chuẩn hóa thay vì can thiệp thủ công rời rạc?",
+    "Question": "Tại sao trong kiến trúc phần cứng CubeSat, việc đóng/ngắt nguồn các phân hệ tải (Power Gating) được điều khiển tập trung thông qua các hàm thư viện EPS chuẩn hóa thay vì can thiệp thủ công rời rạc?",
     "options": [
-      "Vì chân GPIO 25 chỉ có tính năng ngõ vào tương tự ADC",
-      "Vì chân GPIO 25 là chân Strapping cấm sử dụng",
-      "Vì chân GPIO 25 đã được phân bổ cho chức năng ngoại vi khác trên bo mạch",
-      "Vì chân GPIO 25 không hỗ trợ mức điện áp 3.3V"
+      "Để tiết kiệm dung lượng pin bằng cách giảm kích thước mã nguồn",
+      "Để không cần dùng đến điện trở kéo nội trên vi điều khiển",
+      "Để đảm bảo tính đóng gói an toàn phần cứng, đồng bộ trạng thái quản lý nguồn toàn hệ thống và tránh xung đột chân ngoại vi",
+      "Để tự động tăng công suất phát của module viễn thông LoRa"
     ],
-    "Option_A": "Vì chân GPIO 25 chỉ có tính năng ngõ vào tương tự ADC",
-    "Option_B": "Vì chân GPIO 25 là chân Strapping cấm sử dụng",
-    "Option_C": "Vì chân GPIO 25 đã được phân bổ cho chức năng ngoại vi khác trên bo mạch",
-    "Option_D": "Vì chân GPIO 25 không hỗ trợ mức điện áp 3.3V",
+    "Option_A": "Để tiết kiệm dung lượng pin bằng cách giảm kích thước mã nguồn",
+    "Option_B": "Để không cần dùng đến điện trở kéo nội trên vi điều khiển",
+    "Option_C": "Để đảm bảo tính đóng gói an toàn phần cứng, đồng bộ trạng thái quản lý nguồn toàn hệ thống và tránh xung đột chân ngoại vi",
+    "Option_D": "Để tự động tăng công suất phát của module viễn thông LoRa",
     "answer": "C",
     "Answer": "C",
-    "explanation": "Trong sơ đồ thiết kế phần cứng của kit, chân 25 đã được gán cho ngoại vi khác, việc điều khiển mạch hạ áp được quy hoạch sang GPIO 4.",
-    "Explanation": "Trong sơ đồ thiết kế phần cứng của kit, chân 25 đã được gán cho ngoại vi khác, việc điều khiển mạch hạ áp được quy hoạch sang GPIO 4."
+    "explanation": "Chuẩn hóa điều khiển qua thư viện EPS giúp trừu tượng hóa phần cứng, tránh xung đột chân I/O giữa các phân hệ và đảm bảo trạng thái nguồn điện của vệ tinh được quản lý tập trung, an toàn.",
+    "Explanation": "Chuẩn hóa điều khiển qua thư viện EPS giúp trừu tượng hóa phần cứng, tránh xung đột chân I/O giữa các phân hệ và đảm bảo trạng thái nguồn điện của vệ tinh được quản lý tập trung, an toàn."
   },
   {
     "id": 115,
@@ -3696,8 +3696,8 @@
     "Explanation": "Hệ thống sử dụng logic mức 0 cho phép dòng (POWER_ON = LOW) và mức 1 ngắt dòng (POWER_OFF = HIGH)."
   },
   {
-    "id": 156,
-    "ID": "156",
+    "id": 155,
+    "ID": "155",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -3720,8 +3720,8 @@
     "Explanation": "Khi pin nguy cấp, quy trình sa thải phụ tải (Load Shedding) yêu cầu ngắt dòng mạch hạ áp (GPIO 4 = 1) để loại bỏ tải tiêu thụ của cảm biến."
   },
   {
-    "id": 157,
-    "ID": "157",
+    "id": 156,
+    "ID": "156",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -3744,8 +3744,8 @@
     "Explanation": "Khi pin yếu (SOC < 20%), hệ thống nâng thời gian ngủ lên 120 giây; khi pin khỏe, hệ thống duy trì chu kỳ ngủ ngắn 10 giây."
   },
   {
-    "id": 158,
-    "ID": "158",
+    "id": 157,
+    "ID": "157",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -3768,8 +3768,8 @@
     "Explanation": "delay() khóa cứng luồng thực thi trong số mili-giây chỉ định; trong các hệ thống đòi hỏi đa nhiệm mượt mà, kỹ thuật non-blocking bằng millis() được ưu tiên hơn."
   },
   {
-    "id": 159,
-    "ID": "159",
+    "id": 158,
+    "ID": "158",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -3792,8 +3792,8 @@
     "Explanation": "Thanh ghi MODE (0x06) là thanh ghi 16-bit; ghi giá trị 0x4000 (byte 0x40 theo sau bởi byte 0x00) kích hoạt lệnh Quick-Start."
   },
   {
-    "id": 160,
-    "ID": "160",
+    "id": 159,
+    "ID": "159",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -3816,8 +3816,8 @@
     "Explanation": "Bắt lỗi trả về ngăn ngừa tình trạng code tiếp tục đọc dữ liệu rác từ bus đang bị hỏng hoặc treo."
   },
   {
-    "id": 161,
-    "ID": "161",
+    "id": 160,
+    "ID": "160",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -3840,8 +3840,8 @@
     "Explanation": "Giá trị trả về bằng 0 biểu thị lỗi đường truyền hoặc IC không phản hồi xung nhịp của Master."
   },
   {
-    "id": 162,
-    "ID": "162",
+    "id": 161,
+    "ID": "161",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -3864,8 +3864,8 @@
     "Explanation": "Hàm đọc có kiểm tra mã trả về của endTransmission, trả về -1.0 nếu lỗi bus và tính toán chính xác điện áp nếu thành công."
   },
   {
-    "id": 163,
-    "ID": "163",
+    "id": 162,
+    "ID": "162",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -3888,8 +3888,8 @@
     "Explanation": "Chỉ cần đọc đúng 1 byte MSB tại thanh ghi 0x04 là đã có ngay giá trị phần trăm nguyên của mức pin còn lại."
   },
   {
-    "id": 164,
-    "ID": "164",
+    "id": 163,
+    "ID": "163",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -3912,8 +3912,8 @@
     "Explanation": "Chân Enable của các IC nguồn thường tích cực mức cao (Active-High); xuất mức HIGH (3.3V) sẽ bật mạch Boost hoạt động."
   },
   {
-    "id": 165,
-    "ID": "165",
+    "id": 164,
+    "ID": "164",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -3936,8 +3936,8 @@
     "Explanation": "Kéo chân Enable xuống mức LOW (0V) đưa IC Boost vào trạng thái Shutdown với dòng tiêu thụ tĩnh dưới 1 µA."
   },
   {
-    "id": 166,
-    "ID": "166",
+    "id": 165,
+    "ID": "165",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -3960,8 +3960,8 @@
     "Explanation": "Độ trễ ngắn bảo đảm các giao tiếp ngoại vi kết thúc hoàn chỉnh trước khi nguồn cấp cho linh kiện bị ngắt đột ngột."
   },
   {
-    "id": 167,
-    "ID": "167",
+    "id": 166,
+    "ID": "166",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -3984,8 +3984,8 @@
     "Explanation": "Cấu hình chân là OUTPUT và ngay lập tức kéo xuống mức LOW bảo đảm phụ tải công suất không bị kích hoạt ngoài ý muốn khi vừa bật nguồn."
   },
   {
-    "id": 168,
-    "ID": "168",
+    "id": 167,
+    "ID": "167",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -4008,8 +4008,8 @@
     "Explanation": "Luôn khởi tạo giao tiếp trước, đo kiểm sức khỏe nguồn năng lượng của hệ thống rồi mới quyết định tải nào được phép bật."
   },
   {
-    "id": 170,
-    "ID": "170",
+    "id": 168,
+    "ID": "168",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -4032,8 +4032,8 @@
     "Explanation": "Trạng thái sạc đầy đạt được khi cả hai chỉ số SOC tiệm cận 100% và điện áp hai cực tiệm cận ngưỡng cắt sạc 4.2V."
   },
   {
-    "id": 171,
-    "ID": "171",
+    "id": 169,
+    "ID": "169",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -4056,8 +4056,8 @@
     "Explanation": "Chuỗi JSON chuẩn hóa cho phép các giao diện web dashboard dễ dàng phân tích và hiển thị trực quan các thông số nguồn."
   },
   {
-    "id": 172,
-    "ID": "172",
+    "id": 170,
+    "ID": "170",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -4080,8 +4080,8 @@
     "Explanation": "Lưu trữ điện áp phiên trước trong RTC RAM cho phép tính toán độ dốc tiêu hao năng lượng $dV/dt$ giữa các chu kỳ bay."
   },
   {
-    "id": 174,
-    "ID": "174",
+    "id": 171,
+    "ID": "171",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -4104,8 +4104,8 @@
     "Explanation": "Nguyên tắc sống còn của phần mềm nhúng hàng không vũ trụ là mọi vòng chờ ngoại vi bắt buộc phải có giới hạn thời gian Timeout."
   },
   {
-    "id": 175,
-    "ID": "175",
+    "id": 172,
+    "ID": "172",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -4128,8 +4128,8 @@
     "Explanation": "Nếu sau 50 mili-giây mà chưa đủ 2 byte dữ liệu, lệnh break sẽ cưỡng bức thoát khỏi vòng lặp, giải phóng CPU xử lý lỗi."
   },
   {
-    "id": 176,
-    "ID": "176",
+    "id": 173,
+    "ID": "173",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -4152,8 +4152,8 @@
     "Explanation": "Trình tự chuẩn I2C: chọn địa chỉ chip, trỏ địa chỉ thanh ghi mục tiêu, phát Repeated Start và yêu cầu đọc dữ liệu."
   },
   {
-    "id": 177,
-    "ID": "177",
+    "id": 174,
+    "ID": "174",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -4176,8 +4176,8 @@
     "Explanation": "Thanh ghi CONFIG cho phép cài đặt ngưỡng phần trăm pin tối thiểu để kích hoạt cờ cảnh báo Alert."
   },
   {
-    "id": 179,
-    "ID": "179",
+    "id": 175,
+    "ID": "175",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -4200,8 +4200,8 @@
     "Explanation": "Dữ liệu byte thô từ bus I2C là số nguyên không dấu 8-bit; gán sai kiểu có dấu có thể làm sai lệch giá trị khi dịch bit."
   },
   {
-    "id": 180,
-    "ID": "180",
+    "id": 176,
+    "ID": "176",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -4224,8 +4224,8 @@
     "Explanation": "Chuẩn I2C quy định phát 9 xung Clock trên chân SCL giúp thiết bị Slave đang bị kẹt nhả đường truyền dữ liệu SDA."
   },
   {
-    "id": 181,
-    "ID": "181",
+    "id": 177,
+    "ID": "177",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -4248,32 +4248,32 @@
     "Explanation": "Hệ số làm việc Duty Cycle = 1.5 / 6.5 ≈ 23%, do đó tiết kiệm được khoảng 100% - 23% = 77% điện năng tiêu thụ của cụm cảm biến."
   },
   {
-    "id": 182,
-    "ID": "182",
+    "id": 178,
+    "ID": "178",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
     "Section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
-    "question": "Trong quá trình ngắt dòng vào mạch hạ áp (GPIO 4 = 1), tại sao vi điều khiển OBC vẫn có thể hoạt động và in thông báo ra Serial?",
-    "Question": "Trong quá trình ngắt dòng vào mạch hạ áp (GPIO 4 = 1), tại sao vi điều khiển OBC vẫn có thể hoạt động và in thông báo ra Serial?",
+    "question": "Trong quá trình ngắt nguồn cụm cảm biến (`eps.setBuckState(false)`), tại sao vi điều khiển OBC vẫn có thể hoạt động bình thường và xuất nhật ký viễn trắc ra Serial?",
+    "Question": "Trong quá trình ngắt nguồn cụm cảm biến (`eps.setBuckState(false)`), tại sao vi điều khiển OBC vẫn có thể hoạt động bình thường và xuất nhật ký viễn trắc ra Serial?",
     "options": [
-      "Vì OBC dùng đường nguồn riêng, độc lập cảm biến",
-      "Vì OBC có cụm pin quang điện riêng trên khung vỏ",
-      "Vì mạch hạ áp tự phóng năng lượng nuôi vi xử lý",
-      "Vì vi điều khiển có thể tự chạy không cần nguồn"
+      "Nhờ kiến trúc phân tách độc lập các nhánh nguồn: OBC được cấp nguồn từ nhánh điều áp liên tục riêng, độc lập với nhánh hạ áp có thể ngắt mở của cụm tải cảm biến",
+      "Vì OBC tự sinh ra dòng điện từ bức xạ vũ trụ",
+      "Vì cổng Serial tự cấp điện ngược trở lại cho vi điều khiển",
+      "Vì tụ điện trên bo OBC có thể duy trì hoạt động trong nhiều tuần mà không cần nguồn"
     ],
-    "Option_A": "Vì OBC dùng đường nguồn riêng, độc lập cảm biến",
-    "Option_B": "Vì OBC có cụm pin quang điện riêng trên khung vỏ",
-    "Option_C": "Vì mạch hạ áp tự phóng năng lượng nuôi vi xử lý",
-    "Option_D": "Vì vi điều khiển có thể tự chạy không cần nguồn",
+    "Option_A": "Nhờ kiến trúc phân tách độc lập các nhánh nguồn: OBC được cấp nguồn từ nhánh điều áp liên tục riêng, độc lập với nhánh hạ áp có thể ngắt mở của cụm tải cảm biến",
+    "Option_B": "Vì OBC tự sinh ra dòng điện từ bức xạ vũ trụ",
+    "Option_C": "Vì cổng Serial tự cấp điện ngược trở lại cho vi điều khiển",
+    "Option_D": "Vì tụ điện trên bo OBC có thể duy trì hoạt động trong nhiều tuần mà không cần nguồn",
     "answer": "A",
     "Answer": "A",
-    "explanation": "Hệ thống EPS phân tách các nhánh nguồn: vi xử lý OBC có đường nguồn riêng, trong khi ngõ ra của mạch hạ áp này chỉ phục vụ nuôi cụm cảm biến.",
-    "Explanation": "Hệ thống EPS phân tách các nhánh nguồn: vi xử lý OBC có đường nguồn riêng, trong khi ngõ ra của mạch hạ áp này chỉ phục vụ nuôi cụm cảm biến."
+    "explanation": "Hệ thống EPS phân tách các nhánh nguồn chuyên biệt: vi điều khiển OBC được nuôi bởi nhánh nguồn chính duy trì liên tục (Always-on), trong khi ngõ ra của nhánh nguồn tải (Switched Bus) chỉ cấp cho các cảm biến tiêu thụ điện ngắt quãng.",
+    "Explanation": "Hệ thống EPS phân tách các nhánh nguồn chuyên biệt: vi điều khiển OBC được nuôi bởi nhánh nguồn chính duy trì liên tục (Always-on), trong khi ngõ ra của nhánh nguồn tải (Switched Bus) chỉ cấp cho các cảm biến tiêu thụ điện ngắt quãng."
   },
   {
-    "id": 184,
-    "ID": "184",
+    "id": 179,
+    "ID": "179",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -4296,8 +4296,8 @@
     "Explanation": "Tần số 400 kHz là chuẩn Fast Mode, giúp giảm thời gian chiếm dụng bus khi đọc ghi dữ liệu từ IC."
   },
   {
-    "id": 185,
-    "ID": "185",
+    "id": 180,
+    "ID": "180",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -4320,8 +4320,8 @@
     "Explanation": "0x64 tương ứng số thập phân 100; phần lẻ tại byte LSB bằng 0x00 nên pin đang đầy hoàn toàn 100%."
   },
   {
-    "id": 186,
-    "ID": "186",
+    "id": 181,
+    "ID": "181",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -4344,8 +4344,8 @@
     "Explanation": "Byte cao: $0x32 = 50\\%$. Byte thấp: $0x80 = 128 \\rightarrow 128 / 256 = 0.5\\%$. Tổng là $50.5\\%$."
   },
   {
-    "id": 187,
-    "ID": "187",
+    "id": 182,
+    "ID": "182",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -4368,8 +4368,8 @@
     "Explanation": "Hàm dtostrf(val, width, prec, buf) là hàm chuẩn trong C nhúng để biến đổi số thực float thành mảng ký tự không gây phân mảnh RAM."
   },
   {
-    "id": 188,
-    "ID": "188",
+    "id": 183,
+    "ID": "183",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -4392,8 +4392,8 @@
     "Explanation": "Kéo chân kích hoạt nguồn của mạch Boost và các tải phụ xuống mức LOW ngắt toàn bộ dòng cấp, chỉ duy trì nguồn cho OBC."
   },
   {
-    "id": 189,
-    "ID": "189",
+    "id": 184,
+    "ID": "184",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -4412,36 +4412,36 @@
     "Option_D": "Tín hiệu đồng bộ từ trạm phát sóng",
     "answer": "B",
     "Answer": "B",
-    "explanation": "Hệ thống chạy vòng lặp tuần tự hoặc định thời non-blocking để luân phiên bật tắt GPIO 4 mà không sử dụng cơ chế deep sleep.",
-    "Explanation": "Hệ thống chạy vòng lặp tuần tự hoặc định thời non-blocking để luân phiên bật tắt GPIO 4 mà không sử dụng cơ chế deep sleep."
+    "explanation": "Hệ thống chạy vòng lặp tuần tự hoặc định thời non-blocking để luân phiên bật tắt nguồn phụ tải (Power Gating) mà không sử dụng cơ chế deep sleep.",
+    "Explanation": "Hệ thống chạy vòng lặp tuần tự hoặc định thời non-blocking để luân phiên bật tắt nguồn phụ tải (Power Gating) mà không sử dụng cơ chế deep sleep."
   },
   {
-    "id": 190,
-    "ID": "190",
+    "id": 185,
+    "ID": "185",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
     "Section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
-    "question": "Khi lập trình điều khiển mạch hạ áp qua GPIO 4, nếu vô tình xuất mức 0 (LOW) liên tục trong suốt chương trình, hậu quả kỹ thuật nào sẽ xảy ra?",
-    "Question": "Khi lập trình điều khiển mạch hạ áp qua GPIO 4, nếu vô tình xuất mức 0 (LOW) liên tục trong suốt chương trình, hậu quả kỹ thuật nào sẽ xảy ra?",
+    "question": "Trong chiến lược quản lý năng lượng EPS, nếu chương trình bay duy trì cấp nguồn liên tục cho toàn bộ cụm cảm biến (`eps.setBuckState(true)`) ngay cả khi không có lịch đo đạc, hậu quả kỹ thuật nào sẽ xảy ra?",
+    "Question": "Trong chiến lược quản lý năng lượng EPS, nếu chương trình bay duy trì cấp nguồn liên tục cho toàn bộ cụm cảm biến (`eps.setBuckState(true)`) ngay cả khi không có lịch đo đạc, hậu quả kỹ thuật nào sẽ xảy ra?",
     "options": [
-      "Gây quá áp làm cháy vi điều khiển trung tâm ESP32",
-      "Cảm biến nhận điện liên tục gây hao pin pha tối",
-      "Khiến vi mạch quản lý sạc pin ngừng hoạt động",
-      "Phân vùng dữ liệu bộ nhớ flash trên bo bị mất"
+      "Cảm biến sẽ bị tăng gấp đôi độ phân giải đo",
+      "Cụm cảm biến tiêu thụ điện năng liên tục và làm cạn kiệt năng lượng pin dự trữ của vệ tinh trong thời kỳ bay vào vùng bóng tối Trái Đất (Eclipse)",
+      "Tốc độ xử lý của vi điều khiển OBC bị giảm một nửa",
+      "Module viễn thông LoRa tự động chuyển sang chế độ truyền dữ liệu tốc độ cao"
     ],
-    "Option_A": "Gây quá áp làm cháy vi điều khiển trung tâm ESP32",
-    "Option_B": "Cảm biến nhận điện liên tục gây hao pin pha tối",
-    "Option_C": "Khiến vi mạch quản lý sạc pin ngừng hoạt động",
-    "Option_D": "Phân vùng dữ liệu bộ nhớ flash trên bo bị mất",
+    "Option_A": "Cảm biến sẽ bị tăng gấp đôi độ phân giải đo",
+    "Option_B": "Cụm cảm biến tiêu thụ điện năng liên tục và làm cạn kiệt năng lượng pin dự trữ của vệ tinh trong thời kỳ bay vào vùng bóng tối Trái Đất (Eclipse)",
+    "Option_C": "Tốc độ xử lý của vi điều khiển OBC bị giảm một nửa",
+    "Option_D": "Module viễn thông LoRa tự động chuyển sang chế độ truyền dữ liệu tốc độ cao",
     "answer": "B",
     "Answer": "B",
-    "explanation": "Xuất mức 0 liên tục làm mạch hạ áp luôn mở, cụm cảm biến tiêu thụ điện liên tục khiến pin nhanh cạn kiệt khi không có ánh sáng Mặt Trời.",
-    "Explanation": "Xuất mức 0 liên tục làm mạch hạ áp luôn mở, cụm cảm biến tiêu thụ điện liên tục khiến pin nhanh cạn kiệt khi không có ánh sáng Mặt Trời."
+    "explanation": "Việc không ngắt nguồn cụm cảm biến khi rảnh rỗi sẽ gây thất thoát năng lượng dự trữ, khiến pin vệ tinh nhanh chóng cạn kiệt trong thời kỳ bóng tối (Eclipse) khi pin Mặt Trời không sản sinh ra điện năng.",
+    "Explanation": "Việc không ngắt nguồn cụm cảm biến khi rảnh rỗi sẽ gây thất thoát năng lượng dự trữ, khiến pin vệ tinh nhanh chóng cạn kiệt trong thời kỳ bóng tối (Eclipse) khi pin Mặt Trời không sản sinh ra điện năng."
   },
   {
-    "id": 191,
-    "ID": "191",
+    "id": 186,
+    "ID": "186",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -4464,8 +4464,8 @@
     "Explanation": "Cơ chế hàng đợi dịch phần tử bảo đảm mảng luôn chứa đúng 10 mẫu đo gần nhất của hệ thống."
   },
   {
-    "id": 192,
-    "ID": "192",
+    "id": 187,
+    "ID": "187",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -4488,8 +4488,8 @@
     "Explanation": "Tính tổng các phần tử trong mảng rồi chia cho số lượng phần tử là giải thuật chuẩn xác để tính giá trị trung bình trượt."
   },
   {
-    "id": 193,
-    "ID": "193",
+    "id": 188,
+    "ID": "188",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -4512,8 +4512,8 @@
     "Explanation": "Lọc trung bình trượt đóng vai trò như một bộ lọc thông thấp số, loại bỏ các gai sụt áp cục bộ khi phụ tải bật tắt."
   },
   {
-    "id": 194,
-    "ID": "194",
+    "id": 189,
+    "ID": "189",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -4536,8 +4536,8 @@
     "Explanation": "Ví dụ: Ngắt tải khi áp tụt dưới 3.3V, nhưng chỉ bật lại tải khi áp đã sạc hồi phục vượt trên 3.6V."
   },
   {
-    "id": 195,
-    "ID": "195",
+    "id": 190,
+    "ID": "190",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -4560,32 +4560,32 @@
     "Explanation": "Khoảng trễ 0.3V giữa ngưỡng ngắt (3.3V) và ngưỡng phục hồi (3.6V) loại bỏ hoàn toàn hiện tượng dao động lật trạng thái liên tục."
   },
   {
-    "id": 196,
-    "ID": "196",
+    "id": 191,
+    "ID": "191",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
     "Section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
-    "question": "Trạng thái khởi tạo an toàn nhất cho chân GPIO 4 trong hàm setup() ngay khi vệ tinh vừa khởi động nguồn là gì?",
-    "Question": "Trạng thái khởi tạo an toàn nhất cho chân GPIO 4 trong hàm setup() ngay khi vệ tinh vừa khởi động nguồn là gì?",
+    "question": "Trạng thái khởi tạo an toàn nhất cho phân hệ cấp nguồn cảm biến phụ tải trong hàm `setup()` ngay khi vệ tinh vừa khởi động lại là gì?",
+    "Question": "Trạng thái khởi tạo an toàn nhất cho phân hệ cấp nguồn cảm biến phụ tải trong hàm `setup()` ngay khi vệ tinh vừa khởi động lại là gì?",
     "options": [
-      "Cấu hình chân là OUTPUT và xuất ngay mức 0 (LOW)",
-      "Cấu hình OUTPUT và xuất mức 1 ngắt mạch hạ áp",
-      "Cấu hình chân là INPUT_PULLDOWN để nhận tín hiệu",
-      "Để mặc định không cần khởi tạo chân điều khiển"
+      "Lập tức cấp nguồn tối đa cho toàn bộ các thiết bị cảm biến và động cơ cùng lúc",
+      "Khởi tạo ở trạng thái ngắt nguồn phụ tải (`eps.setBuckState(false)`) để bảo đảm dòng khởi động an toàn, tránh sụt áp đột ngột (Brownout) khi hệ thống vừa bật",
+      "Bật/tắt liên tục công tắc nguồn với tần số 100 kHz",
+      "Khởi tạo ở chế độ phát xung PWM điều chỉnh điện áp"
     ],
-    "Option_A": "Cấu hình chân là OUTPUT và xuất ngay mức 0 (LOW)",
-    "Option_B": "Cấu hình OUTPUT và xuất mức 1 ngắt mạch hạ áp",
-    "Option_C": "Cấu hình chân là INPUT_PULLDOWN để nhận tín hiệu",
-    "Option_D": "Để mặc định không cần khởi tạo chân điều khiển",
+    "Option_A": "Lập tức cấp nguồn tối đa cho toàn bộ các thiết bị cảm biến và động cơ cùng lúc",
+    "Option_B": "Khởi tạo ở trạng thái ngắt nguồn phụ tải (`eps.setBuckState(false)`) để bảo đảm dòng khởi động an toàn, tránh sụt áp đột ngột (Brownout) khi hệ thống vừa bật",
+    "Option_C": "Bật/tắt liên tục công tắc nguồn với tần số 100 kHz",
+    "Option_D": "Khởi tạo ở chế độ phát xung PWM điều chỉnh điện áp",
     "answer": "B",
     "Answer": "B",
-    "explanation": "Khởi tạo mức 1 (HIGH) bảo đảm mạch hạ áp ngắt điện ngay từ đầu, tránh sụt áp đột ngột (Brownout) khi toàn hệ thống đang khởi động.",
-    "Explanation": "Khởi tạo mức 1 (HIGH) bảo đảm mạch hạ áp ngắt điện ngay từ đầu, tránh sụt áp đột ngột (Brownout) khi toàn hệ thống đang khởi động."
+    "explanation": "Khởi tạo ở trạng thái ngắt phụ tải giúp giảm thiểu dòng khởi động đỉnh (Inrush Current), ngăn ngừa sụt áp nguồn cấp (Brownout Reset) trong lúc vi điều khiển và các khối chức năng lõi đang ổn định.",
+    "Explanation": "Khởi tạo ở trạng thái ngắt phụ tải giúp giảm thiểu dòng khởi động đỉnh (Inrush Current), ngăn ngừa sụt áp nguồn cấp (Brownout Reset) trong lúc vi điều khiển và các khối chức năng lõi đang ổn định."
   },
   {
-    "id": 198,
-    "ID": "198",
+    "id": 192,
+    "ID": "192",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -4608,8 +4608,8 @@
     "Explanation": "Toán tử XOR bit (`^=`) tích lũy qua từng byte trong mảng dữ liệu tạo ra mã kiểm tra tính toàn vẹn gói tin gọn nhẹ."
   },
   {
-    "id": 199,
-    "ID": "199",
+    "id": 193,
+    "ID": "193",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -4632,8 +4632,8 @@
     "Explanation": "Cơ chế assert bắt các lỗi suy biến dữ liệu nghiêm trọng ngay trong pha thử nghiệm tích hợp trước khi phóng."
   },
   {
-    "id": 200,
-    "ID": "200",
+    "id": 194,
+    "ID": "194",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 3: Lập trình C++ Đọc Dung lượng Pin & Quản lý Tiết kiệm Năng lượng",
@@ -4656,8 +4656,8 @@
     "Explanation": "Định hình mức logic dứt khoát cho các chân điều khiển nguồn ngay khi khởi động ngăn ngừa sốc dòng và bảo đảm an toàn hệ thống."
   },
   {
-    "id": 201,
-    "ID": "201",
+    "id": 195,
+    "ID": "195",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 1: Tổng quan phân hệ EPS & Chu trình Nguồn Vệ tinh",
@@ -4680,8 +4680,8 @@
     "Explanation": "Để duy trì hoạt động lâu dài trên quỹ đạo, điện năng do pin mặt trời tạo ra trong pha sáng phải lớn hơn tổng điện năng toàn bộ vệ tinh tiêu thụ trong cả pha sáng lẫn pha tối."
   },
   {
-    "id": 202,
-    "ID": "202",
+    "id": 196,
+    "ID": "196",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 1: Tổng quan phân hệ EPS & Chu trình Nguồn Vệ tinh",
@@ -4704,8 +4704,8 @@
     "Explanation": "Pin dán thân trên cả 6 mặt giúp CubeSat luôn có bề mặt đón nhận bức xạ mặt trời ngay cả khi vệ tinh bị quay mất kiểm soát (tumbling) hoặc hệ thống ADCS bị hỏng."
   },
   {
-    "id": 203,
-    "ID": "203",
+    "id": 197,
+    "ID": "197",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 1: Tổng quan phân hệ EPS & Chu trình Nguồn Vệ tinh",
@@ -4728,8 +4728,8 @@
     "Explanation": "Cánh pin mặt trời bung xòe có diện tích lớn nhưng đòi hỏi hệ thống định hướng tư thế (ADCS) phải hoạt động chính xác để hướng bề mặt pin vuông góc với tia nắng."
   },
   {
-    "id": 204,
-    "ID": "204",
+    "id": 198,
+    "ID": "198",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 1: Tổng quan phân hệ EPS & Chu trình Nguồn Vệ tinh",
@@ -4752,8 +4752,8 @@
     "Explanation": "Lực đẩy của lò xo trong ống phóng POD luôn tạo ra một mô-men quay ban đầu khiến CubeSat bị quay đảo tự do (Tumbling) với tốc độ góc nhất định."
   },
   {
-    "id": 205,
-    "ID": "205",
+    "id": 199,
+    "ID": "199",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 1: Tổng quan phân hệ EPS & Chu trình Nguồn Vệ tinh",
@@ -4776,8 +4776,8 @@
     "Explanation": "Quy tắc Net-Positive Power trong Safe Mode yêu cầu cắt bỏ mọi tải ngoại vi không thiết yếu, sao cho dòng điện sạc từ pin mặt trời luôn bù đắp được dòng tiêu thụ cơ bản."
   },
   {
-    "id": 206,
-    "ID": "206",
+    "id": 200,
+    "ID": "200",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 1: Tổng quan phân hệ EPS & Chu trình Nguồn Vệ tinh",
@@ -4800,8 +4800,8 @@
     "Explanation": "Trong mỗi quỹ đạo LEO (khoảng 90 phút có 35 phút bóng tối), giới hạn DoD dưới 30% giúp các tế bào pin Lithium duy trì hàng ngàn chu kỳ nạp xả mà không bị suy thoái dung lượng."
   },
   {
-    "id": 207,
-    "ID": "207",
+    "id": 201,
+    "ID": "201",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 1: Tổng quan phân hệ EPS & Chu trình Nguồn Vệ tinh",
@@ -4824,8 +4824,8 @@
     "Explanation": "Khi điện áp tế bào pin Li-ion giảm xuống dưới ngưỡng an toàn (thường là 3.0V - 3.2V), mạch ngắt hạ áp sẽ ngắt nguồn tải để tránh hiện tượng phân rã điện cực không thể phục hồi."
   },
   {
-    "id": 208,
-    "ID": "208",
+    "id": 202,
+    "ID": "202",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 1: Tổng quan phân hệ EPS & Chu trình Nguồn Vệ tinh",
@@ -4848,8 +4848,8 @@
     "Explanation": "MPPT liên tục điều chỉnh trở kháng tải để tế bào quang điện luôn vận hành tại điểm cực đại trên đường đặc tính P-V dưới sự thay đổi liên tục của ánh sáng và nhiệt độ."
   },
   {
-    "id": 209,
-    "ID": "209",
+    "id": 203,
+    "ID": "203",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 1: Tổng quan phân hệ EPS & Chu trình Nguồn Vệ tinh",
@@ -4872,8 +4872,8 @@
     "Explanation": "Áp suất chân không vũ trụ kết hợp với nhiệt độ cao khiến dung dịch điện phân dạng lỏng trong pin có xu hướng giãn nở, phồng túi và tiềm ẩn nguy cơ nổ phá hủy vệ tinh."
   },
   {
-    "id": 210,
-    "ID": "210",
+    "id": 204,
+    "ID": "204",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 1: Tổng quan phân hệ EPS & Chu trình Nguồn Vệ tinh",
@@ -4896,8 +4896,8 @@
     "Explanation": "Trong vùng tối không có ánh sáng, nhiệt độ có thể giảm sâu dưới 0 độ C; mạch điều khiển sẽ kích hoạt điện trở nhiệt (Heater) để giữ nhiệt độ pin trong dải an toàn (0 - 45 độ C)."
   },
   {
-    "id": 211,
-    "ID": "211",
+    "id": 205,
+    "ID": "205",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 1: Tổng quan phân hệ EPS & Chu trình Nguồn Vệ tinh",
@@ -4920,8 +4920,8 @@
     "Explanation": "Chốt RBF là cầu nối ngắt điện vật lý. Trong suốt quá trình tích hợp, thử nghiệm mặt đất và vận chuyển, chốt được cắm để ngăn vệ tinh vô tình khởi động ngoài ý muốn."
   },
   {
-    "id": 212,
-    "ID": "212",
+    "id": 206,
+    "ID": "206",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 1: Tổng quan phân hệ EPS & Chu trình Nguồn Vệ tinh",
@@ -4944,8 +4944,8 @@
     "Explanation": "Khi còn nằm trong ống phóng POD, công tắc hành trình bị nén giữ ở trạng thái hở mạch; ngay khi trượt ra ngoài không gian, công tắc bung ra đóng mạch cấp nguồn cho vệ tinh."
   },
   {
-    "id": 213,
-    "ID": "213",
+    "id": 207,
+    "ID": "207",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 1: Tổng quan phân hệ EPS & Chu trình Nguồn Vệ tinh",
@@ -4968,8 +4968,8 @@
     "Explanation": "Quy định an toàn của các nhà cung cấp phóng (như NASA, JAXA) yêu cầu vệ tinh giữ im lặng tuyệt đối tối thiểu 30 phút sau khi tách để không ảnh hưởng đến tên lửa và các vệ tinh khác."
   },
   {
-    "id": 214,
-    "ID": "214",
+    "id": 208,
+    "ID": "208",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 1: Tổng quan phân hệ EPS & Chu trình Nguồn Vệ tinh",
@@ -4992,8 +4992,8 @@
     "Explanation": "Hầu hết các linh kiện vi điều khiển, cảm biến và mô-đun truyền thông CubeSat hoạt động trên hai mức nguồn chuẩn ổn áp là 3.3V và 5.0V (cùng với đường pin thô Unregulated Bus)."
   },
   {
-    "id": 215,
-    "ID": "215",
+    "id": 209,
+    "ID": "209",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 1: Tổng quan phân hệ EPS & Chu trình Nguồn Vệ tinh",
@@ -5016,8 +5016,8 @@
     "Explanation": "Cầu chì polymer nhiệt PTC (Polymeric Positive Temperature Coefficient) tăng vọt trở kháng khi dòng quá mức làm nóng nó; khi ngắt sự cố và nguội đi, nó tự động dẫn điện trở lại."
   },
   {
-    "id": 216,
-    "ID": "216",
+    "id": 210,
+    "ID": "210",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 1: Tổng quan phân hệ EPS & Chu trình Nguồn Vệ tinh",
@@ -5040,8 +5040,8 @@
     "Explanation": "Khi đóng điện cho các tải dung kháng lớn, dòng Inrush có thể làm sụt áp đường 3.3V xuống dưới ngưỡng Brownout Reset của CPU, khiến vi điều khiển bị khởi động lại liên tục."
   },
   {
-    "id": 217,
-    "ID": "217",
+    "id": 211,
+    "ID": "211",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 1: Tổng quan phân hệ EPS & Chu trình Nguồn Vệ tinh",
@@ -5064,8 +5064,8 @@
     "Explanation": "Điện áp pin, dòng sạc từ pin mặt trời, dòng tiêu thụ của các phân hệ và nhiệt độ pin là những dữ liệu sống còn phản ánh tình trạng sức khỏe cốt lõi của vệ tinh."
   },
   {
-    "id": 218,
-    "ID": "218",
+    "id": 212,
+    "ID": "212",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 1: Tổng quan phân hệ EPS & Chu trình Nguồn Vệ tinh",
@@ -5088,8 +5088,8 @@
     "Explanation": "Các tấm pin mặt trời chuyên dụng cho không gian thường dùng công nghệ Triple-Junction InGaP/GaAs/Ge đạt hiệu suất chuyển đổi quang năng trên 30% trong điều kiện chiếu sáng AM0."
   },
   {
-    "id": 219,
-    "ID": "219",
+    "id": 213,
+    "ID": "213",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 1: Tổng quan phân hệ EPS & Chu trình Nguồn Vệ tinh",
@@ -5112,8 +5112,8 @@
     "Explanation": "Khi đi vào vùng tối Trái Đất (Eclipse), điện áp tấm pin mặt trời bằng 0; nếu không có Blocking Diode, pin sạc sẽ xả ngược dòng điện qua pin mặt trời gây lãng phí và nóng hỏng."
   },
   {
-    "id": 220,
-    "ID": "220",
+    "id": 214,
+    "ID": "214",
     "lab": 2,
     "Lab": "Lab 2: Phân hệ Năng lượng (EPS) & Tiết kiệm Pin",
     "section": "Phần 1: Tổng quan phân hệ EPS & Chu trình Nguồn Vệ tinh",

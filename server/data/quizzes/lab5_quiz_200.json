@@ -3585,14 +3585,14 @@
     "question": "Đoạn mã C++ nào sau đây định dạng một gói phản hồi ACK gọn nhẹ gửi ngược về cho bên phát:",
     "Question": "Đoạn mã C++ nào sau đây định dạng một gói phản hồi ACK gọn nhẹ gửi ngược về cho bên phát:",
     "options": [
-      "Gửi chuỗi ký tự ASCII \"ACK\" qua cổng nối tiếp",
+      "Gửi chuỗi ký tự ASCII ACK qua cổng nối tiếp",
       "Gửi mảng byte nhị phân của cấu trúc struct ACK qua Serial.write()",
-      "Gửi chuỗi ký tự xác nhận \"OK\" kèm ngắt dòng qua Serial.print()",
+      "Gửi chuỗi ký tự xác nhận OK kèm ngắt dòng qua Serial.print()",
       "Gửi một byte nhị phân đơn lẻ giá trị 1 biểu thị thành công"
     ],
-    "Option_A": "Gửi chuỗi ký tự ASCII \"ACK\" qua cổng nối tiếp",
+    "Option_A": "Gửi chuỗi ký tự ASCII ACK qua cổng nối tiếp",
     "Option_B": "Gửi mảng byte nhị phân của cấu trúc struct ACK qua Serial.write()",
-    "Option_C": "Gửi chuỗi ký tự xác nhận \"OK\" kèm ngắt dòng qua Serial.print()",
+    "Option_C": "Gửi chuỗi ký tự xác nhận OK kèm ngắt dòng qua Serial.print()",
     "Option_D": "Gửi một byte nhị phân đơn lẻ giá trị 1 biểu thị thành công",
     "answer": "B",
     "Answer": "B",
@@ -4355,12 +4355,12 @@
     "options": [
       "Tạo gói tin kiểu PKT_PING, gán mốc thời gian millis() hiện tại và phát đi",
       "Tạo gói tin kiểu PKT_PING kèm khoảng trễ delay(100) trước khi gửi",
-      "Gửi chuỗi văn bản ASCII \"PING\" đơn giản ra cổng nối tiếp",
+      "Gửi chuỗi văn bản ASCII PING đơn giản ra cổng nối tiếp",
       "Chờ đợi 100 mili-giây rồi mới kích hoạt phát bản tin kiểm tra kết nối"
     ],
     "Option_A": "Tạo gói tin kiểu PKT_PING, gán mốc thời gian millis() hiện tại và phát đi",
     "Option_B": "Tạo gói tin kiểu PKT_PING kèm khoảng trễ delay(100) trước khi gửi",
-    "Option_C": "Gửi chuỗi văn bản ASCII \"PING\" đơn giản ra cổng nối tiếp",
+    "Option_C": "Gửi chuỗi văn bản ASCII PING đơn giản ra cổng nối tiếp",
     "Option_D": "Chờ đợi 100 mili-giây rồi mới kích hoạt phát bản tin kiểm tra kết nối",
     "answer": "A",
     "Answer": "A",
@@ -4377,12 +4377,12 @@
     "question": "Đoạn mã C++ nào sau đây xử lý gói tin PING nhận được và gửi dội ngược lại bản tin PONG:",
     "Question": "Đoạn mã C++ nào sau đây xử lý gói tin PING nhận được và gửi dội ngược lại bản tin PONG:",
     "options": [
-      "In chuỗi văn bản \"PING\" ra cổng nối tiếp của trạm điều hành",
+      "In chuỗi văn bản PING ra cổng nối tiếp của trạm điều hành",
       "Đóng gói phản hồi PKT_PONG mang nguyên mốc thời gian nhận được từ gói PING",
       "Đổi trường loại gói tin từ PING thành PONG ngay trên chính gói nhận",
       "Chờ khoảng trễ 100 mili-giây rồi phát gói ngẫu nhiên không có dữ liệu"
     ],
-    "Option_A": "In chuỗi văn bản \"PING\" ra cổng nối tiếp của trạm điều hành",
+    "Option_A": "In chuỗi văn bản PING ra cổng nối tiếp của trạm điều hành",
     "Option_B": "Đóng gói phản hồi PKT_PONG mang nguyên mốc thời gian nhận được từ gói PING",
     "Option_C": "Đổi trường loại gói tin từ PING thành PONG ngay trên chính gói nhận",
     "Option_D": "Chờ khoảng trễ 100 mili-giây rồi phát gói ngẫu nhiên không có dữ liệu",
@@ -4392,8 +4392,8 @@
     "Explanation": "Bản tin PONG phản hồi tức thời cung cấp số liệu đo đạc chất lượng và độ sẵn sàng của kênh liên lạc vô tuyến."
   },
   {
-    "id": 185,
-    "ID": "185",
+    "id": 184,
+    "ID": "184",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 3: Lập trình C++ Đóng gói Khung tin, Bắt tay ARQ & Phân mảnh Dữ liệu",
@@ -4416,8 +4416,8 @@
     "Explanation": "Dịch trượt từng byte (Sliding Window Byte-by-Byte Search) là phương pháp chuẩn để tái đồng bộ luồng dữ liệu nhị phân khi bị mất khung."
   },
   {
-    "id": 186,
-    "ID": "186",
+    "id": 185,
+    "ID": "185",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 3: Lập trình C++ Đóng gói Khung tin, Bắt tay ARQ & Phân mảnh Dữ liệu",
@@ -4440,8 +4440,8 @@
     "Explanation": "Cả hàm memcpy và strcpy (có kiểm soát độ dài) đều sao chép an toàn chuỗi ký tự vào mảng bộ đệm payload của gói tin nhị phân."
   },
   {
-    "id": 187,
-    "ID": "187",
+    "id": 186,
+    "ID": "186",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 3: Lập trình C++ Đóng gói Khung tin, Bắt tay ARQ & Phân mảnh Dữ liệu",
@@ -4464,8 +4464,8 @@
     "Explanation": "Mã định danh loại gói (Packet Type Identifier) phân tách các dịch vụ tầng ứng dụng khác nhau trên cùng một tuyến truyền dẫn."
   },
   {
-    "id": 188,
-    "ID": "188",
+    "id": 187,
+    "ID": "187",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 3: Lập trình C++ Đóng gói Khung tin, Bắt tay ARQ & Phân mảnh Dữ liệu",
@@ -4488,8 +4488,8 @@
     "Explanation": "Cấu trúc switch-case điều hướng linh hoạt các loại bản tin khác nhau đến đúng hàm nghiệp vụ tương ứng."
   },
   {
-    "id": 189,
-    "ID": "189",
+    "id": 188,
+    "ID": "188",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 3: Lập trình C++ Đóng gói Khung tin, Bắt tay ARQ & Phân mảnh Dữ liệu",
@@ -4512,8 +4512,8 @@
     "Explanation": "Dành cửa sổ thời gian tĩnh cho chiều Uplink bảo đảm trạm mặt đất luôn có cơ hội chèn viễn lệnh điều khiển vào vệ tinh."
   },
   {
-    "id": 190,
-    "ID": "190",
+    "id": 189,
+    "ID": "189",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 3: Lập trình C++ Đóng gói Khung tin, Bắt tay ARQ & Phân mảnh Dữ liệu",
@@ -4536,8 +4536,8 @@
     "Explanation": "Chuỗi byte cấu hình chuẩn gửi ở Mode 3 để ghi vĩnh viễn các thông số UART và vô tuyến vào bộ nhớ của module."
   },
   {
-    "id": 192,
-    "ID": "192",
+    "id": 190,
+    "ID": "190",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 3: Lập trình C++ Đóng gói Khung tin, Bắt tay ARQ & Phân mảnh Dữ liệu",
@@ -4560,8 +4560,8 @@
     "Explanation": "Kiểm tra khớp số thứ tự `ackedSeq` bảo đảm gói xác nhận thực sự là của gói vừa gửi, tránh nhầm lẫn với các gói ACK đến muộn của các gói cũ."
   },
   {
-    "id": 193,
-    "ID": "193",
+    "id": 191,
+    "ID": "191",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 3: Lập trình C++ Đóng gói Khung tin, Bắt tay ARQ & Phân mảnh Dữ liệu",
@@ -4584,8 +4584,8 @@
     "Explanation": "Kiểm tra tính toàn vẹn của mã mở đầu tệp SOI (Start Of Image) ngay tại gói mảnh số 0 ngăn chặn việc ghi dữ liệu hỏng xuống thẻ nhớ."
   },
   {
-    "id": 194,
-    "ID": "194",
+    "id": 192,
+    "ID": "192",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 3: Lập trình C++ Đóng gói Khung tin, Bắt tay ARQ & Phân mảnh Dữ liệu",
@@ -4608,8 +4608,8 @@
     "Explanation": "Số nguyên không dấu trong C++ tự động quay vòng khi tràn số mà không sinh ngoại lệ; thuật toán so sánh trượt phải tính đến hiện tượng quay vòng này."
   },
   {
-    "id": 195,
-    "ID": "195",
+    "id": 193,
+    "ID": "193",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 3: Lập trình C++ Đóng gói Khung tin, Bắt tay ARQ & Phân mảnh Dữ liệu",
@@ -4632,8 +4632,8 @@
     "Explanation": "Phép trừ trên số nguyên không dấu 16-bit tự động bù hai và bảo toàn khoảng cách tương đối chính xác ngay cả khi biến bị tràn số quay vòng."
   },
   {
-    "id": 196,
-    "ID": "196",
+    "id": 194,
+    "ID": "194",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 3: Lập trình C++ Đóng gói Khung tin, Bắt tay ARQ & Phân mảnh Dữ liệu",
@@ -4656,8 +4656,8 @@
     "Explanation": "Công thức: $\\text{Goodput (kbps)} = (\\text{Bytes} \\times 8) / (\\text{Time}_{ms})$ cho biết lượng thông tin người dùng thực tế được truyền đi mỗi giây."
   },
   {
-    "id": 198,
-    "ID": "198",
+    "id": 195,
+    "ID": "195",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 3: Lập trình C++ Đóng gói Khung tin, Bắt tay ARQ & Phân mảnh Dữ liệu",
@@ -4680,8 +4680,8 @@
     "Explanation": "Mỗi bit trong trường `uint64_t mask` biểu thị trạng thái thiếu của 64 gói tin liên tiếp kể từ `baseSeq`, nén danh sách lỗi cực kỳ gọn nhẹ."
   },
   {
-    "id": 199,
-    "ID": "199",
+    "id": 196,
+    "ID": "196",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 3: Lập trình C++ Đóng gói Khung tin, Bắt tay ARQ & Phân mảnh Dữ liệu",
@@ -4704,8 +4704,8 @@
     "Explanation": "Phép toán dịch bit và AND với mặt nạ nhị phân 64-bit cho phép tra cứu trạng thái thiếu của từng gói tin trong tích tắc."
   },
   {
-    "id": 200,
-    "ID": "200",
+    "id": 197,
+    "ID": "197",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 3: Lập trình C++ Đóng gói Khung tin, Bắt tay ARQ & Phân mảnh Dữ liệu",
@@ -4728,8 +4728,8 @@
     "Explanation": "Đọc mẫu nhiễu nhiệt điện từ tại chân ADC trôi nổi (như GPIO 36) cung cấp nguồn entropy vật lý ngẫu nhiên để khởi tạo bộ sinh số ngẫu nhiên."
   },
   {
-    "id": 201,
-    "ID": "201",
+    "id": 198,
+    "ID": "198",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 1: Tổng quan phân hệ COM & Giao thức Không gian",
@@ -4752,8 +4752,8 @@
     "Explanation": "Ở độ cao LEO khoảng 400 - 600 km, chu kỳ quỹ đạo của vệ tinh là khoảng 90 đến 96 phút, tương đương với 14 đến 16 vòng quay quanh Trái Đất trong 24 giờ."
   },
   {
-    "id": 202,
-    "ID": "202",
+    "id": 199,
+    "ID": "199",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 1: Tổng quan phân hệ COM & Giao thức Không gian",
@@ -4776,8 +4776,8 @@
     "Explanation": "Do chuyển động tương đối nhanh ở quỹ đạo thấp, cửa sổ liên lạc trực tiếp (Line-of-Sight) của vệ tinh với một trạm mặt đất chỉ kéo dài khoảng 10 đến 12 phút mỗi pass."
   },
   {
-    "id": 203,
-    "ID": "203",
+    "id": 200,
+    "ID": "200",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 1: Tổng quan phân hệ COM & Giao thức Không gian",
@@ -4800,8 +4800,8 @@
     "Explanation": "Một trạm mặt đất thường chỉ đón được khoảng 4 phiên bay thuận lợi mỗi ngày (mỗi phiên ~10-12 phút), tổng thời gian tiếp xúc thực tế chỉ khoảng 40 đến 48 phút/ngày."
   },
   {
-    "id": 204,
-    "ID": "204",
+    "id": 201,
+    "ID": "201",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 1: Tổng quan phân hệ COM & Giao thức Không gian",
@@ -4824,8 +4824,8 @@
     "Explanation": "Bộ tham số TLE chứa 2 dòng dữ liệu mô tả các yếu tố quỹ đạo Keplerian tại một thời điểm, giúp phần mềm mặt đất (như Gpredict) tính góc Azimuth/Elevation để quay anten đón bắt vệ tinh."
   },
   {
-    "id": 205,
-    "ID": "205",
+    "id": 202,
+    "ID": "202",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 1: Tổng quan phân hệ COM & Giao thức Không gian",
@@ -4848,8 +4848,8 @@
     "Explanation": "Vệ tinh LEO bay với vận tốc khoảng 7.5 km/s, khiến tần số sóng vô tuyến thu được bị dịch cao hơn khi vệ tinh tiến lại gần (AOS) và dịch thấp hơn khi rời xa (LOS)."
   },
   {
-    "id": 206,
-    "ID": "206",
+    "id": 203,
+    "ID": "203",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 1: Tổng quan phân hệ COM & Giao thức Không gian",
@@ -4872,8 +4872,8 @@
     "Explanation": "Phần mềm điều khiển trạm mặt đất liên tục tính toán độ lệch Doppler và điều khiển máy thu phát SDR bù trừ tần số thời gian thực (Programmed Doppler Control) để không bị mất khóa tín hiệu."
   },
   {
-    "id": 207,
-    "ID": "207",
+    "id": 204,
+    "ID": "204",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 1: Tổng quan phân hệ COM & Giao thức Không gian",
@@ -4896,8 +4896,8 @@
     "Explanation": "Link Budget tính toán tổng đại số của công suất phát, độ lợi anten, suy hao không gian tự do (FSPL) và độ nhạy máy thu để đảm bảo tỉ số tín hiệu trên tạp âm (SNR) đạt yêu cầu giải mã."
   },
   {
-    "id": 208,
-    "ID": "208",
+    "id": 205,
+    "ID": "205",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 1: Tổng quan phân hệ COM & Giao thức Không gian",
@@ -4920,8 +4920,8 @@
     "Explanation": "Bước sóng VHF/UHF khá dài (~70cm ở UHF) nên anten dài hàng chục centimet, bắt buộc phải cuộn gọn bằng dây cước và dùng điện trở đốt đứt dây để bung anten sau khi rời tên lửa."
   },
   {
-    "id": 209,
-    "ID": "209",
+    "id": 206,
+    "ID": "206",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 1: Tổng quan phân hệ COM & Giao thức Không gian",
@@ -4944,8 +4944,8 @@
     "Explanation": "Ở tần số GHz (S-band, X-band), bước sóng ngắn cho phép thiết kế anten dạng tấm phẳng mỏng (Patch) dán cố định trên bề mặt CubeSat, loại bỏ hoàn toàn rủi ro kẹt cơ cấu bung mở."
   },
   {
-    "id": 210,
-    "ID": "210",
+    "id": 207,
+    "ID": "207",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 1: Tổng quan phân hệ COM & Giao thức Không gian",
@@ -4968,8 +4968,8 @@
     "Explanation": "Anten mảng Yagi-Uda cung cấp độ lợi định hướng tốt (12-16 dBi), góc mở chùm sóng vừa phải dễ bám bám theo vệ tinh LEO bằng các bộ xoay Azimuth/Elevation giá rẻ."
   },
   {
-    "id": 211,
-    "ID": "211",
+    "id": 208,
+    "ID": "208",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 1: Tổng quan phân hệ COM & Giao thức Không gian",
@@ -4992,8 +4992,8 @@
     "Explanation": "Chảo parabol hội tụ sóng điện từ bước sóng ngắn (S/X-band) tạo độ lợi rất cao (trên 30 dBi), cần thiết để thu các luồng dữ liệu tốc độ cao (Mbps) từ vệ tinh nhỏ."
   },
   {
-    "id": 212,
-    "ID": "212",
+    "id": 209,
+    "ID": "209",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 1: Tổng quan phân hệ COM & Giao thức Không gian",
@@ -5016,32 +5016,32 @@
     "Explanation": "CW Beacon phát sóng liên tục bật/tắt (OOK) mã Morse công suất chỉ vài trăm mili-watt; tín hiệu này rất dễ thu và giải mã bằng tai ngay cả khi tỉ số SNR cực thấp."
   },
   {
-    "id": 213,
-    "ID": "213",
+    "id": 210,
+    "ID": "210",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 1: Tổng quan phân hệ COM & Giao thức Không gian",
     "Section": "Phần 1: Tổng quan phân hệ COM & Giao thức Không gian",
-    "question": "Tại sao việc khảo sát và triệt tiêu nhiễu điện từ nội bộ (EMI) cực kỳ quan trọng trên vệ tinh?",
-    "Question": "Tại sao việc khảo sát và triệt tiêu nhiễu điện từ nội bộ (EMI) cực kỳ quan trọng trên vệ tinh?",
+    "question": "Để cấu hình các tham số hoạt động (tần số, công suất, tốc độ truyền) cho module LoRa E32 / AS32 bằng Trang Web Cấu Hình PTITCube RF Configurator, module cần được thiết lập ở trạng thái phần cứng nào?",
+    "Question": "Để cấu hình các tham số hoạt động (tần số, công suất, tốc độ truyền) cho module LoRa E32 / AS32 bằng Trang Web Cấu Hình PTITCube RF Configurator, module cần được thiết lập ở trạng thái phần cứng nào?",
     "options": [
-      "Nhiễu từ nguồn xung hoặc camera có thể làm điếc máy thu lệnh của phân hệ COM",
-      "Nhiễu điện từ làm tăng trọng lượng bản thân của các bảng mạch in trên bo",
-      "Nhiễu làm thay đổi góc nghiêng quỹ đạo bay của vệ tinh quanh Trái Đất",
-      "Nhiễu làm giảm tốc độ quay của Trái Đất quanh trục tự nhiên của nó"
+      "Đưa module về chế độ Cấu hình/Ngủ (Mode 3: M0 = HIGH, M1 = HIGH) và kết nối qua cổng nối tiếp ở tốc độ 9600 bps",
+      "Đưa module về chế độ bình thường (Mode 0: M0 = LOW, M1 = LOW) và truyền ở tốc độ 115200 bps",
+      "Tháo anten và nối tắt chân M0 xuống GND",
+      "Ngắt chân nguồn VCC và cấp điện trực tiếp vào chân AUX"
     ],
-    "Option_A": "Nhiễu từ nguồn xung hoặc camera có thể làm điếc máy thu lệnh của phân hệ COM",
-    "Option_B": "Nhiễu điện từ làm tăng trọng lượng bản thân của các bảng mạch in trên bo",
-    "Option_C": "Nhiễu làm thay đổi góc nghiêng quỹ đạo bay của vệ tinh quanh Trái Đất",
-    "Option_D": "Nhiễu làm giảm tốc độ quay của Trái Đất quanh trục tự nhiên của nó",
+    "Option_A": "Đưa module về chế độ Cấu hình/Ngủ (Mode 3: M0 = HIGH, M1 = HIGH) và kết nối qua cổng nối tiếp ở tốc độ 9600 bps",
+    "Option_B": "Đưa module về chế độ bình thường (Mode 0: M0 = LOW, M1 = LOW) và truyền ở tốc độ 115200 bps",
+    "Option_C": "Tháo anten và nối tắt chân M0 xuống GND",
+    "Option_D": "Ngắt chân nguồn VCC và cấp điện trực tiếp vào chân AUX",
     "answer": "A",
     "Answer": "A",
-    "explanation": "Các bộ chuyển đổi nguồn DC-DC và bus dữ liệu tốc độ cao phát ra bức xạ điện từ; nếu lọt vào anten hoặc đầu thu COM, nhiễu này sẽ lấn át tín hiệu lệnh yếu ớt từ mặt đất gửi lên.",
-    "Explanation": "Các bộ chuyển đổi nguồn DC-DC và bus dữ liệu tốc độ cao phát ra bức xạ điện từ; nếu lọt vào anten hoặc đầu thu COM, nhiễu này sẽ lấn át tín hiệu lệnh yếu ớt từ mặt đất gửi lên."
+    "explanation": "Để ghi hoặc đọc các thanh ghi thông số trên module LoRa E32/AS32 thông qua Trang Web Cấu Hình (PTITCube RF Configurator), module bắt buộc phải ở Mode 3 (M0 = 1, M1 = 1) và cổng nối tiếp UART giao tiếp ở tốc độ chuẩn định danh 9600 bps.",
+    "Explanation": "Để ghi hoặc đọc các thanh ghi thông số trên module LoRa E32/AS32 thông qua Trang Web Cấu Hình (PTITCube RF Configurator), module bắt buộc phải ở Mode 3 (M0 = 1, M1 = 1) và cổng nối tiếp UART giao tiếp ở tốc độ chuẩn định danh 9600 bps."
   },
   {
-    "id": 214,
-    "ID": "214",
+    "id": 211,
+    "ID": "211",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 1: Tổng quan phân hệ COM & Giao thức Không gian",
@@ -5064,8 +5064,8 @@
     "Explanation": "Việc sử dụng tần số phải được điều phối qua ITU (International Telecommunication Union) và IARU (International Amateur Radio Union) để tránh gây nhiễu cho các mạng viễn thông toàn cầu."
   },
   {
-    "id": 215,
-    "ID": "215",
+    "id": 212,
+    "ID": "212",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 1: Tổng quan phân hệ COM & Giao thức Không gian",
@@ -5088,8 +5088,8 @@
     "Explanation": "FSK (Frequency Shift Keying) đơn giản, tin cậy; trong khi BPSK và QPSK (Phase Shift Keying) cho hiệu quả sử dụng phổ và năng lượng cao (Eb/N0), chuẩn hóa trên CubeSat."
   },
   {
-    "id": 216,
-    "ID": "216",
+    "id": 213,
+    "ID": "213",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 1: Tổng quan phân hệ COM & Giao thức Không gian",
@@ -5112,8 +5112,8 @@
     "Explanation": "Máy phát công suất cao (PA) tiêu thụ dòng điện lớn từ pin và tỏa nhiều nhiệt; trong môi trường chân không không có đối lưu không khí, phát sóng quá lâu sẽ gây quá nhiệt cháy hỏng chip PA."
   },
   {
-    "id": 217,
-    "ID": "217",
+    "id": 214,
+    "ID": "214",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 1: Tổng quan phân hệ COM & Giao thức Không gian",
@@ -5136,8 +5136,8 @@
     "Explanation": "Broadcast Beacon phát tự động định kỳ (ví dụ mỗi 30 hoặc 60 giây), giúp mạng lưới cộng đồng vô tuyến nghiệp dư toàn cầu thu bắt và chuyển tiếp dữ liệu về cho nhóm nghiên cứu."
   },
   {
-    "id": 218,
-    "ID": "218",
+    "id": 215,
+    "ID": "215",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 1: Tổng quan phân hệ COM & Giao thức Không gian",
@@ -5160,8 +5160,8 @@
     "Explanation": "Bộ dao động thạch anh trên vệ tinh chịu sự thay đổi nhiệt độ liên tục nên đồng hồ RTC luôn bị trôi; việc gửi gói tin UTC từ trạm mặt đất giúp đồng bộ lại đồng hồ vệ tinh định kỳ."
   },
   {
-    "id": 219,
-    "ID": "219",
+    "id": 216,
+    "ID": "216",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 1: Tổng quan phân hệ COM & Giao thức Không gian",
@@ -5184,8 +5184,8 @@
     "Explanation": "Theo phương trình truyền sóng Friis, FSPL tăng theo bình phương cự ly d và bình phương tần số f; do đó cự ly càng xa (khi vệ tinh ở góc thấp) thì tín hiệu thu được càng suy giảm mạnh."
   },
   {
-    "id": 220,
-    "ID": "220",
+    "id": 217,
+    "ID": "217",
     "lab": 5,
     "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
     "section": "Phần 1: Tổng quan phân hệ COM & Giao thức Không gian",
@@ -5206,5 +5206,149 @@
     "Answer": "A",
     "explanation": "Hiệu ứng Faraday (Faraday Rotation) làm xoay mặt phẳng phân cực của sóng phân cực thẳng; để khắc phục, trạm mặt đất thường sử dụng anten phân cực tròn (Circular Polarization).",
     "Explanation": "Hiệu ứng Faraday (Faraday Rotation) làm xoay mặt phẳng phân cực của sóng phân cực thẳng; để khắc phục, trạm mặt đất thường sử dụng anten phân cực tròn (Circular Polarization)."
+  },
+  {
+    "id": 218,
+    "ID": "218",
+    "lab": 5,
+    "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
+    "section": "Doc 5.3: Khung Bản Tin Telemetry, Thuật Toán CRC-16 & Kiến Trúc Trạm Mặt Đất",
+    "Section": "Doc 5.3: Khung Bản Tin Telemetry, Thuật Toán CRC-16 & Kiến Trúc Trạm Mặt Đất",
+    "question": "Trang Web Cấu Hình PTITCube RF Configurator kết nối và truyền nhận lệnh cấu hình trực tiếp với module LoRa E32 / AS32 thông qua công nghệ trình duyệt nào mà không cần cài đặt phần mềm máy tính trung gian?",
+    "Question": "Trang Web Cấu Hình PTITCube RF Configurator kết nối và truyền nhận lệnh cấu hình trực tiếp với module LoRa E32 / AS32 thông qua công nghệ trình duyệt nào mà không cần cài đặt phần mềm máy tính trung gian?",
+    "options": [
+      "Web Serial API trên các trình duyệt hiện đại (như Google Chrome, Microsoft Edge)",
+      "Adobe Flash Player plugin",
+      "Giao thức mạng Bluetooth Web BLE",
+      "Giao thức WebSocket kết nối về máy chủ điện toán đám mây"
+    ],
+    "Option_A": "Web Serial API trên các trình duyệt hiện đại (như Google Chrome, Microsoft Edge)",
+    "Option_B": "Adobe Flash Player plugin",
+    "Option_C": "Giao thức mạng Bluetooth Web BLE",
+    "Option_D": "Giao thức WebSocket kết nối về máy chủ điện toán đám mây",
+    "answer": "A",
+    "Answer": "A",
+    "explanation": "Trang Web Cấu Hình PTITCube RF Configurator sử dụng Web Serial API cho phép trình duyệt web truy cập trực tiếp vào các cổng nối tiếp USB-to-UART trên máy tính để đọc và ghi tham số module LoRa.",
+    "Explanation": "Trang Web Cấu Hình PTITCube RF Configurator sử dụng Web Serial API cho phép trình duyệt web truy cập trực tiếp vào các cổng nối tiếp USB-to-UART trên máy tính để đọc và ghi tham số module LoRa."
+  },
+  {
+    "id": 219,
+    "ID": "219",
+    "lab": 5,
+    "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
+    "section": "Doc 5.2: Công Nghệ Trải Phổ LoRa CSS & Module Ebyte E32-433T20D",
+    "Section": "Doc 5.2: Công Nghệ Trải Phổ LoRa CSS & Module Ebyte E32-433T20D",
+    "question": "Trong khung dữ liệu cấu hình 6-byte của module LoRa E32 / AS32, byte đầu tiên mang giá trị `0xC0` có ý nghĩa kỹ thuật gì?",
+    "Question": "Trong khung dữ liệu cấu hình 6-byte của module LoRa E32 / AS32, byte đầu tiên mang giá trị `0xC0` có ý nghĩa kỹ thuật gì?",
+    "options": [
+      "Lưu vĩnh viễn các tham số cấu hình vào bộ nhớ EEPROM của module (tham số không bị mất khi mất điện hoặc reset)",
+      "Lưu tạm thời các tham số cấu hình vào bộ nhớ RAM (tham số sẽ mất sau khi khởi động lại nguồn)",
+      "Xóa sạch toàn bộ firmware nội bộ của chip SX1278",
+      "Kích hoạt chế độ phát sóng kiểm tra công suất tối đa"
+    ],
+    "Option_A": "Lưu vĩnh viễn các tham số cấu hình vào bộ nhớ EEPROM của module (tham số không bị mất khi mất điện hoặc reset)",
+    "Option_B": "Lưu tạm thời các tham số cấu hình vào bộ nhớ RAM (tham số sẽ mất sau khi khởi động lại nguồn)",
+    "Option_C": "Xóa sạch toàn bộ firmware nội bộ của chip SX1278",
+    "Option_D": "Kích hoạt chế độ phát sóng kiểm tra công suất tối đa",
+    "answer": "A",
+    "Answer": "A",
+    "explanation": "Byte lệnh 0xC0 chỉ thị module ghi đè các tham số cấu hình vào bộ nhớ EEPROM không bay hơi (Permanent Save), giúp module giữ nguyên cấu hình này cho các lần khởi động tiếp theo.",
+    "Explanation": "Byte lệnh 0xC0 chỉ thị module ghi đè các tham số cấu hình vào bộ nhớ EEPROM không bay hơi (Permanent Save), giúp module giữ nguyên cấu hình này cho các lần khởi động tiếp theo."
+  },
+  {
+    "id": 220,
+    "ID": "220",
+    "lab": 5,
+    "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
+    "section": "Doc 5.2: Công Nghệ Trải Phổ LoRa CSS & Module Ebyte E32-433T20D",
+    "Section": "Doc 5.2: Công Nghệ Trải Phổ LoRa CSS & Module Ebyte E32-433T20D",
+    "question": "Nếu người dùng muốn cấu hình thử nghiệm tạm thời các thông số tần số và tốc độ của LoRa mà không muốn lưu vĩnh viễn vào EEPROM, byte lệnh đầu tiên trong khung cấu hình 6-byte được gửi từ Web Configurator là:",
+    "Question": "Nếu người dùng muốn cấu hình thử nghiệm tạm thời các thông số tần số và tốc độ của LoRa mà không muốn lưu vĩnh viễn vào EEPROM, byte lệnh đầu tiên trong khung cấu hình 6-byte được gửi từ Web Configurator là:",
+    "options": [
+      "0xC2 (Ghi thông số tạm thời vào RAM, mất sau khi reset)",
+      "0xC0 (Ghi cố định vào EEPROM)",
+      "0xFF (Xóa toàn bộ thanh ghi)",
+      "0x00 (Khóa không cho phép cấu hình)"
+    ],
+    "Option_A": "0xC2 (Ghi thông số tạm thời vào RAM, mất sau khi reset)",
+    "Option_B": "0xC0 (Ghi cố định vào EEPROM)",
+    "Option_C": "0xFF (Xóa toàn bộ thanh ghi)",
+    "Option_D": "0x00 (Khóa không cho phép cấu hình)",
+    "answer": "A",
+    "Answer": "A",
+    "explanation": "Mã lệnh 0xC2 chỉ thị module áp dụng ngay cấu hình vào thanh ghi RAM đang hoạt động nhưng không ghi vào EEPROM, giúp bảo vệ số lần ghi của EEPROM khi đang thử nghiệm.",
+    "Explanation": "Mã lệnh 0xC2 chỉ thị module áp dụng ngay cấu hình vào thanh ghi RAM đang hoạt động nhưng không ghi vào EEPROM, giúp bảo vệ số lần ghi của EEPROM khi đang thử nghiệm."
+  },
+  {
+    "id": 221,
+    "ID": "221",
+    "lab": 5,
+    "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
+    "section": "Doc 5.2: Công Nghệ Trải Phổ LoRa CSS & Module Ebyte E32-433T20D",
+    "Section": "Doc 5.2: Công Nghệ Trải Phổ LoRa CSS & Module Ebyte E32-433T20D",
+    "question": "Chuỗi 3-byte nào được Trang Web Cấu Hình PTITCube RF Configurator gửi qua cổng nối tiếp ở Mode 3 để yêu cầu module E32/AS32 phản hồi các tham số cấu hình hiện tại?",
+    "Question": "Chuỗi 3-byte nào được Trang Web Cấu Hình PTITCube RF Configurator gửi qua cổng nối tiếp ở Mode 3 để yêu cầu module E32/AS32 phản hồi các tham số cấu hình hiện tại?",
+    "options": [
+      "0xC1 0xC1 0xC1",
+      "0xAA 0x55 0xAA",
+      "0xFF 0xFF 0xFF",
+      "0x00 0x00 0x00"
+    ],
+    "Option_A": "0xC1 0xC1 0xC1",
+    "Option_B": "0xAA 0x55 0xAA",
+    "Option_C": "0xFF 0xFF 0xFF",
+    "Option_D": "0x00 0x00 0x00",
+    "answer": "A",
+    "Answer": "A",
+    "explanation": "Khi nhận được chuỗi lệnh 3 byte 0xC1 0xC1 0xC1 ở Mode 3 (tốc độ 9600 bps), module LoRa sẽ lập tức gửi trả về khung 6 byte chứa toàn bộ cấu hình hiện hành của nó.",
+    "Explanation": "Khi nhận được chuỗi lệnh 3 byte 0xC1 0xC1 0xC1 ở Mode 3 (tốc độ 9600 bps), module LoRa sẽ lập tức gửi trả về khung 6 byte chứa toàn bộ cấu hình hiện hành của nó."
+  },
+  {
+    "id": 222,
+    "ID": "222",
+    "lab": 5,
+    "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
+    "section": "Doc 5.3: Khung Bản Tin Telemetry, Thuật Toán CRC-16 & Kiến Trúc Trạm Mặt Đất",
+    "Section": "Doc 5.3: Khung Bản Tin Telemetry, Thuật Toán CRC-16 & Kiến Trúc Trạm Mặt Đất",
+    "question": "Để thiết lập module LoRa phát quảng bá (Broadcast) đến tất cả các trạm mặt đất hoặc vệ tinh khác trong cùng kênh tần số, hai byte địa chỉ ADDH và ADDL trên Web Configurator cần được đặt là giá trị nào?",
+    "Question": "Để thiết lập module LoRa phát quảng bá (Broadcast) đến tất cả các trạm mặt đất hoặc vệ tinh khác trong cùng kênh tần số, hai byte địa chỉ ADDH và ADDL trên Web Configurator cần được đặt là giá trị nào?",
+    "options": [
+      "ADDH = 0xFF, ADDL = 0xFF (Địa chỉ 0xFFFF)",
+      "ADDH = 0x00, ADDL = 0x00 (Địa chỉ 0x0000)",
+      "ADDH = 0x12, ADDL = 0x34",
+      "ADDH = 0xEE, ADDL = 0xEE"
+    ],
+    "Option_A": "ADDH = 0xFF, ADDL = 0xFF (Địa chỉ 0xFFFF)",
+    "Option_B": "ADDH = 0x00, ADDL = 0x00 (Địa chỉ 0x0000)",
+    "Option_C": "ADDH = 0x12, ADDL = 0x34",
+    "Option_D": "ADDH = 0xEE, ADDL = 0xEE",
+    "answer": "A",
+    "Answer": "A",
+    "explanation": "Trong giao thức truyền tin LoRa E32/AS32, địa chỉ 0xFFFF (ADDH=0xFF, ADDL=0xFF) được quy ước là địa chỉ phát quảng bá (Broadcast); mọi máy thu có cùng kênh CHAN sẽ đều nhận được gói tin này.",
+    "Explanation": "Trong giao thức truyền tin LoRa E32/AS32, địa chỉ 0xFFFF (ADDH=0xFF, ADDL=0xFF) được quy ước là địa chỉ phát quảng bá (Broadcast); mọi máy thu có cùng kênh CHAN sẽ đều nhận được gói tin này."
+  },
+  {
+    "id": 223,
+    "ID": "223",
+    "lab": 5,
+    "Lab": "Lab 5: Phân hệ Truyền thông (COM) & Trạm Mặt đất",
+    "section": "Doc 5.1: Lý Thuyết Truyền Thông Vô Tuyến Không Gian & Cân Bằng Tuyến Link Budget",
+    "Section": "Doc 5.1: Lý Thuyết Truyền Thông Vô Tuyến Không Gian & Cân Bằng Tuyến Link Budget",
+    "question": "Trên Trang Web Cấu Hình PTITCube RF Configurator, tính năng nào giúp người dùng nhanh chóng nạp cấu hình tối ưu đã được thiết lập sẵn cho các mục đích truyền viễn trắc vệ tinh, truyền tầm xa hoặc truyền dữ liệu tốc độ cao?",
+    "Question": "Trên Trang Web Cấu Hình PTITCube RF Configurator, tính năng nào giúp người dùng nhanh chóng nạp cấu hình tối ưu đã được thiết lập sẵn cho các mục đích truyền viễn trắc vệ tinh, truyền tầm xa hoặc truyền dữ liệu tốc độ cao?",
+    "options": [
+      "Quick Presets (Cấu hình mẫu định sẵn theo nhu cầu nhiệm vụ)",
+      "Format Disk (Định dạng lại thẻ nhớ)",
+      "Over-The-Air Flashing (Nạp code qua sóng radio)",
+      "Auto Orbit Calculation (Tự tính toán quỹ đạo bay)"
+    ],
+    "Option_A": "Quick Presets (Cấu hình mẫu định sẵn theo nhu cầu nhiệm vụ)",
+    "Option_B": "Format Disk (Định dạng lại thẻ nhớ)",
+    "Option_C": "Over-The-Air Flashing (Nạp code qua sóng radio)",
+    "Option_D": "Auto Orbit Calculation (Tự tính toán quỹ đạo bay)",
+    "answer": "A",
+    "Answer": "A",
+    "explanation": "Tính năng Quick Presets trên trang web cấu hình cung cấp sẵn các bộ thông số tối ưu (như CubeSat Telemetry, Long Range, High Speed) giúp kỹ sư thiết lập tức thì chỉ với một cú nhấp chuột.",
+    "Explanation": "Tính năng Quick Presets trên trang web cấu hình cung cấp sẵn các bộ thông số tối ưu (như CubeSat Telemetry, Long Range, High Speed) giúp kỹ sư thiết lập tức thì chỉ với một cú nhấp chuột."
   }
 ]

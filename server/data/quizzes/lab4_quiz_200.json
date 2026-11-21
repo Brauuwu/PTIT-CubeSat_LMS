@@ -654,22 +654,22 @@
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
     "Section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
-    "question": "Thách thức lớn về can nhiễu điện từ trường (EMI - Electromagnetic Interference) do module Camera OV2640 gây ra cho CubeSat là gì?",
-    "Question": "Thách thức lớn về can nhiễu điện từ trường (EMI - Electromagnetic Interference) do module Camera OV2640 gây ra cho CubeSat là gì?",
+    "question": "Đặc điểm cấu trúc tệp ảnh nén JPEG xuất từ cảm biến Camera OV2640 qua giao diện dữ liệu nối tiếp là gì?",
+    "Question": "Đặc điểm cấu trúc tệp ảnh nén JPEG xuất từ cảm biến Camera OV2640 qua giao diện dữ liệu nối tiếp là gì?",
     "options": [
-      "Phát ra tia phóng xạ hạt nhân làm ion hóa không khí",
-      "Nhiệt độ module tăng đột biến lên hàng trăm độ C",
-      "Xung nhịp cao gây nhiễu bus I2C và giảm độ nhạy GNSS",
-      "Làm biến dạng từ trường Trái Đất xung quanh vệ tinh"
+      "Tệp ảnh luôn bắt đầu bằng byte mào đầu SOI (0xFF 0xD8) và kết thúc bằng byte đánh dấu EOI (0xFF 0xD9)",
+      "Tệp ảnh luôn được mã hóa thành các ký tự văn bản mã ASCII độ dài cố định 1024 bytes",
+      "Dữ liệu ảnh luôn chứa tọa độ GPS được chèn cứng vào byte đầu tiên",
+      "Dữ liệu ảnh là luồng tín hiệu analog quét từng dòng quét màn hình"
     ],
-    "Option_A": "Phát ra tia phóng xạ hạt nhân làm ion hóa không khí",
-    "Option_B": "Nhiệt độ module tăng đột biến lên hàng trăm độ C",
-    "Option_C": "Xung nhịp cao gây nhiễu bus I2C và giảm độ nhạy GNSS",
-    "Option_D": "Làm biến dạng từ trường Trái Đất xung quanh vệ tinh",
-    "answer": "C",
-    "Answer": "C",
-    "explanation": "Tần số chuyển mạch cao tốc của bus song song tạo thành nguồn phát nhiễu bức xạ và dẫn truyền cực mạnh trong không gian chật hẹp 1U.",
-    "Explanation": "Tần số chuyển mạch cao tốc của bus song song tạo thành nguồn phát nhiễu bức xạ và dẫn truyền cực mạnh trong không gian chật hẹp 1U."
+    "Option_A": "Tệp ảnh luôn bắt đầu bằng byte mào đầu SOI (0xFF 0xD8) và kết thúc bằng byte đánh dấu EOI (0xFF 0xD9)",
+    "Option_B": "Tệp ảnh luôn được mã hóa thành các ký tự văn bản mã ASCII độ dài cố định 1024 bytes",
+    "Option_C": "Dữ liệu ảnh luôn chứa tọa độ GPS được chèn cứng vào byte đầu tiên",
+    "Option_D": "Dữ liệu ảnh là luồng tín hiệu analog quét từng dòng quét màn hình",
+    "answer": "A",
+    "Answer": "A",
+    "explanation": "Ảnh JPEG tuân theo chuẩn nén quốc tế, trong đó luồng nhị phân hợp lệ bắt buộc phải mở đầu bằng cờ Start of Image SOI (0xFFD8) và kết thúc bằng cờ End of Image EOI (0xFFD9).",
+    "Explanation": "Ảnh JPEG tuân theo chuẩn nén quốc tế, trong đó luồng nhị phân hợp lệ bắt buộc phải mở đầu bằng cờ Start of Image SOI (0xFFD8) và kết thúc bằng cờ End of Image EOI (0xFFD9)."
   },
   {
     "id": 29,
@@ -678,22 +678,22 @@
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
     "Section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
-    "question": "Giải pháp phần cứng thông minh sử dụng vi mạch công tắc tương tự 74HC4066 trong thiết kế CubeSat nhằm mục đích gì?",
-    "Question": "Giải pháp phần cứng thông minh sử dụng vi mạch công tắc tương tự 74HC4066 trong thiết kế CubeSat nhằm mục đích gì?",
+    "question": "Giải pháp sử dụng vi mạch chuyển mạch tương tự 74HC4066 trong phân hệ Payload của CubeSat nhằm mục đích gì?",
+    "Question": "Giải pháp sử dụng vi mạch chuyển mạch tương tự 74HC4066 trong phân hệ Payload của CubeSat nhằm mục đích gì?",
     "options": [
-      "Ngắt nguồn và tín hiệu camera khi nghỉ để triệt nhiễu",
-      "Tăng độ sắc nét quang học cho thấu kính của camera",
-      "Chuyển đổi tín hiệu ảnh thành sóng vô tuyến truyền xa",
-      "Nâng cao điện áp hoạt động cho khối cảm biến ảnh"
+      "Cho phép vi điều khiển OBC chia sẻ luân phiên một cổng giao tiếp phần cứng (UART2) giữa hai thiết bị là Module Định Vị GNSS/GPS và Camera Chụp Ảnh",
+      "Tăng gấp 4 lần điện áp cấp nguồn cho cảm biến camera",
+      "Chuyển đổi tín hiệu số từ camera thành tín hiệu quang học phát trực tiếp vào không gian",
+      "Tự động giải mã chuỗi NMEA từ cảm biến GPS thành hình ảnh"
     ],
-    "Option_A": "Ngắt nguồn và tín hiệu camera khi nghỉ để triệt nhiễu",
-    "Option_B": "Tăng độ sắc nét quang học cho thấu kính của camera",
-    "Option_C": "Chuyển đổi tín hiệu ảnh thành sóng vô tuyến truyền xa",
-    "Option_D": "Nâng cao điện áp hoạt động cho khối cảm biến ảnh",
+    "Option_A": "Cho phép vi điều khiển OBC chia sẻ luân phiên một cổng giao tiếp phần cứng (UART2) giữa hai thiết bị là Module Định Vị GNSS/GPS và Camera Chụp Ảnh",
+    "Option_B": "Tăng gấp 4 lần điện áp cấp nguồn cho cảm biến camera",
+    "Option_C": "Chuyển đổi tín hiệu số từ camera thành tín hiệu quang học phát trực tiếp vào không gian",
+    "Option_D": "Tự động giải mã chuỗi NMEA từ cảm biến GPS thành hình ảnh",
     "answer": "A",
     "Answer": "A",
-    "explanation": "74HC4066 đóng vai trò rào chắn điện tử: chỉ đóng mạch cho camera hoạt động trong vài giây chụp ảnh rồi ngắt hoàn toàn khỏi hệ thống.",
-    "Explanation": "74HC4066 đóng vai trò rào chắn điện tử: chỉ đóng mạch cho camera hoạt động trong vài giây chụp ảnh rồi ngắt hoàn toàn khỏi hệ thống."
+    "explanation": "Vi mạch 74HC4066 hoạt động như các công tắc điện tử song hướng hai chiều, cho phép ghép kênh (Multiplexing) để một cổng UART2 trên OBC giao tiếp luân phiên an toàn với GPS hoặc Camera tùy theo thời điểm.",
+    "Explanation": "Vi mạch 74HC4066 hoạt động như các công tắc điện tử song hướng hai chiều, cho phép ghép kênh (Multiplexing) để một cổng UART2 trên OBC giao tiếp luân phiên an toàn với GPS hoặc Camera tùy theo thời điểm."
   },
   {
     "id": 30,
@@ -1110,8 +1110,8 @@
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
     "Section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
-    "question": "Thời gian UTC trích xuất từ câu tin NMEA GPRMC (ví dụ chuỗi `\"123519.00\"`) có ý nghĩa biểu thị thời gian nào?",
-    "Question": "Thời gian UTC trích xuất từ câu tin NMEA GPRMC (ví dụ chuỗi `\"123519.00\"`) có ý nghĩa biểu thị thời gian nào?",
+    "question": "Thời gian UTC trích xuất từ câu tin NMEA GPRMC (ví dụ chuỗi `123519.00`) có ý nghĩa biểu thị thời gian nào?",
+    "Question": "Thời gian UTC trích xuất từ câu tin NMEA GPRMC (ví dụ chuỗi `123519.00`) có ý nghĩa biểu thị thời gian nào?",
     "options": [
       "Mốc thời gian 12 giờ ngày 35 tháng 19 trong năm",
       "Mã định danh của vệ tinh GPS đang phát tín hiệu",
@@ -1446,22 +1446,22 @@
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
     "Section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
-    "question": "Trong không gian, điều kiện chân không ảnh hưởng như thế nào đến khả năng tản nhiệt của module Camera khi chụp ảnh liên tục?",
-    "Question": "Trong không gian, điều kiện chân không ảnh hưởng như thế nào đến khả năng tản nhiệt của module Camera khi chụp ảnh liên tục?",
+    "question": "Trong giao thức bắt tay (Handshake) chụp và truyền dữ liệu ảnh từ Camera Payload về bộ vi xử lý OBC, trình tự chuẩn gồm các bước nào?",
+    "Question": "Trong giao thức bắt tay (Handshake) chụp và truyền dữ liệu ảnh từ Camera Payload về bộ vi xử lý OBC, trình tự chuẩn gồm các bước nào?",
     "options": [
-      "Không có bất kỳ ảnh hưởng nào tới chất lượng ảnh chụp",
-      "Module camera bị đóng băng tức thì do nhiệt độ vũ trụ",
-      "Không thể tản nhiệt đối lưu gây nóng và tăng nhiễu ảnh",
-      "Camera tản nhiệt tốt hơn do không có không khí cản trở"
+      "OBC gửi lệnh chụp ('capture') -> Chờ Camera phản hồi kích thước tệp ảnh -> OBC đọc luồng byte dữ liệu nhị phân của ảnh qua UART cho đến hết kích thước danh định",
+      "Camera liên tục phát dữ liệu ảnh mà không cần lệnh kích hoạt từ OBC",
+      "OBC gửi toàn bộ tọa độ GPS sang Camera rồi mới nhận được tín hiệu ảnh",
+      "Camera chỉ truyền ảnh khi được rọi đèn flash từ ngoài không gian"
     ],
-    "Option_A": "Không có bất kỳ ảnh hưởng nào tới chất lượng ảnh chụp",
-    "Option_B": "Module camera bị đóng băng tức thì do nhiệt độ vũ trụ",
-    "Option_C": "Không thể tản nhiệt đối lưu gây nóng và tăng nhiễu ảnh",
-    "Option_D": "Camera tản nhiệt tốt hơn do không có không khí cản trở",
-    "answer": "C",
-    "Answer": "C",
-    "explanation": "Trong chân không, nhiệt chỉ có thể tản bằng dẫn nhiệt qua mạch in và bức xạ; quá nhiệt cảm biến gây ra các đốm nhiễu hạt màu đỏ/trắng trên ảnh.",
-    "Explanation": "Trong chân không, nhiệt chỉ có thể tản bằng dẫn nhiệt qua mạch in và bức xạ; quá nhiệt cảm biến gây ra các đốm nhiễu hạt màu đỏ/trắng trên ảnh."
+    "Option_A": "OBC gửi lệnh chụp ('capture') -> Chờ Camera phản hồi kích thước tệp ảnh -> OBC đọc luồng byte dữ liệu nhị phân của ảnh qua UART cho đến hết kích thước danh định",
+    "Option_B": "Camera liên tục phát dữ liệu ảnh mà không cần lệnh kích hoạt từ OBC",
+    "Option_C": "OBC gửi toàn bộ tọa độ GPS sang Camera rồi mới nhận được tín hiệu ảnh",
+    "Option_D": "Camera chỉ truyền ảnh khi được rọi đèn flash từ ngoài không gian",
+    "answer": "A",
+    "Answer": "A",
+    "explanation": "Giao thức truyền thông bắt tay chuẩn: OBC gửi lệnh yêu cầu chụp ảnh qua UART, Camera hoàn tất nén JPEG và trả về kích thước tệp (File Size), sau đó OBC tiếp nhận chính xác số byte ảnh đó vào bộ đệm.",
+    "Explanation": "Giao thức truyền thông bắt tay chuẩn: OBC gửi lệnh yêu cầu chụp ảnh qua UART, Camera hoàn tất nén JPEG và trả về kích thước tệp (File Size), sau đó OBC tiếp nhận chính xác số byte ảnh đó vào bộ đệm."
   },
   {
     "id": 62,
@@ -3408,8 +3408,8 @@
     "Explanation": "Đo lường chính xác khoảng thời gian thực tế trôi qua giữa hai chu kỳ lặp (tính bằng giây) bảo đảm phép tích phân góc luôn chuẩn xác."
   },
   {
-    "id": 144,
-    "ID": "144",
+    "id": 143,
+    "ID": "143",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -3432,8 +3432,8 @@
     "Explanation": "BMP280 luôn trả về mã định danh 0x58 tại thanh ghi 0xD0 khi được truy vấn."
   },
   {
-    "id": 145,
-    "ID": "145",
+    "id": 144,
+    "ID": "144",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -3456,8 +3456,8 @@
     "Explanation": "Mã nhị phân: osrs_t=010 (x2), osrs_p=101 (x16), mode=11 (Normal Mode) tạo thành byte giá trị 0x57."
   },
   {
-    "id": 146,
-    "ID": "146",
+    "id": 145,
+    "ID": "145",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -3480,8 +3480,8 @@
     "Explanation": "Hàm pow() tính lũy thừa theo công thức khí áp học quốc tế ICAO để suy ra cao độ từ áp suất đo được."
   },
   {
-    "id": 147,
-    "ID": "147",
+    "id": 146,
+    "ID": "146",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -3504,8 +3504,8 @@
     "Explanation": "Hàm Serial2.begin nhận tham số tốc độ baud, cấu hình khung 8-N-1 và chỉ định chân RX2 (GPIO 16) và TX2 (GPIO 17)."
   },
   {
-    "id": 148,
-    "ID": "148",
+    "id": 147,
+    "ID": "147",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -3528,8 +3528,8 @@
     "Explanation": "Thuật toán nhận ký tự có kiểm soát biên bộ đệm và phát hiện ký tự xuống dòng `\\n` để xử lý trọn vẹn câu NMEA."
   },
   {
-    "id": 149,
-    "ID": "149",
+    "id": 148,
+    "ID": "148",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -3548,12 +3548,12 @@
     "Option_D": "Dùng hàm strncmp() kiểm tra 6 ký tự đầu là tiền tố GPRMC",
     "answer": "D",
     "Answer": "D",
-    "explanation": "Vì câu NMEA chứa nhiều trường dữ liệu phía sau, dùng strncmp(line, \"\\$GPRMC\", 6) == 0 là cách chuẩn xác để nhận dạng loại bản tin.",
-    "Explanation": "Vì câu NMEA chứa nhiều trường dữ liệu phía sau, dùng strncmp(line, \"\\$GPRMC\", 6) == 0 là cách chuẩn xác để nhận dạng loại bản tin."
+    "explanation": "Vì câu NMEA chứa nhiều trường dữ liệu phía sau, dùng strncmp(line, \\$GPRMC, 6) == 0 là cách chuẩn xác để nhận dạng loại bản tin.",
+    "Explanation": "Vì câu NMEA chứa nhiều trường dữ liệu phía sau, dùng strncmp(line, \\$GPRMC, 6) == 0 là cách chuẩn xác để nhận dạng loại bản tin."
   },
   {
-    "id": 150,
-    "ID": "150",
+    "id": 149,
+    "ID": "149",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -3576,8 +3576,8 @@
     "Explanation": "Cả hàm chuẩn strtok() và strsep() trong thư viện C đều được sử dụng hiệu quả để phân rã chuỗi NMEA theo dấu phẩy."
   },
   {
-    "id": 152,
-    "ID": "152",
+    "id": 150,
+    "ID": "150",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -3600,32 +3600,32 @@
     "Explanation": "Quy ước chuẩn bản đồ GIS: Vĩ độ Nam mang dấu âm $(-90^\\circ \\dots 0^\\circ)$ và Kinh độ Tây mang dấu âm $(-180^\\circ \\dots 0^\\circ)$."
   },
   {
-    "id": 153,
-    "ID": "153",
+    "id": 151,
+    "ID": "151",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
     "Section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
-    "question": "Để cấu hình chân GPIO điều khiển khóa chuyển mạch tương tự 74HC4066 (ví dụ chân `CAM_SW_PIN`), lệnh khởi tạo trong `setup()` là:",
-    "Question": "Để cấu hình chân GPIO điều khiển khóa chuyển mạch tương tự 74HC4066 (ví dụ chân `CAM_SW_PIN`), lệnh khởi tạo trong `setup()` là:",
+    "question": "Để khởi tạo phân hệ chụp ảnh Camera Payload trong mã nguồn chương trình bay theo chuẩn thư viện PTITCube, lệnh thực thi chuẩn xác trong hàm `setup()` là:",
+    "Question": "Để khởi tạo phân hệ chụp ảnh Camera Payload trong mã nguồn chương trình bay theo chuẩn thư viện PTITCube, lệnh thực thi chuẩn xác trong hàm `setup()` là:",
     "options": [
-      "Cấu hình chân điều khiển ở chế độ ngõ vào INPUT",
-      "Cấu hình chân điều khiển ở chế độ có điện trở kéo INPUT_PULLUP",
-      "Khởi tạo chân ở chế độ ngắt ngoài cạnh lên RISING",
-      "Cấu hình chân ở chế độ ngõ ra OUTPUT bằng hàm pinMode()"
+      "camera.begin(9600, 8, 1);",
+      "pinMode(CAMERA_POWER, INPUT_PULLUP);",
+      "Serial2.begin(115200); camera.init();",
+      "camera.init();"
     ],
-    "Option_A": "Cấu hình chân điều khiển ở chế độ ngõ vào INPUT",
-    "Option_B": "Cấu hình chân điều khiển ở chế độ có điện trở kéo INPUT_PULLUP",
-    "Option_C": "Khởi tạo chân ở chế độ ngắt ngoài cạnh lên RISING",
-    "Option_D": "Cấu hình chân ở chế độ ngõ ra OUTPUT bằng hàm pinMode()",
+    "Option_A": "camera.begin(9600, 8, 1);",
+    "Option_B": "pinMode(CAMERA_POWER, INPUT_PULLUP);",
+    "Option_C": "Serial2.begin(115200); camera.init();",
+    "Option_D": "camera.init();",
     "answer": "D",
     "Answer": "D",
-    "explanation": "Cấu hình OUTPUT và kéo LOW ban đầu bảo đảm camera được ngắt mạch an toàn ngay khi khởi động để triệt tiêu nhiễu EMI.",
-    "Explanation": "Cấu hình OUTPUT và kéo LOW ban đầu bảo đảm camera được ngắt mạch an toàn ngay khi khởi động để triệt tiêu nhiễu EMI."
+    "explanation": "Theo chuẩn đóng gói API mới của thư viện PTITCube, việc khởi tạo phân hệ chụp ảnh được thực hiện tinh gọn chỉ qua lệnh gọi duy nhất `camera.init()`.",
+    "Explanation": "Theo chuẩn đóng gói API mới của thư viện PTITCube, việc khởi tạo phân hệ chụp ảnh được thực hiện tinh gọn chỉ qua lệnh gọi duy nhất `camera.init()`."
   },
   {
-    "id": 154,
-    "ID": "154",
+    "id": 152,
+    "ID": "152",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -3648,32 +3648,32 @@
     "Explanation": "Kéo chân điều khiển lên HIGH đóng các tiếp điểm công tắc của 74HC4066, chờ 50ms để điện áp nguồn của camera ổn định."
   },
   {
-    "id": 155,
-    "ID": "155",
+    "id": 153,
+    "ID": "153",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
     "Section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
-    "question": "Sau khi hoàn thành tác vụ chụp ảnh và lưu ảnh vào thẻ nhớ, lệnh điều khiển khóa 74HC4066 để cô lập hoàn toàn camera là:",
-    "Question": "Sau khi hoàn thành tác vụ chụp ảnh và lưu ảnh vào thẻ nhớ, lệnh điều khiển khóa 74HC4066 để cô lập hoàn toàn camera là:",
+    "question": "Để chuyển kênh giao tiếp UART2 sang phục vụ đọc dữ liệu định vị vệ tinh từ module GNSS/GPS sau khi đã hoàn tất phiên làm việc với Camera, thao tác chuẩn là gì?",
+    "Question": "Để chuyển kênh giao tiếp UART2 sang phục vụ đọc dữ liệu định vị vệ tinh từ module GNSS/GPS sau khi đã hoàn tất phiên làm việc với Camera, thao tác chuẩn là gì?",
     "options": [
-      "Xuất mức logic HIGH tiếp tục duy trì cấp nguồn cho camera",
-      "Đặt lại chân điều khiển về cấu hình ngõ vào kéo lên INPUT_PULLUP",
-      "Xuất mức logic LOW lên chân điều khiển để khóa đóng mạch ngắt nguồn",
-      "Khởi tạo lại bus I2C để tắt tín hiệu xung nhịp điều khiển camera"
+      "Rút nguồn pin của toàn bộ vệ tinh rồi khởi động lại",
+      "Chuyển mạch tín hiệu UART2 kết nối sang module GNSS và gọi lệnh khởi tạo đọc dữ liệu `gps.init()`",
+      "Tăng tốc độ baudrate của cổng Serial lên 1 Mbps",
+      "Gửi lệnh xóa bộ nhớ đệm RTC của ESP32"
     ],
-    "Option_A": "Xuất mức logic HIGH tiếp tục duy trì cấp nguồn cho camera",
-    "Option_B": "Đặt lại chân điều khiển về cấu hình ngõ vào kéo lên INPUT_PULLUP",
-    "Option_C": "Xuất mức logic LOW lên chân điều khiển để khóa đóng mạch ngắt nguồn",
-    "Option_D": "Khởi tạo lại bus I2C để tắt tín hiệu xung nhịp điều khiển camera",
-    "answer": "C",
-    "Answer": "C",
-    "explanation": "Kéo chân điều khiển về LOW ngắt tiếp điểm, cô lập triệt để nguồn phát nhiễu cao tần của camera để bus I2C và GNSS hoạt động ổn định.",
-    "Explanation": "Kéo chân điều khiển về LOW ngắt tiếp điểm, cô lập triệt để nguồn phát nhiễu cao tần của camera để bus I2C và GNSS hoạt động ổn định."
+    "Option_A": "Rút nguồn pin của toàn bộ vệ tinh rồi khởi động lại",
+    "Option_B": "Chuyển mạch tín hiệu UART2 kết nối sang module GNSS và gọi lệnh khởi tạo đọc dữ liệu `gps.init()`",
+    "Option_C": "Tăng tốc độ baudrate của cổng Serial lên 1 Mbps",
+    "Option_D": "Gửi lệnh xóa bộ nhớ đệm RTC của ESP32",
+    "answer": "B",
+    "Answer": "B",
+    "explanation": "Khi chuyển đổi thiết bị trên đường truyền chia sẻ UART2, hệ thống kích hoạt công tắc ghép kênh chuyển sang module GPS và thực thi lệnh khởi tạo chuẩn `gps.init()` để tiếp nhận các câu NMEA.",
+    "Explanation": "Khi chuyển đổi thiết bị trên đường truyền chia sẻ UART2, hệ thống kích hoạt công tắc ghép kênh chuyển sang module GPS và thực thi lệnh khởi tạo chuẩn `gps.init()` để tiếp nhận các câu NMEA."
   },
   {
-    "id": 156,
-    "ID": "156",
+    "id": 154,
+    "ID": "154",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -3696,8 +3696,8 @@
     "Explanation": "Hằng số PIXFORMAT_JPEG kích hoạt bộ nén JPEG phần cứng trên chip OV2640, giảm kích thước ảnh để ghi thẻ nhớ nhanh chóng."
   },
   {
-    "id": 157,
-    "ID": "157",
+    "id": 155,
+    "ID": "155",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -3720,8 +3720,8 @@
     "Explanation": "FRAMESIZE_UXGA thiết lập cảm biến OV2640 xuất ảnh ở độ phân giải quang học tối đa 1600x1200 pixels."
   },
   {
-    "id": 158,
-    "ID": "158",
+    "id": 156,
+    "ID": "156",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -3744,8 +3744,8 @@
     "Explanation": "Hàm esp_camera_init cấu hình bộ điều khiển DMA, giao diện DVP và nạp các thông số thanh ghi cho cảm biến ảnh qua bus SCCB."
   },
   {
-    "id": 159,
-    "ID": "159",
+    "id": 157,
+    "ID": "157",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -3768,8 +3768,8 @@
     "Explanation": "Hàm esp_camera_fb_get() kích hoạt chụp và trả về con trỏ bộ đệm `fb` chứa toàn bộ dữ liệu bức ảnh."
   },
   {
-    "id": 160,
-    "ID": "160",
+    "id": 158,
+    "ID": "158",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -3792,8 +3792,8 @@
     "Explanation": "Trường `fb->buf` trỏ tới vùng nhớ ảnh và `fb->len` cho biết chính xác dung lượng byte của bức ảnh để ghi xuống thẻ nhớ."
   },
   {
-    "id": 161,
-    "ID": "161",
+    "id": 159,
+    "ID": "159",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -3816,8 +3816,8 @@
     "Explanation": "Nếu không gọi hàm esp_camera_fb_return(fb), bộ đệm DMA sẽ không được giải phóng và các lần chụp ảnh sau sẽ bị lỗi thiếu bộ nhớ."
   },
   {
-    "id": 162,
-    "ID": "162",
+    "id": 160,
+    "ID": "160",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -3840,8 +3840,8 @@
     "Explanation": "Hàm file.write(fb->buf, fb->len) ghi trực tiếp toàn bộ khối byte nhị phân của tệp JPEG xuống thẻ nhớ một cách nhanh chóng."
   },
   {
-    "id": 163,
-    "ID": "163",
+    "id": 161,
+    "ID": "161",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -3864,8 +3864,8 @@
     "Explanation": "Kiểm tra con trỏ khác NULL ngăn chặn lỗi tham chiếu con trỏ rỗng (Null Pointer Dereference) làm crash vi điều khiển."
   },
   {
-    "id": 164,
-    "ID": "164",
+    "id": 162,
+    "ID": "162",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -3888,8 +3888,8 @@
     "Explanation": "Hàm set_quality (với giá trị val từ 10 đến 63, số càng nhỏ chất lượng càng cao) điều chỉnh độ nén linh hoạt theo dung lượng thẻ nhớ còn lại."
   },
   {
-    "id": 165,
-    "ID": "165",
+    "id": 163,
+    "ID": "163",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -3912,8 +3912,8 @@
     "Explanation": "Kiểm tra 2 byte đầu tiên của mảng bộ đệm đối chiếu với mã SOI (Start Of Image 0xFFD8) xác nhận bức ảnh nén không bị lỗi truyền dẫn."
   },
   {
-    "id": 166,
-    "ID": "166",
+    "id": 164,
+    "ID": "164",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -3936,8 +3936,8 @@
     "Explanation": "Đặc tả `%04d` tự động chèn thêm các số 0 ở đầu để tạo chuỗi số có 4 chữ số đồng đều, dễ sắp xếp theo thời gian chụp."
   },
   {
-    "id": 167,
-    "ID": "167",
+    "id": 165,
+    "ID": "165",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -3960,8 +3960,8 @@
     "Explanation": "Hàm esp_camera_deinit() giải phóng toàn bộ các kênh DMA, ngắt kết nối xung nhịp I2S và đưa cảm biến về trạng thái tắt hoàn toàn."
   },
   {
-    "id": 168,
-    "ID": "168",
+    "id": 166,
+    "ID": "166",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -3984,8 +3984,8 @@
     "Explanation": "Giá trị t_fine phản ánh nhiệt độ tinh thể cảm biến ở độ phân giải 1/5120 độ C, là tham số đầu vào bắt buộc để hiệu chuẩn áp suất."
   },
   {
-    "id": 169,
-    "ID": "169",
+    "id": 167,
+    "ID": "167",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4008,8 +4008,8 @@
     "Explanation": "Các phép nhân đa thức hiệu chuẩn tạo ra giá trị trung gian vượt quá giới hạn 32-bit ($2^{31}-1$), đòi hỏi biến 64-bit để giữ độ chính xác tuyệt đối."
   },
   {
-    "id": 170,
-    "ID": "170",
+    "id": 168,
+    "ID": "168",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4032,8 +4032,8 @@
     "Explanation": "Dải thanh ghi từ 0x88 đến 0xA1 lưu trữ 12 tham số hiệu chuẩn 16-bit ($T_1 - T_3$ và $P_1 - P_9$)."
   },
   {
-    "id": 171,
-    "ID": "171",
+    "id": 169,
+    "ID": "169",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4056,8 +4056,8 @@
     "Explanation": "Datasheet quy định rõ: chỉ có `dig_T1` và `dig_P1` là số nguyên không dấu (unsigned 16-bit); tất cả các hệ số còn lại đều là số nguyên có dấu (signed 16-bit)."
   },
   {
-    "id": 172,
-    "ID": "172",
+    "id": 170,
+    "ID": "170",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4080,8 +4080,8 @@
     "Explanation": "Hàm Wire.setTimeOut(ms) cấu hình bộ đếm thời gian phần cứng của ESP32, tự động hủy bỏ giao dịch nếu Slave kéo giãn xung SCL quá lâu."
   },
   {
-    "id": 173,
-    "ID": "173",
+    "id": 171,
+    "ID": "171",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4104,8 +4104,8 @@
     "Explanation": "Hàm chuẩn hóa gửi tuần tự địa chỉ thanh ghi và byte dữ liệu, trả về true nếu giao dịch nhận được ACK thành công."
   },
   {
-    "id": 174,
-    "ID": "174",
+    "id": 172,
+    "ID": "172",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4128,8 +4128,8 @@
     "Explanation": "Hàm kiểm tra chặt chẽ cả bước ghi địa chỉ thanh ghi lẫn số lượng byte nhận về từ lệnh requestFrom."
   },
   {
-    "id": 175,
-    "ID": "175",
+    "id": 173,
+    "ID": "173",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4152,8 +4152,8 @@
     "Explanation": "Bit 7 (H_RESET) kích hoạt chu trình tự đặt lại tất cả các thanh ghi nội bộ về giá trị mặc định của nhà máy."
   },
   {
-    "id": 176,
-    "ID": "176",
+    "id": 174,
+    "ID": "174",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4176,8 +4176,8 @@
     "Explanation": "Đọc thanh ghi trạng thái 0x3A; khi bit 0 bằng 1, dữ liệu cảm biến mới đã được cập nhật vào các thanh ghi ngõ ra."
   },
   {
-    "id": 177,
-    "ID": "177",
+    "id": 175,
+    "ID": "175",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4200,8 +4200,8 @@
     "Explanation": "Tại $\\pm 90^\\circ$, véc-tơ trọng trường trùng với trục quay, làm mất đi một bậc tự do xác định góc lật của hệ tọa độ Euler."
   },
   {
-    "id": 178,
-    "ID": "178",
+    "id": 176,
+    "ID": "176",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4224,8 +4224,8 @@
     "Explanation": "Bộ lọc số thông thấp bậc 1 làm suy giảm hiệu quả các xung nhiễu chấn động tần số cao trên các trục gia tốc."
   },
   {
-    "id": 179,
-    "ID": "179",
+    "id": 177,
+    "ID": "177",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4248,8 +4248,8 @@
     "Explanation": "Chuẩn NMEA quy định mã checksum 8-bit bằng phép XOR tuần tự từng mã ASCII giữa '\\$' và '*', hiển thị dưới dạng 2 ký tự hexa."
   },
   {
-    "id": 180,
-    "ID": "180",
+    "id": 178,
+    "ID": "178",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4272,14 +4272,14 @@
     "Explanation": "Hàm quét các ký tự giữa dấu bắt đầu '\\ và '*', tích lũy mã XOR và đối chiếu với 2 chữ số hexa ở cuối câu. và '*', tích lũy mã XOR và đối chiếu với 2 chữ số hexa ở cuối câu."
   },
   {
-    "id": 181,
-    "ID": "181",
+    "id": 179,
+    "ID": "179",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
     "Section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
-    "question": "Trường dữ liệu số 9 trong câu GPRMC (ví dụ `\"230326\"`) cung cấp thông tin ngày tháng năm theo định dạng nào?",
-    "Question": "Trường dữ liệu số 9 trong câu GPRMC (ví dụ `\"230326\"`) cung cấp thông tin ngày tháng năm theo định dạng nào?",
+    "question": "Trường dữ liệu số 9 trong câu GPRMC (ví dụ `230326`) cung cấp thông tin ngày tháng năm theo định dạng nào?",
+    "Question": "Trường dữ liệu số 9 trong câu GPRMC (ví dụ `230326`) cung cấp thông tin ngày tháng năm theo định dạng nào?",
     "options": [
       "Giờ - Phút - Giây",
       "Ngày - Tháng - Năm",
@@ -4296,8 +4296,8 @@
     "Explanation": "Định dạng ddmmyy trong NMEA biểu thị: 23 là ngày, 03 là tháng 3, 26 là năm 2026."
   },
   {
-    "id": 182,
-    "ID": "182",
+    "id": 180,
+    "ID": "180",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4320,8 +4320,8 @@
     "Explanation": "1 Knot (Hải lý trên giờ) bằng chính xác 1.852 km/h; nhân giá trị knot trích xuất được với 1.852 sẽ quy đổi về km/h."
   },
   {
-    "id": 183,
-    "ID": "183",
+    "id": 181,
+    "ID": "181",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4344,8 +4344,8 @@
     "Explanation": "0 = Không có Fix; 1 = GPS Fix tiêu chuẩn (SPS); 2 = DGPS Fix (chính xác cao hơn)."
   },
   {
-    "id": 184,
-    "ID": "184",
+    "id": 182,
+    "ID": "182",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4368,8 +4368,8 @@
     "Explanation": "Lệnh chuẩn PMTK220 với tham số 200 mili-giây (tương ứng tần số lấy mẫu 5 Hz) kết thúc bằng mã checksum `*2C` và `\\r\\n`."
   },
   {
-    "id": 185,
-    "ID": "185",
+    "id": 183,
+    "ID": "183",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4392,8 +4392,8 @@
     "Explanation": "Hàm set_brightness điều chỉnh độ bù sáng phơi sáng điện tử của cảm biến ảnh OV2640."
   },
   {
-    "id": 186,
-    "ID": "186",
+    "id": 184,
+    "ID": "184",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4416,8 +4416,8 @@
     "Explanation": "Hàm set_vflip(s, 1) đảo ngược thứ tự đọc hàng của cảm biến CMOS, tự động hiệu chỉnh chiều của bức ảnh."
   },
   {
-    "id": 187,
-    "ID": "187",
+    "id": 185,
+    "ID": "185",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4440,8 +4440,8 @@
     "Explanation": "Hàm psramFound() trả về true nếu chip ESP32 kích hoạt thành công chip nhớ ngoại 4MB PSRAM."
   },
   {
-    "id": 188,
-    "ID": "188",
+    "id": 186,
+    "ID": "186",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4464,8 +4464,8 @@
     "Explanation": "Bộ đệm kép loại bỏ độ trễ chờ đợi giữa hai khung hình liên tiếp, tăng tốc độ chụp ảnh chuỗi."
   },
   {
-    "id": 189,
-    "ID": "189",
+    "id": 187,
+    "ID": "187",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4488,8 +4488,8 @@
     "Explanation": "Cơ chế thử lại có timeout tránh làm treo hệ thống nếu khung đệm camera chưa sẵn sàng do nghẽn DMA."
   },
   {
-    "id": 190,
-    "ID": "190",
+    "id": 188,
+    "ID": "188",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4512,8 +4512,8 @@
     "Explanation": "Bắt buộc phải đóng công tắc cấp nguồn ổn định trước thì chip camera mới có thể phản hồi các lệnh khởi tạo I2C/SCCB."
   },
   {
-    "id": 191,
-    "ID": "191",
+    "id": 189,
+    "ID": "189",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4536,8 +4536,8 @@
     "Explanation": "Giải phóng tài nguyên phần mềm trước rồi mới ngắt nguồn vật lý bảo đảm hệ điều hành không bị crash do mất tín hiệu đột ngột."
   },
   {
-    "id": 192,
-    "ID": "192",
+    "id": 190,
+    "ID": "190",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4560,8 +4560,8 @@
     "Explanation": "Hàm snprintf tổng hợp đồng bộ tất cả các tham số cảm biến thành một dòng văn bản sẵn sàng lưu vào thẻ nhớ hoặc truyền đi."
   },
   {
-    "id": 193,
-    "ID": "193",
+    "id": 191,
+    "ID": "191",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4584,8 +4584,8 @@
     "Explanation": "Gọi Wire.end() để giải phóng ngoại vi phần cứng I2C khỏi hai chân, sau đó cấu hình chân SCL làm GPIO xuất để tạo 9 xung clock."
   },
   {
-    "id": 194,
-    "ID": "194",
+    "id": 192,
+    "ID": "192",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4608,8 +4608,8 @@
     "Explanation": "Tạo chuỗi 9 xung vuông ở tần số ~100 kHz kích thích Slave nhả đường SDA bị kẹt."
   },
   {
-    "id": 195,
-    "ID": "195",
+    "id": 193,
+    "ID": "193",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4632,8 +4632,8 @@
     "Explanation": "Mỗi nhóm cảm biến được lấy mẫu ở tần số tối ưu riêng biệt (MPU 50Hz, BMP 5Hz, GNSS 1Hz) mà không gây nghẽn CPU."
   },
   {
-    "id": 196,
-    "ID": "196",
+    "id": 194,
+    "ID": "194",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4656,8 +4656,8 @@
     "Explanation": "So sánh chéo giữa hai nguyên lý đo độc lập (khí áp và vệ tinh) giúp phát hiện sớm sự suy thoái hoặc hỏng hóc của cảm biến."
   },
   {
-    "id": 197,
-    "ID": "197",
+    "id": 195,
+    "ID": "195",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4680,8 +4680,8 @@
     "Explanation": "Định dạng `%+06.2f` luôn hiển thị dấu cộng/trừ và căn lề độ rộng cố định, giúp việc hiển thị trên màn hình không bị nhảy vị trí."
   },
   {
-    "id": 198,
-    "ID": "198",
+    "id": 196,
+    "ID": "196",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4704,8 +4704,8 @@
     "Explanation": "Định lý Pythagoras trong không gian 3 chiều tính độ dài véc-tơ gia tốc tổng; khi rơi tự do giá trị này xấp xỉ bằng 0 g, khi đứng yên xấp xỉ 1 g."
   },
   {
-    "id": 199,
-    "ID": "199",
+    "id": 197,
+    "ID": "197",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4728,8 +4728,8 @@
     "Explanation": "Ảnh JPEG 2MP hợp lệ luôn có dung lượng hàng chục KB; kích thước vài trăm byte chứng tỏ quá trình nén bị lỗi hoặc đường truyền DMA bị đứt."
   },
   {
-    "id": 200,
-    "ID": "200",
+    "id": 198,
+    "ID": "198",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 3: Lập trình C++ Đọc Cảm biến, Giải mã Dữ liệu & Xử lý Ảnh",
@@ -4752,8 +4752,8 @@
     "Explanation": "Giải thuật tương tự như áp suất: căn trái 20 bit từ 3 thanh ghi nhiệt độ liên tiếp của BMP280."
   },
   {
-    "id": 201,
-    "ID": "201",
+    "id": 199,
+    "ID": "199",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
@@ -4776,8 +4776,8 @@
     "Explanation": "Cảm biến Panchromatic gom toàn bộ ánh sáng trong vùng khả kiến thành một dải phổ duy nhất, cho phép tạo ra ảnh đen trắng có độ phân giải không gian cao nhất."
   },
   {
-    "id": 202,
-    "ID": "202",
+    "id": 200,
+    "ID": "200",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
@@ -4800,8 +4800,8 @@
     "Explanation": "Camera đa phổ phân tích các dải bước sóng hẹp gồm Red, Green, Blue, Red-edge và Near-Infrared (NIR) để đánh giá chỉ số thực vật NDVI và độ ẩm đất."
   },
   {
-    "id": 203,
-    "ID": "203",
+    "id": 201,
+    "ID": "201",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
@@ -4824,8 +4824,8 @@
     "Explanation": "Vệ tinh ở quỹ đạo cao bao quát diện tích rộng hơn (FOV lớn), trong khi bay ở quỹ đạo thấp giúp cảm biến đến gần Trái Đất hơn, cho khoảng cách mẫu mặt đất (GSD) nhỏ hơn."
   },
   {
-    "id": 204,
-    "ID": "204",
+    "id": 202,
+    "ID": "202",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
@@ -4848,8 +4848,8 @@
     "Explanation": "Độ phân giải mặt đất tỉ lệ thuận với độ cao và tỉ lệ nghịch với tiêu cự thấu kính; để nhìn rõ chi tiết nhỏ (GSD 5m-10m) cần ống kính tiêu cự dài và thấu kính khẩu độ lớn."
   },
   {
-    "id": 205,
-    "ID": "205",
+    "id": 203,
+    "ID": "203",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
@@ -4872,8 +4872,8 @@
     "Explanation": "Vệ tinh 1U XI-IV của Đại học Tokyo chỉ có kênh truyền thông 1200 bps; việc tải xuống một bức ảnh duy nhất mất 3-4 ngày, đòi hỏi phải lọc ảnh hợp lệ trước khi truyền."
   },
   {
-    "id": 206,
-    "ID": "206",
+    "id": 204,
+    "ID": "204",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
@@ -4896,8 +4896,8 @@
     "Explanation": "Để tiết kiệm năng lượng và băng thông, vệ tinh chạy thuật toán đánh giá ảnh trên bo mạch, loại bỏ ảnh bị đen (bóng tối) hoặc mây trắng che phủ hoàn toàn, chỉ giữ ảnh rõ nét."
   },
   {
-    "id": 207,
-    "ID": "207",
+    "id": 205,
+    "ID": "205",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
@@ -4920,8 +4920,8 @@
     "Explanation": "Các camera tải trọng CubeSat chuẩn hóa giao tiếp điều khiển qua I2C/UART, đường truyền dữ liệu ảnh qua SPI/UART tốc độ cao và cấp nguồn 3.3V hoặc 5.0V."
   },
   {
-    "id": 208,
-    "ID": "208",
+    "id": 206,
+    "ID": "206",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
@@ -4944,8 +4944,8 @@
     "Explanation": "Để tránh nhòe ảnh và chụp trúng tọa độ yêu cầu, hệ thống điều khiển tư thế (ADCS 3 trục) phải ổn định vệ tinh và hướng chính xác khẩu độ quang học về phía mục tiêu."
   },
   {
-    "id": 209,
-    "ID": "209",
+    "id": 207,
+    "ID": "207",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
@@ -4968,8 +4968,8 @@
     "Explanation": "Chip MPU6500 là cảm biến 6-DOF IMU (Inertial Measurement Unit) tích hợp con quay hồi chuyển 3 trục (Gyroscope) và gia tốc kế 3 trục (Accelerometer) trên một đế silicon."
   },
   {
-    "id": 210,
-    "ID": "210",
+    "id": 208,
+    "ID": "208",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
@@ -4992,8 +4992,8 @@
     "Explanation": "Thanh ghi WHO_AM_I (địa chỉ 0x75) của cảm biến MPU6500 luôn trả về giá trị cố định 0x70; giúp phần mềm xác thực chính xác sự hiện diện của chip trên bus I2C."
   },
   {
-    "id": 211,
-    "ID": "211",
+    "id": 209,
+    "ID": "209",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
@@ -5016,8 +5016,8 @@
     "Explanation": "Chân AD0 quyết định bit địa chỉ thấp nhất: nếu nối GND địa chỉ là 0x68, nếu kéo lên 3.3V (VCC) địa chỉ trở thành 0x69, cho phép gắn 2 chip MPU6500 trên cùng bus."
   },
   {
-    "id": 212,
-    "ID": "212",
+    "id": 210,
+    "ID": "210",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
@@ -5040,8 +5040,8 @@
     "Explanation": "Con quay hồi chuyển MEMS luôn có sai số trôi điểm không (Zero-rate drift); lấy mẫu trung bình khi tĩnh và trừ đi giá trị này giúp tính góc tích lũy không bị trôi theo thời gian."
   },
   {
-    "id": 213,
-    "ID": "213",
+    "id": 211,
+    "ID": "211",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
@@ -5064,8 +5064,8 @@
     "Explanation": "Bộ ghép kênh Multiplexer (như 74HC4066 hoặc 74HC4051) cho phép chuyển mạch chia sẻ một cổng UART hoặc I2C giữa nhiều thiết bị ngoại vi (ví dụ: GPS và Camera)."
   },
   {
-    "id": 214,
-    "ID": "214",
+    "id": 212,
+    "ID": "212",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
@@ -5088,8 +5088,8 @@
     "Explanation": "DELPHINUS là tải trọng máy ảnh chuyên dụng trên CubeSat 6U bay quanh Mặt Trăng để phát hiện các chớp sáng quang học (LIF) sinh ra khi thiên thạch va chạm vào bề mặt Mặt Trăng."
   },
   {
-    "id": 215,
-    "ID": "215",
+    "id": 213,
+    "ID": "213",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
@@ -5112,8 +5112,8 @@
     "Explanation": "Thanh chống trọng trường (Gravity Gradient Boom) trên S-CUBE kéo dài khối lượng ra xa, tạo mô-men hồi phục tự nhiên giữ camera luôn hướng về tầng khí quyển Trái Đất."
   },
   {
-    "id": 216,
-    "ID": "216",
+    "id": 214,
+    "ID": "214",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
@@ -5136,8 +5136,8 @@
     "Explanation": "Đầu dò Langmuir (Langmuir Probe) đo dòng điện thu được khi đặt điện thế quét, từ đó tính toán mật độ plasma và nhiệt độ electron của tầng điện ly xung quanh quỹ đạo."
   },
   {
-    "id": 217,
-    "ID": "217",
+    "id": 215,
+    "ID": "215",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
@@ -5160,8 +5160,8 @@
     "Explanation": "Vào ban đêm không có bức xạ ion hóa trực tiếp từ Mặt Trời làm xáo trộn plasma, môi trường tầng điện ly tĩnh lặng hơn, lý tưởng cho việc đo đạc điện trường chính xác."
   },
   {
-    "id": 218,
-    "ID": "218",
+    "id": 216,
+    "ID": "216",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
@@ -5184,8 +5184,8 @@
     "Explanation": "Ở trạng thái tĩnh trên mặt đất, trục Z vuông góc với mặt phẳng bàn sẽ chịu lực phản kháng của mặt sàn chống lại trọng lực, đo được gia tốc +1G (+9.8 m/s^2)."
   },
   {
-    "id": 219,
-    "ID": "219",
+    "id": 217,
+    "ID": "217",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",
@@ -5208,8 +5208,8 @@
     "Explanation": "DLPF (Digital Low Pass Filter) tích hợp bên trong MPU6500 loại bỏ các sóng dao động cơ học tần số cao (do động cơ, rung lắc vỏ) để dữ liệu góc không bị nhiễu răng cưa."
   },
   {
-    "id": 220,
-    "ID": "220",
+    "id": 218,
+    "ID": "218",
     "lab": 4,
     "Lab": "Lab 4: Phân hệ Cảm biến & Tải trọng Khoa học (Payload)",
     "section": "Phần 1: Tổng quan phân hệ Cảm biến & Tải trọng Khoa học",

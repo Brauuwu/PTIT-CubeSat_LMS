@@ -59,8 +59,8 @@ Chuẩn giao tiếp **SPI** là một bus truyền thông nối tiếp đồng b
 ### ❓ Câu Hỏi Củng Cố Kiến Thức (Doc 3.1)
 1. **Bus giao tiếp SPI 4 dây chuẩn kết nối thẻ nhớ MicroSD trên kit OBC bao gồm các chân tín hiệu nào?**
    - A. SDA, SCL, INT, RST
-   - B. TX (GPIO 16), RX (GPIO 17), CTS, RTS
-   - C. CS (GPIO 13), SCK (GPIO 18), MISO (GPIO 19), MOSI (GPIO 23)
+   - B. TX, RX, CTS, RTS
+   - C. CS, SCK, MISO, MOSI
    - D. D0, D1, D2, CLK
 
 2. **Khi ghi dữ liệu viễn trắc vào thẻ MicroSD, tại sao sau khi gọi `dataFile.println()` bắt buộc phải gọi `dataFile.flush()`?**
@@ -245,12 +245,12 @@ void logTelemetryData(float vbat, float temp, float pressure) {
 ```
 
 ### 2. Danh mục Bài Thực hành Lab 3
-- `Lab3-01a_MicroSD_SPI`: Thực hành khởi tạo bus SPI phần cứng ở tốc độ cao (VSPI: CS 13, SCK 18, MISO 19, MOSI 23), nhận diện thẻ nhớ MicroSD và đọc thông tin dung lượng.
+- `Lab3-01a_MicroSD_SPI`: Thực hành khởi tạo bus SPI phần cứng ở tốc độ cao, nhận diện thẻ nhớ MicroSD và đọc thông tin dung lượng.
 - `Lab3-01b_MicroSD_Library`: Ghi log dữ liệu tự động định dạng CSV thông qua đối tượng thư viện `PTIT_Storage` (`storage.init()`).
 - `Lab3-02_Linux_FS_Commands`: Lập trình bộ phân tích cú pháp dòng lệnh CLI nhận 11 lệnh Linux chuẩn (`pwd`, `cd`, `ls`, `cat`, `touch`, `echo`, `mkdir`, `rmdir`, `rm`, `df`, `help`) tuân thủ nguyên tắc Silent Success, không in tiền tố `OK:` rườm rà.
-- `Lab3-03_Multitasking_Scheduler`: Thiết lập 3 tác vụ FreeRTOS chạy song song (Nháy LED nhịp tim GPIO 2, Sinh dữ liệu viễn trắc giả lập có Mutex bảo vệ, Tự chẩn đoán bộ nhớ Heap và xung nhịp CPU) được đồng bộ an toàn qua `PTIT_Scheduler`.
-- `Lab3-04_Watchdog_Timer`: Kích hoạt Task Watchdog Timer (TWDT), nạp lại định kỳ, mô phỏng lỗi treo vi xử lý qua Nút nhấn GPIO 4 hoặc chuỗi lệnh Serial (`fault`/`freeze`), ghi nhận nguyên nhân khởi động lại bằng `esp_reset_reason()`.
-- `Lab3-05_Event_Driven_Queue`: Xây dựng kiến trúc hướng sự kiện (Event-Driven) với hàng đợi FreeRTOS Queue không khóa, tiếp nhận sự kiện ngắt nút nhấn GPIO 4, cảnh báo viễn trắc nhiệt độ vượt ngưỡng và lệnh điều khiển chuỗi Serial mà không cần vòng lặp thăm dò (Polling).
+- `Lab3-03_Multitasking_Scheduler`: Thiết lập 3 tác vụ FreeRTOS chạy song song (Nháy LED nhịp tim chỉ thị, Sinh dữ liệu viễn trắc giả lập có Mutex bảo vệ, Tự chẩn đoán bộ nhớ Heap và xung nhịp CPU) được đồng bộ an toàn qua `PTIT_Scheduler`.
+- `Lab3-04_Watchdog_Timer`: Kích hoạt Task Watchdog Timer (TWDT), nạp lại định kỳ, mô phỏng lỗi treo vi xử lý qua Nút nhấn phần cứng hoặc chuỗi lệnh Serial (`fault`/`freeze`), ghi nhận nguyên nhân khởi động lại bằng `esp_reset_reason()`.
+- `Lab3-05_Event_Driven_Queue`: Xây dựng kiến trúc hướng sự kiện (Event-Driven) với hàng đợi FreeRTOS Queue không khóa, tiếp nhận sự kiện ngắt nút nhấn phần cứng, cảnh báo viễn trắc nhiệt độ vượt ngưỡng và lệnh điều khiển chuỗi Serial mà không cần vòng lặp thăm dò (Polling).
 
 ### ❓ Câu Hỏi Đánh Giá Kỹ Năng Thực Hành (Lab 3)
 1. **Kể từ Lab 3, mọi thao tác xuất log debug ra màn hình Console được chuẩn hóa qua đối tượng nào?**
