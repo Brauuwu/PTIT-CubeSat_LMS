@@ -1,0 +1,108 @@
+services:
+  # ── PostgreSQL Database ──────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_dev
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+      - ./scripts/dev-postgres-init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d cubesat"]
+      interval: 3s
+      timeout: 2s
+      retries: 30
+    networks:
+      - cubesat_net
+
+  # ── Redis Cache ──────────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 2s
+      retries: 20
+    volumes:
+      - redis_data:/data
+    networks:
+      - cubesat_net
+
+  # ── Database Migration & Seeding ──────────────────────────────────────────────
+  migrate:
+    build:
+      context: ./fastapi-backend
+      dockerfile: Dockerfile
+    container_name: migrate
+    env_file:
+      - ./fastapi-backend/.env
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://cubesat:cubesat_dev@postgres:5432/cubesat
+    command: ["sh", "-c", "python -m alembic upgrade head && python -m app.services.curriculum_seed"]
+    restart: "no"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - cubesat_net
+
+  # ── FastAPI Backend ───────────────────────────────────────────────────────────
+  fastapi:
+    build:
+      context: ./fastapi-backend
+      dockerfile: Dockerfile
+    container_name: backend
+    restart: unless-stopped
+    ports:
+      - "8003:8000"
+    env_file:
+      - ./fastapi-backend/.env
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=postgresql+asyncpg://cubesat:cubesat_dev@postgres:5432/cubesat
+      - ALLOWED_ORIGINS=http://localhost:5173,http://127.0.0.1:5173,http://localhost:8003
+    volumes:
+      - ./fastapi-backend/app:/app/app
+      - ./fastapi-backend/build_cache:/app/build_cache
+      - ./fastapi-backend/data:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    networks:
+      - cubesat_net
+
+  # ── React + Vite Frontend (Nginx Proxy) ──────────────────────────────────────
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: frontend
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+    depends_on:
+      - fastapi
+    networks:
+      cubesat_net:
+        aliases:
+          - nginx
+
+networks:
+  cubesat_net:
+    driver: bridge
+
+volumes:
+  redis_data:
+  postgres_dev_data:

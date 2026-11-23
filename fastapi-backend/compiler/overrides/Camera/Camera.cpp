@@ -90,6 +90,8 @@ bool PTIT_Camera::capture() {
 bool PTIT_Camera::captureToFile(const char* path) {
     const bool saved = captureOnCameraChannel(path);
     // Always hand UART2 back to GPS, whether the capture succeeded or failed.
+    Serial2.flush();
+    delay(20);
     selectGPS();
     return saved;
 }

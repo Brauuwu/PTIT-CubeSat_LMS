@@ -14,6 +14,14 @@ import { getLabQuestionSet } from '../../data/lab-questions';
 import { CheckpointCard } from '../lessons/LabCheckpoint';
 import { isSequentialLesson } from '../lessons/lesson-sequence';
 
+const LAB0_CHECKPOINTS = { 'quiz-0-1': 'doc-0-1', 'quiz-0-2': 'doc-0-2', 'quiz-0-3': 'practice-0' };
+const LAB1_CHECKPOINTS = {
+  'quiz-1-1': 'doc-1-1', 'quiz-1-2': 'doc-1-2', 'quiz-1-3': 'doc-1-3', 'quiz-1-4': 'practice-1-led',
+  'quiz-1-5': 'doc-1-4', 'quiz-1-6': 'practice-1-button', 'quiz-1-7': 'doc-1-5', 'quiz-1-8': 'practice-1-74hc595',
+  'quiz-1-9': 'doc-1-6', 'quiz-1-10': 'practice-1-uart', 'quiz-1-11': 'doc-1-7', 'quiz-1-12': 'doc-1-8',
+  'quiz-1-13': 'practice-1-wifi'
+};
+
 // Replace (or add) one lab's entry in the /api/progress list with the server's response.
 const withLabProgress = (list, body) => (list.some(item => item.lab_id === body.lab_id)
   ? list.map(item => item.lab_id === body.lab_id ? body : item)
@@ -48,7 +56,8 @@ function LoadedLabLayout({ lab, catalog, editorPanel, visualizationPanel = null,
   const completedCount = sequentialLessons.filter(item => lessonStates[item.id]?.completed).length;
   const completionPercent = sequentialLessons.length ? Math.round((completedCount / sequentialLessons.length) * 100) : 0;
   const firstIncomplete = lessons.findIndex(item => isSequentialLesson(item) && !lessonStates[item.id]?.completed);
-  const checkpoint = lesson.type === 'quiz' ? getLabQuestionSet(lab.id)?.checkpoints.find(item => item.id === lesson.checkpointId) : null;
+  const checkpointId = lesson.checkpointId || (lab.id === 0 ? LAB0_CHECKPOINTS[lesson.id] : lab.id === 1 ? LAB1_CHECKPOINTS[lesson.id] : null);
+  const checkpoint = lesson.type === 'quiz' ? getLabQuestionSet(lab.id)?.checkpoints.find(item => item.id === checkpointId) : null;
   const labTestLesson = lessons.find(item => item.type === 'labtest');
   const elapsedSeconds = lessonStates[lesson.id]?.started_at
     ? Math.max(0, Math.floor((clock - Date.parse(lessonStates[lesson.id].started_at)) / 1000))
@@ -125,15 +134,15 @@ function LoadedLabLayout({ lab, catalog, editorPanel, visualizationPanel = null,
       </div>
       {practiceVariant === 'split' && <div className="lab-practice-actions" aria-label="Thao tác thực hành" key={lesson.id}>{practiceActions}</div>}
     </section>
-  </> : lesson.type === 'quiz' ? (lesson.checkpointId ? <div className="lesson-quiz">
+  </> : lesson.type === 'quiz' ? <div className="lesson-quiz">
     {checkpoint ? <CheckpointCard as="div" checkpoint={checkpoint}
       renderExercise={id => <button type="button" className="lesson-quiz-exercise" onClick={() => selectLesson(id)}><code>{id}</code></button>} />
-      : <p>Chưa có nội dung cho phần câu hỏi này.</p>}
+      : <div className="fig-body-text">
+        <h2>{lesson.title}</h2>
+        <p>Câu hỏi kiểm tra của mục này đang được biên soạn.</p>
+      </div>}
     <p className="lesson-quiz-note">Phần câu hỏi dùng để ôn tập, không tính vào tiến độ và không khóa bài tiếp theo.</p>
-  </div> : <div className="fig-body-text">
-    <h2>{lesson.title}</h2>
-    <p>Câu hỏi kiểm tra của mục này đang được biên soạn. Đáp án chỉ lưu trên máy chủ và sẽ mở khi ngân hàng câu hỏi được duyệt.</p>
-  </div>) : lesson.type === 'summary' ? <div className="fig-body-text">
+  </div> : lesson.type === 'summary' ? <div className="fig-body-text">
     <h2>Kết quả cần đạt</h2><p>{lesson.description}</p>
     <h2>Đối chiếu các bài thực hành</h2><p>Kiểm tra mã biên dịch, lưu lại kết quả quan sát và giải thích cách chương trình đáp ứng yêu cầu của từng bài.</p>
     <ul className="lesson-summary-list">{lessons.filter(item => item.type === 'practice').map(item => <li key={item.id}><button type="button" onClick={() => selectLesson(item.id)}><code>{item.exerciseCode}</code><span>{item.title}</span></button></li>)}</ul>
@@ -176,7 +185,7 @@ function LoadedLabLayout({ lab, catalog, editorPanel, visualizationPanel = null,
         completedCount={completedCount} totalCount={sequentialLessons.length} completionPercent={completionPercent}
         progressNote={lessons.some(item => item.type === 'quiz') ? 'không tính phần câu hỏi' : ''}
         videoNode={<VideoPlayer url={videoUrl} />}
-        docNode={<DocViewer key={lesson.id} docPath={lab.id === 0 && lesson.id === 'document' ? lab.docPath : undefined} content={lesson.reading} />}
+        docNode={<DocViewer key={lesson.id} docPath={lesson.id} content={lesson.reading} />}
         componentsNode={visualizationPanel}
         bodyNode={lessonBody} goalNode={practiceGoal}
         selectLesson={selectLesson}

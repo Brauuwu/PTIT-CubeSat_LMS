@@ -3,17 +3,18 @@
 
 #include <Arduino.h>
 #include <Stream.h>
+#include <freertos/FreeRTOS.h>
+#include <freertos/queue.h>
+#include <freertos/task.h>
+#include <esp_task_wdt.h>
 #include <type_traits>
 
-// The console port type differs per board: HardwareSerial on ESP32 (UART0),
-// HWCDC/USBCDC on ESP32-S3 when ARDUINO_USB_CDC_ON_BOOT=1. Upstream v1.1.0 hard-codes
-// HardwareSerial&, which does not compile on ESP32-S3.
 using PTIT_ConsoleSerial = std::remove_reference<decltype(Serial)>::type;
 
 /**
  * @class PTIT_CDH
  * @brief Phân hệ Xử lý Dữ liệu và Lệnh điều khiển (Command and Data Handling).
- *
+ * 
  * PTIT_CDH kế thừa từ Stream (và Print) để đóng gói toàn bộ các phương thức
  * giao tiếp dữ liệu nối tiếp của Serial (print, println, printf, read, write, available, v.v.),
  * giúp ẩn phần cứng Serial bên dưới và chuẩn hóa giao tiếp trong hệ thống PTITCube.
@@ -32,11 +33,11 @@ public:
 
     // Các phương thức quản lý cổng Serial của OBC
     void begin(unsigned long baud = 115200);
-    // On a USB CDC console the frame/pin arguments do not apply and are ignored.
-    void begin(unsigned long baud, uint32_t config, int8_t rxPin = -1, int8_t txPin = -1,
+    void begin(unsigned long baud, uint32_t config, int8_t rxPin = -1, int8_t txPin = -1, 
                bool invert = false, unsigned long timeout_ms = 20000UL, uint8_t rxfifo_full_thrhd = 112);
     void end();
     operator bool() const;
+    String extractCommand(const String& cmd);
 
     // Stream interface
     int available() override;
@@ -48,6 +49,121 @@ public:
     size_t write(uint8_t c) override;
     size_t write(const uint8_t *buffer, size_t size) override;
     using Print::write;
+
+    // ==========================================
+    // Watchdog Timer (WDT) APIs
+    // ==========================================
+    bool wdtInit(uint32_t timeoutSec = 3, bool panic = true);
+    void wdtAdd();
+    void wdtFeed();
+    void wdtReset(); // Alias for wdtFeed
+    bool wasWatchdogReset();
+
+    // ==========================================
+    // FreeRTOS Task & Delay Helper APIs
+    // ==========================================
+    bool createTask(TaskFunction_t taskFn, const char* name, uint32_t stackSize = 2048, 
+                    UBaseType_t priority = 1, BaseType_t core = 1, void* param = NULL);
+    void delayMs(uint32_t ms);
 };
+
+// ============================================================================
+// PTIT_Queue: Template bọc FreeRTOS Queue thành API hướng đối tượng tinh gọn
+// ============================================================================
+template <typename T>
+class PTIT_Queue {
+private:
+    QueueHandle_t _queue;
+
+public:
+    PTIT_Queue(size_t length = 0) : _queue(NULL) {
+        if (length > 0) {
+            init(length);
+        }
+    }
+
+    ~PTIT_Queue() {
+        if (_queue != NULL) {
+            vQueueDelete(_queue);
+            _queue = NULL;
+        }
+    }
+
+    bool init(size_t length = 10) {
+        if (_queue != NULL) return true;
+        _queue = xQueueCreate(length, sizeof(T));
+        return (_queue != NULL);
+    }
+
+    bool send(const T* item, uint32_t waitMs = 0) {
+        if (_queue == NULL) return false;
+        TickType_t ticks = (waitMs == portMAX_DELAY) ? portMAX_DELAY : pdMS_TO_TICKS(waitMs);
+        return (xQueueSend(_queue, item, ticks) == pdTRUE);
+    }
+
+    bool send(const T& item, uint32_t waitMs = 0) {
+        return send(&item, waitMs);
+    }
+
+    bool sendFromISR(const T* item) {
+        if (_queue == NULL) return false;
+        BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+        BaseType_t res = xQueueSendFromISR(_queue, item, &xHigherPriorityTaskWoken);
+        if (xHigherPriorityTaskWoken) {
+            portYIELD_FROM_ISR();
+        }
+        return (res == pdTRUE);
+    }
+
+    bool sendFromISR(const T& item) {
+        return sendFromISR(&item);
+    }
+
+    bool receive(T* item, uint32_t waitMs = portMAX_DELAY) {
+        if (_queue == NULL) return false;
+        TickType_t ticks = (waitMs == portMAX_DELAY) ? portMAX_DELAY : pdMS_TO_TICKS(waitMs);
+        return (xQueueReceive(_queue, item, ticks) == pdTRUE);
+    }
+
+    bool isEmpty() const {
+        if (_queue == NULL) return true;
+        return (uxQueueMessagesWaiting(_queue) == 0);
+    }
+
+    UBaseType_t available() const {
+        if (_queue == NULL) return 0;
+        return uxQueueMessagesWaiting(_queue);
+    }
+
+    QueueHandle_t handle() const {
+        return _queue;
+    }
+};
+
+// ============================================================================
+// Global Helper Functions (gọi trực tiếp không cần đối tượng)
+// ============================================================================
+inline bool wdtInit(uint32_t timeoutSec = 3, bool panic = true) {
+    return (esp_task_wdt_init(timeoutSec, panic) == ESP_OK);
+}
+inline void wdtAdd() {
+    esp_task_wdt_add(NULL);
+}
+inline void wdtFeed() {
+    esp_task_wdt_reset();
+}
+inline void wdtReset() {
+    esp_task_wdt_reset();
+}
+inline bool wasWatchdogReset() {
+    return (esp_reset_reason() == ESP_RST_TASK_WDT);
+}
+inline void taskDelayMs(uint32_t ms) {
+    vTaskDelay(pdMS_TO_TICKS(ms));
+}
+inline bool createTask(TaskFunction_t taskFn, const char* name, uint32_t stackSize = 2048, 
+                       UBaseType_t priority = 1, BaseType_t core = 1, void* param = NULL) {
+    return (xTaskCreatePinnedToCore(taskFn, name, stackSize, param, priority, NULL, core) == pdPASS);
+}
 
 #endif

@@ -19,7 +19,7 @@ void PTIT_CDH::begin(unsigned long baud, uint32_t, int8_t, int8_t, bool, unsigne
     _serial.begin(baud); // USB CDC: no UART frame or pin configuration.
 }
 #else
-void PTIT_CDH::begin(unsigned long baud, uint32_t config, int8_t rxPin, int8_t txPin,
+void PTIT_CDH::begin(unsigned long baud, uint32_t config, int8_t rxPin, int8_t txPin, 
                      bool invert, unsigned long timeout_ms, uint8_t rxfifo_full_thrhd) {
     _serial.begin(baud, config, rxPin, txPin, invert, timeout_ms, rxfifo_full_thrhd);
 }
@@ -98,4 +98,50 @@ void PTIT_CDH::publishData(const char* topic, const char* payload) {
     if (mqttClient.connected()) {
         mqttClient.publish(topic, payload);
     }
+}
+
+String PTIT_CDH::extractCommand(const String& cmd) {
+    String command = cmd;
+    command.trim();
+    int sp1 = command.indexOf(' ');
+    if (sp1 > 0) {
+        command = command.substring(0, sp1);
+    }
+    command.toLowerCase();
+    return command;
+}
+
+// ==========================================
+// Watchdog Timer (WDT) Implementation
+// ==========================================
+bool PTIT_CDH::wdtInit(uint32_t timeoutSec, bool panic) {
+    return (esp_task_wdt_init(timeoutSec, panic) == ESP_OK);
+}
+
+void PTIT_CDH::wdtAdd() {
+    esp_task_wdt_add(NULL);
+}
+
+void PTIT_CDH::wdtFeed() {
+    esp_task_wdt_reset();
+}
+
+void PTIT_CDH::wdtReset() {
+    esp_task_wdt_reset();
+}
+
+bool PTIT_CDH::wasWatchdogReset() {
+    return (esp_reset_reason() == ESP_RST_TASK_WDT);
+}
+
+// ==========================================
+// FreeRTOS Task & Delay Implementation
+// ==========================================
+bool PTIT_CDH::createTask(TaskFunction_t taskFn, const char* name, uint32_t stackSize, 
+                          UBaseType_t priority, BaseType_t core, void* param) {
+    return (xTaskCreatePinnedToCore(taskFn, name, stackSize, param, priority, NULL, core) == pdPASS);
+}
+
+void PTIT_CDH::delayMs(uint32_t ms) {
+    vTaskDelay(pdMS_TO_TICKS(ms));
 }

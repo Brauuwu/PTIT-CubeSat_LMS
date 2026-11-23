@@ -1,0 +1,1 @@
+## 📖 Doc 4.7: Kiến Trúc Thu Thập & Xử Lý Dữ Liệu Đa Cảm Biến Toàn Diện

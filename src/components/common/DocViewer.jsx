@@ -11,20 +11,19 @@ export default function DocViewer({ docPath, content: directContent = '' }) {
   useEffect(() => {
     if (directContent) {
       setContent(directContent);
+      setLoading(false);
       return;
     }
     if (!docPath) return;
 
-    {
-      // Try fetching from server API
-      authorizedFetch(`/api/docs/${docPath}`)
-        .then(r => r.ok ? r.text() : Promise.reject())
-        .then(text => { setContent(text); setLoading(false); })
-        .catch(() => {
-          setContent(`# ${docPath}\n\nTài liệu đang được cập nhật...`);
-          setLoading(false);
-        });
-    }
+    setLoading(true);
+    authorizedFetch(`/api/docs/${docPath}`)
+      .then(r => r.ok ? r.text() : Promise.reject())
+      .then(text => { setContent(text); setLoading(false); })
+      .catch(() => {
+        setContent(`# ${docPath}\n\nTài liệu đang được cập nhật...`);
+        setLoading(false);
+      });
   }, [docPath, directContent]);
 
   if (loading) {
