@@ -14,65 +14,102 @@ PTIT_Camera camera;
 PTIT_Storage storage;
 PTIT_COM com;
 
-const float BUS_VOLTAGE_TURN_OFF = 3.5;
-const float BUS_VOLTAGE_TURN_ON  = 3.7;
-bool buck_is_on = true;
+// Ngưỡng bảo vệ nguồn & Chế độ tiết kiệm năng lượng
+const float VOLTAGE_LOW_THRES   = 3.5;  // V
+const float VOLTAGE_HIGH_THRES  = 3.7;  // V
+const float PERCENT_LOW_THRES   = 20.0; // %
+const float PERCENT_HIGH_THRES  = 25.0; // %
+bool isPowerSaving = false;
 
 unsigned long lastTelemetryTime = 0;
 const unsigned long TELEMETRY_INTERVAL = 3000;
 
+void check_power_mode() {
+    float vbat = eps.getBatteryVoltage();
+    float pct  = eps.getBatteryPercentage();
+
+    if (!isPowerSaving && (vbat < VOLTAGE_LOW_THRES || pct < PERCENT_LOW_THRES)) {
+        isPowerSaving = true;
+        eps.setBuckState(false);
+        cdh.println("Power saving mode ENABLED (Low battery). Sensors, camera and storage disabled.");
+        com.sendMessage("ALERT: Power saving mode ENABLED");
+    } else if (isPowerSaving && vbat > VOLTAGE_HIGH_THRES && pct > PERCENT_HIGH_THRES) {
+        isPowerSaving = false;
+        eps.setBuckState(true);
+        cdh.println("Power saving mode DISABLED (Battery recovered). All subsystems active.");
+        com.sendMessage("ALERT: Power saving mode DISABLED");
+    }
+}
+
 void downlink_hk_data() {
     eps.update();
-    sensor.update();
+    check_power_mode();
+
     camera.selectGPS();
     gps.update();
 
-    // 1. JSON Telemetry Snapshot cho Serial C&DH và Thẻ nhớ SD
-    JsonDocument doc;
-    JsonObject epsObj = doc["eps"].to<JsonObject>();
-    epsObj["v"]    = eps.getBatteryVoltage();
-    epsObj["pct"]  = eps.getBatteryPercentage();
-    epsObj["rate"] = eps.getChargeRate();
+    if (!isPowerSaving) {
+        sensor.update();
 
-    JsonObject envObj = doc["env"].to<JsonObject>();
-    envObj["temp"]  = sensor.getTemperature();
-    envObj["press"] = sensor.getPressure();
+        // 1. Snapshot JSON cho Serial C&DH và Thẻ nhớ SD
+        JsonDocument doc;
+        JsonObject epsObj = doc["eps"].to<JsonObject>();
+        epsObj["v"]    = eps.getBatteryVoltage();
+        epsObj["pct"]  = eps.getBatteryPercentage();
+        epsObj["rate"] = eps.getChargeRate();
 
-    JsonObject imuObj = doc["imu"].to<JsonObject>();
-    imuObj["roll"]    = sensor.getRoll();
-    imuObj["pitch"]   = sensor.getPitch();
-    imuObj["yaw"]     = sensor.getHeading();
-    imuObj["ax_ms2"]  = sensor.getAccX();
-    imuObj["ay_ms2"]  = sensor.getAccY();
-    imuObj["az_ms2"]  = sensor.getAccZ();
-    imuObj["gx_rads"] = sensor.getGyroX();
-    imuObj["gy_rads"] = sensor.getGyroY();
-    imuObj["gz_rads"] = sensor.getGyroZ();
+        JsonObject envObj = doc["env"].to<JsonObject>();
+        envObj["temp"]  = sensor.getTemperature();
+        envObj["press"] = sensor.getPressure();
 
-    if (gps.hasFix()) {
-        JsonObject gpsObj = doc["gps"].to<JsonObject>();
-        gpsObj["lat"]  = gps.getLatitude();
-        gpsObj["lng"]  = gps.getLongitude();
-        gpsObj["alt"]  = gps.getAltitude();
-        gpsObj["sats"] = gps.getSatellites();
-    }
+        JsonObject imuObj = doc["imu"].to<JsonObject>();
+        imuObj["roll"]    = sensor.getRoll();
+        imuObj["pitch"]   = sensor.getPitch();
+        imuObj["yaw"]     = sensor.getHeading();
+        imuObj["ax_ms2"]  = sensor.getAccX();
+        imuObj["ay_ms2"]  = sensor.getAccY();
+        imuObj["az_ms2"]  = sensor.getAccZ();
+        imuObj["gx_rads"] = sensor.getGyroX();
+        imuObj["gy_rads"] = sensor.getGyroY();
+        imuObj["gz_rads"] = sensor.getGyroZ();
 
-    String telem;
-    serializeJson(doc, telem);
-    cdh.printf("[TELEM] %s\n", telem.c_str());
-    storage.appendFile("/datalog.txt", (telem + "\n").c_str());
-    cdh.println("[SD] Telemetry saved");
+        if (gps.hasFix()) {
+            JsonObject gpsObj = doc["gps"].to<JsonObject>();
+            gpsObj["lat"]  = gps.getLatitude();
+            gpsObj["lng"]  = gps.getLongitude();
+            gpsObj["alt"]  = gps.getAltitude();
+            gpsObj["sats"] = gps.getSatellites();
+        }
 
-    // 2. Chia nhỏ HK Telemetry thành các Chunk (< 58 bytes) truyền qua LoRa
-    String chunks[] = {
-        "{\"eps\":{\"v\":" + String(eps.getBatteryVoltage(), 2) + ",\"pct\":" + String(eps.getBatteryPercentage(), 1) + "}}",
-        "{\"env\":{\"temp\":" + String(sensor.getTemperature(), 2) + ",\"press\":" + String(sensor.getPressure(), 2) + "}}",
-        "{\"imu\":{\"roll\":" + String(sensor.getRoll(), 1) + ",\"pitch\":" + String(sensor.getPitch(), 1) + ",\"head\":" + String(sensor.getHeading(), 1) + "}}",
-        gps.hasFix() ? ("{\"gps\":{\"lat\":" + String(gps.getLatitude(), 5) + ",\"lng\":" + String(gps.getLongitude(), 5) + "}}") : ""
-    };
-    for (const auto& c : chunks) {
-        if (c.length() > 0) {
-            com.sendMessage(c);
+        String telem;
+        serializeJson(doc, telem);
+        cdh.printf("[TELEM] %s\n", telem.c_str());
+        storage.appendFile("/datalog.txt", (telem + "\n").c_str());
+        cdh.println("[SD] Telemetry saved");
+
+        // 2. Chia nhỏ HK Telemetry thành các Chunk (< 58 bytes) truyền qua LoRa
+        String chunks[] = {
+            "{\"eps\":{\"v\":" + String(eps.getBatteryVoltage(), 2) + ",\"pct\":" + String(eps.getBatteryPercentage(), 1) + "}}",
+            "{\"env\":{\"temp\":" + String(sensor.getTemperature(), 2) + ",\"press\":" + String(sensor.getPressure(), 2) + "}}",
+            "{\"imu\":{\"roll\":" + String(sensor.getRoll(), 1) + ",\"pitch\":" + String(sensor.getPitch(), 1) + ",\"head\":" + String(sensor.getHeading(), 1) + "}}",
+            gps.hasFix() ? ("{\"gps\":{\"lat\":" + String(gps.getLatitude(), 5) + ",\"lng\":" + String(gps.getLongitude(), 5) + "}}") : ""
+        };
+        for (const auto& c : chunks) {
+            if (c.length() > 0) {
+                com.sendMessage(c);
+                delay(100);
+            }
+        }
+    } else {
+        // Chế độ Power Saving: Cảm biến và Storage bị tắt, chỉ giữ LoRa và GPS
+        String epsChunk = "{\"eps\":{\"v\":" + String(eps.getBatteryVoltage(), 2) + ",\"pct\":" + String(eps.getBatteryPercentage(), 1) + ",\"pwr_save\":true}}";
+        cdh.printf("[TELEM] %s\n", epsChunk.c_str());
+        com.sendMessage(epsChunk);
+        delay(100);
+
+        if (gps.hasFix()) {
+            String gpsChunk = "{\"gps\":{\"lat\":" + String(gps.getLatitude(), 5) + ",\"lng\":" + String(gps.getLongitude(), 5) + "}}";
+            com.sendMessage(gpsChunk);
             delay(100);
         }
     }
@@ -83,7 +120,7 @@ void handle_command(char cmd) {
     com.sendMessage("ACK: " + String(cmd));
 
     switch (cmd) {
-        case 'a': // Beacon test
+        case 'a': // Beacon test (LoRa hoạt động bình thường)
             for (uint8_t i = 0; i < 5; i++) {
                 com.sendMessage("Hello PTITCube");
                 cdh.println("Hello PTITCube");
@@ -91,7 +128,12 @@ void handle_command(char cmd) {
             }
             break;
 
-        case 'b': { // SD Card log & readback
+        case 'b': // SD Card log (Vô hiệu hóa trong Power Saving)
+            if (isPowerSaving) {
+                cdh.println("ERR: Storage disabled in power saving mode!");
+                com.sendMessage("ERR: Storage disabled in power saving mode");
+                break;
+            }
             cdh.println("Saving voltages to the SD card...");
             storage.writeFile("/voltage.txt", "");
             for (uint8_t i = 0; i < 5; i++) {
@@ -101,14 +143,16 @@ void handle_command(char cmd) {
             }
             cdh.println("Done saving voltages to the SD card.");
             cdh.println("Reading voltages from the SD card...");
-            String content = storage.readFile("/voltage.txt");
-            com.sendMessage(content);
-            cdh.print(content);
+            cdh.print(storage.readFile("/voltage.txt"));
             cdh.println("Done reading voltages from the SD card.");
             break;
-        }
 
-        case 'c': // Accelerometer
+        case 'c': // Accelerometer (Vô hiệu hóa trong Power Saving)
+            if (isPowerSaving) {
+                cdh.println("ERR: Sensors disabled in power saving mode!");
+                com.sendMessage("ERR: Sensors disabled in power saving mode");
+                break;
+            }
             for (uint8_t i = 0; i < 5; i++) {
                 sensor.update();
                 String msg = "Acceleration: ax=" + String(sensor.getAccX(), 2) + ", ay=" + String(sensor.getAccY(), 2) + ", az=" + String(sensor.getAccZ(), 2) + " m/s^2";
@@ -118,7 +162,12 @@ void handle_command(char cmd) {
             }
             break;
 
-        case 'd': // Gyroscope
+        case 'd': // Gyroscope (Vô hiệu hóa trong Power Saving)
+            if (isPowerSaving) {
+                cdh.println("ERR: Sensors disabled in power saving mode!");
+                com.sendMessage("ERR: Sensors disabled in power saving mode");
+                break;
+            }
             for (uint8_t i = 0; i < 5; i++) {
                 sensor.update();
                 String msg = "Gyroscope: gx=" + String(sensor.getGyroX(), 2) + ", gy=" + String(sensor.getGyroY(), 2) + ", gz=" + String(sensor.getGyroZ(), 2) + " rad/s";
@@ -128,7 +177,7 @@ void handle_command(char cmd) {
             }
             break;
 
-        case 'e': // GPS
+        case 'e': // GPS (Vẫn hoạt động bình thường qua MUX)
             camera.selectGPS();
             delay(100);
             for (uint8_t i = 0; i < 5; i++) {
@@ -142,7 +191,12 @@ void handle_command(char cmd) {
             }
             break;
 
-        case 'f': { // Camera ESP32-CAM
+        case 'f': { // Camera ESP32-CAM (Vô hiệu hóa trong Power Saving)
+            if (isPowerSaving) {
+                cdh.println("ERR: Camera disabled in power saving mode!");
+                com.sendMessage("ERR: Camera disabled in power saving mode");
+                break;
+            }
             cdh.println("Capturing photo with ESP32-CAM...");
             camera.selectCamera();
             delay(200);
@@ -185,20 +239,6 @@ void loop() {
     if (now - lastTelemetryTime >= TELEMETRY_INTERVAL) {
         lastTelemetryTime = now;
         downlink_hk_data();
-
-        // HEPTA-SAT Power Hysteresis
-        float bus_v = eps.getBatteryVoltage();
-        if (buck_is_on && bus_v < BUS_VOLTAGE_TURN_OFF) {
-            cdh.println("Bus voltage is low! Switching off Buck converter to save power.");
-            eps.setBuckState(false);
-            buck_is_on = false;
-        } else if (!buck_is_on && bus_v > BUS_VOLTAGE_TURN_ON) {
-            cdh.println("Bus voltage recovered. Switching on Buck converter.");
-            eps.setBuckState(true);
-            buck_is_on = true;
-        } else {
-            cdh.printf("Buck converter is %s.\n", buck_is_on ? "on" : "off");
-        }
     }
 
     gps.update();
