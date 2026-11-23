@@ -22,7 +22,7 @@ const float PERCENT_HIGH_THRES  = 25.0; // %
 bool isPowerSaving = false;
 
 unsigned long lastTelemetryTime = 0;
-const unsigned long TELEMETRY_INTERVAL = 3000;
+const unsigned long TELEMETRY_INTERVAL = 4000; // 4 giây gửi viễn trắc 1 lần (tối ưu cửa sổ đón lệnh)
 
 void check_power_mode() {
     float vbat = eps.getBatteryVoltage();
@@ -97,7 +97,7 @@ void downlink_hk_data() {
         for (const auto& c : chunks) {
             if (c.length() > 0) {
                 com.sendMessage(c);
-                delay(100);
+                delay(120);
             }
         }
     } else {
@@ -105,26 +105,33 @@ void downlink_hk_data() {
         String epsChunk = "{\"eps\":{\"v\":" + String(eps.getBatteryVoltage(), 2) + ",\"pct\":" + String(eps.getBatteryPercentage(), 1) + ",\"pwr_save\":true}}";
         cdh.printf("[TELEM] %s\n", epsChunk.c_str());
         com.sendMessage(epsChunk);
-        delay(100);
+        delay(120);
 
         if (gps.hasFix()) {
             String gpsChunk = "{\"gps\":{\"lat\":" + String(gps.getLatitude(), 5) + ",\"lng\":" + String(gps.getLongitude(), 5) + "}}";
             com.sendMessage(gpsChunk);
-            delay(100);
+            delay(120);
         }
     }
 }
 
 void handle_command(char cmd) {
+    // Hoãn chu kỳ viễn trắc kế tiếp (Telemetry Backoff) để tránh nghẽn kênh LoRa khi đang xử lý lệnh
+    lastTelemetryTime = millis();
+
+    // Khoảng trễ an toàn cho transceiver trạm mặt đất chuyển hoàn tất từ TX sang RX
+    delay(80);
+
     cdh.printf("Received command: %c\n", cmd);
     com.sendMessage("ACK: " + String(cmd));
+    delay(100);
 
     switch (cmd) {
         case 'a': // Beacon test (LoRa hoạt động bình thường)
             for (uint8_t i = 0; i < 5; i++) {
                 com.sendMessage("Hello PTITCube");
                 cdh.println("Hello PTITCube");
-                delay(500);
+                delay(400);
             }
             break;
 
@@ -139,7 +146,7 @@ void handle_command(char cmd) {
             for (uint8_t i = 0; i < 5; i++) {
                 eps.update();
                 storage.appendFile("/voltage.txt", ("Bus voltage: " + String(eps.getBatteryVoltage(), 2) + " V\r\n").c_str());
-                delay(500);
+                delay(400);
             }
             cdh.println("Done saving voltages to the SD card.");
             cdh.println("Reading voltages from the SD card...");
@@ -158,7 +165,7 @@ void handle_command(char cmd) {
                 String msg = "Acceleration: ax=" + String(sensor.getAccX(), 2) + ", ay=" + String(sensor.getAccY(), 2) + ", az=" + String(sensor.getAccZ(), 2) + " m/s^2";
                 com.sendMessage(msg);
                 cdh.println(msg);
-                delay(500);
+                delay(400);
             }
             break;
 
@@ -173,7 +180,7 @@ void handle_command(char cmd) {
                 String msg = "Gyroscope: gx=" + String(sensor.getGyroX(), 2) + ", gy=" + String(sensor.getGyroY(), 2) + ", gz=" + String(sensor.getGyroZ(), 2) + " rad/s";
                 com.sendMessage(msg);
                 cdh.println(msg);
-                delay(500);
+                delay(400);
             }
             break;
 
@@ -187,7 +194,7 @@ void handle_command(char cmd) {
                     : "GPS: Waiting for fix...";
                 com.sendMessage(msg);
                 cdh.println(msg);
-                delay(500);
+                delay(400);
             }
             break;
 
@@ -243,10 +250,18 @@ void loop() {
 
     gps.update();
 
-    String cmd = com.update();
-    if (cmd.length() > 0) {
-        cmd.trim();
-        handle_command(cmd.charAt(0));
+    String rawCmd = com.update();
+    if (rawCmd.length() > 0) {
+        // Lọc bỏ ký tự rác không in được do nhiễu sóng RF khi chuyển mạch
+        String cleanCmd = "";
+        for (unsigned int i = 0; i < rawCmd.length(); i++) {
+            char c = rawCmd.charAt(i);
+            if (c >= 32 && c <= 126) cleanCmd += c;
+        }
+        cleanCmd.trim();
+        if (cleanCmd.length() > 0) {
+            handle_command(cleanCmd.charAt(0));
+        }
     }
     delay(10);
 }
