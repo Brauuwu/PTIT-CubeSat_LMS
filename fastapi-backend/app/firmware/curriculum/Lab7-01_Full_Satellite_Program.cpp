@@ -31,7 +31,7 @@ void check_power_mode() {
     if (!isPowerSaving && (vbat < VOLTAGE_LOW_THRES || pct < PERCENT_LOW_THRES)) {
         isPowerSaving = true;
         eps.setBuckState(false);
-        cdh.println("Power saving mode ENABLED (Low battery). Sensors, camera and storage disabled.");
+        cdh.println("Power saving mode ENABLED (Low battery). Sensors and camera disabled.");
         com.sendMessage("ALERT: Power saving mode ENABLED");
     } else if (isPowerSaving && vbat > VOLTAGE_HIGH_THRES && pct > PERCENT_HIGH_THRES) {
         isPowerSaving = false;
@@ -101,7 +101,7 @@ void downlink_hk_data() {
             }
         }
     } else {
-        // Chế độ Power Saving: Cảm biến và Storage bị tắt, chỉ giữ LoRa và GPS
+        // Chế độ Power Saving: Cảm biến bị tắt nguồn, chỉ truyền EPS và GPS qua LoRa
         String epsChunk = "{\"eps\":{\"v\":" + String(eps.getBatteryVoltage(), 2) + ",\"pct\":" + String(eps.getBatteryPercentage(), 1) + ",\"pwr_save\":true}}";
         cdh.printf("[TELEM] %s\n", epsChunk.c_str());
         com.sendMessage(epsChunk);
@@ -135,24 +135,43 @@ void handle_command(char cmd) {
             }
             break;
 
-        case 'b': // SD Card log (Vô hiệu hóa trong Power Saving)
-            if (isPowerSaving) {
-                cdh.println("ERR: Storage disabled in power saving mode!");
-                com.sendMessage("ERR: Storage disabled in power saving mode");
-                break;
-            }
-            cdh.println("Saving voltages to the SD card...");
+        case 'b': { // Lưu và đọc lại điện áp & dung lượng pin từ thẻ nhớ SD (nhận nguồn từ OBC, luôn hoạt động)
+            com.sendMessage("Saving battery data to SD card...");
+            cdh.println("Saving battery data to SD card...");
             storage.writeFile("/voltage.txt", "");
             for (uint8_t i = 0; i < 5; i++) {
                 eps.update();
-                storage.appendFile("/voltage.txt", ("Bus voltage: " + String(eps.getBatteryVoltage(), 2) + " V\r\n").c_str());
-                delay(400);
+                float v = eps.getBatteryVoltage();
+                float pct = eps.getBatteryPercentage();
+                String line = "[" + String(i + 1) + "/5] Bat: " + String(v, 2) + "V, " + String(pct, 1) + "%";
+                storage.appendFile("/voltage.txt", (line + "\r\n").c_str());
+                delay(200);
             }
-            cdh.println("Done saving voltages to the SD card.");
-            cdh.println("Reading voltages from the SD card...");
-            cdh.print(storage.readFile("/voltage.txt"));
-            cdh.println("Done reading voltages from the SD card.");
+            com.sendMessage("Done saving. Reading from SD card:");
+            cdh.println("Done saving. Reading from SD card:");
+            delay(100);
+
+            String content = storage.readFile("/voltage.txt");
+            cdh.print(content);
+
+            // Gửi từng dòng dữ liệu đọc được từ thẻ nhớ về trạm mặt đất qua LoRa
+            int startIdx = 0;
+            while (startIdx < (int)content.length()) {
+                int endIdx = content.indexOf('\n', startIdx);
+                if (endIdx < 0) endIdx = content.length();
+                String singleLine = content.substring(startIdx, endIdx);
+                singleLine.trim();
+                if (singleLine.length() > 0) {
+                    com.sendMessage(singleLine);
+                    delay(120);
+                }
+                startIdx = endIdx + 1;
+            }
+
+            com.sendMessage("Done reading from SD card.");
+            cdh.println("Done reading from SD card.");
             break;
+        }
 
         case 'c': // Accelerometer (Vô hiệu hóa trong Power Saving)
             if (isPowerSaving) {
