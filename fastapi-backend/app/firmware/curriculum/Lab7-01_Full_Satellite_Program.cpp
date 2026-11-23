@@ -19,29 +19,50 @@ const float VOLTAGE_THRES = 3.5;  // V
 const float PERCENT_THRES = 20.0; // %
 bool isPowerSaving = false;
 bool isTelemetryPaused = false;
+float lastBatteryV = 0.0f;
+float lastBatteryPct = 0.0f;
 
 unsigned long lastTelemetryTime = 0;
 const unsigned long TELEMETRY_INTERVAL = 4000; // 4 giây gửi viễn trắc 1 lần (tối ưu cửa sổ đón lệnh)
 
 void check_power_mode() {
+    // Để đọc MAX17048 qua I2C, cần đảm bảo nguồn Buck cấp điện ổn định cho đường bus
+    if (isPowerSaving) {
+        eps.setBuckState(true);
+        delay(60);
+        Wire.begin();
+    }
+
+    eps.update();
     float vbat = eps.getBatteryVoltage();
     float pct  = eps.getBatteryPercentage();
 
-    if (!isPowerSaving && (vbat < VOLTAGE_THRES || pct < PERCENT_THRES)) {
-        isPowerSaving = true;
-        eps.setBuckState(false);
-        cdh.println("Power saving mode ENABLED (Low battery). Sensors and camera disabled.");
-        com.sendMessage("ALERT: Power saving mode ENABLED");
-    } else if (isPowerSaving && vbat >= VOLTAGE_THRES && pct >= PERCENT_THRES) {
-        isPowerSaving = false;
-        eps.setBuckState(true);
-        cdh.println("Power saving mode DISABLED (Battery recovered). All subsystems active.");
-        com.sendMessage("ALERT: Power saving mode DISABLED");
+    if (vbat > 0.5f) {
+        lastBatteryV = vbat;
+        lastBatteryPct = pct;
+
+        if (!isPowerSaving && (vbat < VOLTAGE_THRES || pct < PERCENT_THRES)) {
+            isPowerSaving = true;
+            eps.setBuckState(false);
+            cdh.println("Power saving mode ENABLED (Low battery). Sensors and camera disabled.");
+            com.sendMessage("ALERT: Power saving mode ENABLED");
+        } else if (isPowerSaving && vbat >= VOLTAGE_THRES && pct >= PERCENT_THRES) {
+            isPowerSaving = false;
+            // Buck đã bật ở trên, duy trì bật cho các phân hệ hoạt động lại
+            cdh.println("Power saving mode DISABLED (Battery recovered). All subsystems active.");
+            com.sendMessage("ALERT: Power saving mode DISABLED");
+        } else if (isPowerSaving) {
+            // Vẫn ở chế độ tiết kiệm năng lượng -> ngắt lại Buck
+            eps.setBuckState(false);
+        }
+    } else {
+        if (isPowerSaving) {
+            eps.setBuckState(false);
+        }
     }
 }
 
 void downlink_hk_data() {
-    eps.update();
     check_power_mode();
 
     camera.selectGPS();
@@ -53,8 +74,8 @@ void downlink_hk_data() {
         // 1. Snapshot JSON cho Serial C&DH và Thẻ nhớ SD
         JsonDocument doc;
         JsonObject epsObj = doc["eps"].to<JsonObject>();
-        epsObj["v"]    = eps.getBatteryVoltage();
-        epsObj["pct"]  = eps.getBatteryPercentage();
+        epsObj["v"]    = lastBatteryV;
+        epsObj["pct"]  = lastBatteryPct;
         epsObj["rate"] = eps.getChargeRate();
 
         JsonObject envObj = doc["env"].to<JsonObject>();
@@ -88,7 +109,7 @@ void downlink_hk_data() {
 
         // 2. Chia nhỏ HK Telemetry thành các Chunk (< 58 bytes) truyền qua LoRa
         String chunks[] = {
-            "{\"eps\":{\"v\":" + String(eps.getBatteryVoltage(), 2) + ",\"pct\":" + String(eps.getBatteryPercentage(), 1) + "}}",
+            "{\"eps\":{\"v\":" + String(lastBatteryV, 2) + ",\"pct\":" + String(lastBatteryPct, 1) + "}}",
             "{\"env\":{\"temp\":" + String(sensor.getTemperature(), 2) + ",\"press\":" + String(sensor.getPressure(), 2) + "}}",
             "{\"imu\":{\"roll\":" + String(sensor.getRoll(), 1) + ",\"pitch\":" + String(sensor.getPitch(), 1) + ",\"head\":" + String(sensor.getHeading(), 1) + "}}",
             gps.hasFix() ? ("{\"gps\":{\"lat\":" + String(gps.getLatitude(), 5) + ",\"lng\":" + String(gps.getLongitude(), 5) + "}}") : ""
@@ -101,7 +122,7 @@ void downlink_hk_data() {
         }
     } else {
         // Chế độ Power Saving: Cảm biến bị tắt nguồn, chỉ truyền EPS và GPS qua LoRa
-        String epsChunk = "{\"eps\":{\"v\":" + String(eps.getBatteryVoltage(), 2) + ",\"pct\":" + String(eps.getBatteryPercentage(), 1) + ",\"pwr_save\":true}}";
+        String epsChunk = "{\"eps\":{\"v\":" + String(lastBatteryV, 2) + ",\"pct\":" + String(lastBatteryPct, 1) + ",\"pwr_save\":true}}";
         cdh.printf("[TELEM] %s\n", epsChunk.c_str());
         com.sendMessage(epsChunk);
         delay(120);
@@ -138,6 +159,12 @@ void handle_command(char cmd) {
             com.sendMessage("Saving battery data to SD card...");
             cdh.println("Saving battery data to SD card...");
             storage.writeFile("/voltage.txt", "");
+            bool wasPowerSaving = isPowerSaving;
+            if (wasPowerSaving) {
+                eps.setBuckState(true);
+                delay(60);
+                Wire.begin();
+            }
             for (uint8_t i = 0; i < 5; i++) {
                 eps.update();
                 float v = eps.getBatteryVoltage();
@@ -145,6 +172,9 @@ void handle_command(char cmd) {
                 String line = "[" + String(i + 1) + "/5] Bat: " + String(v, 2) + "V, " + String(pct, 1) + "%";
                 storage.appendFile("/voltage.txt", (line + "\r\n").c_str());
                 delay(200);
+            }
+            if (wasPowerSaving) {
+                eps.setBuckState(false);
             }
             com.sendMessage("Done saving. Reading from SD card:");
             cdh.println("Done saving. Reading from SD card:");
@@ -259,6 +289,8 @@ void setup() {
     eps.setBuckState(true);
 
     eps.init();
+    lastBatteryV = eps.getBatteryVoltage();
+    lastBatteryPct = eps.getBatteryPercentage();
     sensor.init();
     gps.init();
     storage.init();
