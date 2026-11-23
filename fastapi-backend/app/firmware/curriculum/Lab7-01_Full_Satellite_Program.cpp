@@ -20,6 +20,7 @@ const float VOLTAGE_HIGH_THRES  = 3.7;  // V
 const float PERCENT_LOW_THRES   = 20.0; // %
 const float PERCENT_HIGH_THRES  = 25.0; // %
 bool isPowerSaving = false;
+bool isTelemetryPaused = false;
 
 unsigned long lastTelemetryTime = 0;
 const unsigned long TELEMETRY_INTERVAL = 4000; // 4 giây gửi viễn trắc 1 lần (tối ưu cửa sổ đón lệnh)
@@ -236,6 +237,18 @@ void handle_command(char cmd) {
             break;
         }
 
+        case 'p': // Tạm dừng gửi HK viễn trắc (Pause Telemetry)
+            isTelemetryPaused = true;
+            com.sendMessage("Telemetry PAUSED");
+            cdh.println("Telemetry PAUSED");
+            break;
+
+        case 'r': // Tiếp tục gửi HK viễn trắc (Resume Telemetry)
+            isTelemetryPaused = false;
+            com.sendMessage("Telemetry RESUMED");
+            cdh.println("Telemetry RESUMED");
+            break;
+
         default:
             com.sendMessage("Unknown command");
             cdh.println("Unknown command");
@@ -262,7 +275,7 @@ void setup() {
 
 void loop() {
     unsigned long now = millis();
-    if (now - lastTelemetryTime >= TELEMETRY_INTERVAL) {
+    if (!isTelemetryPaused && (now - lastTelemetryTime >= TELEMETRY_INTERVAL)) {
         lastTelemetryTime = now;
         downlink_hk_data();
     }
