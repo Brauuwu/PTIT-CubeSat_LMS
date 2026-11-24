@@ -4,7 +4,6 @@
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 #include <TinyGPSPlus.h>
-#include <Adafruit_MPU6050.h>
 #include <Adafruit_BMP280.h>
 #include <Adafruit_QMC5883P.h>
 #include <PTITCube.h>
