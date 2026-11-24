@@ -1,6 +1,5 @@
 /**
  * LAB 7-01: TÍCH HỢP HỆ THỐNG VỆ TINH TOÀN DIỆN (HEPTA-SAT PATTERN)
- * Tích hợp: C&DH, EPS, Sensor, GPS, Camera, Storage, COM (LoRa Chunking).
  */
 #include <Arduino.h>
 #include <ArduinoJson.h>
@@ -14,33 +13,33 @@ PTIT_Camera camera;
 PTIT_Storage storage;
 PTIT_COM com;
 
-// Ngưỡng bảo vệ nguồn & Chế độ tiết kiệm năng lượng
 const float VOLTAGE_THRES = 3.5;  // V
 const float PERCENT_THRES = 20.0; // %
 bool isPowerSaving = false;
 bool isTelemetryPaused = false;
-
 unsigned long lastTelemetryTime = 0;
-const unsigned long TELEMETRY_INTERVAL = 4000; // 4 giây gửi viễn trắc 1 lần (tối ưu cửa sổ đón lệnh)
+const unsigned long TELEMETRY_INTERVAL = 4000;
+
+void notify(const String& msg) {
+    com.sendMessage(msg);
+    cdh.println(msg);
+}
 
 void check_power_mode() {
     float vbat = eps.getBatteryVoltage();
     float pct  = eps.getBatteryPercentage();
+    if (vbat <= 0.5f) return;
 
-    if (vbat > 0.5f) {
-        if (!isPowerSaving && (vbat < VOLTAGE_THRES || pct < PERCENT_THRES)) {
-            isPowerSaving = true;
-            eps.setBuckState(false);
-            cdh.println("Power saving mode ENABLED (Low battery). Sensors and camera disabled.");
-            com.sendMessage("ALERT: Power saving mode ENABLED");
-        } else if (isPowerSaving && vbat >= VOLTAGE_THRES && pct >= PERCENT_THRES) {
-            isPowerSaving = false;
-            eps.setBuckState(true);
-            cdh.println("Power saving mode DISABLED (Battery recovered). All subsystems active.");
-            com.sendMessage("ALERT: Power saving mode DISABLED");
-        } else if (isPowerSaving) {
-            eps.setBuckState(false);
-        }
+    if (!isPowerSaving && (vbat < VOLTAGE_THRES || pct < PERCENT_THRES)) {
+        isPowerSaving = true;
+        eps.setBuckState(false);
+        notify("ALERT: Power saving mode ENABLED");
+        cdh.println("Power saving mode ENABLED (Low battery). Sensors and camera disabled.");
+    } else if (isPowerSaving && vbat >= VOLTAGE_THRES && pct >= PERCENT_THRES) {
+        isPowerSaving = false;
+        eps.setBuckState(true);
+        notify("ALERT: Power saving mode DISABLED");
+        cdh.println("Power saving mode DISABLED (Battery recovered). All subsystems active.");
     }
 }
 
@@ -54,7 +53,7 @@ void downlink_hk_data() {
     if (!isPowerSaving) {
         sensor.update();
 
-        // 1. Snapshot JSON cho Serial C&DH và Thẻ nhớ SD
+        // 1. Snapshot JSON viễn trắc lưu SD và Serial
         JsonDocument doc;
         JsonObject epsObj = doc["eps"].to<JsonObject>();
         epsObj["v"]    = eps.getBatteryVoltage();
@@ -90,7 +89,7 @@ void downlink_hk_data() {
         storage.appendFile("/datalog.txt", (telem + "\n").c_str());
         cdh.println("[SD] Telemetry saved");
 
-        // 2. Chia nhỏ HK Telemetry thành các Chunk (< 58 bytes) truyền qua LoRa
+        // 2. Chunks truyền qua LoRa (< 58 bytes)
         String chunks[] = {
             "{\"eps\":{\"v\":" + String(eps.getBatteryVoltage(), 2) + ",\"pct\":" + String(eps.getBatteryPercentage(), 1) + "}}",
             "{\"env\":{\"temp\":" + String(sensor.getTemperature(), 2) + ",\"press\":" + String(sensor.getPressure(), 2) + "}}",
@@ -104,7 +103,6 @@ void downlink_hk_data() {
             }
         }
     } else {
-        // Chế độ Power Saving: Cảm biến bị tắt nguồn, chỉ truyền EPS và GPS qua LoRa
         String epsChunk = "{\"eps\":{\"v\":" + String(eps.getBatteryVoltage(), 2) + ",\"pct\":" + String(eps.getBatteryPercentage(), 1) + ",\"pwr_save\":true}}";
         cdh.printf("[TELEM] %s\n", epsChunk.c_str());
         com.sendMessage(epsChunk);
@@ -119,10 +117,7 @@ void downlink_hk_data() {
 }
 
 void handle_command(char cmd) {
-    // Hoãn chu kỳ viễn trắc kế tiếp (Telemetry Backoff) để tránh nghẽn kênh LoRa khi đang xử lý lệnh
     lastTelemetryTime = millis();
-
-    // Khoảng trễ an toàn cho transceiver trạm mặt đất chuyển hoàn tất từ TX sang RX
     delay(80);
 
     cdh.printf("Received command: %c\n", cmd);
@@ -130,105 +125,75 @@ void handle_command(char cmd) {
     delay(100);
 
     switch (cmd) {
-        case 'a': // Beacon test (LoRa hoạt động bình thường)
+        case 'a':
             for (uint8_t i = 0; i < 5; i++) {
-                com.sendMessage("Hello PTITCube");
-                cdh.println("Hello PTITCube");
+                notify("Hello PTITCube");
                 delay(400);
             }
             break;
 
-        case 'b': { // Lưu và đọc lại điện áp & dung lượng pin từ thẻ nhớ SD (nhận nguồn từ OBC, luôn hoạt động)
-            com.sendMessage("Saving battery data to SD card...");
-            cdh.println("Saving battery data to SD card...");
+        case 'b': {
+            notify("Saving battery data to SD card...");
             storage.writeFile("/voltage.txt", "");
-            for (uint8_t i = 0; i < 5; i++) {
+            for (uint8_t i = 1; i <= 5; i++) {
                 eps.update();
-                float v = eps.getBatteryVoltage();
-                float pct = eps.getBatteryPercentage();
-                String line = "[" + String(i + 1) + "/5] Bat: " + String(v, 2) + "V, " + String(pct, 1) + "%";
+                String line = "[" + String(i) + "/5] Bat: " + String(eps.getBatteryVoltage(), 2) + "V, " + String(eps.getBatteryPercentage(), 1) + "%";
                 storage.appendFile("/voltage.txt", (line + "\r\n").c_str());
                 delay(200);
             }
-            if (isPowerSaving) {
-                eps.setBuckState(false);
-            }
-            com.sendMessage("Done saving. Reading from SD card:");
-            cdh.println("Done saving. Reading from SD card:");
+            notify("Done saving. Reading from SD card:");
             delay(100);
 
             String content = storage.readFile("/voltage.txt");
             cdh.print(content);
-
-            // Gửi từng dòng dữ liệu đọc được từ thẻ nhớ về trạm mặt đất qua LoRa
             int startIdx = 0;
             while (startIdx < (int)content.length()) {
                 int endIdx = content.indexOf('\n', startIdx);
                 if (endIdx < 0) endIdx = content.length();
-                String singleLine = content.substring(startIdx, endIdx);
-                singleLine.trim();
-                if (singleLine.length() > 0) {
-                    com.sendMessage(singleLine);
+                String line = content.substring(startIdx, endIdx);
+                line.trim();
+                if (line.length() > 0) {
+                    com.sendMessage(line);
                     delay(120);
                 }
                 startIdx = endIdx + 1;
             }
-
-            com.sendMessage("Done reading from SD card.");
-            cdh.println("Done reading from SD card.");
+            notify("Done reading from SD card.");
             break;
         }
 
-        case 'c': // Accelerometer (Vô hiệu hóa trong Power Saving)
-            if (isPowerSaving) {
-                cdh.println("ERR: Sensors disabled in power saving mode!");
-                com.sendMessage("ERR: Sensors disabled in power saving mode");
-                break;
-            }
+        case 'c':
+            if (isPowerSaving) { notify("ERR: Sensors disabled in power saving mode"); break; }
             for (uint8_t i = 0; i < 5; i++) {
                 sensor.update();
-                String msg = "Acceleration: ax=" + String(sensor.getAccX(), 2) + ", ay=" + String(sensor.getAccY(), 2) + ", az=" + String(sensor.getAccZ(), 2) + " m/s^2";
-                com.sendMessage(msg);
-                cdh.println(msg);
+                notify("Acceleration: ax=" + String(sensor.getAccX(), 2) + ", ay=" + String(sensor.getAccY(), 2) + ", az=" + String(sensor.getAccZ(), 2) + " m/s^2");
                 delay(400);
             }
             break;
 
-        case 'd': // Gyroscope (Vô hiệu hóa trong Power Saving)
-            if (isPowerSaving) {
-                cdh.println("ERR: Sensors disabled in power saving mode!");
-                com.sendMessage("ERR: Sensors disabled in power saving mode");
-                break;
-            }
+        case 'd':
+            if (isPowerSaving) { notify("ERR: Sensors disabled in power saving mode"); break; }
             for (uint8_t i = 0; i < 5; i++) {
                 sensor.update();
-                String msg = "Gyroscope: gx=" + String(sensor.getGyroX(), 2) + ", gy=" + String(sensor.getGyroY(), 2) + ", gz=" + String(sensor.getGyroZ(), 2) + " rad/s";
-                com.sendMessage(msg);
-                cdh.println(msg);
+                notify("Gyroscope: gx=" + String(sensor.getGyroX(), 2) + ", gy=" + String(sensor.getGyroY(), 2) + ", gz=" + String(sensor.getGyroZ(), 2) + " rad/s");
                 delay(400);
             }
             break;
 
-        case 'e': // GPS (Vẫn hoạt động bình thường qua MUX)
+        case 'e':
             camera.selectGPS();
             delay(100);
             for (uint8_t i = 0; i < 5; i++) {
                 gps.update();
-                String msg = gps.hasFix() 
+                notify(gps.hasFix() 
                     ? ("GPS: Lat=" + String(gps.getLatitude(), 6) + ", Lng=" + String(gps.getLongitude(), 6) + ", Alt=" + String(gps.getAltitude(), 1) + "m")
-                    : "GPS: Waiting for fix...";
-                com.sendMessage(msg);
-                cdh.println(msg);
+                    : "GPS: Waiting for fix...");
                 delay(400);
             }
             break;
 
-        case 'f': { // Camera ESP32-CAM (Vô hiệu hóa trong Power Saving)
-            if (isPowerSaving) {
-                cdh.println("ERR: Camera disabled in power saving mode!");
-                com.sendMessage("ERR: Camera disabled in power saving mode");
-                break;
-            }
+        case 'f': {
+            if (isPowerSaving) { notify("ERR: Camera disabled in power saving mode"); break; }
             cdh.println("Capturing photo with ESP32-CAM...");
             camera.selectCamera();
             delay(200);
@@ -236,27 +201,22 @@ void handle_command(char cmd) {
             String path = "/photos/cam_" + String(idx++) + ".jpg";
             bool ok = camera.captureToFile(path.c_str());
             camera.selectGPS();
-            String msg = ok ? ("Photo captured and saved to SD: " + path) : "Camera capture failed!";
-            com.sendMessage(msg);
-            cdh.println(msg);
+            notify(ok ? ("Photo captured and saved to SD: " + path) : "Camera capture failed!");
             break;
         }
 
-        case 'p': // Tạm dừng gửi HK viễn trắc (Pause Telemetry)
+        case 'p':
             isTelemetryPaused = true;
-            com.sendMessage("Telemetry PAUSED");
-            cdh.println("Telemetry PAUSED");
+            notify("Telemetry PAUSED");
             break;
 
-        case 'r': // Tiếp tục gửi HK viễn trắc (Resume Telemetry)
+        case 'r':
             isTelemetryPaused = false;
-            com.sendMessage("Telemetry RESUMED");
-            cdh.println("Telemetry RESUMED");
+            notify("Telemetry RESUMED");
             break;
 
         default:
-            com.sendMessage("Unknown command");
-            cdh.println("Unknown command");
+            notify("Unknown command");
             break;
     }
 }
@@ -289,7 +249,6 @@ void loop() {
 
     String rawCmd = com.update();
     if (rawCmd.length() > 0) {
-        // Lọc bỏ ký tự rác không in được do nhiễu sóng RF khi chuyển mạch
         String cleanCmd = "";
         for (unsigned int i = 0; i < rawCmd.length(); i++) {
             char c = rawCmd.charAt(i);
