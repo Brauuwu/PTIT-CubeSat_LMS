@@ -1,9 +1,13 @@
 #include "GPS.h"
+#include "../EPS/EPS.h"
 
-PTIT_GPS::PTIT_GPS() : gpsSerial(Serial2), gpsSelectPin(12), camSelectPin(14) {
+PTIT_GPS::PTIT_GPS() : gpsSerial(Serial2), gpsSelectPin(12), camSelectPin(14), bufferIndex(0) {
+    nmeaBuffer[0] = '\0';
 }
 
 void PTIT_GPS::init(uint8_t gpsSelectPin, uint8_t camSelectPin) {
+    PTIT_EPS::setBuckState(true);
+
     this->gpsSelectPin = gpsSelectPin;
     this->camSelectPin = camSelectPin;
 
@@ -17,9 +21,7 @@ void PTIT_GPS::init(uint8_t gpsSelectPin, uint8_t camSelectPin) {
         digitalWrite(this->gpsSelectPin, HIGH);
     }
 
-    Serial.println("[GPS] Initializing GPS NEO (UART2, RX=16, TX=17)...");
-    if (gpsSerial.baudRate() == 0) gpsSerial.begin(9600, SERIAL_8N1, 16, 17);
-    else if (gpsSerial.baudRate() != 9600) { gpsSerial.flush(); gpsSerial.updateBaudRate(9600); }
+    gpsSerial.begin(9600, SERIAL_8N1, 16, 17);
 }
 
 void PTIT_GPS::selectGPS() {
@@ -29,8 +31,8 @@ void PTIT_GPS::selectGPS() {
         delayMicroseconds(50);
         // BẬT GPS sau
         digitalWrite(gpsSelectPin, HIGH);
-        // Đặt lại baudrate GPS (9600) trên cùng instance UART2
-        if (gpsSerial.baudRate() != 9600) { gpsSerial.flush(); gpsSerial.updateBaudRate(9600); }
+        // Đặt lại baudrate GPS (9600)
+        gpsSerial.begin(9600, SERIAL_8N1, 16, 17);
     }
 }
 
@@ -41,8 +43,8 @@ void PTIT_GPS::selectCamera() {
         delayMicroseconds(50);
         // BẬT CAM sau
         digitalWrite(camSelectPin, HIGH);
-        // Đặt lại baudrate Camera (115200) trên cùng instance UART2
-        if (gpsSerial.baudRate() != 115200) { gpsSerial.flush(); gpsSerial.updateBaudRate(115200); }
+        // Đặt lại baudrate Camera (115200)
+        gpsSerial.begin(115200, SERIAL_8N1, 16, 17);
     }
 }
 
@@ -52,9 +54,80 @@ void PTIT_GPS::update() {
     }
 }
 
+bool PTIT_GPS::readSentence(char* buffer, size_t maxLen) {
+    if (!buffer || maxLen == 0) return false;
+
+    while (gpsSerial.available() > 0) {
+        char c = (char)gpsSerial.read();
+        gps.encode(c);
+
+        if (c == '$') {
+            bufferIndex = 0;
+            nmeaBuffer[bufferIndex++] = c;
+        } else if (c == '\n' || c == '\r') {
+            if (bufferIndex > 0 && nmeaBuffer[0] == '$') {
+                nmeaBuffer[bufferIndex] = '\0';
+                strncpy(buffer, nmeaBuffer, maxLen - 1);
+                buffer[maxLen - 1] = '\0';
+                bufferIndex = 0;
+                return true;
+            }
+        } else {
+            if (bufferIndex < sizeof(nmeaBuffer) - 1) {
+                nmeaBuffer[bufferIndex++] = c;
+            }
+        }
+    }
+    return false;
+}
+
+bool PTIT_GPS::readSentence(String& sentence) {
+    char buf[128];
+    if (readSentence(buf, sizeof(buf))) {
+        sentence = String(buf);
+        return true;
+    }
+    return false;
+}
+
+String PTIT_GPS::readSentence() {
+    String s = "";
+    readSentence(s);
+    return s;
+}
+
+bool PTIT_GPS::verifyChecksum(const char* sentence) {
+    if (!sentence || sentence[0] != '$') return false;
+
+    uint8_t calculatedChecksum = 0;
+    int i = 1;
+
+    while (sentence[i] != '*' && sentence[i] != '\0') {
+        calculatedChecksum ^= (uint8_t)sentence[i];
+        i++;
+    }
+
+    if (sentence[i] != '*') return false;
+
+    char hexStr[3] = { sentence[i + 1], sentence[i + 2], '\0' };
+    uint8_t receivedChecksum = (uint8_t)strtol(hexStr, NULL, 16);
+
+    return (calculatedChecksum == receivedChecksum);
+}
+
+const char* PTIT_GPS::getNMEAType(const char* sentence) {
+    if (!sentence) return "UNKNOWN";
+    if (strstr(sentence, "RMC")) return "RMC";
+    if (strstr(sentence, "GGA")) return "GGA";
+    if (strstr(sentence, "VTG")) return "VTG";
+    if (strstr(sentence, "GSA")) return "GSA";
+    if (strstr(sentence, "GSV")) return "GSV";
+    if (strstr(sentence, "GLL")) return "GLL";
+    return "OTHER";
+}
+
 bool PTIT_GPS::hasFix() {
-    // A fix older than 5 seconds is stale (MUX switched away, antenna lost, ...).
-    return gps.location.isValid() && gps.location.age() < 5000;
+    return gps.location.isValid();
 }
 
 float PTIT_GPS::getLatitude() {

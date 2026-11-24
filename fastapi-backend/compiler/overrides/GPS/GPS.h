@@ -21,6 +21,18 @@ public:
     // Đọc và xử lý dữ liệu GPS mới từ UART
     void update();
 
+    // Thu nhận câu tin NMEA thô từ UART
+    String readSentence();
+    bool readSentence(char* buffer, size_t maxLen);
+    bool readSentence(String& sentence);
+
+    // Kiểm tra tính toàn vẹn Checksum XOR (*hh) của câu tin NMEA
+    static bool verifyChecksum(const char* sentence);
+    static bool verifyNMEAChecksum(const char* sentence) { return verifyChecksum(sentence); }
+
+    // Nhận diện loại bản tin NMEA (RMC, GGA, VTG, GSA, GSV, GLL)
+    static const char* getNMEAType(const char* sentence);
+
     // Kiểm tra GPS đã chốt vị trí chưa
     bool hasFix();
 
@@ -37,10 +49,11 @@ public:
 
 private:
     TinyGPSPlus gps;
-    // Shared with PTIT_Camera: one HardwareSerial instance per UART2 peripheral.
     HardwareSerial& gpsSerial;
     uint8_t gpsSelectPin;
     uint8_t camSelectPin;
+    char nmeaBuffer[128];
+    uint8_t bufferIndex;
 };
 
 #endif

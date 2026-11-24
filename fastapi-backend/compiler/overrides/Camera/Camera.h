@@ -42,7 +42,6 @@ private:
     bool sdReady;
     
     bool initializeSd();
-    bool captureOnCameraChannel(const char* path);
 };
 
 #endif
