@@ -1,5 +1,5 @@
 /**
- * LAB 7-01: TÍCH HỢP HỆ THỐNG VỆ TINH TOÀN DIỆN (HEPTA-SAT PATTERN)
+ * LAB 7-01: TÍCH HỢP HỆ THỐNG VỆ TINH TOÀN DIỆN (PTITCUBE CUBESAT ARCHITECTURE)
  */
 #include <Arduino.h>
 #include <ArduinoJson.h>
