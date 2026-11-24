@@ -23,24 +23,74 @@ bool isTelemetryPaused = false;
 unsigned long lastTelemetryTime = 0;
 const unsigned long TELEMETRY_INTERVAL = 4000; // 4 giây gửi viễn trắc 1 lần (tối ưu cửa sổ đón lệnh)
 
+void maintain_i2c() {
+    Wire.begin(21, 22);
+    Wire.setTimeOut(25);
+
+    // Luôn detect MAX17048 (EPS @ 0x36) và cố gắng khởi tạo lại (không hiển thị log serial)
+    Wire.beginTransmission(0x36);
+    if (Wire.endTransmission() != 0) {
+        eps.setBuckState(true);
+        delay(20);
+        Wire.begin(21, 22);
+    }
+
+    Wire.beginTransmission(0x36);
+    if (Wire.endTransmission() == 0) {
+        eps.init();
+    }
+
+    // Luôn detect các component cảm biến trên I2C và cố gắng khởi tạo lại khi không ở Power Saving
+    if (!isPowerSaving) {
+        bool bmpFound = false;
+        Wire.beginTransmission(0x76);
+        if (Wire.endTransmission() == 0) bmpFound = true;
+        else {
+            Wire.beginTransmission(0x77);
+            if (Wire.endTransmission() == 0) bmpFound = true;
+        }
+
+        bool mpuFound = false;
+        Wire.beginTransmission(0x68);
+        if (Wire.endTransmission() == 0) mpuFound = true;
+
+        bool qmcFound = false;
+        Wire.beginTransmission(0x2C);
+        if (Wire.endTransmission() == 0) qmcFound = true;
+        else {
+            Wire.beginTransmission(0x0D);
+            if (Wire.endTransmission() == 0) qmcFound = true;
+        }
+
+        if (bmpFound || mpuFound || qmcFound) {
+            sensor.init(bmpFound, mpuFound, qmcFound);
+        }
+    }
+}
+
 void check_power_mode() {
     float vbat = eps.getBatteryVoltage();
     float pct  = eps.getBatteryPercentage();
 
-    if (!isPowerSaving && (vbat < VOLTAGE_THRES || pct < PERCENT_THRES)) {
-        isPowerSaving = true;
-        eps.setBuckState(false);
-        cdh.println("Power saving mode ENABLED (Low battery). Sensors and camera disabled.");
-        com.sendMessage("ALERT: Power saving mode ENABLED");
-    } else if (isPowerSaving && vbat >= VOLTAGE_THRES && pct >= PERCENT_THRES) {
-        isPowerSaving = false;
-        eps.setBuckState(true);
-        cdh.println("Power saving mode DISABLED (Battery recovered). All subsystems active.");
-        com.sendMessage("ALERT: Power saving mode DISABLED");
+    if (vbat > 0.5f) {
+        if (!isPowerSaving && (vbat < VOLTAGE_THRES || pct < PERCENT_THRES)) {
+            isPowerSaving = true;
+            eps.setBuckState(false);
+            cdh.println("Power saving mode ENABLED (Low battery). Sensors and camera disabled.");
+            com.sendMessage("ALERT: Power saving mode ENABLED");
+        } else if (isPowerSaving && vbat >= VOLTAGE_THRES && pct >= PERCENT_THRES) {
+            isPowerSaving = false;
+            eps.setBuckState(true);
+            cdh.println("Power saving mode DISABLED (Battery recovered). All subsystems active.");
+            com.sendMessage("ALERT: Power saving mode DISABLED");
+        } else if (isPowerSaving) {
+            eps.setBuckState(false);
+        }
     }
 }
 
 void downlink_hk_data() {
+    maintain_i2c();
     eps.update();
     check_power_mode();
 
@@ -135,6 +185,7 @@ void handle_command(char cmd) {
             break;
 
         case 'b': { // Lưu và đọc lại điện áp & dung lượng pin từ thẻ nhớ SD (nhận nguồn từ OBC, luôn hoạt động)
+            maintain_i2c();
             com.sendMessage("Saving battery data to SD card...");
             cdh.println("Saving battery data to SD card...");
             storage.writeFile("/voltage.txt", "");
@@ -145,6 +196,9 @@ void handle_command(char cmd) {
                 String line = "[" + String(i + 1) + "/5] Bat: " + String(v, 2) + "V, " + String(pct, 1) + "%";
                 storage.appendFile("/voltage.txt", (line + "\r\n").c_str());
                 delay(200);
+            }
+            if (isPowerSaving) {
+                eps.setBuckState(false);
             }
             com.sendMessage("Done saving. Reading from SD card:");
             cdh.println("Done saving. Reading from SD card:");
