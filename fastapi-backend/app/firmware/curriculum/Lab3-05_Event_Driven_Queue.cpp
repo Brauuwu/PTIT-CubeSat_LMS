@@ -7,7 +7,7 @@
 PTIT_CDH cdh;
 
 #define LED_PIN    2
-#define BUTTON_PIN 4
+#define BUTTON_PIN 5   // Chân nút nhấn ngoài GPIO 5 (tránh GPIO 4 - chân Buck nguồn cảm biến)
 
 enum EventType {
     EVENT_BUTTON,
