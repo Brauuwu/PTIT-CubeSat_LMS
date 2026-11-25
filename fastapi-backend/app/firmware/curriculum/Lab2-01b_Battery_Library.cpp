@@ -6,6 +6,9 @@
 
 PTIT_EPS eps;
 
+const float LOW_VOLTAGE_THRESHOLD = 3.70f;  // Dưới 3.70V
+const float LOW_SOC_THRESHOLD     = 25.0f;  // Hoặc dưới 25% dung lượng
+
 void setup() {
     Serial.begin(115200);
     eps.init();
@@ -18,7 +21,16 @@ void loop() {
     float percent    = eps.getBatteryPercent();
     float chargeRate = eps.getChargeRate();
 
-    Serial.printf("V: %.3f V | SOC: %.1f %% | Rate: %+.2f %%/h\n", voltage, percent, chargeRate);
+    // Điều kiện tiết kiệm năng lượng: Chưa bật/tắt vệ tinh (!eps.isConnected()) hoặc pin yếu
+    bool isLowPower = !eps.isConnected() || (voltage < LOW_VOLTAGE_THRESHOLD) || (percent < LOW_SOC_THRESHOLD);
 
-    delay(2000);
+    if (isLowPower) {
+        eps.setBuckState(false);
+        Serial.printf("EPS: Power Saving Mode (V: %.2fV, SOC: %.1f%%)\n", voltage, percent);
+        delay(3000);
+    } else {
+        eps.setBuckState(true);
+        Serial.printf("V: %.3f V | SOC: %.1f %% | Rate: %+.2f %%/h\n", voltage, percent, chargeRate);
+        delay(2000);
+    }
 }

@@ -20,8 +20,8 @@ void loop() {
     float vcell = eps.getBatteryVoltage();
     float soc   = eps.getBatteryPercent();
 
-    // Kích hoạt Power Saving Mode nếu điện áp hoặc dung lượng pin thấp hơn ngưỡng
-    bool isLowPower = (vcell < LOW_VOLTAGE_THRESHOLD) || (soc < LOW_SOC_THRESHOLD);
+    // Kích hoạt Power Saving Mode nếu điện áp/dung lượng thấp, hoặc vệ tinh tắt / mất kết nối
+    bool isLowPower = !eps.isConnected() || (vcell < LOW_VOLTAGE_THRESHOLD) || (soc < LOW_SOC_THRESHOLD);
 
     if (isLowPower) {
         // Chế độ tiết kiệm năng lượng: TẮT mạch hạ áp để ngắt tải phụ, kéo dài thời gian ngủ
