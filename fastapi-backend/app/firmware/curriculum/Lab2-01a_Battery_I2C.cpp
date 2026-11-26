@@ -40,22 +40,27 @@ void setup() {
 }
 
 void loop() {
-    // Đọc điện áp (VCELL: 78.125 uV / LSB)
+    // Đọc điện áp (VCELL: 78.125 uV / LSB) — nếu I2C NACK thì rawVcell = 0
     uint16_t rawVcell = readRegister16(REG_VCELL);
-    float voltage = (float)rawVcell * 0.000078125f;
+    bool connected = (rawVcell != 0);
 
-    // Đọc dung lượng (SOC: 1/256 %)
-    uint16_t rawSoc = readRegister16(REG_SOC);
-    float soc = (float)rawSoc / 256.0f;
-    if (soc > 100.0f) soc = 100.0f;
-    if (soc < 0.0f)   soc = 0.0f;
+    float voltage = connected ? (float)rawVcell * 0.000078125f : 0.0f;
+    float soc     = 0.0f;
+    float crate   = 0.0f;
 
-    // Đọc tốc độ sạc/xả (CRATE: 0.208 %/h)
-    int16_t rawCrate = (int16_t)readRegister16(REG_CRATE);
-    float crate = (float)rawCrate * 0.208f;
+    if (connected) {
+        // Đọc dung lượng (SOC: 1/256 %)
+        uint16_t rawSoc = readRegister16(REG_SOC);
+        soc = (float)rawSoc / 256.0f;
+        if (soc > 100.0f) soc = 100.0f;
+        if (soc < 0.0f)   soc = 0.0f;
 
-    // Điều kiện tiết kiệm năng lượng: Chưa bật/tắt vệ tinh (rawVcell == 0) hoặc pin yếu
-    bool isLowPower = (rawVcell == 0) || (voltage < LOW_VOLTAGE_THRESHOLD) || (soc < LOW_SOC_THRESHOLD);
+        // Đọc tốc độ sạc/xả (CRATE: 0.208 %/h)
+        crate = (float)(int16_t)readRegister16(REG_CRATE) * 0.208f;
+    }
+
+    // Điều kiện tiết kiệm năng lượng: Chưa bật/tắt vệ tinh (!connected) hoặc pin yếu
+    bool isLowPower = !connected || (voltage < LOW_VOLTAGE_THRESHOLD) || (soc < LOW_SOC_THRESHOLD);
 
     if (isLowPower) {
         eps.setBuckState(false);

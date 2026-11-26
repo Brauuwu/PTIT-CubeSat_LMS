@@ -17,12 +17,13 @@ void setup() {
 void loop() {
     eps.update();
 
-    float voltage    = eps.getBatteryVoltage();
-    float percent    = eps.getBatteryPercent();
-    float chargeRate = eps.getChargeRate();
+    bool connected   = eps.isConnected();
+    float voltage    = connected ? eps.getBatteryVoltage()  : 0.0f;
+    float percent    = connected ? eps.getBatteryPercent()  : 0.0f;
+    float chargeRate = connected ? eps.getChargeRate()      : 0.0f;
 
-    // Điều kiện tiết kiệm năng lượng: Chưa bật/tắt vệ tinh (!eps.isConnected()) hoặc pin yếu
-    bool isLowPower = !eps.isConnected() || (voltage < LOW_VOLTAGE_THRESHOLD) || (percent < LOW_SOC_THRESHOLD);
+    // Điều kiện tiết kiệm năng lượng: Chưa bật/tắt vệ tinh (!connected) hoặc pin yếu
+    bool isLowPower = !connected || (voltage < LOW_VOLTAGE_THRESHOLD) || (percent < LOW_SOC_THRESHOLD);
 
     if (isLowPower) {
         eps.setBuckState(false);
