@@ -31,10 +31,12 @@ uint16_t readRegister16(uint8_t reg) {
 void setup() {
     Serial.begin(115200);
 
-    // Kích hoạt hạ áp cấp nguồn ngoại vi trên PCB vệ tinh qua thư viện EPS
+    // Kích hoạt hạ áp cấp nguồn ngoại vi trên PCB vệ tinh
     eps.setBuckState(true);
 
+    // Khởi tạo bus I2C (SDA=21, SCL=22) với timeout 25ms
     Wire.begin(21, 22);
+    Wire.setTimeOut(25);
 }
 
 void loop() {
@@ -46,7 +48,7 @@ void loop() {
     uint16_t rawSoc = readRegister16(REG_SOC);
     float soc = (float)rawSoc / 256.0f;
     if (soc > 100.0f) soc = 100.0f;
-    if (soc < 0.0f) soc = 0.0f;
+    if (soc < 0.0f)   soc = 0.0f;
 
     // Đọc tốc độ sạc/xả (CRATE: 0.208 %/h)
     int16_t rawCrate = (int16_t)readRegister16(REG_CRATE);
