@@ -12,9 +12,6 @@ PTIT_EPS eps;
 #define REG_SOC        0x04
 #define REG_CRATE      0x16
 
-const float LOW_VOLTAGE_THRESHOLD = 3.70f;  // Dưới 3.70V
-const float LOW_SOC_THRESHOLD     = 25.0f;  // Hoặc dưới 25% dung lượng
-
 uint16_t readRegister16(uint8_t reg) {
     Wire.beginTransmission(MAX17048_ADDR);
     Wire.write(reg);
@@ -59,16 +56,6 @@ void loop() {
         crate = (float)(int16_t)readRegister16(REG_CRATE) * 0.208f;
     }
 
-    // Điều kiện tiết kiệm năng lượng: Chưa bật/tắt vệ tinh (!connected) hoặc pin yếu
-    bool isLowPower = !connected || (voltage < LOW_VOLTAGE_THRESHOLD) || (soc < LOW_SOC_THRESHOLD);
-
-    if (isLowPower) {
-        eps.setBuckState(false);
-        Serial.printf("EPS: Power Saving Mode (V: %.2fV, SOC: %.1f%%)\n", voltage, soc);
-        delay(3000);
-    } else {
-        eps.setBuckState(true);
-        Serial.printf("V: %.3f V | SOC: %.1f %% | Rate: %+.2f %%/h\n", voltage, soc, crate);
-        delay(2000);
-    }
+    Serial.printf("V: %.3f V | SOC: %.1f %% | Rate: %+.2f %%/h\n", voltage, soc, crate);
+    delay(2000);
 }
